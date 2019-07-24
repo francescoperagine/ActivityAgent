@@ -100,15 +100,15 @@ public class RegisterActivity extends AppCompatActivity {
     public View.OnClickListener buttonRegisterListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            name = "Francesco";//editTextName.getText().toString().trim();
-            surname = "Peragine";//editTextSurname.getText().toString().trim();
-            serialNumber = "443020";//editTextSerialNumber.getText().toString().trim();
-            email = "francescoperagine@gmail.com";//editTextEmail.getText().toString().toLowerCase().trim();
-            password = "Stormbringer666";//editTextPassword.getText().toString().trim();
-            confirmPassword = "Stormbringer666";//editTextConfirmPassword.getText().toString().trim();
-        //    if(validateInputs()) {
+            name = editTextName.getText().toString().trim();
+            surname = editTextSurname.getText().toString().trim();
+            serialNumber = editTextSerialNumber.getText().toString().trim();
+            email = editTextEmail.getText().toString().toLowerCase().trim();
+            password = editTextPassword.getText().toString().trim();
+            confirmPassword = editTextConfirmPassword.getText().toString().trim();
+            if(validateInputs()) {
                 register();
-        //    }
+            }
         }
     };
 
