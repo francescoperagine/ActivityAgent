@@ -1,3 +1,31 @@
 <resources>
     <string name="app_name">dibApp</string>
+    <string name="title_activity_login">Sign in</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="welcome">"Welcome!"</string>
+    <string name="invalid_email">Not a valid email</string>
+    <string name="email_taken">Email is already in use</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="rememberMeToggleString">Remember me</string>
+    <string name="passwordForgotLinkString">Forgot password</string>
+    <string name="emailPromptHint">Email</string>
+    <string name="passwordPromptHint">Password</string>
+    <string name="rememberMeToggleHint">Keep me logged</string>
+    <string name="forgotPasswordLinkHint">Retrieve credentials</string>
+    <string name="action_register">Register</string>
+    <string name="text_or">or</string>
+    <string name="ssnPromptHint">Serial Number</string>
+    <string name="namePromptHint">Name</string>
+    <string name="confirmPasswordPromptHint">Confirm password</string>
+    <string name="surnamePromptHint">Surname</string>
+    <string name="alreadyRegistered">Already registered?</string>
+    <string name="inputCannotBeEmpty">cannot be empty</string>
+    <string name="passwordAndConfirmDoesNotMatch">Password and confirm password does not match.</string>
+    <string name="emailNotValid">Email is not valid.</string>
+    <string name="action_logout">Logout</string>
+    <string name="logoContentDescription" >L</string>
+    <string name="dashboard_menu_settings">Settings</string>
+    <string name="dashboard_menu_exit">Exit</string>
+    <string name="dashboard_menu_search">Search</string>
 </resources>

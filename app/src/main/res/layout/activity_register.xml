@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RegisterActivity">
+
+    <EditText
+        android:id="@+id/confirmPassword"
+        android:layout_width="344dp"
+        android:layout_height="wrap_content"
+
+        android:autofillHints="password"
+        android:hint="@string/confirmPasswordPromptHint"
+        android:imeOptions="actionDone"
+        android:includeFontPadding="true"
+        android:inputType="textPassword"
+        android:padding="@dimen/textDefaultPadding"
+        android:selectAllOnFocus="true"
+        app:layout_constraintBottom_toTopOf="@+id/register"
+        app:layout_constraintEnd_toEndOf="@+id/password"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/password"
+        app:layout_constraintTop_toBottomOf="@+id/password" />
+
+    <EditText
+        android:id="@+id/name"
+        android:layout_width="344dp"
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:autofillHints="password"
+        android:hint="@string/namePromptHint"
+        android:imeOptions="actionDone"
+        android:includeFontPadding="true"
+        android:inputType="textPersonName"
+        android:padding="@dimen/textDefaultPadding"
+        android:selectAllOnFocus="true"
+        app:layout_constraintBottom_toTopOf="@+id/surname"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/logo" />
+
+    <EditText
+        android:id="@+id/surname"
+        android:layout_width="344dp"
+        android:layout_height="wrap_content"
+
+        android:autofillHints="password"
+        android:hint="@string/surnamePromptHint"
+        android:imeOptions="actionDone"
+        android:includeFontPadding="true"
+        android:inputType="textPersonName"
+        android:padding="@dimen/textDefaultPadding"
+        android:selectAllOnFocus="true"
+        app:layout_constraintBottom_toTopOf="@+id/ssn"
+        app:layout_constraintEnd_toEndOf="@+id/name"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/name"
+        app:layout_constraintTop_toBottomOf="@+id/name" />
+
+    <EditText
+        android:id="@+id/ssn"
+        android:layout_width="344dp"
+        android:layout_height="wrap_content"
+
+        android:autofillHints="Serial Number"
+        android:hint="@string/ssnPromptHint"
+        android:imeOptions="actionDone"
+        android:includeFontPadding="true"
+        android:inputType="number"
+        android:padding="@dimen/textDefaultPadding"
+        android:selectAllOnFocus="true"
+        app:layout_constraintBottom_toTopOf="@+id/email"
+        app:layout_constraintEnd_toEndOf="@+id/surname"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/surname"
+        app:layout_constraintTop_toBottomOf="@+id/surname" />
+
+    <EditText
+        android:id="@+id/email"
+        android:layout_width="344dp"
+        android:layout_height="wrap_content"
+
+        android:autofillHints="username"
+        android:hint="@string/emailPromptHint"
+        android:includeFontPadding="true"
+        android:inputType="textEmailAddress"
+        android:padding="@dimen/textDefaultPadding"
+        android:selectAllOnFocus="true"
+        app:layout_constraintBottom_toTopOf="@+id/password"
+        app:layout_constraintEnd_toEndOf="@+id/ssn"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/ssn"
+        app:layout_constraintTop_toBottomOf="@+id/ssn" />
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="344dp"
+        android:layout_height="wrap_content"
+
+        android:autofillHints="password"
+        android:hint="@string/passwordPromptHint"
+        android:imeOptions="actionDone"
+        android:includeFontPadding="true"
+        android:inputType="textPassword"
+        android:padding="@dimen/textDefaultPadding"
+        android:selectAllOnFocus="true"
+        app:layout_constraintBottom_toTopOf="@+id/confirmPassword"
+        app:layout_constraintEnd_toEndOf="@+id/email"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/email"
+        app:layout_constraintTop_toBottomOf="@+id/email" />
+
+    <Button
+        android:id="@+id/register"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="@string/action_register"
+        app:layout_constraintBottom_toTopOf="@+id/alreadyRegistered"
+        app:layout_constraintEnd_toEndOf="@+id/confirmPassword"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/confirmPassword"
+        app:layout_constraintTop_toBottomOf="@+id/confirmPassword" />
+
+    <TextView
+        android:id="@+id/alreadyRegistered"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/alreadyRegistered"
+        app:layout_constraintBottom_toTopOf="@+id/sign_in"
+        app:layout_constraintEnd_toEndOf="@+id/register"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/register"
+        app:layout_constraintTop_toBottomOf="@+id/register" />
+
+    <Button
+        android:id="@+id/sign_in"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/action_sign_in"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/register"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/register"
+        app:layout_constraintTop_toBottomOf="@+id/register" />
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toTopOf="@id/name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@mipmap/dib_logo" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
