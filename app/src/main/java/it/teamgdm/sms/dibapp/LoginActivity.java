@@ -17,17 +17,17 @@ public class LoginActivity extends AppCompatActivity {
 
     private final String TAG = "dibApp.LoginActivity";
 
-    private static final String login_url = "login.php";
     private static final String REQUEST_METHOD = "POST";
-    private static final String LOGIN_OK = "Login is complete.";
-    private static final int LOGIN_OK_CODE = 201;
-
+    private static final String KEY_ACTION = "action";
+    private static final String ACTION = "login";
+    private static final String KEY_CODE = "code";
+    private static final String KEY_MESSAGE = "message";
     private static final String KEY_EMAIL = "email";
     private static final String KEY_PASSWORD = "password";
     private static final String KEY_EMPTY = "";
+    private static final int LOGIN_OK_CODE = 201;
 
-    private int codeResult;
-
+    private JSONObject response;
     private SessionHandler session;
     private EditText editTextEmail, editTextPassword;
 
@@ -41,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
 
         session = new SessionHandler(getApplicationContext());
         if(session.isLoggedIn()){
-            loadDashboard();
+       //     loadDashboard();
         }
         setContentView(R.layout.activity_login);
 
@@ -87,7 +87,6 @@ public class LoginActivity extends AppCompatActivity {
             email = editTextEmail.getText().toString().toLowerCase().trim();
             password = editTextPassword.getText().toString().trim();
             if(validateInputs()) login();
-
         }
     };
 
@@ -129,22 +128,27 @@ public class LoginActivity extends AppCompatActivity {
 
         //Populate the data parameters
         try {
+            data.put(KEY_ACTION, ACTION);
             data.put(KEY_EMAIL, email);
             data.put(KEY_PASSWORD, password);
-            Connection connection = new Connection(data, login_url, REQUEST_METHOD);
+            Connection connection = new Connection(data, REQUEST_METHOD);
             connection.execute();
-            codeResult = connection.get();
-            Log.i(TAG, getClass().getSimpleName() + " -login- execute. " + codeResult);
+            response = connection.get();
+            int codeResult = (int) response.get(KEY_CODE);
+            String message = response.getString(KEY_MESSAGE);
+            Log.i(TAG, getClass().getSimpleName() + " -login- Code: " + codeResult + " \tMessage: " + message);
+            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+
             if (codeResult == LOGIN_OK_CODE) {
-                Log.i(TAG, getClass().getSimpleName() + " -login-LOGIN_OK_CODE-");
-                Toast.makeText(getApplicationContext(), LOGIN_OK, Toast.LENGTH_SHORT).show();
                 session.loginUser(email);
                 loadDashboard();
-            } else {
-                Log.i(TAG, getClass().getSimpleName() + " -login-else-");
             }
+            else {
+                Log.i(TAG, getClass().getSimpleName() + " -login-LOGIN_CODE_NOT_OK-");
+            }
+
         } catch (Exception e) {
-            Log.i(TAG, getClass().getSimpleName() + " -login-Exception-");
+            Log.i(TAG, getClass().getSimpleName() + " -login- Exception-");
             Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }

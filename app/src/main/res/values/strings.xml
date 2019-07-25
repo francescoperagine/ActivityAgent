@@ -24,8 +24,8 @@
     <string name="passwordAndConfirmDoesNotMatch">Password and confirm password does not match.</string>
     <string name="emailNotValid">Email is not valid.</string>
     <string name="action_logout">Logout</string>
-    <string name="logoContentDescription" >L</string>
+    <string name="logoContentDescription" >LogoDescription</string>
     <string name="dashboard_menu_settings">Settings</string>
-    <string name="dashboard_menu_exit">Exit</string>
+    <string name="dashboard_menu_exit">Logout</string>
     <string name="dashboard_menu_search">Search</string>
 </resources>

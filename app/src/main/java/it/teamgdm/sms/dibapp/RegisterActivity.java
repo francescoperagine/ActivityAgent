@@ -6,29 +6,32 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.concurrent.ExecutionException;
+
 public class RegisterActivity extends AppCompatActivity {
 
     private final String TAG = "dibApp.RegisterActivity";
 
-    private static final String REGISTRATION_URL = "registration.php";
     private static final String REQUEST_METHOD = "POST";
-    private static final String REGISTRATION_OK = "Registration is complete.";
-
+    private static final String KEY_ACTION = "action";
+    private static final String ACTION = "registration";
+    private static final String KEY_CODE = "code";
+    private static final String KEY_MESSAGE = "message";
     private static final String KEY_NAME = "name";
     private static final String KEY_SURNAME = "surname";
     private static final String KEY_SERIAL_NUMBER = "serialNumber";
     private static final String KEY_EMAIL = "email";
     private static final String KEY_PASSWORD = "password";
     private static final String KEY_EMPTY = "";
-    private static final String KEY_STATUS = "status";
-    private static final String KEY_MESSAGE = "message";
 
+    private JSONObject response;
     private SessionHandler session;
 
     private EditText editTextName, editTextSurname, editTextSerialNumber, editTextEmail, editTextPassword, editTextConfirmPassword;
@@ -47,6 +50,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_register);
+
         session = new SessionHandler(getApplicationContext());
 
         editTextName = findViewById(R.id.name);
@@ -154,19 +158,30 @@ public class RegisterActivity extends AppCompatActivity {
     private void register() {
         Log.i(TAG, getClass().getSimpleName() + " -register-");
         JSONObject data = new JSONObject();
+
+        //Populate the data parameters
         try {
-            //Populate the data parameters
+            data.put(KEY_ACTION, ACTION);
             data.put(KEY_SERIAL_NUMBER, serialNumber);
             data.put(KEY_NAME, name);
             data.put(KEY_SURNAME, surname);
             data.put(KEY_EMAIL, email);
             data.put(KEY_PASSWORD, password);
-        } catch (JSONException e) {
+            Connection connection = new Connection(data, REQUEST_METHOD);
+            connection.execute();
+            response = connection.get();
+
+            int codeResult = (int) response.get(KEY_CODE);
+            String message = response.getString(KEY_MESSAGE);
+            Log.i(TAG, getClass().getSimpleName() + " -login- Code: " + codeResult + " \tMessage: " + message);
+            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+
+        } catch (JSONException | ExecutionException | InterruptedException e) {
+            Log.i(TAG, getClass().getSimpleName() + " -register- Exception-");
             System.out.println("\n\t" + data + "\n\t" + e.getMessage());
             e.printStackTrace();
         }
-        Connection connection = new Connection(data, REGISTRATION_URL, REQUEST_METHOD);
-        connection.execute();
+
     }
 
     /**
