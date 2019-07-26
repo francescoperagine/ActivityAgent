@@ -1,6 +1,7 @@
 package it.teamgdm.sms.dibapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 
@@ -40,11 +41,6 @@ public class SessionHandler {
         this.sharedPreferencesEditor = sharedPreferences.edit();
     }
 
-    /**
-     * Logs in the user by saving user details and setting session
-     *
-     * @param email
-     */
     public void loginUser(String email) {
         Log.i(TAG, getClass().getSimpleName() + " -loginUser-");
         User user = getUserDetails(email);
@@ -61,11 +57,18 @@ public class SessionHandler {
     }
 
     private long getExpireSessionTimer() {
+        Log.i(TAG, getClass().getSimpleName() + " -getExpireSessionTimer-");
         Date date = new Date();
         //Set user session for next 7 days
         long millis = date.getTime() + (7 * 24 * 60 * 60 * 1000);
         return millis;
     }
+
+    /**
+     * Check if session is expired by comparing current date and Session expiry date
+     * If shared preferences does not have a value then user is not logged in.
+     * @return boolean
+     */
 
     public boolean isLoggedIn() {
         Log.i(TAG, getClass().getSimpleName() + " -isLoggedIn-");
@@ -73,22 +76,15 @@ public class SessionHandler {
 
         long millis = sharedPreferences.getLong(KEY_EXPIRES, KEY_ZERO);
 
-        /* If shared preferences does not have a value
-         then user is not logged in
-         */
         if (millis == 0) {
             return false;
         }
         Date expiryDate = new Date(millis);
-
-        /* Check if session is expired by comparing
-        current date and Session expiry date
-        */
         return currentDate.before(expiryDate);
     }
 
     private User getUserDetails(String email) {
-        Log.i(TAG, getClass().getSimpleName() + " -getUserFromDB-");
+        Log.i(TAG, getClass().getSimpleName() + " -getUserDetails-");
         JSONObject data = new JSONObject();
         JSONObject response;
         User user = new User();
@@ -105,7 +101,7 @@ public class SessionHandler {
             user.setDegreeCourseId(response.getInt(KEY_DEGREE_COURSE_ID));
             user.setDegreeCourseName(response.getString(KEY_DEGREE_COURSE_NAME));
         } catch (JSONException | ExecutionException | InterruptedException e) {
-            Log.i(TAG, getClass().getSimpleName() + " -getUserFromDB- Exception");
+            Log.i(TAG, getClass().getSimpleName() + " -getUserDetails- Exception");
             e.printStackTrace();
         }
         return user;
@@ -115,8 +111,10 @@ public class SessionHandler {
      * Logs out user by clearing the session
      */
     public void logoutUser(){
-        sharedPreferencesEditor.clear();
-        sharedPreferencesEditor.commit();
+        Log.i(TAG, getClass().getSimpleName() + " -logoutUser-");
+        sharedPreferencesEditor.clear().commit();
+        Intent homeIntent = new Intent(context, MainActivity.class);
+        context.startActivity(homeIntent);
     }
 
 }

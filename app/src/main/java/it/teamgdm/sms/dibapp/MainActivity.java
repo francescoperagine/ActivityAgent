@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
         Log.i(TAG, getClass().getSimpleName() + " -onStart- The activity is getting started.");
         super.onStart();
 
+        //TODO: Splash screen
         Intent loginIntent = new Intent(this, LoginActivity.class);
         startActivity(loginIntent);
     }

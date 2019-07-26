@@ -41,15 +41,15 @@ public class LoginActivity extends AppCompatActivity {
 
         session = new SessionHandler(getApplicationContext());
         if(session.isLoggedIn()){
-       //     loadDashboard();
+            loadDashboard();
         }
         setContentView(R.layout.activity_login);
 
         editTextEmail = findViewById(R.id.email);
         editTextPassword = findViewById(R.id.password);
 
-        buttonSignIn = findViewById(R.id.sign_in);
-        buttonRegister = findViewById(R.id.register);
+        buttonSignIn = findViewById(R.id.sign_inButton);
+        buttonRegister = findViewById(R.id.registerButton);
     }
 
     protected void onStart() {
@@ -59,7 +59,6 @@ public class LoginActivity extends AppCompatActivity {
         buttonSignIn.setOnClickListener(buttonSignInListener);
         buttonRegister.setOnClickListener(buttonRegisterListener);
     }
-
     @Override
     protected void onResume() {
         Log.i(TAG, getClass().getSimpleName() + " -onResume- The activity is being resumed.");
@@ -142,11 +141,9 @@ public class LoginActivity extends AppCompatActivity {
             if (codeResult == LOGIN_OK_CODE) {
                 session.loginUser(email);
                 loadDashboard();
-            }
-            else {
+            } else {
                 Log.i(TAG, getClass().getSimpleName() + " -login-LOGIN_CODE_NOT_OK-");
             }
-
         } catch (Exception e) {
             Log.i(TAG, getClass().getSimpleName() + " -login- Exception-");
             Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();

@@ -12,7 +12,8 @@
         android:title="@string/dashboard_menu_settings"
         app:showAsAction="never" />
     <item
-        android:id="@+id/exit"
+        android:id="@+id/logoutButton"
+        android:icon="@drawable/ic_exit"
         android:title="@string/dashboard_menu_exit"
         app:showAsAction="never" />
 </menu>

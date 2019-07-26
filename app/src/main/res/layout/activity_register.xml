@@ -18,7 +18,7 @@
         android:inputType="textPassword"
         android:padding="@dimen/textDefaultPadding"
         android:selectAllOnFocus="true"
-        app:layout_constraintBottom_toTopOf="@+id/register"
+        app:layout_constraintBottom_toTopOf="@+id/registerButton"
         app:layout_constraintEnd_toEndOf="@+id/password"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/password"
@@ -115,7 +115,7 @@
         app:layout_constraintTop_toBottomOf="@+id/email" />
 
     <Button
-        android:id="@+id/register"
+        android:id="@+id/registerButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -131,22 +131,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/alreadyRegistered"
-        app:layout_constraintBottom_toTopOf="@+id/sign_in"
-        app:layout_constraintEnd_toEndOf="@+id/register"
+        app:layout_constraintBottom_toTopOf="@+id/sign_inButton"
+        app:layout_constraintEnd_toEndOf="@+id/registerButton"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="@+id/register"
-        app:layout_constraintTop_toBottomOf="@+id/register" />
+        app:layout_constraintStart_toStartOf="@+id/registerButton"
+        app:layout_constraintTop_toBottomOf="@+id/registerButton" />
 
     <Button
-        android:id="@+id/sign_in"
+        android:id="@+id/sign_inButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/action_sign_in"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/register"
+        app:layout_constraintEnd_toEndOf="@+id/registerButton"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="@+id/register"
-        app:layout_constraintTop_toBottomOf="@+id/register" />
+        app:layout_constraintStart_toStartOf="@+id/registerButton"
+        app:layout_constraintTop_toBottomOf="@+id/registerButton" />
 
     <ImageView
         android:id="@+id/logo"

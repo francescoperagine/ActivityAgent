@@ -19,8 +19,8 @@ import java.net.URL;
 
 public class Connection extends AsyncTask<Void, Void, JSONObject> {
     private final static String TAG = "dibApp.Connection";
-    private String serverUrl = "http://192.168.1.5:80/sms-dibapp-server/api_gateway.php";
-    //private final static String serverUrl = "http://10.72.50.165:80/sms-dibapp-server/api_gateway.php";
+    //private String serverUrl = "http://192.168.1.5:80/sms-dibapp-server/api_gateway.php";
+    private final static String serverUrl = "http://10.72.50.165:80/sms-dibapp-server/api_gateway.php";
 
     private URL url;
     private HttpURLConnection urlConnection;
@@ -58,7 +58,6 @@ public class Connection extends AsyncTask<Void, Void, JSONObject> {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
             String line;
             while ((line = bufferedReader.readLine()) != null) {
-                Log.i(TAG, "\n\t doInBackground while: "+ line);
                 readResponse(line);
             }
         } catch (IOException e) {

@@ -60,8 +60,8 @@ public class RegisterActivity extends AppCompatActivity {
         editTextPassword = findViewById(R.id.password);
         editTextConfirmPassword = findViewById(R.id.confirmPassword);
 
-        buttonRegister = findViewById(R.id.register);
-        buttonSignIn = findViewById(R.id.sign_in);
+        buttonRegister = findViewById(R.id.registerButton);
+        buttonSignIn = findViewById(R.id.sign_inButton);
     }
 
     protected void onStart() {
