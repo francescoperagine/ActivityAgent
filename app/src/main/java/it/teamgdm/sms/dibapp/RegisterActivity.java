@@ -31,9 +31,6 @@ public class RegisterActivity extends AppCompatActivity {
     private static final String KEY_PASSWORD = "password";
     private static final String KEY_EMPTY = "";
 
-    private JSONObject response;
-    private SessionHandler session;
-
     private EditText editTextName, editTextSurname, editTextSerialNumber, editTextEmail, editTextPassword, editTextConfirmPassword;
     private String name;
     private String surname;
@@ -42,7 +39,10 @@ public class RegisterActivity extends AppCompatActivity {
     private String password;
     private String confirmPassword;
 
-    Button buttonRegister, buttonSignIn;
+    private SessionHandler session;
+
+    private Button buttonRegister;
+    private Button buttonSignIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +93,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    public View.OnClickListener buttonSignInListener = new View.OnClickListener() {
+    private final View.OnClickListener buttonSignInListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             Intent signInIntent = new Intent(RegisterActivity.this, LoginActivity.class);
@@ -101,7 +101,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
     };
 
-    public View.OnClickListener buttonRegisterListener = new View.OnClickListener() {
+    private final View.OnClickListener buttonRegisterListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             name = editTextName.getText().toString().trim();
@@ -118,7 +118,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     /**
      * Validates inputs and shows error if any
-     * @return
+     *
      */
     private boolean validateInputs() {
         Log.i(TAG, getClass().getSimpleName() + " -validateInputs-");
@@ -169,15 +169,16 @@ public class RegisterActivity extends AppCompatActivity {
             data.put(KEY_PASSWORD, password);
             Connection connection = new Connection(data, REQUEST_METHOD);
             connection.execute();
-            response = connection.get();
+            JSONObject response = connection.get();
 
             int codeResult = (int) response.get(KEY_CODE);
             String message = response.getString(KEY_MESSAGE);
             Log.i(TAG, getClass().getSimpleName() + " -login- Code: " + codeResult + " \tMessage: " + message);
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-
+            session.loginUser(email);
+            loadDashboard();
         } catch (JSONException | ExecutionException | InterruptedException e) {
-            Log.i(TAG, getClass().getSimpleName() + " -register- Exception-");
+            Log.i(TAG, getClass().getSimpleName() + " -register-Exception-");
             System.out.println("\n\t" + data + "\n\t" + e.getMessage());
             e.printStackTrace();
         }

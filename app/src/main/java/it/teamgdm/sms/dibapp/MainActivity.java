@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
+    //TODO: tests
+
     private final String TAG = "dibApp.MainActivity";
 
     @Override

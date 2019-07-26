@@ -16,17 +16,16 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
-public class Connection extends AsyncTask<Void, Void, JSONObject> {
+class Connection extends AsyncTask<Void, Void, JSONObject> {
     private final static String TAG = "dibApp.Connection";
-    //private String serverUrl = "http://192.168.1.5:80/sms-dibapp-server/api_gateway.php";
-    private final static String serverUrl = "http://10.72.50.165:80/sms-dibapp-server/api_gateway.php";
 
     private URL url;
     private HttpURLConnection urlConnection;
-    private String requestMethod;
+    private final String requestMethod;
 
-    private JSONObject data;
+    private final JSONObject data;
     private JSONObject response;
 
     Connection(JSONObject data, String requestMethod) {
@@ -39,6 +38,8 @@ public class Connection extends AsyncTask<Void, Void, JSONObject> {
     private void urlBuilder() {
         Log.i(TAG, getClass().getSimpleName() + " -urlBuilder-");
         try {
+            // String serverUrl = "http://10.72.50.165:80/sms-dibapp-server/api_gateway.php";
+            String serverUrl = "http://192.168.1.5:80/sms-dibapp-server/api_gateway.php";
             url = new URL(serverUrl);
         } catch (MalformedURLException e) {
             Log.i(TAG, getClass().getSimpleName() + " -urlBuilder- fault");
@@ -52,7 +53,7 @@ public class Connection extends AsyncTask<Void, Void, JSONObject> {
         try {
             setConnection();
             OutputStream outputStream = new BufferedOutputStream(urlConnection.getOutputStream());
-            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
             bufferedWriter.write(data.toString());
             bufferedWriter.flush();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
@@ -63,9 +64,8 @@ public class Connection extends AsyncTask<Void, Void, JSONObject> {
         } catch (IOException e) {
             Log.i(TAG, getClass().getSimpleName() + " -doInBackground-Exception");
             e.printStackTrace();
-        } finally {
-            return response;
         }
+        return response;
     }
 
     private void setConnection() {
@@ -88,7 +88,7 @@ public class Connection extends AsyncTask<Void, Void, JSONObject> {
         Log.i(TAG, getClass().getSimpleName() + " -readResponse-");
         try {
             response = new JSONObject(line);
-            Log.i(TAG, "\n\t Response: "+ line);
+            Log.i(TAG, "\nResponse: "+ line);
        } catch (JSONException e) {
             Log.i(TAG,response.toString());
             e.printStackTrace();

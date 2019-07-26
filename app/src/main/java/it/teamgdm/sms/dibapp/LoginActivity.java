@@ -27,16 +27,17 @@ public class LoginActivity extends AppCompatActivity {
     private static final String KEY_EMPTY = "";
     private static final int LOGIN_OK_CODE = 201;
 
-    private JSONObject response;
     private SessionHandler session;
     private EditText editTextEmail, editTextPassword;
 
-    Button buttonSignIn, buttonRegister;
-    String email, password;
+    private Button buttonSignIn;
+    private Button buttonRegister;
+    private String email;
+    private String password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.i(TAG, getClass().getSimpleName() + " -onCreate- The activity is getting created.");
+        Log.i(TAG, getClass().getSimpleName() + " -onCreate-");
         super.onCreate(savedInstanceState);
 
         session = new SessionHandler(getApplicationContext());
@@ -53,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     protected void onStart() {
-        Log.i(TAG, getClass().getSimpleName() + " -onStart- The activity is getting started.");
+        Log.i(TAG, getClass().getSimpleName() + " -onStart-");
         super.onStart();
 
         buttonSignIn.setOnClickListener(buttonSignInListener);
@@ -61,37 +62,39 @@ public class LoginActivity extends AppCompatActivity {
     }
     @Override
     protected void onResume() {
-        Log.i(TAG, getClass().getSimpleName() + " -onResume- The activity is being resumed.");
+        Log.i(TAG, getClass().getSimpleName() + " -onResume-");
         super.onResume();
     }
     @Override
     protected void onPause() {
-        Log.i(TAG, getClass().getSimpleName() + " -onPause- The activity is being paused.");
+        Log.i(TAG, getClass().getSimpleName() + " -onPause-");
         super.onPause();
     }
     @Override
     protected void onStop() {
-        Log.i(TAG, getClass().getSimpleName() + " -onStop- The activity is being stopped.");
+        Log.i(TAG, getClass().getSimpleName() + " -onStop-");
         super.onStop();
     }
     @Override
     protected void onDestroy() {
-        Log.i(TAG, getClass().getSimpleName() + " -onDestroy- The activity is being destroyed.");
+        Log.i(TAG, getClass().getSimpleName() + " -onDestroy-");
         super.onDestroy();
     }
 
-    public OnClickListener buttonSignInListener = new OnClickListener() {
+    private final OnClickListener buttonSignInListener = new OnClickListener() {
         @Override
         public void onClick(View view) {
+            Log.i(TAG, getClass().getSimpleName() + " -OnClickListener-buttonSignInListener-onClick-");
             email = editTextEmail.getText().toString().toLowerCase().trim();
             password = editTextPassword.getText().toString().trim();
             if(validateInputs()) login();
         }
     };
 
-    public OnClickListener buttonRegisterListener = new OnClickListener() {
+    private final OnClickListener buttonRegisterListener = new OnClickListener() {
         @Override
         public void onClick(View view) {
+            Log.i(TAG, getClass().getSimpleName() + " -OnClickListener-buttonRegisterListener-onClick-");
             Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
             startActivity(registerIntent);
         }
@@ -116,7 +119,7 @@ public class LoginActivity extends AppCompatActivity {
         return true;
     }
 
-    boolean isEmailValid(CharSequence email) {
+    private boolean isEmailValid(CharSequence email) {
         Log.i(TAG, getClass().getSimpleName() + " -isEmailValid-");
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
@@ -132,13 +135,14 @@ public class LoginActivity extends AppCompatActivity {
             data.put(KEY_PASSWORD, password);
             Connection connection = new Connection(data, REQUEST_METHOD);
             connection.execute();
-            response = connection.get();
+            JSONObject response = connection.get();
             int codeResult = (int) response.get(KEY_CODE);
             String message = response.getString(KEY_MESSAGE);
             Log.i(TAG, getClass().getSimpleName() + " -login- Code: " + codeResult + " \tMessage: " + message);
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
 
             if (codeResult == LOGIN_OK_CODE) {
+                Log.i(TAG, getClass().getSimpleName() + " -login-LOGIN_OK_CODE-");
                 session.loginUser(email);
                 loadDashboard();
             } else {
@@ -158,5 +162,10 @@ public class LoginActivity extends AppCompatActivity {
         Log.i(TAG, getClass().getSimpleName() + " -loadDashboard-");
         Intent i = new Intent(getApplicationContext(), DashboardActivity.class);
         startActivity(i);
+    }
+
+    public void passwordForgotten(View view) {
+        Log.i(TAG, getClass().getSimpleName() + " -passwordForgotten-");
+        //TODO: passwordForgotten
     }
 }

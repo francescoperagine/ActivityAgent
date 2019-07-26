@@ -1,5 +1,6 @@
 package it.teamgdm.sms.dibapp;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,7 +12,7 @@ import org.json.JSONObject;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
-public class SessionHandler {
+class SessionHandler {
 
     private final String TAG = "dibApp.RegisterActivity";
 
@@ -27,13 +28,13 @@ public class SessionHandler {
     private static final String KEY_DEGREE_COURSE_ID = "degreeCourseId";
     private static final String KEY_DEGREE_COURSE_NAME = "degreeCourseName";
     private static final String KEY_EXPIRES = "expires";
-    private static final String KEY_EMPTY = "";
     private static final int KEY_ZERO = 0;
 
-    private Context context;
-    private SharedPreferences.Editor sharedPreferencesEditor;
-    private SharedPreferences sharedPreferences;
+    private final Context context;
+    private final SharedPreferences.Editor sharedPreferencesEditor;
+    private final SharedPreferences sharedPreferences;
 
+    @SuppressLint("CommitPrefEdits")
     public SessionHandler(Context context) {
         Log.i(TAG, getClass().getSimpleName() + " -Constructor-");
         this.context = context;
@@ -60,8 +61,7 @@ public class SessionHandler {
         Log.i(TAG, getClass().getSimpleName() + " -getExpireSessionTimer-");
         Date date = new Date();
         //Set user session for next 7 days
-        long millis = date.getTime() + (7 * 24 * 60 * 60 * 1000);
-        return millis;
+        return date.getTime() + (7 * 24 * 60 * 60 * 1000);
     }
 
     /**
@@ -70,7 +70,7 @@ public class SessionHandler {
      * @return boolean
      */
 
-    public boolean isLoggedIn() {
+    boolean isLoggedIn() {
         Log.i(TAG, getClass().getSimpleName() + " -isLoggedIn-");
         Date currentDate = new Date();
 
@@ -113,8 +113,8 @@ public class SessionHandler {
     public void logoutUser(){
         Log.i(TAG, getClass().getSimpleName() + " -logoutUser-");
         sharedPreferencesEditor.clear().commit();
-        Intent homeIntent = new Intent(context, MainActivity.class);
-        context.startActivity(homeIntent);
+        Intent mainIntent = new Intent(context, MainActivity.class);
+        context.startActivity(mainIntent);
     }
 
 }

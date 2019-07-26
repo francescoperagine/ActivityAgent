@@ -11,7 +11,8 @@
         android:layout_width="344dp"
         android:layout_height="wrap_content"
 
-        android:autofillHints="password"
+        android:autofillHints="@string/confirmPasswordPromptHint"
+        tools:targetApi="o"
         android:hint="@string/confirmPasswordPromptHint"
         android:imeOptions="actionDone"
         android:includeFontPadding="true"
@@ -31,7 +32,8 @@
 
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:autofillHints="password"
+        android:autofillHints="@string/namePromptHint"
+        tools:targetApi="o"
         android:hint="@string/namePromptHint"
         android:imeOptions="actionDone"
         android:includeFontPadding="true"
@@ -48,7 +50,8 @@
         android:layout_width="344dp"
         android:layout_height="wrap_content"
 
-        android:autofillHints="password"
+        android:autofillHints="@string/surnamePromptHint"
+        tools:targetApi="o"
         android:hint="@string/surnamePromptHint"
         android:imeOptions="actionDone"
         android:includeFontPadding="true"
@@ -66,7 +69,8 @@
         android:layout_width="344dp"
         android:layout_height="wrap_content"
 
-        android:autofillHints="Serial Number"
+        android:autofillHints="@string/ssnPromptHint"
+        tools:targetApi="o"
         android:hint="@string/ssnPromptHint"
         android:imeOptions="actionDone"
         android:includeFontPadding="true"
@@ -84,7 +88,8 @@
         android:layout_width="344dp"
         android:layout_height="wrap_content"
 
-        android:autofillHints="username"
+        android:autofillHints="@string/emailPromptHint"
+        tools:targetApi="o"
         android:hint="@string/emailPromptHint"
         android:includeFontPadding="true"
         android:inputType="textEmailAddress"
@@ -101,7 +106,8 @@
         android:layout_width="344dp"
         android:layout_height="wrap_content"
 
-        android:autofillHints="password"
+        android:autofillHints="@string/passwordPromptHint"
+        tools:targetApi="o"
         android:hint="@string/passwordPromptHint"
         android:imeOptions="actionDone"
         android:includeFontPadding="true"
@@ -158,6 +164,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@mipmap/dib_logo" />
+        app:srcCompat="@mipmap/dib_logo"
+        android:contentDescription="@+string/contentDescriptionLogo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

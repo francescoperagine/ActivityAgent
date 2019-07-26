@@ -34,7 +34,8 @@
         app:layout_constraintBottom_toTopOf="@+id/password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logo" />
+        app:layout_constraintTop_toBottomOf="@+id/logo"
+        tools:targetApi="o" />
 
     <EditText
         android:id="@+id/password"
@@ -49,7 +50,8 @@
         app:layout_constraintBottom_toTopOf="@id/passwordForgotLink"
         app:layout_constraintEnd_toEndOf="@+id/email"
         app:layout_constraintStart_toStartOf="@+id/email"
-        app:layout_constraintTop_toBottomOf="@id/email" />
+        app:layout_constraintTop_toBottomOf="@id/email"
+        tools:targetApi="o" />
 
     <Button
         android:id="@+id/sign_inButton"
@@ -97,11 +99,9 @@
         app:layout_constraintTop_toBottomOf="@id/password" />
 
     <TextView
-        android:id="@+id/or"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:editable="false"
         android:text="@string/text_or"
         android:textAlignment="center"
         app:layout_constraintBottom_toTopOf="@+id/registerButton"

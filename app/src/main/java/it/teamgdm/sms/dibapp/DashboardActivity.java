@@ -6,25 +6,22 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 public class DashboardActivity extends AppCompatActivity {
 
     private final String TAG = "dibApp.LoginActivity";
 
-    private SessionHandler session;
-    boolean doubleBackToExitPressedOnce = false;
+    private boolean doubleBackToExitPressedOnce = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(TAG, getClass().getSimpleName() + " -onCreate-");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
-
-        session = new SessionHandler(getApplicationContext());
     }
 
     @Override
@@ -32,15 +29,6 @@ public class DashboardActivity extends AppCompatActivity {
         Log.i(TAG, getClass().getSimpleName() + " -onStart-");
         super.onStart();
     }
-
-    public View.OnClickListener buttonLogoutListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Log.i(TAG, getClass().getSimpleName() + " -buttonLogoutListener.OnClickListener-");
-            session.logoutUser();
-        }
-    };
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -57,9 +45,9 @@ public class DashboardActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             //TODO: set up the action bar items
             case R.id.logoutButton:
-                //TODO: ask for exit confirmation
-                LogoutDialogFragment logout = new LogoutDialogFragment(this.getApplicationContext());
-                session.logoutUser();
+                FragmentManager fragmentManager = this.getSupportFragmentManager();
+                LogoutDialogFragment logoutDialogFragment = new LogoutDialogFragment(this);
+                logoutDialogFragment.show(fragmentManager, "logout_fragment");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
