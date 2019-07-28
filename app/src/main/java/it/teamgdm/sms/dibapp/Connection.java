@@ -21,6 +21,8 @@ import java.nio.charset.StandardCharsets;
 class Connection extends AsyncTask<Void, Void, JSONObject> {
     private final static String TAG = "dibApp.Connection";
 
+    // private final static String serverUrl = "http://10.72.50.165:80/sms-dibapp-server/api_gateway.php";
+    final static String serverUrl = "http://192.168.1.5:80/sms-dibapp-server/api_gateway.php";
     private URL url;
     private HttpURLConnection urlConnection;
     private final String requestMethod;
@@ -38,9 +40,8 @@ class Connection extends AsyncTask<Void, Void, JSONObject> {
     private void urlBuilder() {
         Log.i(TAG, getClass().getSimpleName() + " -urlBuilder-");
         try {
-            // String serverUrl = "http://10.72.50.165:80/sms-dibapp-server/api_gateway.php";
-            String serverUrl = "http://192.168.1.5:80/sms-dibapp-server/api_gateway.php";
             url = new URL(serverUrl);
+            Log.i(TAG, getClass().getSimpleName() + " -urlBuilder-URL " + url);
         } catch (MalformedURLException e) {
             Log.i(TAG, getClass().getSimpleName() + " -urlBuilder- fault");
             e.printStackTrace();
@@ -59,6 +60,7 @@ class Connection extends AsyncTask<Void, Void, JSONObject> {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
             String line;
             while ((line = bufferedReader.readLine()) != null) {
+                Log.i(TAG, getClass().getSimpleName() + " -doInBackground-while"+line);
                 readResponse(line);
             }
         } catch (IOException e) {
@@ -88,6 +90,7 @@ class Connection extends AsyncTask<Void, Void, JSONObject> {
         Log.i(TAG, getClass().getSimpleName() + " -readResponse-");
         try {
             response = new JSONObject(line);
+            Log.i(TAG, "\nResponse: "+ response);
             Log.i(TAG, "\nResponse: "+ line);
        } catch (JSONException e) {
             Log.i(TAG,response.toString());

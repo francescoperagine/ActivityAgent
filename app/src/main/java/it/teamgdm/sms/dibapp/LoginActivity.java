@@ -42,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
 
         session = new SessionHandler(getApplicationContext());
         if(session.isLoggedIn()){
-            loadDashboard();
+       //     loadDashboard();
         }
         setContentView(R.layout.activity_login);
 

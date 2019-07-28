@@ -30,6 +30,7 @@ public class RegisterActivity extends AppCompatActivity {
     private static final String KEY_EMAIL = "email";
     private static final String KEY_PASSWORD = "password";
     private static final String KEY_EMPTY = "";
+    private static final int REGISTRATION_OK_CODE = 202;
 
     private EditText editTextName, editTextSurname, editTextSerialNumber, editTextEmail, editTextPassword, editTextConfirmPassword;
     private String name;
@@ -40,6 +41,7 @@ public class RegisterActivity extends AppCompatActivity {
     private String confirmPassword;
 
     private SessionHandler session;
+    boolean registrationComplete;
 
     private Button buttonRegister;
     private Button buttonSignIn;
@@ -52,6 +54,7 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         session = new SessionHandler(getApplicationContext());
+        registrationComplete = false;
 
         editTextName = findViewById(R.id.name);
         editTextSurname = findViewById(R.id.surname);
@@ -65,7 +68,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     protected void onStart() {
-        Log.i(TAG, getClass().getSimpleName() + " -onStart- The activity is getting started.");
+        Log.i(TAG, getClass().getSimpleName() + " -onStart-");
         super.onStart();
 
         buttonSignIn.setOnClickListener(buttonSignInListener);
@@ -74,28 +77,29 @@ public class RegisterActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        Log.i(TAG, getClass().getSimpleName() + " -onResume- The activity is being resumed.");
+        Log.i(TAG, getClass().getSimpleName() + " -onResume-");
         super.onResume();
     }
     @Override
     protected void onPause() {
-        Log.i(TAG, getClass().getSimpleName() + " -onPause- The activity is being paused.");
+        Log.i(TAG, getClass().getSimpleName() + " -onPause-");
         super.onPause();
     }
     @Override
     protected void onStop() {
-        Log.i(TAG, getClass().getSimpleName() + " -onStop- The activity is being stopped.");
+        Log.i(TAG, getClass().getSimpleName() + " -onStop-");
         super.onStop();
     }
     @Override
     protected void onDestroy() {
-        Log.i(TAG, getClass().getSimpleName() + " -onDestroy- The activity is being destroyed.");
+        Log.i(TAG, getClass().getSimpleName() + " -onDestroy-");
         super.onDestroy();
     }
 
     private final View.OnClickListener buttonSignInListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            Log.i(TAG, getClass().getSimpleName() + " -OnClickListener-buttonSignInListener-onClick-");
             Intent signInIntent = new Intent(RegisterActivity.this, LoginActivity.class);
             startActivity(signInIntent);
         }
@@ -104,17 +108,28 @@ public class RegisterActivity extends AppCompatActivity {
     private final View.OnClickListener buttonRegisterListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            Log.i(TAG, getClass().getSimpleName() + " -OnClickListener-buttonRegisterListener-onClick-");
             name = editTextName.getText().toString().trim();
             surname = editTextSurname.getText().toString().trim();
             serialNumber = editTextSerialNumber.getText().toString().trim();
             email = editTextEmail.getText().toString().toLowerCase().trim();
             password = editTextPassword.getText().toString().trim();
             confirmPassword = editTextConfirmPassword.getText().toString().trim();
-            if(validateInputs()) {
-                register();
-            }
+            registrationInit();
         }
     };
+
+    private void registrationInit() {
+        Log.i(TAG, getClass().getSimpleName() + " -registrationInit-");
+        if(validateInputs()) {
+            register();
+        }
+        if(registrationComplete == true ) {
+            Log.i(TAG, getClass().getSimpleName() + " -registrationInit-registrationComplete-TRUE");
+            session.loginUser(email);
+            loadDashboard();
+        }
+    }
 
     /**
      * Validates inputs and shows error if any
@@ -170,13 +185,17 @@ public class RegisterActivity extends AppCompatActivity {
             Connection connection = new Connection(data, REQUEST_METHOD);
             connection.execute();
             JSONObject response = connection.get();
-
             int codeResult = (int) response.get(KEY_CODE);
             String message = response.getString(KEY_MESSAGE);
-            Log.i(TAG, getClass().getSimpleName() + " -login- Code: " + codeResult + " \tMessage: " + message);
+            Log.i(TAG, getClass().getSimpleName() + " -register- Code: " + codeResult + " \tMessage: " + message);
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-            session.loginUser(email);
-            loadDashboard();
+            if (codeResult == REGISTRATION_OK_CODE) {
+                Log.i(TAG, getClass().getSimpleName() + " -register-REGISTRATION_OK_CODE-");
+                registrationComplete = true;
+            } else {
+                Log.i(TAG, getClass().getSimpleName() + " -register-REGISTRATION_CODE_NOT_OK-");
+            }
+
         } catch (JSONException | ExecutionException | InterruptedException e) {
             Log.i(TAG, getClass().getSimpleName() + " -register-Exception-");
             System.out.println("\n\t" + data + "\n\t" + e.getMessage());
