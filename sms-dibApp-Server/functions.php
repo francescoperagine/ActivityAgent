@@ -4,13 +4,13 @@ include 'db_connect.php';
 include 'config.php';
 
 class Response {
-
-	var $code;
+	
 	var $message;
+	var $code;
 	
 	function __construct(string $message, int $code) {
-		$this->code = $code;
 		$this->message = $message;
+		$this->code = $code;
 	}
 }
 
@@ -55,45 +55,51 @@ function verifyPassword(string $email, string $password) {
 }
 
 function registration($input) {
-	global $connection;
 	if(isset($input['serialNumber']) && isset($input['name']) && isset($input['surname']) && isset($input['email']) && isset($input['password'])){
-	//Check if user already exist
-		if(!userExists($input['email'])){
-			//Get a unique Salt
-			$salt         = getSalt();
-			//Generate a unique password Hash
-			$passwordHash = password_hash(concatPasswordWithSalt($input['password'],$salt),PASSWORD_DEFAULT);
-			
-			//Query to register new user
-			$insertQuery  = "INSERT INTO user(serialNumber, name, surname, email, passwordHash, salt) VALUES (:serialNumber, :name, :surname, :email, :passwordHash, :salt)";
-			if($stmt = $connection->prepare($insertQuery)){
-				$stmt->bindValue(':serialNumber', $input['serialNumber']);
-				$stmt->bindValue(':name', $input['name']);
-				$stmt->bindValue(':surname', $input['surname']);
-				$stmt->bindValue(':email', $input['email']);
-				$stmt->bindValue(':passwordHash', $passwordHash);
-				$stmt->bindValue(':salt', $salt);
-				$stmt->execute();
-				$response = $stmt->fetch(PDO::FETCH_OBJ);
-				$response->code = USER_CREATED_CODE;
-				$response->message = USER_CREATED_TEXT;
-			}
-		} else {
-			$response = new Response(USER_ALREADY_EXISTS_CODE,USER_ALREADY_EXISTS);
+	//Register the user if doesn't exists
+		try {
+			userExists($input['email']);
+			$response = new Response(USER_ALREADY_EXISTS_TEXT, USER_ALREADY_EXISTS_CODE);
+		} catch(Exception $e) {
+			$response = registerNewUser($input);
 		}
 	} else { 
-		$response = new Response(MISSING_MANDATORY_PARAMETERS,MISSING_MANDATORY_PARAMETERS_TEXT);
+		$response = new Response(MISSING_MANDATORY_PARAMETERS_TEXT, MISSING_MANDATORY_PARAMETERS_CODE);
+	}
+	return $response;
+}
+
+function registerNewUser($input) {
+	global $connection;
+	//Get a unique Salt
+	$salt = getSalt();
+	//Generate a unique password Hash
+	$passwordHash = password_hash(concatPasswordWithSalt($input['password'],$salt),PASSWORD_DEFAULT);
+	$response = null;
+	
+	//Query to register new user
+	$insertQuery  = "INSERT INTO user(serialNumber, name, surname, email, passwordHash, salt) VALUES (:serialNumber, :name, :surname, :email, :passwordHash, :salt)";
+	$stmt = $connection->prepare($insertQuery);
+	$stmt->bindValue(':serialNumber', $input['serialNumber']);
+	$stmt->bindValue(':name', $input['name']);
+	$stmt->bindValue(':surname', $input['surname']);
+	$stmt->bindValue(':email', $input['email']);
+	$stmt->bindValue(':passwordHash', $passwordHash);
+	$stmt->bindValue(':salt', $salt);
+	$stmt->execute();
+	if($stmt) {
+		$response = new Response(USER_CREATED_TEXT,USER_CREATED_CODE);
+	} else {
+		$response = new Response(USER_NOT_CREATED_TEXT,USER_NOT_CREATED_CODE);
 	}
 	return $response;
 }
 
 function getUserDetails(string $email) {
 	global $connection;
-	$query = "SELECT u.name as name, u.surname as surname, u.registrationDate as registrationDate, dc.id as degreeCourseId, dc.name as degreeCourseName, r.id as roleId, r.name as roleName
-		FROM user as u, user_degreeCourse as udc, degreeCourse as dc, user_role as ur, role as r
-		WHERE u.id = udc.userID 
-		AND udc.classID = dc.id
-		AND u.id = ur.userID AND ur.roleID = r.ID
+	$query = "SELECT u.name as name, u.surname as surname, u.email as email, u.registrationDate as registrationDate, r.id as roleId, r.name as roleName
+		FROM user as u, user_role as ur, role as r
+		WHERE u.id = ur.userID AND ur.roleID = r.ID
 		AND email = ?";
 	$stmt = $connection->prepare($query);
 	$stmt->execute([$email]);

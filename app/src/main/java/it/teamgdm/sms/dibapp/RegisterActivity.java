@@ -17,21 +17,6 @@ import java.util.concurrent.ExecutionException;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private final String TAG = "dibApp.RegisterActivity";
-
-    private static final String REQUEST_METHOD = "POST";
-    private static final String KEY_ACTION = "action";
-    private static final String ACTION = "registration";
-    private static final String KEY_CODE = "code";
-    private static final String KEY_MESSAGE = "message";
-    private static final String KEY_NAME = "name";
-    private static final String KEY_SURNAME = "surname";
-    private static final String KEY_SERIAL_NUMBER = "serialNumber";
-    private static final String KEY_EMAIL = "email";
-    private static final String KEY_PASSWORD = "password";
-    private static final String KEY_EMPTY = "";
-    private static final int REGISTRATION_OK_CODE = 202;
-
     private EditText editTextName, editTextSurname, editTextSerialNumber, editTextEmail, editTextPassword, editTextConfirmPassword;
     private String name;
     private String surname;
@@ -40,21 +25,15 @@ public class RegisterActivity extends AppCompatActivity {
     private String password;
     private String confirmPassword;
 
-    private SessionHandler session;
-    boolean registrationComplete;
-
     private Button buttonRegister;
     private Button buttonSignIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.i(TAG, getClass().getSimpleName() + " -onCreate-");
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -onCreate-");
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_register);
-
-        session = new SessionHandler(getApplicationContext());
-        registrationComplete = false;
 
         editTextName = findViewById(R.id.name);
         editTextSurname = findViewById(R.id.surname);
@@ -68,7 +47,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     protected void onStart() {
-        Log.i(TAG, getClass().getSimpleName() + " -onStart-");
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -onStart-");
         super.onStart();
 
         buttonSignIn.setOnClickListener(buttonSignInListener);
@@ -77,29 +56,29 @@ public class RegisterActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        Log.i(TAG, getClass().getSimpleName() + " -onResume-");
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -onResume-");
         super.onResume();
     }
     @Override
     protected void onPause() {
-        Log.i(TAG, getClass().getSimpleName() + " -onPause-");
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -onPause-");
         super.onPause();
     }
     @Override
     protected void onStop() {
-        Log.i(TAG, getClass().getSimpleName() + " -onStop-");
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -onStop-");
         super.onStop();
     }
     @Override
     protected void onDestroy() {
-        Log.i(TAG, getClass().getSimpleName() + " -onDestroy-");
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -onDestroy-");
         super.onDestroy();
     }
 
     private final View.OnClickListener buttonSignInListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Log.i(TAG, getClass().getSimpleName() + " -OnClickListener-buttonSignInListener-onClick-");
+            Log.i(Settings.TAG, getClass().getSimpleName() + " -OnClickListener-buttonSignInListener-onClick-");
             Intent signInIntent = new Intent(RegisterActivity.this, LoginActivity.class);
             startActivity(signInIntent);
         }
@@ -108,7 +87,7 @@ public class RegisterActivity extends AppCompatActivity {
     private final View.OnClickListener buttonRegisterListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Log.i(TAG, getClass().getSimpleName() + " -OnClickListener-buttonRegisterListener-onClick-");
+            Log.i(Settings.TAG, getClass().getSimpleName() + " -OnClickListener-buttonRegisterListener-onClick-");
             name = editTextName.getText().toString().trim();
             surname = editTextSurname.getText().toString().trim();
             serialNumber = editTextSerialNumber.getText().toString().trim();
@@ -119,15 +98,20 @@ public class RegisterActivity extends AppCompatActivity {
         }
     };
 
+    /**
+     * Validate the input, records the user then loads the login activity
+     */
+
     private void registrationInit() {
-        Log.i(TAG, getClass().getSimpleName() + " -registrationInit-");
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -registrationInit-");
+        boolean registrationComplete = false;
         if(validateInputs()) {
-            register();
+            registrationComplete = register();
         }
-        if(registrationComplete == true ) {
-            Log.i(TAG, getClass().getSimpleName() + " -registrationInit-registrationComplete-TRUE");
-            session.loginUser(email);
-            loadDashboard();
+        if(registrationComplete) {
+            Log.i(Settings.TAG, getClass().getSimpleName() + " -registrationInit-registrationComplete-");
+            Intent loginIntent = new Intent(this, LoginActivity.class);
+            startActivity(loginIntent);
         }
     }
 
@@ -136,28 +120,28 @@ public class RegisterActivity extends AppCompatActivity {
      *
      */
     private boolean validateInputs() {
-        Log.i(TAG, getClass().getSimpleName() + " -validateInputs-");
-        if (KEY_EMPTY.equals(name)) {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -validateInputs-");
+        if (Settings.KEY_EMPTY.equals(name)) {
             editTextName.setError(getResources().getString(R.string.namePromptHint) + " " + getResources().getString(R.string.inputCannotBeEmpty));
             editTextName.requestFocus();
             return false;
         }
-        if (KEY_EMPTY.equals(surname)) {
+        if (Settings.KEY_EMPTY.equals(surname)) {
             editTextSurname.setError(getResources().getString(R.string.surnamePromptHint) + " " + getResources().getString(R.string.inputCannotBeEmpty));
             editTextSurname.requestFocus();
             return false;
         }
-        if (KEY_EMPTY.equals(serialNumber)) {
+        if (Settings.KEY_EMPTY.equals(serialNumber)) {
             editTextSerialNumber.setError(getResources().getString(R.string.ssnPromptHint) + " " + getResources().getString(R.string.inputCannotBeEmpty));
             editTextSerialNumber.requestFocus();
             return false;
         }
-        if (KEY_EMPTY.equals(password)) {
+        if (Settings.KEY_EMPTY.equals(password)) {
             editTextPassword.setError(getResources().getString(R.string.passwordPromptHint) + " " + getResources().getString(R.string.inputCannotBeEmpty));
             editTextPassword.requestFocus();
             return false;
         }
-        if (KEY_EMPTY.equals(confirmPassword)) {
+        if (Settings.KEY_EMPTY.equals(confirmPassword)) {
             editTextConfirmPassword.setError(getResources().getString(R.string.confirmPasswordPromptHint) + " " + getResources().getString(R.string.inputCannotBeEmpty));
             editTextConfirmPassword.requestFocus();
             return false;
@@ -170,46 +154,38 @@ public class RegisterActivity extends AppCompatActivity {
         return true;
     }
 
-    private void register() {
-        Log.i(TAG, getClass().getSimpleName() + " -register-");
+    private boolean register() {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -register-");
         JSONObject data = new JSONObject();
 
         //Populate the data parameters
         try {
-            data.put(KEY_ACTION, ACTION);
-            data.put(KEY_SERIAL_NUMBER, serialNumber);
-            data.put(KEY_NAME, name);
-            data.put(KEY_SURNAME, surname);
-            data.put(KEY_EMAIL, email);
-            data.put(KEY_PASSWORD, password);
-            Connection connection = new Connection(data, REQUEST_METHOD);
+            data.put(Settings.KEY_ACTION, Settings.ACTION_REGISTRATION);
+            data.put(Settings.KEY_SERIAL_NUMBER, serialNumber);
+            data.put(Settings.KEY_NAME, name);
+            data.put(Settings.KEY_SURNAME, surname);
+            data.put(Settings.KEY_EMAIL, email);
+            data.put(Settings.KEY_PASSWORD, password);
+            Connection connection = new Connection(data, Settings.REQUEST_METHOD);
             connection.execute();
             JSONObject response = connection.get();
-            int codeResult = (int) response.get(KEY_CODE);
-            String message = response.getString(KEY_MESSAGE);
-            Log.i(TAG, getClass().getSimpleName() + " -register- Code: " + codeResult + " \tMessage: " + message);
-            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-            if (codeResult == REGISTRATION_OK_CODE) {
-                Log.i(TAG, getClass().getSimpleName() + " -register-REGISTRATION_OK_CODE-");
-                registrationComplete = true;
-            } else {
-                Log.i(TAG, getClass().getSimpleName() + " -register-REGISTRATION_CODE_NOT_OK-");
-            }
+            Log.i(Settings.TAG, getClass().getSimpleName() + " -register- Response: " + response.toString());
+            String message = response.getString(Settings.KEY_MESSAGE);
+            int codeResult = (int) response.get(Settings.KEY_CODE);
 
+            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+            if (codeResult == Settings.USER_CREATED_CODE) {
+                Log.i(Settings.TAG, getClass().getSimpleName() + " -register-Settings.USER_CREATED-");
+                return true;
+            } else {
+                Log.i(Settings.TAG, getClass().getSimpleName() + " -register-REGISTRATION_NOT_OK-");
+                return false;
+            }
         } catch (JSONException | ExecutionException | InterruptedException e) {
-            Log.i(TAG, getClass().getSimpleName() + " -register-Exception-");
-            System.out.println("\n\t" + data + "\n\t" + e.getMessage());
+            Log.i(Settings.TAG, getClass().getSimpleName() + " -register-Exception-");
+            System.out.println("\n\t" + "\n\t" + e.getMessage());
             e.printStackTrace();
         }
-
-    }
-
-    /**
-     * Launch Dashboard Activity on Successful Sign Up
-     */
-    private void loadDashboard() {
-        Log.i(TAG, getClass().getSimpleName() + " -loadDashboard-");
-        Intent i = new Intent(getApplicationContext(), DashboardActivity.class);
-        startActivity(i);
+        return false;
     }
 }

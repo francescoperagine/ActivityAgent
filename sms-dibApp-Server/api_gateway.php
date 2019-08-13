@@ -7,7 +7,7 @@ error_reporting(E_ALL);
 $inputJSON = file_get_contents('php://input');
 $input = json_decode($inputJSON, TRUE); //convert JSON into array
 
-if(isset($input[ACTION])){
+if(isset($input[ACTION])){	
 	switch($input[ACTION]) {
 		case ACTION_LOGIN: 
 			$response = login($input);
@@ -23,7 +23,7 @@ if(isset($input[ACTION])){
 			break;
 	}
 } else {
-	$response = new Response($e->getMessage(), intval($e->getCode())); 
+	$response = new Response(ACTION_NOT_DEFINED_TEXT, ACTION_NOT_DEFINED_CODE); 
 }
 echo json_encode($response);
 

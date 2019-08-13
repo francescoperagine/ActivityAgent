@@ -7,22 +7,22 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 
 class LogoutDialogFragment extends DialogFragment {
 
-    private final String TAG = "dibApp.LoginActivity";
-
     private final Context applicationContext;
 
-    public LogoutDialogFragment(Context applicationContext) {
-        Log.i(TAG, getClass().getSimpleName() + " -LogoutDialogFragment-");
+    LogoutDialogFragment(Context applicationContext) {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -LogoutDialogFragment-");
         this.applicationContext = applicationContext;
     }
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Log.i(TAG, getClass().getSimpleName() + " -onCreateDialog-");
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -onCreateDialog-");
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(R.string.logout_dialog_confirm)
                 .setPositiveButton(R.string.logout_dialog_confirm_yes, new DialogInterface.OnClickListener() {

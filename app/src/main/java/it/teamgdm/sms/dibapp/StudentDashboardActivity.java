@@ -8,42 +8,42 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
-public class DashboardActivity extends AppCompatActivity {
-
-    private final String TAG = "dibApp.LoginActivity";
+public class StudentDashboardActivity extends AppCompatActivity {
 
     private boolean doubleBackToExitPressedOnce = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.i(TAG, getClass().getSimpleName() + " -onCreate-");
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -onCreate-");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dashboard);
+        setContentView(R.layout.student_activity_dashboard);
     }
 
     @Override
     protected void onStart() {
-        Log.i(TAG, getClass().getSimpleName() + " -onStart-");
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -onStart-");
         super.onStart();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        Log.i(TAG, getClass().getSimpleName() + " -onCreateOptionsMenu-" + menu.toString());
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -onCreateOptionsMenu-" + menu.toString());
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.dashboard_menu, menu);
+        menuInflater.inflate(R.menu.student_dashboard_menu, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Log.i(TAG, getClass().getSimpleName() + " -onOptionsItemSelected-" +item.toString());
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -onOptionsItemSelected-" +item.toString());
         // Handle item selection
         switch (item.getItemId()) {
             //TODO: set up the action bar items
+            //TODO: search feature
             case R.id.logoutButton:
                 FragmentManager fragmentManager = this.getSupportFragmentManager();
                 LogoutDialogFragment logoutDialogFragment = new LogoutDialogFragment(this);
@@ -56,7 +56,7 @@ public class DashboardActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Log.i(TAG, getClass().getSimpleName() + " -onBackPressed-");
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -onBackPressed-");
         if (doubleBackToExitPressedOnce) {
             super.onBackPressed();
             return;
@@ -68,7 +68,7 @@ public class DashboardActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Log.i(TAG, getClass().getSimpleName() + " -onBackPressed-run-");
+                Log.i(Settings.TAG, getClass().getSimpleName() + " -onBackPressed-run-");
                 doubleBackToExitPressedOnce=false;
             }
         }, 2000);

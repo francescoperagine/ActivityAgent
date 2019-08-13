@@ -1,5 +1,6 @@
 package it.teamgdm.sms.dibapp;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,34 +16,23 @@ import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private final String TAG = "dibApp.LoginActivity";
-
-    private static final String REQUEST_METHOD = "POST";
-    private static final String KEY_ACTION = "action";
-    private static final String ACTION = "login";
-    private static final String KEY_CODE = "code";
-    private static final String KEY_MESSAGE = "message";
-    private static final String KEY_EMAIL = "email";
-    private static final String KEY_PASSWORD = "password";
-    private static final String KEY_EMPTY = "";
-    private static final int LOGIN_OK_CODE = 201;
-
     private SessionHandler session;
     private EditText editTextEmail, editTextPassword;
-
     private Button buttonSignIn;
     private Button buttonRegister;
     private String email;
     private String password;
 
+    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.i(TAG, getClass().getSimpleName() + " -onCreate-");
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -onCreate-");
         super.onCreate(savedInstanceState);
 
         session = new SessionHandler(getApplicationContext());
         if(session.isLoggedIn()){
-       //     loadDashboard();
+            session.setUserWithSharedPreferences();
+            loadDashboard();
         }
         setContentView(R.layout.activity_login);
 
@@ -54,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     protected void onStart() {
-        Log.i(TAG, getClass().getSimpleName() + " -onStart-");
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -onStart-");
         super.onStart();
 
         buttonSignIn.setOnClickListener(buttonSignInListener);
@@ -62,51 +52,65 @@ public class LoginActivity extends AppCompatActivity {
     }
     @Override
     protected void onResume() {
-        Log.i(TAG, getClass().getSimpleName() + " -onResume-");
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -onResume-");
         super.onResume();
     }
     @Override
     protected void onPause() {
-        Log.i(TAG, getClass().getSimpleName() + " -onPause-");
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -onPause-");
         super.onPause();
     }
     @Override
     protected void onStop() {
-        Log.i(TAG, getClass().getSimpleName() + " -onStop-");
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -onStop-");
         super.onStop();
     }
     @Override
     protected void onDestroy() {
-        Log.i(TAG, getClass().getSimpleName() + " -onDestroy-");
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -onDestroy-");
         super.onDestroy();
     }
 
     private final OnClickListener buttonSignInListener = new OnClickListener() {
         @Override
         public void onClick(View view) {
-            Log.i(TAG, getClass().getSimpleName() + " -OnClickListener-buttonSignInListener-onClick-");
+            Log.i(Settings.TAG, getClass().getSimpleName() + " -OnClickListener-buttonSignInListener-onClick-");
             email = editTextEmail.getText().toString().toLowerCase().trim();
             password = editTextPassword.getText().toString().trim();
-            if(validateInputs()) login();
+            loginInit();
         }
     };
+
+    private void loginInit() {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -loginInit-");
+        boolean loginComplete = false;
+        if(validateInputs()) {
+            loginComplete = login();
+        }
+        if(loginComplete) {
+            Log.i(Settings.TAG, getClass().getSimpleName() + " -loginInit-loginComplete-TRUE");
+            session.login(email);
+            loadDashboard();
+        }
+    }
 
     private final OnClickListener buttonRegisterListener = new OnClickListener() {
         @Override
         public void onClick(View view) {
-            Log.i(TAG, getClass().getSimpleName() + " -OnClickListener-buttonRegisterListener-onClick-");
+            Log.i(Settings.TAG, getClass().getSimpleName() + " -OnClickListener-buttonRegisterListener-onClick-");
             Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
             startActivity(registerIntent);
         }
     };
 
     private boolean validateInputs() {
-        if(KEY_EMPTY.equals(email) ){
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -validateInputs-");
+        if(email.equals(Settings.KEY_EMPTY) ){
             editTextEmail.setError(getResources().getString(R.string.emailPromptHint) + " " + getResources().getString(R.string.inputCannotBeEmpty));
             editTextEmail.requestFocus();
             return false;
         }
-        if(KEY_EMPTY.equals(password)){
+        if(password.equals(Settings.KEY_EMPTY)){
             editTextPassword.setError(getResources().getString(R.string.passwordPromptHint) + " " + getResources().getString(R.string.inputCannotBeEmpty));
             editTextPassword.requestFocus();
             return false;
@@ -120,52 +124,54 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private boolean isEmailValid(CharSequence email) {
-        Log.i(TAG, getClass().getSimpleName() + " -isEmailValid-");
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -isEmailValid-");
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
-    private void login() {
-        Log.i(TAG, getClass().getSimpleName() + " -login-");
+    private boolean login() {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -login-");
         JSONObject data = new JSONObject();
 
         //Populate the data parameters
         try {
-            data.put(KEY_ACTION, ACTION);
-            data.put(KEY_EMAIL, email);
-            data.put(KEY_PASSWORD, password);
-            Connection connection = new Connection(data, REQUEST_METHOD);
+            data.put(Settings.KEY_ACTION, Settings.ACTION_LOGIN);
+            data.put(Settings.KEY_EMAIL, email);
+            data.put(Settings.KEY_PASSWORD, password);
+            Connection connection = new Connection(data, Settings.REQUEST_METHOD);
             connection.execute();
             JSONObject response = connection.get();
-            int codeResult = (int) response.get(KEY_CODE);
-            String message = response.getString(KEY_MESSAGE);
-            Log.i(TAG, getClass().getSimpleName() + " -login- Code: " + codeResult + " \tMessage: " + message);
-            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
 
-            if (codeResult == LOGIN_OK_CODE) {
-                Log.i(TAG, getClass().getSimpleName() + " -login-LOGIN_OK_CODE-");
-                session.loginUser(email);
-                loadDashboard();
+            String message = response.getString(Settings.KEY_MESSAGE);
+            int codeResult = (int) response.get(Settings.KEY_CODE);
+
+            Log.i(Settings.TAG, getClass().getSimpleName() + " -login- Code: " + codeResult + " \tMessage: " + message);
+            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+            if (codeResult == Settings.LOGIN_OK_CODE) {
+                Log.i(Settings.TAG, getClass().getSimpleName() + " -login-Settings.LOGIN_OK_CODE-");
+                return true;
             } else {
-                Log.i(TAG, getClass().getSimpleName() + " -login-LOGIN_CODE_NOT_OK-");
+                Log.i(Settings.TAG, getClass().getSimpleName() + " -login-LOGIN_CODE_NOT_OK-");
             }
         } catch (Exception e) {
-            Log.i(TAG, getClass().getSimpleName() + " -login- Exception-");
+            Log.i(Settings.TAG, getClass().getSimpleName() + " -login- Exception-");
             Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
+        return false;
     }
 
     /**
      * Launch Dashboard Activity on Successful Login
+     *
      */
     private void loadDashboard() {
-        Log.i(TAG, getClass().getSimpleName() + " -loadDashboard-");
-        Intent i = new Intent(getApplicationContext(), DashboardActivity.class);
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -loadDashboard-");
+        Intent i;
+        if(session.isStudent()) {
+            i = new Intent(this, StudentDashboardActivity.class);
+        } else {
+            i = new Intent(this, TeacherDashboardActivity.class);
+        }
         startActivity(i);
-    }
-
-    public void passwordForgotten(View view) {
-        Log.i(TAG, getClass().getSimpleName() + " -passwordForgotten-");
-        //TODO: passwordForgotten
     }
 }

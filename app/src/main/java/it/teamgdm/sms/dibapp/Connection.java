@@ -19,38 +19,39 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 class Connection extends AsyncTask<Void, Void, JSONObject> {
-    private final static String TAG = "dibApp.Connection";
-
-    // private final static String serverUrl = "http://10.72.50.165:80/sms-dibapp-server/api_gateway.php";
-    final static String serverUrl = "http://192.168.1.5:80/sms-dibapp-server/api_gateway.php";
+    private final static String serverUrl = "http://10.72.50.165:80/sms-dibapp-server/api_gateway.php";
+    // private final static String serverUrl = "http://192.168.1.5:80/sms-dibapp-server/api_gateway.php";
+    // private final static String serverUrl = "http://192.168.1.178:80/sms-dibapp-server/api_gateway.php";
     private URL url;
     private HttpURLConnection urlConnection;
     private final String requestMethod;
 
     private final JSONObject data;
-    private JSONObject response;
 
     Connection(JSONObject data, String requestMethod) {
-        Log.i(TAG, getClass().getSimpleName() + " -Constructor-");
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -Constructor-");
         this.data = data;
         this.requestMethod = requestMethod;
         urlBuilder();
     }
 
     private void urlBuilder() {
-        Log.i(TAG, getClass().getSimpleName() + " -urlBuilder-");
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -urlBuilder-");
         try {
             url = new URL(serverUrl);
-            Log.i(TAG, getClass().getSimpleName() + " -urlBuilder-URL " + url);
+            Log.i(Settings.TAG, getClass().getSimpleName() + " -urlBuilder-URL " + url);
         } catch (MalformedURLException e) {
-            Log.i(TAG, getClass().getSimpleName() + " -urlBuilder- fault");
+            Log.i(Settings.TAG, getClass().getSimpleName() + " -urlBuilder- fault");
             e.printStackTrace();
         }
     }
 
     @Override
     protected JSONObject doInBackground(Void... voids) {
-        Log.i(TAG, getClass().getSimpleName() + " -doInBackground-");
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -doInBackground-");
+        JSONObject response = null;
+        String text;
+
         try {
             setConnection();
             OutputStream outputStream = new BufferedOutputStream(urlConnection.getOutputStream());
@@ -58,20 +59,32 @@ class Connection extends AsyncTask<Void, Void, JSONObject> {
             bufferedWriter.write(data.toString());
             bufferedWriter.flush();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                Log.i(TAG, getClass().getSimpleName() + " -doInBackground-while"+line);
-                readResponse(line);
+
+            while ((text = bufferedReader.readLine()) != null) {
+                Log.i(Settings.TAG, getClass().getSimpleName() + " -doInBackground-while"+text);
+                response = getResponse(text);
             }
         } catch (IOException e) {
-            Log.i(TAG, getClass().getSimpleName() + " -doInBackground-Exception");
+            Log.i(Settings.TAG, getClass().getSimpleName() + " -doInBackground-Exception");
+            e.printStackTrace();
+        }
+        return response;
+    }
+
+    private JSONObject getResponse(String text) {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -getResponse-");
+        JSONObject response = null;
+        try {
+            response = new JSONObject(String.valueOf(text));
+        } catch (JSONException e) {
+            Log.i(Settings.TAG, getClass().getSimpleName() + " -getResponse-Exception");
             e.printStackTrace();
         }
         return response;
     }
 
     private void setConnection() {
-        Log.i(TAG, getClass().getSimpleName() + " -setConnection-");
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -setConnection-");
         try {
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestProperty("Content-Type", "application/json");
@@ -81,19 +94,7 @@ class Connection extends AsyncTask<Void, Void, JSONObject> {
             urlConnection.setChunkedStreamingMode(0);
             urlConnection.setRequestProperty("Connection", "close");
         } catch (IOException e) {
-            Log.i(TAG, getClass().getSimpleName() + " -setConnection-cannot connect");
-            e.printStackTrace();
-        }
-    }
-
-    private void readResponse(String line) {
-        Log.i(TAG, getClass().getSimpleName() + " -readResponse-");
-        try {
-            response = new JSONObject(line);
-            Log.i(TAG, "\nResponse: "+ response);
-            Log.i(TAG, "\nResponse: "+ line);
-       } catch (JSONException e) {
-            Log.i(TAG,response.toString());
+            Log.i(Settings.TAG, getClass().getSimpleName() + " -setConnection-cannot connect");
             e.printStackTrace();
         }
     }

@@ -7,25 +7,6 @@
     tools:context=".RegisterActivity">
 
     <EditText
-        android:id="@+id/confirmPassword"
-        android:layout_width="344dp"
-        android:layout_height="wrap_content"
-
-        android:autofillHints="@string/confirmPasswordPromptHint"
-        tools:targetApi="o"
-        android:hint="@string/confirmPasswordPromptHint"
-        android:imeOptions="actionDone"
-        android:includeFontPadding="true"
-        android:inputType="textPassword"
-        android:padding="@dimen/textDefaultPadding"
-        android:selectAllOnFocus="true"
-        app:layout_constraintBottom_toTopOf="@+id/registerButton"
-        app:layout_constraintEnd_toEndOf="@+id/password"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="@+id/password"
-        app:layout_constraintTop_toBottomOf="@+id/password" />
-
-    <EditText
         android:id="@+id/name"
         android:layout_width="344dp"
         android:layout_height="wrap_content"
@@ -33,7 +14,6 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:autofillHints="@string/namePromptHint"
-        tools:targetApi="o"
         android:hint="@string/namePromptHint"
         android:imeOptions="actionDone"
         android:includeFontPadding="true"
@@ -43,7 +23,8 @@
         app:layout_constraintBottom_toTopOf="@+id/surname"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/logo" />
+        app:layout_constraintTop_toBottomOf="@id/logo"
+        tools:targetApi="o" />
 
     <EditText
         android:id="@+id/surname"
@@ -51,7 +32,6 @@
         android:layout_height="wrap_content"
 
         android:autofillHints="@string/surnamePromptHint"
-        tools:targetApi="o"
         android:hint="@string/surnamePromptHint"
         android:imeOptions="actionDone"
         android:includeFontPadding="true"
@@ -62,7 +42,8 @@
         app:layout_constraintEnd_toEndOf="@+id/name"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/name"
-        app:layout_constraintTop_toBottomOf="@+id/name" />
+        app:layout_constraintTop_toBottomOf="@+id/name"
+        tools:targetApi="o" />
 
     <EditText
         android:id="@+id/ssn"
@@ -70,7 +51,6 @@
         android:layout_height="wrap_content"
 
         android:autofillHints="@string/ssnPromptHint"
-        tools:targetApi="o"
         android:hint="@string/ssnPromptHint"
         android:imeOptions="actionDone"
         android:includeFontPadding="true"
@@ -81,7 +61,8 @@
         app:layout_constraintEnd_toEndOf="@+id/surname"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/surname"
-        app:layout_constraintTop_toBottomOf="@+id/surname" />
+        app:layout_constraintTop_toBottomOf="@+id/surname"
+        tools:targetApi="o" />
 
     <EditText
         android:id="@+id/email"
@@ -89,7 +70,6 @@
         android:layout_height="wrap_content"
 
         android:autofillHints="@string/emailPromptHint"
-        tools:targetApi="o"
         android:hint="@string/emailPromptHint"
         android:includeFontPadding="true"
         android:inputType="textEmailAddress"
@@ -99,7 +79,8 @@
         app:layout_constraintEnd_toEndOf="@+id/ssn"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/ssn"
-        app:layout_constraintTop_toBottomOf="@+id/ssn" />
+        app:layout_constraintTop_toBottomOf="@+id/ssn"
+        tools:targetApi="o" />
 
     <EditText
         android:id="@+id/password"
@@ -107,7 +88,6 @@
         android:layout_height="wrap_content"
 
         android:autofillHints="@string/passwordPromptHint"
-        tools:targetApi="o"
         android:hint="@string/passwordPromptHint"
         android:imeOptions="actionDone"
         android:includeFontPadding="true"
@@ -118,7 +98,27 @@
         app:layout_constraintEnd_toEndOf="@+id/email"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/email"
-        app:layout_constraintTop_toBottomOf="@+id/email" />
+        app:layout_constraintTop_toBottomOf="@+id/email"
+        tools:targetApi="o" />
+
+    <EditText
+        android:id="@+id/confirmPassword"
+        android:layout_width="344dp"
+        android:layout_height="wrap_content"
+
+        android:autofillHints="@string/confirmPasswordPromptHint"
+        android:hint="@string/confirmPasswordPromptHint"
+        android:imeOptions="actionDone"
+        android:includeFontPadding="true"
+        android:inputType="textPassword"
+        android:padding="@dimen/textDefaultPadding"
+        android:selectAllOnFocus="true"
+        app:layout_constraintBottom_toTopOf="@+id/registerButton"
+        app:layout_constraintEnd_toEndOf="@+id/password"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/password"
+        app:layout_constraintTop_toBottomOf="@+id/password"
+        tools:targetApi="o" />
 
     <Button
         android:id="@+id/registerButton"

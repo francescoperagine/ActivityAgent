@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,51 +15,85 @@ import java.util.concurrent.ExecutionException;
 
 class SessionHandler {
 
-    private final String TAG = "dibApp.RegisterActivity";
-
-    private static final String REQUEST_METHOD = "POST";
-    private static final String KEY_ACTION = "action";
-    private static final String ACTION = "getUserDetails";
-    private static final String PREFERENCE_FILE_KEY = "it.teamgdm.dibApp.userSession";
-    private static final String KEY_NAME = "name";
-    private static final String KEY_SURNAME = "surname";
-    private static final String KEY_EMAIL = "email";
-    private static final String KEY_ROLE_ID = "roleId";
-    private static final String KEY_ROLE_NAME = "roleName";
-    private static final String KEY_DEGREE_COURSE_ID = "degreeCourseId";
-    private static final String KEY_DEGREE_COURSE_NAME = "degreeCourseName";
-    private static final String KEY_EXPIRES = "expires";
-    private static final int KEY_ZERO = 0;
-
     private final Context context;
     private final SharedPreferences.Editor sharedPreferencesEditor;
     private final SharedPreferences sharedPreferences;
+    private JSONObject userDetails;
+    private User user;
 
     @SuppressLint("CommitPrefEdits")
-    public SessionHandler(Context context) {
-        Log.i(TAG, getClass().getSimpleName() + " -Constructor-");
+    SessionHandler(Context context) {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -Constructor-");
         this.context = context;
-        sharedPreferences = context.getSharedPreferences(PREFERENCE_FILE_KEY, Context.MODE_PRIVATE);
+        sharedPreferences = context.getSharedPreferences(Settings.PREFERENCE_FILE_KEY, Context.MODE_PRIVATE);
         this.sharedPreferencesEditor = sharedPreferences.edit();
+        user = new User();
     }
 
-    public void loginUser(String email) {
-        Log.i(TAG, getClass().getSimpleName() + " -loginUser-");
-        User user = getUserDetails(email);
-        sharedPreferencesEditor.putString(KEY_NAME, user.getName());
-        sharedPreferencesEditor.putString(KEY_SURNAME, user.getSurname());
-        sharedPreferencesEditor.putString(KEY_EMAIL, email);
-        sharedPreferencesEditor.putInt(KEY_ROLE_ID, user.getRoleId());
-        sharedPreferencesEditor.putString(KEY_ROLE_NAME, user.getRoleName());
-        sharedPreferencesEditor.putInt(KEY_DEGREE_COURSE_ID, user.getDegreeCourseId());
-        sharedPreferencesEditor.putString(KEY_DEGREE_COURSE_NAME, user.getDegreeCourseName());
-        long millis = getExpireSessionTimer();
-        sharedPreferencesEditor.putLong(KEY_EXPIRES, millis);
-        sharedPreferencesEditor.commit();
+    void login(String email) {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -login-");
+        userDetails = getUserDetails(email);
+        assert userDetails != null;
+        setUserDetails(userDetails);
+        setSharedPreferences(userDetails);
     }
 
-    private long getExpireSessionTimer() {
-        Log.i(TAG, getClass().getSimpleName() + " -getExpireSessionTimer-");
+    private JSONObject getUserDetails(String email) {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -getUserDetails-");
+        JSONObject data = new JSONObject();
+        try {
+            data.put(Settings.KEY_ACTION, Settings.GET_USER_DETAILS);
+            data.put(Settings.KEY_EMAIL, email);
+            Log.i(Settings.TAG, getClass().getSimpleName() + " -getUserDetails-data: " + data.toString());
+            Connection connection = new Connection(data, Settings.REQUEST_METHOD);
+            connection.execute();
+            JSONObject response = connection.get();
+            Log.i(Settings.TAG, getClass().getSimpleName() + " -getUserDetails-response: " + response.toString());
+            return response;
+        } catch (ExecutionException | InterruptedException | JSONException e) {
+            Log.i(Settings.TAG, getClass().getSimpleName() + " -getUserDetails-Exception");
+            Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private void setUserDetails(JSONObject userDetails) {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -setUserDetails-");
+        try {
+            user.setName(userDetails.getString(Settings.KEY_NAME));
+            user.setSurname(userDetails.getString(Settings.KEY_SURNAME));
+            user.setEmail(userDetails.getString(Settings.KEY_EMAIL));
+            user.setRoleId(userDetails.getInt(Settings.KEY_ROLE_ID));
+            user.setRoleName(userDetails.getString(Settings.KEY_ROLE_NAME));
+            //TODO fix setRegistrationDate with DB data;
+    //        user.setRegistrationDate(Long.getLong(userDetails.getString(Settings.KEY_REGISTRATION_DATE)));
+            user.setSessionExpiryDate(getExpireSessionDate());
+        } catch (JSONException e) {
+            Log.i(Settings.TAG, getClass().getSimpleName() + " -setUserDetails-Exception");
+            e.printStackTrace();
+        }
+    }
+
+    private void setSharedPreferences(JSONObject userDetails) {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -setSharedPreferences-");
+        try {
+            sharedPreferencesEditor.putString(Settings.KEY_NAME, userDetails.getString(Settings.KEY_NAME));
+            sharedPreferencesEditor.putString(Settings.KEY_SURNAME, userDetails.getString(Settings.KEY_SURNAME));
+            sharedPreferencesEditor.putString(Settings.KEY_EMAIL, userDetails.getString(Settings.KEY_EMAIL));
+            sharedPreferencesEditor.putInt(Settings.KEY_ROLE_ID, userDetails.getInt(Settings.KEY_ROLE_ID));
+            sharedPreferencesEditor.putString(Settings.KEY_ROLE_NAME, userDetails.getString(Settings.KEY_ROLE_NAME));
+            long millis = getExpireSessionDate();
+            sharedPreferencesEditor.putLong(Settings.KEY_EXPIRE_TIME, millis);
+            sharedPreferencesEditor.commit();
+        } catch (JSONException e) {
+            Log.i(Settings.TAG, getClass().getSimpleName() + " -setSharedPreferences-Exception");
+            e.printStackTrace();
+        }
+    }
+
+    private long getExpireSessionDate() {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -getExpireSessionDate-");
         Date date = new Date();
         //Set user session for next 7 days
         return date.getTime() + (7 * 24 * 60 * 60 * 1000);
@@ -71,10 +106,10 @@ class SessionHandler {
      */
 
     boolean isLoggedIn() {
-        Log.i(TAG, getClass().getSimpleName() + " -isLoggedIn-");
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -isLoggedIn-");
         Date currentDate = new Date();
 
-        long millis = sharedPreferences.getLong(KEY_EXPIRES, KEY_ZERO);
+        long millis = sharedPreferences.getLong(Settings.KEY_EXPIRE_TIME, Settings.KEY_ZERO);
 
         if (millis == 0) {
             return false;
@@ -83,38 +118,35 @@ class SessionHandler {
         return currentDate.before(expiryDate);
     }
 
-    private User getUserDetails(String email) {
-        Log.i(TAG, getClass().getSimpleName() + " -getUserDetails-");
-        JSONObject data = new JSONObject();
-        JSONObject response;
-        User user = new User();
-        try {
-            data.put(KEY_ACTION, ACTION);
-            data.put(KEY_EMAIL, email);
-            Connection connection = new Connection(data, REQUEST_METHOD);
-            connection.execute();
-            response = connection.get();
-            user.setName(response.getString(KEY_NAME));
-            user.setSurname(response.getString(KEY_SURNAME));
-            user.setRoleId(response.getInt(KEY_ROLE_ID));
-            user.setRoleName(response.getString(KEY_ROLE_NAME));
-            user.setDegreeCourseId(response.getInt(KEY_DEGREE_COURSE_ID));
-            user.setDegreeCourseName(response.getString(KEY_DEGREE_COURSE_NAME));
-        } catch (JSONException | ExecutionException | InterruptedException e) {
-            Log.i(TAG, getClass().getSimpleName() + " -getUserDetails- Exception");
-            e.printStackTrace();
-        }
-        return user;
-    }
-
     /**
      * Logs out user by clearing the session
      */
-    public void logoutUser(){
-        Log.i(TAG, getClass().getSimpleName() + " -logoutUser-");
+    void logoutUser(){
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -logoutUser-");
         sharedPreferencesEditor.clear().commit();
         Intent mainIntent = new Intent(context, MainActivity.class);
         context.startActivity(mainIntent);
     }
 
+    boolean isStudent() {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -isStudent-");
+        return user.isStudent();
+    }
+
+    public boolean isTeacher() {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -isTeacher-");
+        return user.isTeacher();
+    }
+
+    void setUserWithSharedPreferences() {
+        user.setName(sharedPreferences.getString(Settings.KEY_NAME, Settings.KEY_EMPTY));
+        user.setSurname(sharedPreferences.getString(Settings.KEY_SURNAME, Settings.KEY_EMPTY));
+        user.setEmail(sharedPreferences.getString(Settings.KEY_EMAIL, Settings.KEY_EMPTY));
+        user.setRoleId(sharedPreferences.getInt(Settings.KEY_ROLE_ID, Settings.KEY_ZERO));
+        user.setRoleName(sharedPreferences.getString(Settings.KEY_ROLE_NAME, Settings.KEY_EMPTY));
+    //    user.setDegreeCourseId(sharedPreferences.getInt(Settings.KEY_DEGREE_COURSE_ID, Settings.KEY_ZERO));
+    //    user.setDegreeCourseName(sharedPreferences.getString(Settings.KEY_DEGREE_COURSE_NAME, Settings.KEY_EMPTY));
+    //    user.setRegistrationDate(sharedPreferences.getLong(Settings.KEY_REGISTRATION_DATE, Settings.KEY_ZERO));
+        user.setSessionExpiryDate(getExpireSessionDate());
+    }
 }
