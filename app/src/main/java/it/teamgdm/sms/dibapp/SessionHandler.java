@@ -121,8 +121,8 @@ class SessionHandler {
     /**
      * Logs out user by clearing the session
      */
-    void logoutUser(){
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -logoutUser-");
+    void logout(){
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -logout-");
         sharedPreferencesEditor.clear().commit();
         Intent mainIntent = new Intent(context, MainActivity.class);
         context.startActivity(mainIntent);
@@ -144,6 +144,7 @@ class SessionHandler {
         user.setEmail(sharedPreferences.getString(Settings.KEY_EMAIL, Settings.KEY_EMPTY));
         user.setRoleId(sharedPreferences.getInt(Settings.KEY_ROLE_ID, Settings.KEY_ZERO));
         user.setRoleName(sharedPreferences.getString(Settings.KEY_ROLE_NAME, Settings.KEY_EMPTY));
+        //TODO setSharedPreferences DegreeCourses
     //    user.setDegreeCourseId(sharedPreferences.getInt(Settings.KEY_DEGREE_COURSE_ID, Settings.KEY_ZERO));
     //    user.setDegreeCourseName(sharedPreferences.getString(Settings.KEY_DEGREE_COURSE_NAME, Settings.KEY_EMPTY));
     //    user.setRegistrationDate(sharedPreferences.getLong(Settings.KEY_REGISTRATION_DATE, Settings.KEY_ZERO));

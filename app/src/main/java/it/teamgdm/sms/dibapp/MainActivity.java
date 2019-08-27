@@ -8,7 +8,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    //TODO: tests
+    //TODO tests
+    //TODO Splash screen
+    //TODO Student - Class list
+    //TODO Student - Class fragment
+    //TODO Student - Ratings activity
+    //TODO Teacher - Class list
+    //TODO Teacher - Class fragment
+    //TODO Teacher - Statistics activity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,8 +27,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         Log.i(Settings.TAG, getClass().getSimpleName() + " -onStart- The activity is getting started.");
         super.onStart();
-
-        //TODO: Splash screen
         Intent loginIntent = new Intent(this, LoginActivity.class);
         startActivity(loginIntent);
     }

@@ -99,16 +99,12 @@ public class RegisterActivity extends AppCompatActivity {
     };
 
     /**
-     * Validate the input, records the user then loads the login activity
+     * Starts the registration process
      */
 
     private void registrationInit() {
         Log.i(Settings.TAG, getClass().getSimpleName() + " -registrationInit-");
-        boolean registrationComplete = false;
-        if(validateInputs()) {
-            registrationComplete = register();
-        }
-        if(registrationComplete) {
+        if(validateInputs() & register()) {
             Log.i(Settings.TAG, getClass().getSimpleName() + " -registrationInit-registrationComplete-");
             Intent loginIntent = new Intent(this, LoginActivity.class);
             startActivity(loginIntent);
@@ -153,6 +149,11 @@ public class RegisterActivity extends AppCompatActivity {
         }
         return true;
     }
+
+    /**
+     * Sends form data to the webserver with the default request method
+     * @return true if the server returns USER_CREATED_CODE
+     */
 
     private boolean register() {
         Log.i(Settings.TAG, getClass().getSimpleName() + " -register-");

@@ -19,8 +19,8 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 class Connection extends AsyncTask<Void, Void, JSONObject> {
-    private final static String serverUrl = "http://10.72.50.165:80/sms-dibapp-server/api_gateway.php";
-    // private final static String serverUrl = "http://192.168.1.5:80/sms-dibapp-server/api_gateway.php";
+    // private final static String serverUrl = "http://10.72.50.165:80/sms-dibapp-server/api_gateway.php";
+    private final static String serverUrl = "http://192.168.1.110:80/sms-dibapp-server/api_gateway.php";
     // private final static String serverUrl = "http://192.168.1.178:80/sms-dibapp-server/api_gateway.php";
     private URL url;
     private HttpURLConnection urlConnection;

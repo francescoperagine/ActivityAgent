@@ -10,7 +10,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 
-class LogoutDialogFragment extends DialogFragment {
+public class LogoutDialogFragment extends DialogFragment {
 
     private final Context applicationContext;
 
@@ -28,7 +28,7 @@ class LogoutDialogFragment extends DialogFragment {
                 .setPositiveButton(R.string.logout_dialog_confirm_yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         SessionHandler session = new SessionHandler(applicationContext);
-                        session.logoutUser();
+                        session.logout();
                     }})
                 .setNegativeButton(R.string.logout_dialog_confirm_no, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
