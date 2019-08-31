@@ -42,8 +42,6 @@ public class StudentDashboardActivity extends AppCompatActivity {
         Log.i(Settings.TAG, getClass().getSimpleName() + " -onOptionsItemSelected-" +item.toString());
         // Handle item selection
         switch (item.getItemId()) {
-            //TODO: set up the action bar items
-            //TODO: search feature
             case R.id.logoutButton:
                 FragmentManager fragmentManager = this.getSupportFragmentManager();
                 LogoutDialogFragment logoutDialogFragment = new LogoutDialogFragment(this);

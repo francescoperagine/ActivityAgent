@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class MainActivity extends AppCompatActivity {
 
     //TODO tests
+    //TODO Horizontal layout
     //TODO Splash screen
     //TODO Student - Class list
     //TODO Student - Class fragment

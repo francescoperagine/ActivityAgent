@@ -12,9 +12,6 @@ if(isset($input[ACTION])){
 		case ACTION_LOGIN: 
 			$response = login($input);
 			break;
-		case ACTION_GET_ROLE_LIST:
-			$response = getRoleList();
-			break;
 		case ACTION_REGISTRATION:
 			$response = registration($input);
 			break;
@@ -26,7 +23,7 @@ if(isset($input[ACTION])){
 			break;
 	}
 } else {
-	$response = new Response($input[ACTION] + " - " + ACTION_NOT_DEFINED_TEXT, ACTION_NOT_DEFINED_CODE); 
+	$response = new Response(ACTION_NOT_DEFINED_TEXT, ACTION_NOT_DEFINED_CODE); 
 }
 echo json_encode($response);
 

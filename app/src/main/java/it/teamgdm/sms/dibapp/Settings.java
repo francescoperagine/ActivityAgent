@@ -1,6 +1,7 @@
 package it.teamgdm.sms.dibapp;
 
 public final class Settings {
+
     static final String TAG = "dibApp";
     static final String PREFERENCE_FILE_KEY = "it.teamgdm.dibApp.userSession";
 
@@ -8,7 +9,6 @@ public final class Settings {
     static final String KEY_ACTION = "action";
     static final String KEY_CODE = "code";
     static final String KEY_MESSAGE = "message";
-    static final String GET_USER_DETAILS = "getUserDetails";
 
     static final String KEY_NAME = "name";
     static final String KEY_SURNAME = "surname";
@@ -16,7 +16,7 @@ public final class Settings {
     static final String KEY_EMAIL = "email";
     static final String KEY_PASSWORD = "password";
     static final String KEY_ROLE_ID = "roleId";
-    static final String KEY_ROLE_NAME = "roleName";
+    static final String KEY_ROLE_NAME = "name";
     static final int KEY_ROLE_TEACHER = 1;
     static final int KEY_ROLE_STUDENT = 2;
     public static final String KEY_DEGREE_COURSE_ID = "degreeCourseId";
@@ -30,4 +30,6 @@ public final class Settings {
 
     static final String ACTION_LOGIN = "login";
     static final String ACTION_REGISTRATION = "registration";
+    static final String ACTION_GET_USER_DETAILS = "getUserDetails";
+    static final String ACTION_GET_ROLE_LIST = "getRoleList";
 }

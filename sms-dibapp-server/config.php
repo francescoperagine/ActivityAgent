@@ -3,7 +3,6 @@ define("ACTION","action");
 define("ACTION_LOGIN", "login");
 define("ACTION_REGISTRATION", "registration");
 define("ACTION_GET_USER_DETAILS", "getUserDetails");
-define("ACTION_GET_ROLE_LIST", "getRoleList");
 
 define("ACTION_NOT_DEFINED_TEXT", "Action not defined");
 define("ACTION_NOT_DEFINED_CODE", 101);

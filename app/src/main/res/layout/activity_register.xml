@@ -57,29 +57,37 @@
         android:inputType="number"
         android:padding="@dimen/textDefaultPadding"
         android:selectAllOnFocus="true"
-        app:layout_constraintBottom_toTopOf="@+id/email"
-        app:layout_constraintEnd_toEndOf="@+id/surname"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="@+id/surname"
-        app:layout_constraintTop_toBottomOf="@+id/surname"
+        app:layout_constraintBottom_toTopOf="@id/role"
+        app:layout_constraintEnd_toEndOf="@id/surname"
+        app:layout_constraintStart_toStartOf="@id/surname"
+        app:layout_constraintTop_toBottomOf="@id/surname"
         tools:targetApi="o" />
+
+    <Spinner
+        android:id="@+id/role"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/textDefaultPadding"
+        android:spinnerMode="dropdown"
+        app:layout_constraintBottom_toTopOf="@id/email"
+        app:layout_constraintEnd_toEndOf="@+id/ssn"
+        app:layout_constraintStart_toStartOf="@+id/ssn"
+        app:layout_constraintTop_toBottomOf="@id/ssn" />
 
     <EditText
         android:id="@+id/email"
         android:layout_width="344dp"
         android:layout_height="wrap_content"
-
         android:autofillHints="@string/emailPromptHint"
         android:hint="@string/emailPromptHint"
         android:includeFontPadding="true"
         android:inputType="textEmailAddress"
         android:padding="@dimen/textDefaultPadding"
         android:selectAllOnFocus="true"
-        app:layout_constraintBottom_toTopOf="@+id/password"
-        app:layout_constraintEnd_toEndOf="@+id/ssn"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="@+id/ssn"
-        app:layout_constraintTop_toBottomOf="@+id/ssn"
+        app:layout_constraintBottom_toTopOf="@id/password"
+        app:layout_constraintEnd_toEndOf="@+id/role"
+        app:layout_constraintStart_toStartOf="@+id/role"
+        app:layout_constraintTop_toBottomOf="@id/role"
         tools:targetApi="o" />
 
     <EditText

@@ -3,12 +3,6 @@
 include 'db_connect.php';
 include 'config.php';
 
-define("USER_EXISTS_QUERY", "SELECT count(*) as count FROM user WHERE email = ?");
-define("VERIFY_PASSWORD_QUERY", "SELECT passwordHash, salt FROM user WHERE email = ?");
-define("GET_ROLE_LIST", "SELECT name FROM role");
-define("REGISTER_NEW_USER_QUERY", "INSERT INTO user(serialNumber, name, surname, email, passwordHash, salt) VALUES (:serialNumber, :name, :surname, :email, :passwordHash, :salt)");
-define("GET_USER_DETAILS_QUERY", "SELECT u.name as name, u.surname as surname, u.email as email, u.registrationDate as registrationDate, u.roleID as roleId, r.name as roleName FROM user as u, role as r WHERE u.roleID = r.ID AND email = ?");
-
 class Response {
 	
 	var $message;
@@ -42,7 +36,8 @@ function credentialAreNotNull(string $email, string $password) {
 
 function userExists(string $email){
 	global $connection;
-	$stmt = $connection->prepare(USER_EXISTS_QUERY);
+	$query = "SELECT count(*) as count FROM user WHERE email = ?";
+	$stmt = $connection->prepare($query);
 	$stmt->execute([$email]);
 	$result = $stmt->fetch(PDO::FETCH_OBJ);
 	if($result->count != 1) throw new Exception(INVALID_EMAIL_TEXT, INVALID_EMAIL_CODE);
@@ -50,7 +45,8 @@ function userExists(string $email){
 
 function verifyPassword(string $email, string $password) {
 	global $connection;
-	$stmt = $connection->prepare(VERIFY_PASSWORD_QUERY);
+	$query = "SELECT passwordHash, salt FROM user WHERE email = ?";
+	$stmt = $connection->prepare($query);
 	$stmt->execute([$email]);
 	$result = $stmt->fetch(PDO::FETCH_OBJ);
 	if(!password_verify(concatPasswordWithSalt($password, $result->salt), $result->passwordHash)){
@@ -73,14 +69,6 @@ function registration($input) {
 	return $response;
 }
 
-function getRoleList() {
-	global $connection;
-	$stmt = $connection->prepare(GET_ROLE_LIST);
-	$stmt->execute();
-	$response = $stmt->fetchAll(PDO::FETCH_OBJ);
-	return $response;
-}
-
 function registerNewUser($input) {
 	global $connection;
 	//Get a unique Salt
@@ -90,7 +78,8 @@ function registerNewUser($input) {
 	$response = null;
 	
 	//Query to register new user
-	$stmt = $connection->prepare(REGISTER_NEW_USER_QUERY);
+	$insertQuery  = "INSERT INTO user(serialNumber, name, surname, email, passwordHash, salt) VALUES (:serialNumber, :name, :surname, :email, :passwordHash, :salt)";
+	$stmt = $connection->prepare($insertQuery);
 	$stmt->bindValue(':serialNumber', $input['serialNumber']);
 	$stmt->bindValue(':name', $input['name']);
 	$stmt->bindValue(':surname', $input['surname']);
@@ -108,7 +97,11 @@ function registerNewUser($input) {
 
 function getUserDetails(string $email) {
 	global $connection;
-	$stmt = $connection->prepare(GET_USER_DETAILS_QUERY);
+	$query = "SELECT u.name as name, u.surname as surname, u.email as email, u.registrationDate as registrationDate, r.id as roleId, r.name as roleName
+		FROM user as u, user_role as ur, role as r
+		WHERE u.id = ur.userID AND ur.roleID = r.ID
+		AND email = ?";
+	$stmt = $connection->prepare($query);
 	$stmt->execute([$email]);
 	$response = $stmt->fetch(PDO::FETCH_OBJ);
 	return $response;

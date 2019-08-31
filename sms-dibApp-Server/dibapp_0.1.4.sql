@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.5
+-- version 4.7.4
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1:3306
--- Creato il: Ago 14, 2019 alle 11:32
--- Versione del server: 5.7.26
--- Versione PHP: 7.2.18
+-- Host: 127.0.0.1
+-- Creato il: Ago 30, 2019 alle 12:08
+-- Versione del server: 10.1.28-MariaDB
+-- Versione PHP: 7.1.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -28,16 +28,14 @@ SET time_zone = "+00:00";
 -- Struttura della tabella `class`
 --
 
-DROP TABLE IF EXISTS `class`;
-CREATE TABLE IF NOT EXISTS `class` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `class` (
+  `ID` int(11) NOT NULL,
   `name` varchar(256) DEFAULT NULL,
   `description` text,
   `code` varchar(10) NOT NULL,
   `year` int(1) NOT NULL,
-  `semester` int(1) NOT NULL,
-  PRIMARY KEY (`ID`)
-) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4;
+  `semester` int(1) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dump dei dati per la tabella `class`
@@ -71,15 +69,13 @@ INSERT INTO `class` (`ID`, `name`, `description`, `code`, `year`, `semester`) VA
 -- Struttura della tabella `class_room_calendar`
 --
 
-DROP TABLE IF EXISTS `class_room_calendar`;
-CREATE TABLE IF NOT EXISTS `class_room_calendar` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `class_room_calendar` (
+  `ID` int(11) NOT NULL,
   `classID` int(11) NOT NULL,
   `roomID` int(11) NOT NULL,
   `day` int(1) NOT NULL,
   `timeStart` time NOT NULL,
-  `timeEnd` time NOT NULL,
-  PRIMARY KEY (`ID`)
+  `timeEnd` time NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -88,15 +84,13 @@ CREATE TABLE IF NOT EXISTS `class_room_calendar` (
 -- Struttura della tabella `class_room_lesson`
 --
 
-DROP TABLE IF EXISTS `class_room_lesson`;
-CREATE TABLE IF NOT EXISTS `class_room_lesson` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `class_room_lesson` (
+  `ID` int(11) NOT NULL,
   `calendarID` int(11) NOT NULL,
   `date` date DEFAULT NULL,
   `timeStart` time NOT NULL,
-  `timeEnd` time NOT NULL,
-  PRIMARY KEY (`ID`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+  `timeEnd` time NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -104,14 +98,12 @@ CREATE TABLE IF NOT EXISTS `class_room_lesson` (
 -- Struttura della tabella `degreecourse`
 --
 
-DROP TABLE IF EXISTS `degreecourse`;
-CREATE TABLE IF NOT EXISTS `degreecourse` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `degreecourse` (
+  `ID` int(11) NOT NULL,
   `name` varchar(256) NOT NULL,
   `description` text,
-  `ministerialDecree` varchar(128) DEFAULT NULL,
-  PRIMARY KEY (`ID`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+  `ministerialDecree` varchar(128) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dump dei dati per la tabella `degreecourse`
@@ -128,13 +120,11 @@ INSERT INTO `degreecourse` (`ID`, `name`, `description`, `ministerialDecree`) VA
 -- Struttura della tabella `degreecourse_class`
 --
 
-DROP TABLE IF EXISTS `degreecourse_class`;
-CREATE TABLE IF NOT EXISTS `degreecourse_class` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `degreecourse_class` (
+  `ID` int(11) NOT NULL,
   `degreecourseID` int(11) NOT NULL,
-  `classID` int(11) NOT NULL,
-  PRIMARY KEY (`ID`)
-) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4;
+  `classID` int(11) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dump dei dati per la tabella `degreecourse_class`
@@ -168,12 +158,10 @@ INSERT INTO `degreecourse_class` (`ID`, `degreecourseID`, `classID`) VALUES
 -- Struttura della tabella `role`
 --
 
-DROP TABLE IF EXISTS `role`;
-CREATE TABLE IF NOT EXISTS `role` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(128) NOT NULL,
-  PRIMARY KEY (`ID`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `role` (
+  `ID` int(11) NOT NULL,
+  `name` varchar(128) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dump dei dati per la tabella `role`
@@ -190,12 +178,10 @@ INSERT INTO `role` (`ID`, `name`) VALUES
 -- Struttura della tabella `room`
 --
 
-DROP TABLE IF EXISTS `room`;
-CREATE TABLE IF NOT EXISTS `room` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(128) DEFAULT NULL,
-  PRIMARY KEY (`ID`)
-) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `room` (
+  `ID` int(11) NOT NULL,
+  `name` varchar(128) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dump dei dati per la tabella `room`
@@ -218,12 +204,27 @@ INSERT INTO `room` (`ID`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Struttura della tabella `student_career`
+--
+
+CREATE TABLE `student_career` (
+  `ID` int(11) NOT NULL,
+  `studentID` int(11) NOT NULL,
+  `classID` int(11) NOT NULL,
+  `passed` tinyint(1) NOT NULL DEFAULT '0',
+  `vote` int(2) NOT NULL,
+  `laud` tinyint(1) DEFAULT NULL,
+  `date` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Struttura della tabella `user`
 --
 
-DROP TABLE IF EXISTS `user`;
-CREATE TABLE IF NOT EXISTS `user` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `user` (
+  `ID` int(11) NOT NULL,
   `serialNumber` varchar(11) NOT NULL,
   `name` varchar(128) NOT NULL,
   `surname` varchar(128) NOT NULL,
@@ -231,17 +232,16 @@ CREATE TABLE IF NOT EXISTS `user` (
   `passwordHash` varchar(256) NOT NULL,
   `salt` varchar(256) NOT NULL,
   `registrationDate` datetime DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`ID`),
-  UNIQUE KEY `email` (`email`)
-) ENGINE=MyISAM AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4;
+  `roleID` int(11) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dump dei dati per la tabella `user`
 --
 
-INSERT INTO `user` (`ID`, `serialNumber`, `name`, `surname`, `email`, `passwordHash`, `salt`, `registrationDate`) VALUES
-(1, '443020', 'Francesco', 'Peragine', 'francescoperagine@gmail.com', '$2y$10$wG9wq4KArvDcbwwbVlsogu6Z9IIl8uTlxfIKb4hW5th/EIiZD8W8W', 'f627667e46de19e736b1a8239b0928a4eba100e522bbc3d0a9cf2a21f9c891ff', NULL),
-(19, '123456', 'paolo', 'buono', 'buono@uniba.it', '$2y$10$zDnrHIsGSEgiuVzSJk7Z7u/TnIjWxfCg1xgx6v6fg3ZRvrk49JC1i', 'debd8a7b1884f93e0573fa704ffae26231b79fb5c6f97d72e6f5c5986ccd8bce', '2019-08-13 10:39:44');
+INSERT INTO `user` (`ID`, `serialNumber`, `name`, `surname`, `email`, `passwordHash`, `salt`, `registrationDate`, `roleID`) VALUES
+(1, '443020', 'Francesco', 'Peragine', 'francescoperagine@gmail.com', '$2y$10$wG9wq4KArvDcbwwbVlsogu6Z9IIl8uTlxfIKb4hW5th/EIiZD8W8W', 'f627667e46de19e736b1a8239b0928a4eba100e522bbc3d0a9cf2a21f9c891ff', NULL, 2),
+(19, '123456', 'paolo', 'buono', 'buono@uniba.it', '$2y$10$zDnrHIsGSEgiuVzSJk7Z7u/TnIjWxfCg1xgx6v6fg3ZRvrk49JC1i', 'debd8a7b1884f93e0573fa704ffae26231b79fb5c6f97d72e6f5c5986ccd8bce', '2019-08-13 10:39:44', 1);
 
 -- --------------------------------------------------------
 
@@ -249,15 +249,13 @@ INSERT INTO `user` (`ID`, `serialNumber`, `name`, `surname`, `email`, `passwordH
 -- Struttura della tabella `user_class_rating`
 --
 
-DROP TABLE IF EXISTS `user_class_rating`;
-CREATE TABLE IF NOT EXISTS `user_class_rating` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `user_class_rating` (
+  `ID` int(11) NOT NULL,
   `userID` int(11) NOT NULL,
   `lessonID` int(11) NOT NULL,
   `rating` int(1) DEFAULT NULL,
   `summary` varchar(128) DEFAULT NULL,
-  `review` text,
-  PRIMARY KEY (`ID`)
+  `review` text
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -266,13 +264,11 @@ CREATE TABLE IF NOT EXISTS `user_class_rating` (
 -- Struttura della tabella `user_degreecourse`
 --
 
-DROP TABLE IF EXISTS `user_degreecourse`;
-CREATE TABLE IF NOT EXISTS `user_degreecourse` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `user_degreecourse` (
+  `ID` int(11) NOT NULL,
   `userID` int(11) NOT NULL,
-  `degreecourseID` int(11) NOT NULL,
-  PRIMARY KEY (`ID`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+  `degreecourseID` int(11) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dump dei dati per la tabella `user_degreecourse`
@@ -283,27 +279,146 @@ INSERT INTO `user_degreecourse` (`ID`, `userID`, `degreecourseID`) VALUES
 (2, 19, 2),
 (3, 19, 1);
 
--- --------------------------------------------------------
-
 --
--- Struttura della tabella `user_role`
+-- Indici per le tabelle scaricate
 --
 
-DROP TABLE IF EXISTS `user_role`;
-CREATE TABLE IF NOT EXISTS `user_role` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `userID` int(11) NOT NULL,
-  `roleID` int(11) NOT NULL,
-  PRIMARY KEY (`ID`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+--
+-- Indici per le tabelle `class`
+--
+ALTER TABLE `class`
+  ADD PRIMARY KEY (`ID`);
 
 --
--- Dump dei dati per la tabella `user_role`
+-- Indici per le tabelle `class_room_calendar`
+--
+ALTER TABLE `class_room_calendar`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indici per le tabelle `class_room_lesson`
+--
+ALTER TABLE `class_room_lesson`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indici per le tabelle `degreecourse`
+--
+ALTER TABLE `degreecourse`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indici per le tabelle `degreecourse_class`
+--
+ALTER TABLE `degreecourse_class`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indici per le tabelle `role`
+--
+ALTER TABLE `role`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indici per le tabelle `room`
+--
+ALTER TABLE `room`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indici per le tabelle `student_career`
+--
+ALTER TABLE `student_career`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indici per le tabelle `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`ID`),
+  ADD UNIQUE KEY `email` (`email`);
+
+--
+-- Indici per le tabelle `user_class_rating`
+--
+ALTER TABLE `user_class_rating`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indici per le tabelle `user_degreecourse`
+--
+ALTER TABLE `user_degreecourse`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- AUTO_INCREMENT per le tabelle scaricate
 --
 
-INSERT INTO `user_role` (`ID`, `userID`, `roleID`) VALUES
-(1, 1, 2),
-(2, 19, 1);
+--
+-- AUTO_INCREMENT per la tabella `class`
+--
+ALTER TABLE `class`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+
+--
+-- AUTO_INCREMENT per la tabella `class_room_calendar`
+--
+ALTER TABLE `class_room_calendar`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT per la tabella `class_room_lesson`
+--
+ALTER TABLE `class_room_lesson`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT per la tabella `degreecourse`
+--
+ALTER TABLE `degreecourse`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT per la tabella `degreecourse_class`
+--
+ALTER TABLE `degreecourse_class`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+
+--
+-- AUTO_INCREMENT per la tabella `role`
+--
+ALTER TABLE `role`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT per la tabella `room`
+--
+ALTER TABLE `room`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- AUTO_INCREMENT per la tabella `student_career`
+--
+ALTER TABLE `student_career`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT per la tabella `user`
+--
+ALTER TABLE `user`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+
+--
+-- AUTO_INCREMENT per la tabella `user_class_rating`
+--
+ALTER TABLE `user_class_rating`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT per la tabella `user_degreecourse`
+--
+ALTER TABLE `user_degreecourse`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

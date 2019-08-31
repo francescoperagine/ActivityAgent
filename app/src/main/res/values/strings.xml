@@ -26,4 +26,7 @@
     <string name="logout_dialog_confirm_yes">Yes</string>
     <string name="logout_dialog_confirm_no">No</string>
     <string name="contentDescriptionLogo">Logo</string>
+    <string name="roleToggleString">Role</string>
+    <string name="teacherRoleString">Teacher</string>
+    <string name="studentRoleString">Student</string>
 </resources>

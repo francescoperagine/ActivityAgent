@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -42,14 +43,14 @@ class SessionHandler {
         Log.i(Settings.TAG, getClass().getSimpleName() + " -getUserDetails-");
         JSONObject data = new JSONObject();
         try {
-            data.put(Settings.KEY_ACTION, Settings.GET_USER_DETAILS);
+            data.put(Settings.KEY_ACTION, Settings.ACTION_GET_USER_DETAILS);
             data.put(Settings.KEY_EMAIL, email);
             Log.i(Settings.TAG, getClass().getSimpleName() + " -getUserDetails-data: " + data.toString());
             Connection connection = new Connection(data, Settings.REQUEST_METHOD);
             connection.execute();
-            JSONObject response = connection.get();
+            JSONArray response = connection.get();
             Log.i(Settings.TAG, getClass().getSimpleName() + " -getUserDetails-response: " + response.toString());
-            return response;
+            return response.getJSONObject(0);
         } catch (ExecutionException | InterruptedException | JSONException e) {
             Log.i(Settings.TAG, getClass().getSimpleName() + " -getUserDetails-Exception");
             Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();

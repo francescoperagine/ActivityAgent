@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity {
@@ -139,10 +140,10 @@ public class LoginActivity extends AppCompatActivity {
             data.put(Settings.KEY_PASSWORD, password);
             Connection connection = new Connection(data, Settings.REQUEST_METHOD);
             connection.execute();
-            JSONObject response = connection.get();
-
-            String message = response.getString(Settings.KEY_MESSAGE);
-            int codeResult = (int) response.get(Settings.KEY_CODE);
+            JSONArray response = connection.get();
+            Log.i(Settings.TAG, getClass().getSimpleName() + " -login- response:" + response.toString());
+            String message = response.getJSONObject(0).getString(Settings.KEY_MESSAGE);
+            int codeResult = (int) response.getJSONObject(0).getInt(Settings.KEY_CODE);
 
             Log.i(Settings.TAG, getClass().getSimpleName() + " -login- Code: " + codeResult + " \tMessage: " + message);
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();

@@ -3,6 +3,5 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TeacherDashboardActivity">
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    android:orientation="vertical"
+    tools:context="it.teamgdm.sms.dibapp.TeacherDashboardActivity" />

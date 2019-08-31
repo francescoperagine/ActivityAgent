@@ -3,8 +3,10 @@ package it.teamgdm.sms.dibapp;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -18,12 +20,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
-class Connection extends AsyncTask<Void, Void, JSONObject> {
+class Connection extends AsyncTask<Void, Void, JSONArray> {
     // private final static String serverUrl = "http://10.72.50.165:80/sms-dibapp-server/api_gateway.php";
-    private final static String serverUrl = "http://192.168.1.110:80/sms-dibapp-server/api_gateway.php";
+    private final static String serverUrl = "http://192.168.1.2:80/sms-dibapp-server/api_gateway.php";
+    // private final static String serverUrl = "http://civicsensebari.altervista.org/api_gateway.php";
     // private final static String serverUrl = "http://192.168.1.178:80/sms-dibapp-server/api_gateway.php";
     private URL url;
-    private HttpURLConnection urlConnection;
     private final String requestMethod;
 
     private final JSONObject data;
@@ -47,44 +49,44 @@ class Connection extends AsyncTask<Void, Void, JSONObject> {
     }
 
     @Override
-    protected JSONObject doInBackground(Void... voids) {
+    protected JSONArray doInBackground(Void... voids) {
         Log.i(Settings.TAG, getClass().getSimpleName() + " -doInBackground-");
-        JSONObject response = null;
+        HttpURLConnection urlConnection = null;
+        BufferedReader bufferedReader = null;
+        JSONArray response = null;
         String text;
 
         try {
-            setConnection();
-            OutputStream outputStream = new BufferedOutputStream(urlConnection.getOutputStream());
-            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
-            bufferedWriter.write(data.toString());
-            bufferedWriter.flush();
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+            urlConnection = setConnection();
+            bufferedReader = setBufferedReader(urlConnection);
 
             while ((text = bufferedReader.readLine()) != null) {
                 Log.i(Settings.TAG, getClass().getSimpleName() + " -doInBackground-while"+text);
-                response = getResponse(text);
+                Object json = new JSONTokener(text).nextValue();
+                if(json instanceof JSONObject) {
+                    Log.i(Settings.TAG, getClass().getSimpleName() + " -doInBackground-while-JSONObject");
+                    // convert to JSONArray
+                    response = new JSONArray();
+                    response.put(json);
+                    Log.i(Settings.TAG, getClass().getSimpleName() + " -doInBackground-while-JSONObject-response"+ response.toString());
+                } else if (json instanceof JSONArray) {
+                    Log.i(Settings.TAG, getClass().getSimpleName() + " -doInBackground-while-JSONArray");
+                    // acquire the JSONArray
+                    response = new JSONArray(text);
+                } else {
+                    Log.i(Settings.TAG, getClass().getSimpleName() + " -doInBackground-while-WTFisThis");
+                }
             }
-        } catch (IOException e) {
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -doInBackground-Exception");
+        } catch (IOException | JSONException e) {
+            Log.i(Settings.TAG, getClass().getSimpleName() + " -doInBackground-IOException");
             e.printStackTrace();
         }
         return response;
     }
 
-    private JSONObject getResponse(String text) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -getResponse-");
-        JSONObject response = null;
-        try {
-            response = new JSONObject(String.valueOf(text));
-        } catch (JSONException e) {
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -getResponse-Exception");
-            e.printStackTrace();
-        }
-        return response;
-    }
-
-    private void setConnection() {
+    private HttpURLConnection setConnection() {
         Log.i(Settings.TAG, getClass().getSimpleName() + " -setConnection-");
+        HttpURLConnection urlConnection = null;
         try {
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestProperty("Content-Type", "application/json");
@@ -97,5 +99,22 @@ class Connection extends AsyncTask<Void, Void, JSONObject> {
             Log.i(Settings.TAG, getClass().getSimpleName() + " -setConnection-cannot connect");
             e.printStackTrace();
         }
+        return urlConnection;
+    }
+
+    private BufferedReader setBufferedReader(HttpURLConnection urlConnection) {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -setBufferedReader-");
+        BufferedReader bufferedReader = null;
+        try {
+            OutputStream outputStream = new BufferedOutputStream(urlConnection.getOutputStream());
+            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
+            bufferedWriter.write(data.toString());
+            bufferedWriter.flush();
+            bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+        } catch (IOException e) {
+            Log.i(Settings.TAG, getClass().getSimpleName() + " -setBufferedReader-not working properly");
+            e.printStackTrace();
+        }
+        return  bufferedReader;
     }
 }
