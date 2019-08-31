@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.SpannableString;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -68,19 +69,21 @@ public class RegisterActivity extends AppCompatActivity {
     private void loadRoleSpinner() {
         Log.i(Settings.TAG, getClass().getSimpleName() + " -loadRoleSpinner-");
         final JSONArray roleListData = loadRoleListData();
+        assert roleListData != null;
         final ArrayList<Role> roleList = setRoleList(roleListData);
-
-        ArrayAdapter spinnerAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, roleList);
+        ArrayAdapter spinnerAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, roleList);
+        spinnerAdapter.setDropDownViewResource(R.layout.spinner_item);
         spinnerRole.setAdapter(spinnerAdapter);
+        spinnerRole.setSelection(0);
     }
 
     private JSONArray loadRoleListData() {
         Log.i(Settings.TAG, getClass().getSimpleName() + " -loadRoleListData-");
         JSONObject data = new JSONObject();
-        JSONArray response = null;
+        JSONArray response;
         try {
             data.put(Settings.KEY_ACTION, Settings.ACTION_GET_ROLE_LIST);
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -loadRoleListData-data: " + data.toString());
+            Log.i(Settings.TAG, getClass().getSimpleName() + " -loadRoleListData-data: " + data);
             Connection connection = new Connection(data, Settings.REQUEST_METHOD);
             connection.execute();
             response = connection.get();
@@ -96,16 +99,16 @@ public class RegisterActivity extends AppCompatActivity {
 
     private ArrayList setRoleList(JSONArray roleListData) {
         Log.i(Settings.TAG, getClass().getSimpleName() + " -setRoleList-");
-        ArrayList roleList = new ArrayList<>();
+        ArrayList<Role> roleList = new ArrayList<>();
         for(int i = 0; i<roleListData.length(); i++) {
             try {
                 Role r = new Role(roleListData.getJSONObject(i).optString(Settings.KEY_ROLE_NAME));
-                roleList.add(r.getName());
+                roleList.add(r);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -setRoleList-roleList " + roleList.toString());
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -setRoleList-roleList " + roleList);
         return roleList;
     }
 

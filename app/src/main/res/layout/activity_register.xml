@@ -30,7 +30,6 @@
         android:id="@+id/surname"
         android:layout_width="344dp"
         android:layout_height="wrap_content"
-
         android:autofillHints="@string/surnamePromptHint"
         android:hint="@string/surnamePromptHint"
         android:imeOptions="actionDone"
@@ -47,9 +46,8 @@
 
     <EditText
         android:id="@+id/ssn"
-        android:layout_width="344dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-
         android:autofillHints="@string/ssnPromptHint"
         android:hint="@string/ssnPromptHint"
         android:imeOptions="actionDone"
@@ -67,8 +65,8 @@
         android:id="@+id/role"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:padding="@dimen/textDefaultPadding"
-        android:spinnerMode="dropdown"
+        android:spinnerMode="dialog"
+        android:prompt="@string/selectRoleText"
         app:layout_constraintBottom_toTopOf="@id/email"
         app:layout_constraintEnd_toEndOf="@+id/ssn"
         app:layout_constraintStart_toStartOf="@+id/ssn"
