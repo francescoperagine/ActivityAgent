@@ -20,7 +20,7 @@ class Response {
 	}
 }
 
-function login($input) {
+function login(array $input) {
 	if(isset($input['email']) && isset($input['password'])){
 		try {
 			credentialAreNotNull($input['email'], $input['password']);
@@ -58,7 +58,7 @@ function verifyPassword(string $email, string $password) {
 	}
 }
 
-function registration($input) {
+function registration(array $input) {
 	if(isset($input['serialNumber']) && isset($input['name']) && isset($input['surname']) && isset($input['email']) && isset($input['password'])){
 	//Register the user if doesn't exists
 		try {
@@ -81,7 +81,7 @@ function getRoleList() {
 	return $response;
 }
 
-function registerNewUser($input) {
+function registerNewUser(array $input) {
 	global $connection;
 	//Get a unique Salt
 	$salt = getSalt();

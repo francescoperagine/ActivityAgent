@@ -26,7 +26,8 @@ if(isset($input[ACTION])){
 			break;
 	}
 } else {
-	$response = new Response($input[ACTION] + " - " + ACTION_NOT_DEFINED_TEXT, ACTION_NOT_DEFINED_CODE); 
+	$message = $input[ACTION] + " - " + ACTION_NOT_DEFINED_TEXT;
+	$response = new Response($message, ACTION_NOT_DEFINED_CODE); 
 }
 echo json_encode($response);
 
