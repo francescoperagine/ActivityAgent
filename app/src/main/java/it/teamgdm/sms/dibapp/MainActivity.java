@@ -8,16 +8,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    //TODO tests
-    //TODO Horizontal layout
-    //TODO Splash screen
-    //TODO Student - Class list
-    //TODO Student - Class fragment
-    //TODO Student - Ratings activity
-    //TODO Teacher - Class list
-    //TODO Teacher - Class fragment
-    //TODO Teacher - Statistics activity
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(Settings.TAG, getClass().getSimpleName() + " -onCreate- The activity is getting created.");
