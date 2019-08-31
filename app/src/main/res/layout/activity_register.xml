@@ -10,7 +10,6 @@
         android:id="@+id/name"
         android:layout_width="344dp"
         android:layout_height="wrap_content"
-
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:autofillHints="@string/namePromptHint"
@@ -66,7 +65,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:spinnerMode="dialog"
-        android:prompt="@string/selectRoleText"
         app:layout_constraintBottom_toTopOf="@id/email"
         app:layout_constraintEnd_toEndOf="@+id/ssn"
         app:layout_constraintStart_toStartOf="@+id/ssn"

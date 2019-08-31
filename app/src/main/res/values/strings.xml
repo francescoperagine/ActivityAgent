@@ -29,5 +29,6 @@
     <string name="roleToggleString">Role</string>
     <string name="teacherRoleString">Teacher</string>
     <string name="studentRoleString">Student</string>
-    <string name="selectRoleText">Select role</string>
+    <string name="selectRoleText">Role</string>
+    <string name="roleSelectionErrorText">Select your role</string>
 </resources>

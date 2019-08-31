@@ -1,6 +1,7 @@
 package it.teamgdm.sms.dibapp;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -57,7 +59,6 @@ public class RegisterActivity extends AppCompatActivity {
     private void loadRoleSpinner() {
         Log.i(Settings.TAG, getClass().getSimpleName() + " -loadRoleSpinner-");
         final JSONArray roleListData = loadRoleListData();
-        assert roleListData != null;
         final ArrayList<Role> roleList = setRoleList(roleListData);
         ArrayAdapter spinnerAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, roleList);
         spinnerAdapter.setDropDownViewResource(R.layout.spinner_item);
@@ -88,6 +89,8 @@ public class RegisterActivity extends AppCompatActivity {
     private ArrayList setRoleList(JSONArray roleListData) {
         Log.i(Settings.TAG, getClass().getSimpleName() + " -setRoleList-");
         ArrayList<Role> roleList = new ArrayList<>();
+        Role selectRole = new Role(getResources().getString(R.string.selectRoleText));
+        roleList.add(selectRole);
         for(int i = 0; i<roleListData.length(); i++) {
             try {
                 Role r = new Role(roleListData.getJSONObject(i).optString(Settings.KEY_ROLE_NAME));
@@ -98,27 +101,6 @@ public class RegisterActivity extends AppCompatActivity {
         }
         Log.i(Settings.TAG, getClass().getSimpleName() + " -setRoleList-roleList " + roleList);
         return roleList;
-    }
-
-    @Override
-    protected void onResume() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onResume-");
-        super.onResume();
-    }
-    @Override
-    protected void onPause() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onPause-");
-        super.onPause();
-    }
-    @Override
-    protected void onStop() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onStop-");
-        super.onStop();
-    }
-    @Override
-    protected void onDestroy() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onDestroy-");
-        super.onDestroy();
     }
 
     private final View.OnClickListener buttonSignInListener = new View.OnClickListener() {
@@ -134,13 +116,6 @@ public class RegisterActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             Log.i(Settings.TAG, getClass().getSimpleName() + " -OnClickListener-buttonRegisterListener-onClick-");
-            name = editTextName.getText().toString().trim();
-            surname = editTextSurname.getText().toString().trim();
-            serialNumber = editTextSerialNumber.getText().toString().trim();
-            role = spinnerRole.toString().trim();
-            email = editTextEmail.getText().toString().toLowerCase().trim();
-            password = editTextPassword.getText().toString().trim();
-            confirmPassword = editTextConfirmPassword.getText().toString().trim();
             registrationInit();
         }
     };
@@ -151,8 +126,19 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void registrationInit() {
         Log.i(Settings.TAG, getClass().getSimpleName() + " -registrationInit-");
-        if(validateInputs() & register()) {
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -registrationInit-registrationComplete-");
+
+        User tmpUser = new User();
+
+        tmpUser.setName(editTextName.getText().toString().trim());
+        tmpUser.setSurname(editTextSurname.getText().toString().trim());
+        tmpUser.setSsn(editTextSerialNumber.getText().toString().trim()) ;
+        tmpUser.setRole(spinnerRole.getSelectedItem().toString());
+        tmpUser.setEmail(editTextEmail.getText().toString().toLowerCase().trim());
+        tmpUser.setPassword(editTextPassword.getText().toString().trim());
+        tmpUser.setConfirmPassword(editTextConfirmPassword.getText().toString().trim());
+
+        if(validateInputs(tmpUser) && register(tmpUser)) {
+            Log.i(Settings.TAG, getClass().getSimpleName() + " -registrationInit-registrationComplete-"+tmpUser);
             Intent loginIntent = new Intent(this, LoginActivity.class);
             startActivity(loginIntent);
         }
@@ -161,35 +147,45 @@ public class RegisterActivity extends AppCompatActivity {
     /**
      * Validates inputs and shows error if any
      *
+     * @param tmpUser
      */
-    private boolean validateInputs() {
+    private boolean validateInputs(User tmpUser) {
         Log.i(Settings.TAG, getClass().getSimpleName() + " -validateInputs-");
-        if (Settings.KEY_EMPTY.equals(name)) {
+
+        if (Settings.KEY_EMPTY.equals(tmpUser.getName())) {
             editTextName.setError(getResources().getString(R.string.namePromptHint) + " " + getResources().getString(R.string.inputCannotBeEmpty));
             editTextName.requestFocus();
             return false;
         }
-        if (Settings.KEY_EMPTY.equals(surname)) {
+        if (Settings.KEY_EMPTY.equals(tmpUser.getSurname())) {
             editTextSurname.setError(getResources().getString(R.string.surnamePromptHint) + " " + getResources().getString(R.string.inputCannotBeEmpty));
             editTextSurname.requestFocus();
             return false;
         }
-        if (Settings.KEY_EMPTY.equals(serialNumber)) {
+        if (Settings.KEY_EMPTY.equals(tmpUser.getSsn())) {
             editTextSerialNumber.setError(getResources().getString(R.string.ssnPromptHint) + " " + getResources().getString(R.string.inputCannotBeEmpty));
             editTextSerialNumber.requestFocus();
             return false;
         }
-        if (Settings.KEY_EMPTY.equals(password)) {
+        if (tmpUser.getRole().equals(getResources().getString(R.string.selectRoleText))) {
+            TextView errorText = (TextView) spinnerRole.getSelectedView();
+            errorText.setError("");
+            errorText.setTextColor(Color.RED);
+            errorText.setText(getResources().getString(R.string.roleSelectionErrorText));
+            return false;
+        }
+        if(!isEmailValid(tmpUser.getEmail())) {
+            Log.i(Settings.TAG, getClass().getSimpleName() + " -validateInputs-!isEmailValid" + tmpUser.getEmail());
+            editTextEmail.setError(getResources().getString(R.string.emailNotValid));
+            editTextEmail.requestFocus();
+            return false;
+        }
+        if (Settings.KEY_EMPTY.equals(tmpUser.getPassword())) {
             editTextPassword.setError(getResources().getString(R.string.passwordPromptHint) + " " + getResources().getString(R.string.inputCannotBeEmpty));
             editTextPassword.requestFocus();
             return false;
         }
-        if (Settings.KEY_EMPTY.equals(confirmPassword)) {
-            editTextConfirmPassword.setError(getResources().getString(R.string.confirmPasswordPromptHint) + " " + getResources().getString(R.string.inputCannotBeEmpty));
-            editTextConfirmPassword.requestFocus();
-            return false;
-        }
-        if (!password.equals(confirmPassword)) {
+        if (!tmpUser.getPassword().equals(tmpUser.getConfirmPassword())) {
             editTextConfirmPassword.setError(getResources().getString(R.string.passwordAndConfirmDoesNotMatch));
             editTextConfirmPassword.requestFocus();
             return false;
@@ -197,24 +193,30 @@ public class RegisterActivity extends AppCompatActivity {
         return true;
     }
 
+    private boolean isEmailValid(CharSequence email) {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -isEmailValid-");
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
     /**
      * Sends form data to the webserver with the default request method
      * @return true if the server returns USER_CREATED_CODE
+     * @param tmpUser
      */
 
-    private boolean register() {
+    private boolean register(User tmpUser) {
         Log.i(Settings.TAG, getClass().getSimpleName() + " -register-");
         JSONObject data = new JSONObject();
 
         //Populate the data parameters
         try {
             data.put(Settings.KEY_ACTION, Settings.ACTION_REGISTRATION);
-            data.put(Settings.KEY_SERIAL_NUMBER, serialNumber);
-            data.put(Settings.KEY_NAME, name);
-            data.put(Settings.KEY_SURNAME, surname);
-            data.put(Settings.KEY_EMAIL, email);
-            data.put(Settings.KEY_PASSWORD, password);
-            data.put(Settings.KEY_ROLE_ID, role);
+            data.put(Settings.KEY_NAME, tmpUser.getName());
+            data.put(Settings.KEY_SURNAME, tmpUser.getSurname());
+            data.put(Settings.KEY_SERIAL_NUMBER, tmpUser.getSsn());
+            data.put(Settings.KEY_ROLE_NAME, tmpUser.getRole());
+            data.put(Settings.KEY_EMAIL, tmpUser.getEmail());
+            data.put(Settings.KEY_PASSWORD, tmpUser.getPassword());
             Connection connection = new Connection(data, Settings.REQUEST_METHOD);
             connection.execute();
             JSONArray response = connection.get();
@@ -238,4 +240,26 @@ public class RegisterActivity extends AppCompatActivity {
         }
         return false;
     }
+
+    @Override
+    protected void onResume() {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -onResume-");
+        super.onResume();
+    }
+    @Override
+    protected void onPause() {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -onPause-");
+        super.onPause();
+    }
+    @Override
+    protected void onStop() {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -onStop-");
+        super.onStop();
+    }
+    @Override
+    protected void onDestroy() {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -onDestroy-");
+        super.onDestroy();
+    }
+
 }

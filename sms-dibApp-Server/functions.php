@@ -5,8 +5,9 @@ include 'config.php';
 
 define("USER_EXISTS_QUERY", "SELECT count(*) as count FROM user WHERE email = ?");
 define("VERIFY_PASSWORD_QUERY", "SELECT passwordHash, salt FROM user WHERE email = ?");
-define("GET_ROLE_LIST", "SELECT name FROM role");
+define("GET_ROLE_LIST", "SELECT name as roleName FROM role");
 define("REGISTER_NEW_USER_QUERY", "INSERT INTO user(serialNumber, name, surname, email, passwordHash, salt) VALUES (:serialNumber, :name, :surname, :email, :passwordHash, :salt)");
+define("REGISTER_NEW_USER_ROLE_QUERY", "UPDATE user SET user.roleID = (SELECT ID from role WHERE name = :roleName) WHERE user.email = :email"); 
 define("GET_USER_DETAILS_QUERY", "SELECT u.name as name, u.surname as surname, u.email as email, u.registrationDate as registrationDate, u.roleID as roleId, r.name as roleName FROM user as u, role as r WHERE u.roleID = r.ID AND email = ?");
 
 class Response {
@@ -59,7 +60,7 @@ function verifyPassword(string $email, string $password) {
 }
 
 function registration(array $input) {
-	if(isset($input['serialNumber']) && isset($input['name']) && isset($input['surname']) && isset($input['email']) && isset($input['password'])){
+	if(isset($input['name']) && isset($input['surname']) && isset($input['serialNumber']) && isset($input['roleName']) && isset($input['email']) && isset($input['password'])){
 	//Register the user if doesn't exists
 		try {
 			userExists($input['email']);
@@ -91,14 +92,20 @@ function registerNewUser(array $input) {
 	
 	//Query to register new user
 	$stmt = $connection->prepare(REGISTER_NEW_USER_QUERY);
-	$stmt->bindValue(':serialNumber', $input['serialNumber']);
 	$stmt->bindValue(':name', $input['name']);
 	$stmt->bindValue(':surname', $input['surname']);
+	$stmt->bindValue(':serialNumber', $input['serialNumber']);
 	$stmt->bindValue(':email', $input['email']);
 	$stmt->bindValue(':passwordHash', $passwordHash);
 	$stmt->bindValue(':salt', $salt);
 	$stmt->execute();
-	if($stmt) {
+	
+	$stmt2 = $connection->prepare(REGISTER_NEW_USER_ROLE_QUERY);
+	$stmt2->bindValue(':email', $input['email']);
+	$stmt2->bindValue(':roleName', $input['roleName']);
+	$stmt2->execute();
+	
+	if($stmt && $stmt2) {
 		$response = new Response(USER_CREATED_TEXT,USER_CREATED_CODE);
 	} else {
 		$response = new Response(USER_NOT_CREATED_TEXT,USER_NOT_CREATED_CODE);

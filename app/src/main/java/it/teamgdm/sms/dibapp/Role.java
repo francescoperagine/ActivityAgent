@@ -3,6 +3,7 @@ package it.teamgdm.sms.dibapp;
 import androidx.annotation.NonNull;
 
 public class Role {
+
     private String name;
 
     Role(String name) {

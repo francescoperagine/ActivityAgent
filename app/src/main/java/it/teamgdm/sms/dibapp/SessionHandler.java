@@ -65,8 +65,7 @@ class SessionHandler {
             user.setName(userDetails.getString(Settings.KEY_NAME));
             user.setSurname(userDetails.getString(Settings.KEY_SURNAME));
             user.setEmail(userDetails.getString(Settings.KEY_EMAIL));
-            user.setRoleId(userDetails.getInt(Settings.KEY_ROLE_ID));
-            user.setRoleName(userDetails.getString(Settings.KEY_ROLE_NAME));
+            user.setRole(userDetails.getString(Settings.KEY_ROLE_NAME));
             //TODO fix setRegistrationDate with DB data;
     //        user.setRegistrationDate(Long.getLong(userDetails.getString(Settings.KEY_REGISTRATION_DATE)));
             user.setSessionExpiryDate(getExpireSessionDate());
@@ -143,8 +142,7 @@ class SessionHandler {
         user.setName(sharedPreferences.getString(Settings.KEY_NAME, Settings.KEY_EMPTY));
         user.setSurname(sharedPreferences.getString(Settings.KEY_SURNAME, Settings.KEY_EMPTY));
         user.setEmail(sharedPreferences.getString(Settings.KEY_EMAIL, Settings.KEY_EMPTY));
-        user.setRoleId(sharedPreferences.getInt(Settings.KEY_ROLE_ID, Settings.KEY_ZERO));
-        user.setRoleName(sharedPreferences.getString(Settings.KEY_ROLE_NAME, Settings.KEY_EMPTY));
+        user.setRole(sharedPreferences.getString(Settings.KEY_ROLE_NAME, Settings.KEY_EMPTY));
         //TODO setSharedPreferences DegreeCourses
     //    user.setDegreeCourseId(sharedPreferences.getInt(Settings.KEY_DEGREE_COURSE_ID, Settings.KEY_ZERO));
     //    user.setDegreeCourseName(sharedPreferences.getString(Settings.KEY_DEGREE_COURSE_NAME, Settings.KEY_EMPTY));

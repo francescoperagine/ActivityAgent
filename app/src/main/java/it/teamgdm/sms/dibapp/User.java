@@ -6,13 +6,15 @@ class User {
 
     private String name;
     private String surname;
-    private String email;
-    private int roleId;
+    private String ssn;
     private String roleName;
+    private String email;
     private int degreeCourseId;
     private String degreeCourseName;
     private long registrationDate;
     private long sessionExpiryTime;
+    private String password;
+    private String confirmPassword;
 
     User() {
 
@@ -20,12 +22,12 @@ class User {
 
     boolean isStudent() {
         Log.i(Settings.TAG, getClass().getSimpleName() + " -isStudent-");
-        return roleId == Settings.KEY_ROLE_STUDENT;
+        return roleName.equals(R.string.studentRoleString);
     }
 
     boolean isTeacher() {
         Log.i(Settings.TAG, getClass().getSimpleName() + " -isTeacher-");
-        return roleId == Settings.KEY_ROLE_TEACHER;
+        return roleName.equals(R.string.teacherRoleString);
     }
 
     String getName() {
@@ -33,49 +35,14 @@ class User {
         return name;
     }
 
-    String getSurname() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -getSurname-");
-        return surname;
-    }
-
-    String getEmail() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -getEmail-");
-        return email;
-    }
-
-    long getRegistrationDate() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -getRegistrationDate-");
-        return registrationDate;
-    }
-
-    long getSessionExpiryTime() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -getSessionExpiryTime-");
-        return sessionExpiryTime;
-    }
-
-    int getRoleId() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -getRoleId-");
-        return roleId;
-    }
-
-    String getRoleName() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -getRoleName-");
-        return roleName;
-    }
-
-    int getDegreeCourseId() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -getDegreeCourseId-");
-        return degreeCourseId;
-    }
-
-    String getDegreeCourseName() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -getDegreeCourseName-");
-        return degreeCourseName;
-    }
-
     void setName(String name) {
         Log.i(Settings.TAG, getClass().getSimpleName() + " -setName-");
         this.name = name;
+    }
+
+    String getSurname() {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -getSurname-");
+        return surname;
     }
 
     void setSurname(String surname) {
@@ -83,14 +50,34 @@ class User {
         this.surname = surname;
     }
 
+    String getSsn() {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -getSsn-");
+        return ssn;
+    }
+
+    void setSsn(String ssn) {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -setSsn-");
+        this.ssn = ssn;
+    }
+
+    String getRole() {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -getRole-");
+        return roleName;
+    }
+
+    void setRole(String roleName) {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -setRole-");
+        this.roleName = roleName;
+    }
+
+    String getEmail() {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -getEmail-");
+        return email;
+    }
+
     void setEmail(String email) {
         Log.i(Settings.TAG, getClass().getSimpleName() + " -setEmail-");
         this.email = email;
-    }
-
-    void setRegistrationDate(long registrationDate) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -setRegistrationDate-");
-        this.registrationDate = registrationDate;
     }
 
     void setSessionExpiryDate(long sessionExpiryTime) {
@@ -98,23 +85,28 @@ class User {
         this.sessionExpiryTime = sessionExpiryTime;
     }
 
-    void setRoleId(int roleId) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -setRoleId-");
-        this.roleId = roleId;
+    String getPassword() {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -getPassword-");
+        return password;
     }
 
-    void setRoleName(String roleName) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -setRoleName-");
-        this.roleName = roleName;
+    void setPassword(String password) {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -setPassword-");
+        this.password = password;
     }
 
-    void setDegreeCourseId(int degreeCourseId) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -setDegreeCourseId-");
-        this.degreeCourseId = degreeCourseId;
+    String getConfirmPassword() {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -getConfirmPassword-");
+        return confirmPassword;
     }
 
-    void setDegreeCourseName(String degreeCourseName) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -setDegreeCourseName-");
-        this.degreeCourseName = degreeCourseName;
+    void setConfirmPassword(String confirmPassword) {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -confirmPassword-");
+        this.confirmPassword = confirmPassword;
+    }
+
+    @Override
+    public String toString() {
+        return name + Settings.KEY_BLANK + surname + Settings.KEY_BLANK + ssn + Settings.KEY_BLANK + roleName + Settings.KEY_BLANK + email + Settings.KEY_BLANK + password;
     }
 }
