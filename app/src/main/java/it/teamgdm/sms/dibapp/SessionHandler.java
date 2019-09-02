@@ -43,7 +43,7 @@ class SessionHandler {
         Log.i(Settings.TAG, getClass().getSimpleName() + " -getUserDetails-");
         JSONObject data = new JSONObject();
         try {
-            data.put(Settings.KEY_ACTION, Settings.ACTION_GET_USER_DETAILS);
+            data.put(Settings.KEY_ACTION, Settings.USER_DETAILS);
             data.put(Settings.KEY_EMAIL, email);
             Log.i(Settings.TAG, getClass().getSimpleName() + " -getUserDetails-data: " + data.toString());
             Connection connection = new Connection(data, Settings.REQUEST_METHOD);

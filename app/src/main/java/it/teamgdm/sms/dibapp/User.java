@@ -7,6 +7,7 @@ class User {
     private String name;
     private String surname;
     private String ssn;
+    private String degreeCourse;
     private String roleName;
     private String email;
     private int degreeCourseId;
@@ -58,6 +59,16 @@ class User {
     void setSsn(String ssn) {
         Log.i(Settings.TAG, getClass().getSimpleName() + " -setSsn-");
         this.ssn = ssn;
+    }
+
+    String getDegreeCourse() {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -getDegreeCourse-");
+        return degreeCourse;
+    }
+
+    void setDegreeCourse(String degreeCourse) {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -setDegreeCourse-");
+        this.degreeCourse = degreeCourse;
     }
 
     String getRole() {

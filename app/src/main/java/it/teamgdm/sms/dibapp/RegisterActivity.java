@@ -24,9 +24,8 @@ import java.util.concurrent.ExecutionException;
 public class RegisterActivity extends AppCompatActivity {
 
     private EditText editTextName, editTextSurname, editTextSerialNumber, editTextEmail, editTextPassword, editTextConfirmPassword;
-    private String name, surname, serialNumber, role, email, password, confirmPassword;
 
-    private Spinner spinnerRole;
+    private Spinner spinnerRole, spinnerDegreecourse;
     private Button buttonRegister, buttonSignIn;
 
     @Override
@@ -44,6 +43,7 @@ public class RegisterActivity extends AppCompatActivity {
         editTextConfirmPassword = findViewById(R.id.confirmPassword);
 
         spinnerRole = findViewById(R.id.role);
+        spinnerDegreecourse = findViewById(R.id.degreecourse);
         buttonRegister = findViewById(R.id.registerButton);
         buttonSignIn = findViewById(R.id.sign_inButton);
     }
@@ -51,34 +51,47 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onStart() {
         Log.i(Settings.TAG, getClass().getSimpleName() + " -onStart-");
         super.onStart();
-        loadRoleSpinner();
+        setSpinners();
         buttonSignIn.setOnClickListener(buttonSignInListener);
         buttonRegister.setOnClickListener(buttonRegisterListener);
     }
 
-    private void loadRoleSpinner() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -loadRoleSpinner-");
-        final JSONArray roleListData = loadRoleListData();
-        final ArrayList<Role> roleList = setRoleList(roleListData);
-        ArrayAdapter spinnerAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, roleList);
-        spinnerAdapter.setDropDownViewResource(R.layout.spinner_item);
-        spinnerRole.setAdapter(spinnerAdapter);
+    /**
+     * Sets role & degreecourse spinners
+     */
+
+    private void setSpinners() {
+        spinnerDegreecourse.setAdapter(setInputSpinner(Settings.DEGREECOURSE_LIST, R.string.selectDegreecourseText));
+        spinnerDegreecourse.setSelection(0);
+        spinnerRole.setAdapter(setInputSpinner(Settings.ROLE_LIST, R.string.selectRoleText));
         spinnerRole.setSelection(0);
     }
 
-    private JSONArray loadRoleListData() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -loadRoleListData-");
+    private ArrayAdapter<SpinnerElement> setInputSpinner(String spinnerArgument, int spinnerSelectItemText) {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -setInputSpinner-");
+
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -setInputSpinner-"+spinnerArgument);
+        final JSONArray spinnerListData = loadSpinnerData(spinnerArgument);
+        assert spinnerListData != null;
+        ArrayList<SpinnerElement> spinnerElementList = setSpinnerList(spinnerListData, getResources().getString(spinnerSelectItemText));
+        ArrayAdapter<SpinnerElement> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, spinnerElementList);
+        spinnerAdapter.setDropDownViewResource(R.layout.spinner_item);
+        return spinnerAdapter;
+    }
+
+    private JSONArray loadSpinnerData(String spinnerDataList) {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -loadSpinnerData-" + spinnerDataList);
         JSONObject data = new JSONObject();
         JSONArray response;
         try {
-            data.put(Settings.KEY_ACTION, Settings.ACTION_GET_ROLE_LIST);
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -loadRoleListData-data: " + data);
+            data.put(Settings.KEY_ACTION, spinnerDataList);
+            Log.i(Settings.TAG, getClass().getSimpleName() + " -loadSpinnerData-data: " + data);
             Connection connection = new Connection(data, Settings.REQUEST_METHOD);
             connection.execute();
             response = connection.get();
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -loadRoleListData-response: " + response.toString());
+            Log.i(Settings.TAG, getClass().getSimpleName() + " -loadSpinnerData-response: " + response.toString());
         } catch (ExecutionException | InterruptedException | JSONException e) {
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -loadRoleListData-Exception");
+            Log.i(Settings.TAG, getClass().getSimpleName() + " -loadSpinnerData-Exception");
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
             e.printStackTrace();
             return null;
@@ -86,21 +99,21 @@ public class RegisterActivity extends AppCompatActivity {
         return response;
     }
 
-    private ArrayList setRoleList(JSONArray roleListData) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -setRoleList-");
-        ArrayList<Role> roleList = new ArrayList<>();
-        Role selectRole = new Role(getResources().getString(R.string.selectRoleText));
-        roleList.add(selectRole);
-        for(int i = 0; i<roleListData.length(); i++) {
+    private ArrayList<SpinnerElement> setSpinnerList(JSONArray spinnerListData, String selectSpinnerValueText) {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -setSpinnerList-");
+        ArrayList<SpinnerElement> spinnerElementList = new ArrayList<>();
+        SpinnerElement selectSpinnerElement = new SpinnerElement(selectSpinnerValueText);
+        spinnerElementList.add(selectSpinnerElement);
+        for(int i = 0; i<spinnerListData.length(); i++) {
             try {
-                Role r = new Role(roleListData.getJSONObject(i).optString(Settings.KEY_ROLE_NAME));
-                roleList.add(r);
+                SpinnerElement r = new SpinnerElement(spinnerListData.getJSONObject(i).optString(Settings.KEY_NAME));
+                spinnerElementList.add(r);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -setRoleList-roleList " + roleList);
-        return roleList;
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -setSpinnerList-spinnerElementList " + spinnerElementList);
+        return spinnerElementList;
     }
 
     private final View.OnClickListener buttonSignInListener = new View.OnClickListener() {
@@ -132,6 +145,7 @@ public class RegisterActivity extends AppCompatActivity {
         tmpUser.setName(editTextName.getText().toString().trim());
         tmpUser.setSurname(editTextSurname.getText().toString().trim());
         tmpUser.setSsn(editTextSerialNumber.getText().toString().trim()) ;
+        tmpUser.setDegreeCourse(spinnerDegreecourse.getSelectedItem().toString());
         tmpUser.setRole(spinnerRole.getSelectedItem().toString());
         tmpUser.setEmail(editTextEmail.getText().toString().toLowerCase().trim());
         tmpUser.setPassword(editTextPassword.getText().toString().trim());
@@ -165,6 +179,13 @@ public class RegisterActivity extends AppCompatActivity {
         if (Settings.KEY_EMPTY.equals(tmpUser.getSsn())) {
             editTextSerialNumber.setError(getResources().getString(R.string.ssnPromptHint) + " " + getResources().getString(R.string.inputCannotBeEmpty));
             editTextSerialNumber.requestFocus();
+            return false;
+        }
+        if (tmpUser.getDegreeCourse().equals(getResources().getString(R.string.selectDegreecourseText))) {
+            TextView errorText = (TextView) spinnerDegreecourse.getSelectedView();
+            errorText.setError("");
+            errorText.setTextColor(Color.RED);
+            errorText.setText(getResources().getString(R.string.degreecourseSelectionErrorText));
             return false;
         }
         if (tmpUser.getRole().equals(getResources().getString(R.string.selectRoleText))) {
@@ -210,10 +231,11 @@ public class RegisterActivity extends AppCompatActivity {
 
         //Populate the data parameters
         try {
-            data.put(Settings.KEY_ACTION, Settings.ACTION_REGISTRATION);
+            data.put(Settings.KEY_ACTION, Settings.USER_REGISTRATION);
             data.put(Settings.KEY_NAME, tmpUser.getName());
             data.put(Settings.KEY_SURNAME, tmpUser.getSurname());
             data.put(Settings.KEY_SERIAL_NUMBER, tmpUser.getSsn());
+            data.put(Settings.KEY_DEGREECOURSE, tmpUser.getDegreeCourse());
             data.put(Settings.KEY_ROLE_NAME, tmpUser.getRole());
             data.put(Settings.KEY_EMAIL, tmpUser.getEmail());
             data.put(Settings.KEY_PASSWORD, tmpUser.getPassword());
@@ -227,10 +249,10 @@ public class RegisterActivity extends AppCompatActivity {
 
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
             if (codeResult == Settings.USER_CREATED_CODE) {
-                Log.i(Settings.TAG, getClass().getSimpleName() + " -register-Settings.USER_CREATED-");
+                Log.i(Settings.TAG, getClass().getSimpleName() + " -register-"+message);
                 return true;
             } else {
-                Log.i(Settings.TAG, getClass().getSimpleName() + " -register-REGISTRATION_NOT_OK-");
+                Log.i(Settings.TAG, getClass().getSimpleName() + " -register-REGISTRATION_NOT_OK");
                 return false;
             }
         } catch (JSONException | ExecutionException | InterruptedException e) {

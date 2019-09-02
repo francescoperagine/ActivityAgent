@@ -1,5 +1,6 @@
 package it.teamgdm.sms.dibapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -12,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
-public class TeacherDashboardActivity extends AppCompatActivity {
+public class DashboardActivity extends AppCompatActivity {
 
     private boolean doubleBackToExitPressedOnce = false;
 
@@ -20,7 +21,7 @@ public class TeacherDashboardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(Settings.TAG, getClass().getSimpleName() + " -onCreate-");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.teacher_activity_dashboard);
+        setContentView(R.layout.activity_dashboard);
     }
 
     @Override
@@ -33,7 +34,7 @@ public class TeacherDashboardActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         Log.i(Settings.TAG, getClass().getSimpleName() + " -onCreateOptionsMenu-" + menu.toString());
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.teacher_dashboard_menu, menu);
+        menuInflater.inflate(R.menu.dashboard_menu, menu);
         return true;
     }
 
@@ -42,6 +43,14 @@ public class TeacherDashboardActivity extends AppCompatActivity {
         Log.i(Settings.TAG, getClass().getSimpleName() + " -onOptionsItemSelected-" +item.toString());
         // Handle item selection
         switch (item.getItemId()) {
+            case R.id.profileButton:
+                Intent profileIntent = new Intent(this, ProfileActivity.class);
+                startActivity(profileIntent);
+                return true;
+            case R.id.settingsButton:
+                Intent settingIntent = new Intent(this, SettingsActivity.class);
+                startActivity(settingIntent);
+                return true;
             case R.id.logoutButton:
                 FragmentManager fragmentManager = this.getSupportFragmentManager();
                 LogoutDialogFragment logoutDialogFragment = new LogoutDialogFragment(this);

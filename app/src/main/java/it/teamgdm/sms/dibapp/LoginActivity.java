@@ -135,7 +135,7 @@ public class LoginActivity extends AppCompatActivity {
 
         //Populate the data parameters
         try {
-            data.put(Settings.KEY_ACTION, Settings.ACTION_LOGIN);
+            data.put(Settings.KEY_ACTION, Settings.USER_LOGIN);
             data.put(Settings.KEY_EMAIL, email);
             data.put(Settings.KEY_PASSWORD, password);
             Connection connection = new Connection(data, Settings.REQUEST_METHOD);
@@ -167,12 +167,7 @@ public class LoginActivity extends AppCompatActivity {
      */
     private void loadDashboard() {
         Log.i(Settings.TAG, getClass().getSimpleName() + " -loadDashboard-");
-        Intent i;
-        if(session.isStudent()) {
-            i = new Intent(this, StudentDashboardActivity.class);
-        } else {
-            i = new Intent(this, TeacherDashboardActivity.class);
-        }
+        Intent i = new Intent(this, DashboardActivity.class);
         startActivity(i);
     }
 }
