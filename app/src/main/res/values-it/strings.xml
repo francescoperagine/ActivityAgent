@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">dibApp</string>
+    <string name="action_register">Registrati</string>
+    <string name="action_sign_in">Accedi</string>
+    <string name="alreadyRegistered">Già registrato?</string>
+    <string name="confirmPasswordPromptHint">Conferma password</string>
+    <string name="contentDescriptionLogo">Logo</string>
+    <string name="dashboard_menu_exit">Disconnettiti</string>
+    <string name="dashboard_menu_search">Cerca</string>
+    <string name="dashboard_menu_settings">Impostazioni</string>
+    <string name="emailNotValid">Email non valida</string>
+    <string name="emailPromptHint">Email</string>
+    <string name="forgotPasswordLinkHint">Recupera credenziali</string>
+    <string name="inputCannotBeEmpty">Non può essere vuoto</string>
+    <string name="logoContentDescription">Descrizione logo</string>
+    <string name="logout_dialog_confirm">Sei sicuro di voler uscire?</string>
+    <string name="logout_dialog_confirm_no">No</string>
+    <string name="logout_dialog_confirm_yes">Si</string>
+    <string name="logout_double_back_confirm">Clicca di nuovo \"INDIETRO\" per uscire.</string>
+    <string name="namePromptHint">Nome</string>
+    <string name="passwordAndConfirmDoesNotMatch">Password e conferma password non corrispondono</string>
+    <string name="passwordForgotLinkString">Password dimenticata</string>
+    <string name="passwordPromptHint">Password</string>
+    <string name="rememberMeToggleHint">Mantienimi connesso</string>
+    <string name="rememberMeToggleString">Ricordami</string>
+    <string name="roleSelectionErrorText">Seleziona il tuo ruolo</string>
+    <string name="roleToggleString">Ruolo</string>
+    <string name="selectRoleText">Ruolo</string>
+    <string name="ssnPromptHint">Numero di serie</string>
+    <string name="studentRoleString">Studente</string>
+    <string name="teacherRoleString">Professore</string>
+    <string name="text_or">oppure</string>
+    <string name="surnamePromptHint">Cognome</string>
+</resources>
