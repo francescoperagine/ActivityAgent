@@ -4,6 +4,7 @@ import android.util.Log;
 
 class User {
 
+    private int ID;
     private String name;
     private String surname;
     private String ssn;
@@ -12,7 +13,7 @@ class User {
     private String email;
     private int degreeCourseId;
     private String degreeCourseName;
-    private long registrationDate;
+    private String registrationDate;
     private long sessionExpiryTime;
     private String password;
     private String confirmPassword;
@@ -29,6 +30,16 @@ class User {
     boolean isTeacher() {
         Log.i(Settings.TAG, getClass().getSimpleName() + " -isTeacher-");
         return roleName.equals(R.string.teacherRoleString);
+    }
+
+    int getID() {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -getID-");
+        return ID;
+    }
+
+    void setID(int ID) {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -setID-");
+        this.ID = ID;
     }
 
     String getName() {
@@ -91,6 +102,16 @@ class User {
         this.email = email;
     }
 
+    String getRegistrationDate() {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -getRegistrationDate-");
+        return registrationDate;
+    }
+
+    void setRegistrationDate(String registrationDate) {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -setRegistrationDate-");
+        this.registrationDate = registrationDate;
+    }
+
     void setSessionExpiryDate(long sessionExpiryTime) {
         Log.i(Settings.TAG, getClass().getSimpleName() + " -setSessionExpiryDate-");
         this.sessionExpiryTime = sessionExpiryTime;
@@ -116,8 +137,14 @@ class User {
         this.confirmPassword = confirmPassword;
     }
 
+    boolean isEmailValid() {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -isEmailValid-");
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
     @Override
     public String toString() {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -toString-");
         return name + Settings.KEY_BLANK + surname + Settings.KEY_BLANK + ssn + Settings.KEY_BLANK + roleName + Settings.KEY_BLANK + email + Settings.KEY_BLANK + password;
     }
 }

@@ -17,7 +17,7 @@ import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private SessionHandler session;
+    private Session session;
     private EditText editTextEmail, editTextPassword;
     private Button buttonSignIn;
     private Button buttonRegister;
@@ -30,9 +30,9 @@ public class LoginActivity extends AppCompatActivity {
         Log.i(Settings.TAG, getClass().getSimpleName() + " -onCreate-");
         super.onCreate(savedInstanceState);
 
-        session = new SessionHandler(getApplicationContext());
+        session = new Session(getApplicationContext());
         if(session.isLoggedIn()){
-            session.setUserWithSharedPreferences();
+            session.getUserFromSharedPreferences();
             loadDashboard();
         }
         setContentView(R.layout.activity_login);
@@ -136,11 +136,11 @@ public class LoginActivity extends AppCompatActivity {
         //Populate the data parameters
         try {
             data.put(Settings.KEY_ACTION, Settings.USER_LOGIN);
-            data.put(Settings.KEY_EMAIL, email);
+            data.put(Settings.KEY_USER_EMAIL, email);
             data.put(Settings.KEY_PASSWORD, password);
-            Connection connection = new Connection(data, Settings.REQUEST_METHOD);
-            connection.execute();
-            JSONArray response = connection.get();
+            AsyncTaskConnection asyncTaskConnection = new AsyncTaskConnection();
+            asyncTaskConnection.execute(data);
+            JSONArray response = asyncTaskConnection.get();
             Log.i(Settings.TAG, getClass().getSimpleName() + " -login- response:" + response.toString());
             String message = response.getJSONObject(0).getString(Settings.KEY_MESSAGE);
             int codeResult = (int) response.getJSONObject(0).getInt(Settings.KEY_CODE);

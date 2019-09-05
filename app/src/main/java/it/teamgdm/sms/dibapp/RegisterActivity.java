@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -18,7 +17,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -61,59 +59,13 @@ public class RegisterActivity extends AppCompatActivity {
      */
 
     private void setSpinners() {
-        spinnerDegreecourse.setAdapter(setInputSpinner(Settings.DEGREECOURSE_LIST, R.string.selectDegreecourseText));
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -setSpinners-");
+        SpinnerListAdapter spinnerDegreecourseAdapter = new SpinnerListAdapter(this, Settings.GET_DEGREECOURSE_LIST, R.string.selectDegreecourseText, android.R.layout.simple_spinner_dropdown_item);
+        spinnerDegreecourse.setAdapter(spinnerDegreecourseAdapter.setInputList());
         spinnerDegreecourse.setSelection(0);
-        spinnerRole.setAdapter(setInputSpinner(Settings.ROLE_LIST, R.string.selectRoleText));
+        SpinnerListAdapter spinnerRoleAdapter = new SpinnerListAdapter(this, Settings.GET_ROLE_LIST, R.string.selectRoleText, android.R.layout.simple_spinner_dropdown_item);
+        spinnerRole.setAdapter(spinnerRoleAdapter.setInputList());
         spinnerRole.setSelection(0);
-    }
-
-    private ArrayAdapter<SpinnerElement> setInputSpinner(String spinnerArgument, int spinnerSelectItemText) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -setInputSpinner-");
-
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -setInputSpinner-"+spinnerArgument);
-        final JSONArray spinnerListData = loadSpinnerData(spinnerArgument);
-        assert spinnerListData != null;
-        ArrayList<SpinnerElement> spinnerElementList = setSpinnerList(spinnerListData, getResources().getString(spinnerSelectItemText));
-        ArrayAdapter<SpinnerElement> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, spinnerElementList);
-        spinnerAdapter.setDropDownViewResource(R.layout.spinner_item);
-        return spinnerAdapter;
-    }
-
-    private JSONArray loadSpinnerData(String spinnerDataList) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -loadSpinnerData-" + spinnerDataList);
-        JSONObject data = new JSONObject();
-        JSONArray response;
-        try {
-            data.put(Settings.KEY_ACTION, spinnerDataList);
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -loadSpinnerData-data: " + data);
-            Connection connection = new Connection(data, Settings.REQUEST_METHOD);
-            connection.execute();
-            response = connection.get();
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -loadSpinnerData-response: " + response.toString());
-        } catch (ExecutionException | InterruptedException | JSONException e) {
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -loadSpinnerData-Exception");
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-            return null;
-        }
-        return response;
-    }
-
-    private ArrayList<SpinnerElement> setSpinnerList(JSONArray spinnerListData, String selectSpinnerValueText) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -setSpinnerList-");
-        ArrayList<SpinnerElement> spinnerElementList = new ArrayList<>();
-        SpinnerElement selectSpinnerElement = new SpinnerElement(selectSpinnerValueText);
-        spinnerElementList.add(selectSpinnerElement);
-        for(int i = 0; i<spinnerListData.length(); i++) {
-            try {
-                SpinnerElement r = new SpinnerElement(spinnerListData.getJSONObject(i).optString(Settings.KEY_NAME));
-                spinnerElementList.add(r);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -setSpinnerList-spinnerElementList " + spinnerElementList);
-        return spinnerElementList;
     }
 
     private final View.OnClickListener buttonSignInListener = new View.OnClickListener() {
@@ -195,7 +147,7 @@ public class RegisterActivity extends AppCompatActivity {
             errorText.setText(getResources().getString(R.string.roleSelectionErrorText));
             return false;
         }
-        if(!isEmailValid(tmpUser.getEmail())) {
+        if(!tmpUser.isEmailValid()) {
             Log.i(Settings.TAG, getClass().getSimpleName() + " -validateInputs-!isEmailValid" + tmpUser.getEmail());
             editTextEmail.setError(getResources().getString(R.string.emailNotValid));
             editTextEmail.requestFocus();
@@ -214,11 +166,6 @@ public class RegisterActivity extends AppCompatActivity {
         return true;
     }
 
-    private boolean isEmailValid(CharSequence email) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -isEmailValid-");
-        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
-    }
-
     /**
      * Sends form data to the webserver with the default request method
      * @return true if the server returns USER_CREATED_CODE
@@ -232,16 +179,16 @@ public class RegisterActivity extends AppCompatActivity {
         //Populate the data parameters
         try {
             data.put(Settings.KEY_ACTION, Settings.USER_REGISTRATION);
-            data.put(Settings.KEY_NAME, tmpUser.getName());
-            data.put(Settings.KEY_SURNAME, tmpUser.getSurname());
+            data.put(Settings.KEY_USER_NAME, tmpUser.getName());
+            data.put(Settings.KEY_USER_SURNAME, tmpUser.getSurname());
             data.put(Settings.KEY_SERIAL_NUMBER, tmpUser.getSsn());
             data.put(Settings.KEY_DEGREECOURSE, tmpUser.getDegreeCourse());
-            data.put(Settings.KEY_ROLE_NAME, tmpUser.getRole());
-            data.put(Settings.KEY_EMAIL, tmpUser.getEmail());
+            data.put(Settings.KEY_USER_ROLE_NAME, tmpUser.getRole());
+            data.put(Settings.KEY_USER_EMAIL, tmpUser.getEmail());
             data.put(Settings.KEY_PASSWORD, tmpUser.getPassword());
-            Connection connection = new Connection(data, Settings.REQUEST_METHOD);
-            connection.execute();
-            JSONArray response = connection.get();
+            AsyncTaskConnection asyncTaskConnection = new AsyncTaskConnection();
+            asyncTaskConnection.execute(data);
+            JSONArray response = asyncTaskConnection.get();
             Log.i(Settings.TAG, getClass().getSimpleName() + " -register- Response: " + response.toString());
 
             String message = response.getJSONObject(0).getString(Settings.KEY_MESSAGE);

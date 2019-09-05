@@ -14,16 +14,16 @@ import org.json.JSONObject;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
-class SessionHandler {
+class Session {
 
     private final Context context;
     private final SharedPreferences.Editor sharedPreferencesEditor;
-    private final SharedPreferences sharedPreferences;
+    private SharedPreferences sharedPreferences = null;
     private JSONObject userDetails;
-    private User user;
+    private static User user;
 
     @SuppressLint("CommitPrefEdits")
-    SessionHandler(Context context) {
+    Session(Context context) {
         Log.i(Settings.TAG, getClass().getSimpleName() + " -Constructor-");
         this.context = context;
         sharedPreferences = context.getSharedPreferences(Settings.PREFERENCE_FILE_KEY, Context.MODE_PRIVATE);
@@ -43,12 +43,12 @@ class SessionHandler {
         Log.i(Settings.TAG, getClass().getSimpleName() + " -getUserDetails-");
         JSONObject data = new JSONObject();
         try {
-            data.put(Settings.KEY_ACTION, Settings.USER_DETAILS);
-            data.put(Settings.KEY_EMAIL, email);
+            data.put(Settings.KEY_ACTION, Settings.GET_USER_DETAILS);
+            data.put(Settings.KEY_USER_EMAIL, email);
             Log.i(Settings.TAG, getClass().getSimpleName() + " -getUserDetails-data: " + data.toString());
-            Connection connection = new Connection(data, Settings.REQUEST_METHOD);
-            connection.execute();
-            JSONArray response = connection.get();
+            AsyncTaskConnection asyncTaskConnection = new AsyncTaskConnection();
+            asyncTaskConnection.execute(data);
+            JSONArray response = asyncTaskConnection.get();
             Log.i(Settings.TAG, getClass().getSimpleName() + " -getUserDetails-response: " + response.toString());
             return response.getJSONObject(0);
         } catch (ExecutionException | InterruptedException | JSONException e) {
@@ -62,12 +62,12 @@ class SessionHandler {
     private void setUserDetails(JSONObject userDetails) {
         Log.i(Settings.TAG, getClass().getSimpleName() + " -setUserDetails-");
         try {
-            user.setName(userDetails.getString(Settings.KEY_NAME));
-            user.setSurname(userDetails.getString(Settings.KEY_SURNAME));
-            user.setEmail(userDetails.getString(Settings.KEY_EMAIL));
-            user.setRole(userDetails.getString(Settings.KEY_ROLE_NAME));
-            //TODO fix setRegistrationDate with DB data;
-    //        user.setRegistrationDate(Long.getLong(userDetails.getString(Settings.KEY_REGISTRATION_DATE)));
+            user.setID(userDetails.getInt(Settings.KEY_USER_ID));
+            user.setName(userDetails.getString(Settings.KEY_USER_NAME));
+            user.setSurname(userDetails.getString(Settings.KEY_USER_SURNAME));
+            user.setEmail(userDetails.getString(Settings.KEY_USER_EMAIL));
+            user.setRole(userDetails.getString(Settings.KEY_USER_ROLE_NAME));
+            user.setRegistrationDate(userDetails.getString(Settings.KEY_REGISTRATION_DATE));
             user.setSessionExpiryDate(getExpireSessionDate());
         } catch (JSONException e) {
             Log.i(Settings.TAG, getClass().getSimpleName() + " -setUserDetails-Exception");
@@ -78,11 +78,11 @@ class SessionHandler {
     private void setSharedPreferences(JSONObject userDetails) {
         Log.i(Settings.TAG, getClass().getSimpleName() + " -setSharedPreferences-");
         try {
-            sharedPreferencesEditor.putString(Settings.KEY_NAME, userDetails.getString(Settings.KEY_NAME));
-            sharedPreferencesEditor.putString(Settings.KEY_SURNAME, userDetails.getString(Settings.KEY_SURNAME));
-            sharedPreferencesEditor.putString(Settings.KEY_EMAIL, userDetails.getString(Settings.KEY_EMAIL));
-            sharedPreferencesEditor.putInt(Settings.KEY_ROLE_ID, userDetails.getInt(Settings.KEY_ROLE_ID));
-            sharedPreferencesEditor.putString(Settings.KEY_ROLE_NAME, userDetails.getString(Settings.KEY_ROLE_NAME));
+            sharedPreferencesEditor.putInt(Settings.KEY_USER_NAME, userDetails.getInt(Settings.KEY_USER_ID));
+            sharedPreferencesEditor.putString(Settings.KEY_USER_NAME, userDetails.getString(Settings.KEY_USER_NAME));
+            sharedPreferencesEditor.putString(Settings.KEY_USER_SURNAME, userDetails.getString(Settings.KEY_USER_SURNAME));
+            sharedPreferencesEditor.putString(Settings.KEY_USER_EMAIL, userDetails.getString(Settings.KEY_USER_EMAIL));
+            sharedPreferencesEditor.putString(Settings.KEY_USER_ROLE_NAME, userDetails.getString(Settings.KEY_USER_ROLE_NAME));
             long millis = getExpireSessionDate();
             sharedPreferencesEditor.putLong(Settings.KEY_EXPIRE_TIME, millis);
             sharedPreferencesEditor.commit();
@@ -138,15 +138,24 @@ class SessionHandler {
         return user.isTeacher();
     }
 
-    void setUserWithSharedPreferences() {
-        user.setName(sharedPreferences.getString(Settings.KEY_NAME, Settings.KEY_EMPTY));
-        user.setSurname(sharedPreferences.getString(Settings.KEY_SURNAME, Settings.KEY_EMPTY));
-        user.setEmail(sharedPreferences.getString(Settings.KEY_EMAIL, Settings.KEY_EMPTY));
-        user.setRole(sharedPreferences.getString(Settings.KEY_ROLE_NAME, Settings.KEY_EMPTY));
+    void getUserFromSharedPreferences() {
+        user.setName(sharedPreferences.getString(Settings.KEY_USER_NAME, Settings.KEY_EMPTY));
+        user.setSurname(sharedPreferences.getString(Settings.KEY_USER_SURNAME, Settings.KEY_EMPTY));
+        user.setEmail(sharedPreferences.getString(Settings.KEY_USER_EMAIL, Settings.KEY_EMPTY));
+        user.setRole(sharedPreferences.getString(Settings.KEY_USER_ROLE_NAME, Settings.KEY_EMPTY));
         //TODO setSharedPreferences DegreeCourses
     //    user.setDegreeCourseId(sharedPreferences.getInt(Settings.KEY_DEGREE_COURSE_ID, Settings.KEY_ZERO));
     //    user.setDegreeCourseName(sharedPreferences.getString(Settings.KEY_DEGREE_COURSE_NAME, Settings.KEY_EMPTY));
     //    user.setRegistrationDate(sharedPreferences.getLong(Settings.KEY_REGISTRATION_DATE, Settings.KEY_ZERO));
         user.setSessionExpiryDate(getExpireSessionDate());
     }
+
+    static String getUserEmail() {
+        return user.getEmail();
+    }
+
+    static int getUserID() {
+        return user.getID();
+    }
+
 }

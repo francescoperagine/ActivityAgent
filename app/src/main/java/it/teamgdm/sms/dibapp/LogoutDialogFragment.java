@@ -27,7 +27,7 @@ public class LogoutDialogFragment extends DialogFragment {
         builder.setMessage(R.string.logout_dialog_confirm)
                 .setPositiveButton(R.string.logout_dialog_confirm_yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        SessionHandler session = new SessionHandler(applicationContext);
+                        Session session = new Session(applicationContext);
                         session.logout();
                     }})
                 .setNegativeButton(R.string.logout_dialog_confirm_no, new DialogInterface.OnClickListener() {
