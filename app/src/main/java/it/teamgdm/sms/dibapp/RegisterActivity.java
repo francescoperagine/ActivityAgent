@@ -140,7 +140,7 @@ public class RegisterActivity extends AppCompatActivity {
             errorText.setText(getResources().getString(R.string.degreecourseSelectionErrorText));
             return false;
         }
-        if (tmpUser.getRole().equals(getResources().getString(R.string.selectRoleText))) {
+        if (tmpUser.getRoleName().equals(getResources().getString(R.string.selectRoleText))) {
             TextView errorText = (TextView) spinnerRole.getSelectedView();
             errorText.setError("");
             errorText.setTextColor(Color.RED);
@@ -183,7 +183,7 @@ public class RegisterActivity extends AppCompatActivity {
             data.put(Settings.KEY_USER_SURNAME, tmpUser.getSurname());
             data.put(Settings.KEY_SERIAL_NUMBER, tmpUser.getSsn());
             data.put(Settings.KEY_DEGREECOURSE, tmpUser.getDegreeCourse());
-            data.put(Settings.KEY_USER_ROLE_NAME, tmpUser.getRole());
+            data.put(Settings.KEY_USER_ROLE_NAME, tmpUser.getRoleName());
             data.put(Settings.KEY_USER_EMAIL, tmpUser.getEmail());
             data.put(Settings.KEY_PASSWORD, tmpUser.getPassword());
             AsyncTaskConnection asyncTaskConnection = new AsyncTaskConnection();

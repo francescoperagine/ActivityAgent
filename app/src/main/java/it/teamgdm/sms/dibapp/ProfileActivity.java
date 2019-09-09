@@ -1,14 +1,24 @@
 package it.teamgdm.sms.dibapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
+import android.util.Log;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -onCreate-");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
     }
+
+    @Override
+    int getLayoutResource() {
+        return R.layout.activity_profile;
+    }
+
+    @Override
+    String getActivityTitle() {
+        return getResources().getString(R.string.title_activity_profile);
+    }
+
 }

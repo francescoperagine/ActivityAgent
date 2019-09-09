@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/exam_detail_fragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ExamDetailActivity"
+    tools:ignore="MergeRootFrame">
+
+    <TextView
+        android:id="@+id/exam_detail"
+        style="?android:attr/textAppearanceLarge"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:textIsSelectable="true"
+        tools:context=".ExamDetailFragment" />
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/toolbar" />
+
+    <Button
+        android:id="@+id/partecipateButton"
+        android:layout_width="0dp"
+        android:layout_height="339dp"
+        android:text="@string/partecipateButtonText"
+        app:layout_constraintEnd_toStartOf="@id/evaluateButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/include" />
+
+    <Button
+        android:id="@+id/evaluateButton"
+        android:layout_width="0dp"
+        android:layout_height="339dp"
+        android:text="@string/evaluateButtonText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/partecipateButton"
+        app:layout_constraintTop_toBottomOf="@id/include" />
+
+    <Button
+        android:id="@+id/historyButton"
+        android:layout_width="0dp"
+        android:layout_height="339dp"
+        android:text="@string/historyButtonText"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/informationButton"
+        app:layout_constraintStart_toStartOf="@id/partecipateButton"
+        app:layout_constraintTop_toBottomOf="@id/partecipateButton" />
+
+    <Button
+        android:id="@+id/informationButton"
+        android:layout_width="0dp"
+        android:layout_height="339dp"
+        android:text="@string/informationButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/evaluateButton"
+        app:layout_constraintStart_toEndOf="@id/historyButton"
+        app:layout_constraintTop_toBottomOf="@id/evaluateButton" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

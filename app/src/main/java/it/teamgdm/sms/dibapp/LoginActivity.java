@@ -31,7 +31,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         session = new Session(getApplicationContext());
-        if(session.isLoggedIn()){
+        if(session.userIsLoggedIn()){
             session.getUserFromSharedPreferences();
             loadDashboard();
         }
@@ -50,26 +50,6 @@ public class LoginActivity extends AppCompatActivity {
 
         buttonSignIn.setOnClickListener(buttonSignInListener);
         buttonRegister.setOnClickListener(buttonRegisterListener);
-    }
-    @Override
-    protected void onResume() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onResume-");
-        super.onResume();
-    }
-    @Override
-    protected void onPause() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onPause-");
-        super.onPause();
-    }
-    @Override
-    protected void onStop() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onStop-");
-        super.onStop();
-    }
-    @Override
-    protected void onDestroy() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onDestroy-");
-        super.onDestroy();
     }
 
     private final OnClickListener buttonSignInListener = new OnClickListener() {
@@ -90,7 +70,7 @@ public class LoginActivity extends AppCompatActivity {
         }
         if(loginComplete) {
             Log.i(Settings.TAG, getClass().getSimpleName() + " -loginInit-loginComplete-TRUE");
-            session.login(email);
+            session.login(this, email);
             loadDashboard();
         }
     }
@@ -167,7 +147,28 @@ public class LoginActivity extends AppCompatActivity {
      */
     private void loadDashboard() {
         Log.i(Settings.TAG, getClass().getSimpleName() + " -loadDashboard-");
-        Intent i = new Intent(this, DashboardActivity.class);
+        Intent i = new Intent(this, ExamListActivity.class);
         startActivity(i);
+    }
+
+    @Override
+    protected void onResume() {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -onResume-");
+        super.onResume();
+    }
+    @Override
+    protected void onPause() {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -onPause-");
+        super.onPause();
+    }
+    @Override
+    protected void onStop() {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -onStop-");
+        super.onStop();
+    }
+    @Override
+    protected void onDestroy() {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -onDestroy-");
+        super.onDestroy();
     }
 }

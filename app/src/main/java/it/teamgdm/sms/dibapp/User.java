@@ -9,12 +9,12 @@ class User {
     private String surname;
     private String ssn;
     private String degreeCourse;
+    private int roleID;
     private String roleName;
     private String email;
     private int degreeCourseId;
     private String degreeCourseName;
     private String registrationDate;
-    private long sessionExpiryTime;
     private String password;
     private String confirmPassword;
 
@@ -82,8 +82,18 @@ class User {
         this.degreeCourse = degreeCourse;
     }
 
-    String getRole() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -getRole-");
+    int getRoleID() {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -getRoleID-");
+        return roleID;
+    }
+
+    void setRoleID(int roleID) {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -setRoleID-");
+        this.roleID = roleID;
+    }
+
+    String getRoleName() {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -getRoleName-");
         return roleName;
     }
 
@@ -110,11 +120,6 @@ class User {
     void setRegistrationDate(String registrationDate) {
         Log.i(Settings.TAG, getClass().getSimpleName() + " -setRegistrationDate-");
         this.registrationDate = registrationDate;
-    }
-
-    void setSessionExpiryDate(long sessionExpiryTime) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -setSessionExpiryDate-");
-        this.sessionExpiryTime = sessionExpiryTime;
     }
 
     String getPassword() {

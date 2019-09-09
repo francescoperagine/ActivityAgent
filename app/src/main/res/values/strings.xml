@@ -49,5 +49,14 @@
     <string name="attachment_title">Download incoming attachments</string>
     <string name="attachment_summary_on">Automatically download attachments for incoming emails</string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="title_exam_list">Exams</string>
+    <string name="title_exam_detail">Exam Detail</string>
+    <string name="examListActivityTitle">Exams list</string>
+    <string name="profileActivityTitle">Profile</string>
+    <string name="partecipateButtonText">Enter</string>
+    <string name="evaluateButtonText">Evalutate</string>
+    <string name="historyButtonText">History</string>
+    <string name="informationButton">Informations</string>
+    <string name="title_activity_profile">Profile</string>
 
 </resources>

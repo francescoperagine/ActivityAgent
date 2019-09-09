@@ -1,10 +1,13 @@
 package it.teamgdm.sms.dibapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -31,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
             firstLaunch = 0;
             finishAffinity();
         }
-
     }
 
     @Override

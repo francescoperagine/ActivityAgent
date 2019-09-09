@@ -10,11 +10,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class StudentCareer {
-    private ArrayList<Exam> examList;
+    private static ArrayList<Exam> examList;
 
-    StudentCareer() {
+    StudentCareer(JSONArray studentCareerData) {
         Log.i(Settings.TAG, getClass().getSimpleName() + " -StudentCareer-Constructor-");
         examList = new ArrayList<>();
+        setExamList(studentCareerData);
     }
 
     public ArrayList<Exam> getExamList() {
@@ -22,8 +23,8 @@ public class StudentCareer {
         return examList;
     }
 
-    public void setExamList(JSONArray studentCareerData) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -setExamList- "+studentCareerData);
+    public static void setExamList(JSONArray studentCareerData) {
+        Log.i(Settings.TAG, StudentCareer.class.getSimpleName() + " -setExamList- "+studentCareerData);
         for (int i=0; i< studentCareerData.length(); i++) {
             Exam exam = new Exam();
             try {
@@ -47,5 +48,15 @@ public class StudentCareer {
     public String toString() {
         Log.i(Settings.TAG, getClass().getSimpleName() + " -toString-");
         return examList.toString();
+    }
+
+    public static Exam getExam(int examID) {
+        Exam e = null;
+        for(int i=0; i<examList.size(); i++) {
+            if(examList.get(i).getID() == examID) {
+                e = examList.get(i);
+            }
+        }
+        return e;
     }
 }
