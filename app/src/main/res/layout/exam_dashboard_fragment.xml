@@ -10,9 +10,6 @@
     tools:context=".ExamDetailActivity"
     tools:ignore="MergeRootFrame">
 
-    <include
-        android:id="@+id/include"
-        layout="@layout/toolbar" />
 
     <Button
         android:id="@+id/partecipate"
@@ -21,7 +18,7 @@
         android:text="@string/partecipateButtonText"
         app:layout_constraintEnd_toStartOf="@id/evaluate"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/include" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/evaluate"
@@ -30,7 +27,7 @@
         android:text="@string/evaluateButtonText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/partecipate"
-        app:layout_constraintTop_toBottomOf="@id/include" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/history"

@@ -35,12 +35,15 @@ public class ExamDetailActivity extends BaseActivity implements BaseFragment.OnC
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            int id = getIntent().getIntExtra(ExamDashboardFragment.ARG_ITEM_ID, 0);
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -onCreate- ID " + id);
-            arguments.putInt(ExamDashboardFragment.ARG_ITEM_ID, id);
+            int examID = getIntent().getIntExtra(ExamDashboardFragment.ARG_ITEM_ID, 0);
+            Log.i(Settings.TAG, getClass().getSimpleName() + " -onCreate- examID " + examID);
+            arguments.putInt(ExamDashboardFragment.ARG_ITEM_ID, examID);
+            exam = StudentCareer.getExam(examID);
+            arguments.putSerializable(String.valueOf(examID), exam);
             ExamDashboardFragment fragment = new ExamDashboardFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction().add(R.id.examDetailContainer, fragment).commit();
+            Log.i(Settings.TAG, getClass().getSimpleName() + " -onCreate- Exam " + exam);
         }
     }
 
@@ -62,10 +65,9 @@ public class ExamDetailActivity extends BaseActivity implements BaseFragment.OnC
     @Override
     String setActivityTitle() {
         Log.i(Settings.TAG, getClass().getSimpleName() + " -setActivityTitle- ");
-        int id = getIntent().getIntExtra(ExamDashboardFragment.ARG_ITEM_ID, 0);
-        exam = StudentCareer.getExam(id);
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -setActivityTitle- exam " + exam);
-        return exam.toString();
+        if(exam != null ){
+            return exam.getName();
+        } else return "";
     }
 
     @Override
@@ -86,8 +88,23 @@ public class ExamDetailActivity extends BaseActivity implements BaseFragment.OnC
     }
 
     @Override
-    public void onItemSelected(int examID, String examName, String selectedAction) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onItemSelected-id " + examID + " name " + examName + " " + selectedAction);
+    public void onItemSelected(int selectedActionResource) {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -onItemSelected-action " + selectedActionResource);
+        switch (selectedActionResource) {
+            case R.id.partecipate:
+
+                break;
+            case R.id.evaluate:
+
+                break;
+            case R.id.history:
+
+                break;
+            case R.id.information:
+                break;
+            default:
+                break;
+        }
     }
 
 }

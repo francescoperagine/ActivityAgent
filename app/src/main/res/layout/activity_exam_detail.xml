@@ -9,11 +9,6 @@
     tools:context=".ExamDetailActivity"
     tools:ignore="MergeRootFrame">
 
-    <FrameLayout
-        android:id="@+id/frameLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-        <include layout="@layout/toolbar" />
-    </FrameLayout>
+    <include layout="@layout/toolbar" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

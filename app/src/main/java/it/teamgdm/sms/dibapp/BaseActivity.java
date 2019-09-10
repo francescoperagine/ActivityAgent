@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -22,12 +21,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
 
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(setActivityTitle());
     }
 
     abstract int getLayoutResource();
-
-    abstract String setActivityTitle();
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -58,16 +54,4 @@ public abstract class BaseActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
-    void showToolbar() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -showToolbar-");
-        toolbar.setVisibility(View.VISIBLE);
-    }
-
-    void hideToolbar() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -hideToolbar-");
-        toolbar.setVisibility(View.GONE);
-    }
-
-
 }

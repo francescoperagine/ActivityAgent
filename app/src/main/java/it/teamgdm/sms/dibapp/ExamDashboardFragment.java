@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
@@ -36,6 +35,7 @@ public class ExamDashboardFragment extends BaseFragment implements View.OnClickL
      */
     public ExamDashboardFragment() {
         Log.i(Settings.TAG, getClass().getSimpleName() + " -ExamDashboardFragment-");
+
     }
 
     @Override
@@ -53,7 +53,7 @@ public class ExamDashboardFragment extends BaseFragment implements View.OnClickL
         if (getArguments().containsKey(ARG_ITEM_ID)) {
             Log.i(Settings.TAG, getClass().getSimpleName() + " -onCreate-argument " + getArguments().getInt(ARG_ITEM_ID));
             int id = getArguments().getInt(ARG_ITEM_ID);
-            exam = StudentCareer.getExam(id);
+            exam = (Exam) getArguments().getSerializable(String.valueOf(id));
         }
     }
 
@@ -73,8 +73,8 @@ public class ExamDashboardFragment extends BaseFragment implements View.OnClickL
         buttonInformation.setOnClickListener(this);
 
         if (exam != null) {
-        //    callback.setTitle(exam.getName());
-        //    ((TextView) rootView.findViewById(R.id.exam_dashboard_fragment_title)).setText(exam.getName());
+            Log.i(Settings.TAG, getClass().getSimpleName() + " -onCreateView-exam not null. Exam" + exam);
+            getActivity().setTitle(exam.getName());
         }
         return rootView;
     }
@@ -82,24 +82,6 @@ public class ExamDashboardFragment extends BaseFragment implements View.OnClickL
     @Override
     public void onClick(View view) {
         Log.i(Settings.TAG, getClass().getSimpleName() + " -onClick-");
-        String selectedAction;
-        switch (view.getId()) {
-            case R.id.partecipate:
-                selectedAction = Settings.KEY_ACTION_PARTECIPATE;
-                break;
-            case R.id.evaluate:
-                selectedAction = Settings.KEY_ACTION_EVALUATE;
-                break;
-            case R.id.history:
-                selectedAction = Settings.KEY_ACTION_HISTORY;
-                break;
-            case R.id.information:
-                selectedAction = Settings.KEY_ACTION_INFORMATION;
-                break;
-            default:
-                selectedAction = null;
-                break;
-        }
-        callback.onItemSelected(exam.getID(), exam.getName(), selectedAction);
+        callback.onItemSelected(view.getId());
     }
 }

@@ -18,8 +18,8 @@ public class StudentCareer {
         setExamList(studentCareerData);
     }
 
-    public ArrayList<Exam> getExamList() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -getExamList-");
+    public static ArrayList<Exam> getExamList() {
+        Log.i(Settings.TAG, StudentCareer.class.getSimpleName() + " -getExamList-");
         return examList;
     }
 
@@ -50,7 +50,7 @@ public class StudentCareer {
         return examList.toString();
     }
 
-    public static Exam getExam(int examID) {
+    static Exam getExam(int examID) {
         Exam e = null;
         for(int i=0; i<examList.size(); i++) {
             if(examList.get(i).getID() == examID) {

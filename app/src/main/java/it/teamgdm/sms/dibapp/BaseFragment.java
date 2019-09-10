@@ -14,7 +14,7 @@ public class BaseFragment extends Fragment {
     }
 
     public interface OnClickedItemListener {
-        void onItemSelected(int examID, String examName, String selectedAction);
+        void onItemSelected(int selectedAction);
     }
 
 }

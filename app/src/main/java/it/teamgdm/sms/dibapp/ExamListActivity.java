@@ -68,9 +68,8 @@ public class ExamListActivity extends BaseActivity {
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         Log.i(Settings.TAG, getClass().getSimpleName() + " -setupRecyclerView-");
-        StudentCareer studentCareer = new StudentCareer(loadClassList());
-        ArrayList<Exam> examList = studentCareer.getExamList();
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, examList, mTwoPane));
+        new StudentCareer(loadClassList());
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, StudentCareer.getExamList(), mTwoPane));
     }
 
     private static JSONArray loadClassList() {
