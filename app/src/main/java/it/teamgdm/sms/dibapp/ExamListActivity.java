@@ -60,12 +60,6 @@ public class ExamListActivity extends BaseActivity {
         return R.layout.activity_exam_list;
     }
 
-    @Override
-    String setActivityTitle() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -setActivityTitle-");
-        return getResources().getString(R.string.title_exam_list);
-    }
-
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         Log.i(Settings.TAG, getClass().getSimpleName() + " -setupRecyclerView-");
         new StudentCareer(loadClassList());

@@ -63,14 +63,6 @@ public class ExamDetailActivity extends BaseActivity implements BaseFragment.OnC
     }
 
     @Override
-    String setActivityTitle() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -setActivityTitle- ");
-        if(exam != null ){
-            return exam.getName();
-        } else return "";
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.i(Settings.TAG, getClass().getSimpleName() + " -onOptionsItemSelected-");
         int id = item.getItemId();

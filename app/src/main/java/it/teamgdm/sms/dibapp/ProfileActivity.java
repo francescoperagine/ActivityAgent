@@ -16,9 +16,4 @@ public class ProfileActivity extends BaseActivity {
         return R.layout.activity_profile;
     }
 
-    @Override
-    String setActivityTitle() {
-        return getResources().getString(R.string.title_activity_profile);
-    }
-
 }
