@@ -14,7 +14,6 @@ import androidx.fragment.app.FragmentManager;
 public abstract class BaseActivity extends AppCompatActivity {
 
     Toolbar toolbar;
- //   String title = "title";
 
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(Settings.TAG, getClass().getSimpleName() + " -onCreate-");
@@ -23,13 +22,12 @@ public abstract class BaseActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
 
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getActivityTitle());
-      //  Objects.requireNonNull(getSupportActionBar()).setTitle(getActivityTitle());
+        getSupportActionBar().setTitle(setActivityTitle());
     }
 
     abstract int getLayoutResource();
 
-    abstract String getActivityTitle();
+    abstract String setActivityTitle();
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

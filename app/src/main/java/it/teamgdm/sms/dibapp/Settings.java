@@ -3,6 +3,10 @@ package it.teamgdm.sms.dibapp;
 public final class Settings {
 
 
+    static final String KEY_ACTION_PARTECIPATE = "Partecipate";
+    static final String KEY_ACTION_EVALUATE = "Evaluate";
+    static final String KEY_ACTION_HISTORY = "History";
+    static final String KEY_ACTION_INFORMATION = "Information";
 
     static final String TAG = "dibApp";
     static final String PREFERENCE_FILE_KEY = "it.teamgdm.dibApp.userSession";

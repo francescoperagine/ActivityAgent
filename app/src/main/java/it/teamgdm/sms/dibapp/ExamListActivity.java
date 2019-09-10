@@ -61,8 +61,8 @@ public class ExamListActivity extends BaseActivity {
     }
 
     @Override
-    String getActivityTitle() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -getActivityTitle-");
+    String setActivityTitle() {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -setActivityTitle-");
         return getResources().getString(R.string.title_exam_list);
     }
 
@@ -106,16 +106,16 @@ public class ExamListActivity extends BaseActivity {
                 Log.i(Settings.TAG, getClass().getSimpleName() + " SimpleItemRecyclerViewAdapter-OnClickListener- Exam " + exam);
                 if (mTwoPane) {
                     Bundle arguments = new Bundle();
-                    arguments.putInt(ExamDetailFragment.ARG_ITEM_ID, exam.getID());
-                    Log.i(Settings.TAG, getClass().getSimpleName() + " SimpleItemRecyclerViewAdapter-OnClickListener-mTwoPane- arguments " + ExamDetailFragment.ARG_ITEM_ID + " " + exam.getID());
-                    ExamDetailFragment fragment = new ExamDetailFragment();
+                    arguments.putInt(ExamDashboardFragment.ARG_ITEM_ID, exam.getID());
+                    Log.i(Settings.TAG, getClass().getSimpleName() + " SimpleItemRecyclerViewAdapter-OnClickListener-mTwoPane- arguments " + ExamDashboardFragment.ARG_ITEM_ID + " " + exam.getID());
+                    ExamDashboardFragment fragment = new ExamDashboardFragment();
                     fragment.setArguments(arguments);
                     mParentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.exam_detail_container, fragment).commit();
                 } else {
                     Context context = view.getContext();
                     Intent intent = new Intent(context, ExamDetailActivity.class);
-                    intent.putExtra(ExamDetailFragment.ARG_ITEM_ID, exam.getID());
-                    Log.i(Settings.TAG, getClass().getSimpleName() + " SimpleItemRecyclerViewAdapter-OnClickListener- putExtra " + ExamDetailFragment.ARG_ITEM_ID + " " + exam.getID());
+                    intent.putExtra(ExamDashboardFragment.ARG_ITEM_ID, exam.getID());
+                    Log.i(Settings.TAG, getClass().getSimpleName() + " SimpleItemRecyclerViewAdapter-OnClickListener- putExtra " + ExamDashboardFragment.ARG_ITEM_ID + " " + exam.getID());
                     context.startActivity(intent);
                 }
             }

@@ -5,13 +5,18 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+
 /**
  * An activity representing a single Exam detail screen. This
  * activity is only used on narrow width devices. On tablet-size devices,
  * item details are presented side-by-side with a list of items
  * in a {@link ExamListActivity}.
  */
-public class ExamDetailActivity extends BaseActivity {
+public class ExamDetailActivity extends BaseActivity implements BaseFragment.OnClickedItemListener{
+
+    Exam exam;
 
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(Settings.TAG, getClass().getSimpleName() + " -onCreate-");
@@ -30,12 +35,21 @@ public class ExamDetailActivity extends BaseActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            int id = getIntent().getIntExtra(ExamDetailFragment.ARG_ITEM_ID, 0);
+            int id = getIntent().getIntExtra(ExamDashboardFragment.ARG_ITEM_ID, 0);
             Log.i(Settings.TAG, getClass().getSimpleName() + " -onCreate- ID " + id);
-            arguments.putInt(ExamDetailFragment.ARG_ITEM_ID, id);
-            ExamDetailFragment fragment = new ExamDetailFragment();
+            arguments.putInt(ExamDashboardFragment.ARG_ITEM_ID, id);
+            ExamDashboardFragment fragment = new ExamDashboardFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction().add(R.id.examDetailContainer, fragment).commit();
+        }
+    }
+
+    @Override
+    public void onAttachFragment(@NonNull Fragment fragment) {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -onAttachFragment-");
+        if(fragment instanceof BaseFragment) {
+            BaseFragment baseFragment = (BaseFragment) fragment;
+            baseFragment.setOnClickedItemListener(this);
         }
     }
 
@@ -46,12 +60,12 @@ public class ExamDetailActivity extends BaseActivity {
     }
 
     @Override
-    String getActivityTitle() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -getActivityTitle- ");
-        int id = getIntent().getIntExtra(ExamDetailFragment.ARG_ITEM_ID, 0);
-        Exam e = StudentCareer.getExam(id);
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -getActivityTitle- exam " + e);
-        return e.toString();
+    String setActivityTitle() {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -setActivityTitle- ");
+        int id = getIntent().getIntExtra(ExamDashboardFragment.ARG_ITEM_ID, 0);
+        exam = StudentCareer.getExam(id);
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -setActivityTitle- exam " + exam);
+        return exam.toString();
     }
 
     @Override
@@ -70,4 +84,10 @@ public class ExamDetailActivity extends BaseActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onItemSelected(int examID, String examName, String selectedAction) {
+        Log.i(Settings.TAG, getClass().getSimpleName() + " -onItemSelected-id " + examID + " name " + examName + " " + selectedAction);
+    }
+
 }

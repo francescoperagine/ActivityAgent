@@ -10,55 +10,46 @@
     tools:context=".ExamDetailActivity"
     tools:ignore="MergeRootFrame">
 
-    <TextView
-        android:id="@+id/exam_detail"
-        style="?android:attr/textAppearanceLarge"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="16dp"
-        android:textIsSelectable="true"
-        tools:context=".ExamDetailFragment" />
-
     <include
         android:id="@+id/include"
         layout="@layout/toolbar" />
 
     <Button
-        android:id="@+id/partecipateButton"
+        android:id="@+id/partecipate"
         android:layout_width="0dp"
         android:layout_height="339dp"
         android:text="@string/partecipateButtonText"
-        app:layout_constraintEnd_toStartOf="@id/evaluateButton"
+        app:layout_constraintEnd_toStartOf="@id/evaluate"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/include" />
 
     <Button
-        android:id="@+id/evaluateButton"
+        android:id="@+id/evaluate"
         android:layout_width="0dp"
         android:layout_height="339dp"
         android:text="@string/evaluateButtonText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/partecipateButton"
+        app:layout_constraintStart_toEndOf="@+id/partecipate"
         app:layout_constraintTop_toBottomOf="@id/include" />
 
     <Button
-        android:id="@+id/historyButton"
+        android:id="@+id/history"
         android:layout_width="0dp"
         android:layout_height="339dp"
         android:text="@string/historyButtonText"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/informationButton"
-        app:layout_constraintStart_toStartOf="@id/partecipateButton"
-        app:layout_constraintTop_toBottomOf="@id/partecipateButton" />
+        app:layout_constraintEnd_toStartOf="@id/information"
+        app:layout_constraintStart_toStartOf="@id/partecipate"
+        app:layout_constraintTop_toBottomOf="@id/evaluate" />
 
     <Button
-        android:id="@+id/informationButton"
+        android:id="@+id/information"
         android:layout_width="0dp"
         android:layout_height="339dp"
         android:text="@string/informationButton"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/evaluateButton"
-        app:layout_constraintStart_toEndOf="@id/historyButton"
-        app:layout_constraintTop_toBottomOf="@id/evaluateButton" />
+        app:layout_constraintEnd_toEndOf="@id/evaluate"
+        app:layout_constraintStart_toEndOf="@id/history"
+        app:layout_constraintTop_toBottomOf="@id/evaluate" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
