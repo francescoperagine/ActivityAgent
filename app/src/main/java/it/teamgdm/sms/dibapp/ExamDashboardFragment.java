@@ -10,17 +10,9 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 
-/**
- * A fragment representing a single Exam detail screen.
- * This fragment is either contained in a {@link ExamListActivity}
- * in two-pane mode (on tablets) or a {@link ExamDetailActivity}
- * on handsets.
- */
+import java.util.Objects;
+
 public class ExamDashboardFragment extends BaseFragment implements View.OnClickListener {
-
-    // This interface can be implemented by the Activity, parent Fragment,
-    // or a separate test implementation.
-
 
     /**
      * The fragment argument representing the item ID that this fragment
@@ -34,24 +26,17 @@ public class ExamDashboardFragment extends BaseFragment implements View.OnClickL
      * fragment (e.g. upon screen orientation changes).
      */
     public ExamDashboardFragment() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -ExamDashboardFragment-");
-
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onAttach-");
-        super.onAttach(context);
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -ExamDashboardFragment-");
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onCreate-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-");
         super.onCreate(savedInstanceState);
 
         assert getArguments() != null;
         if (getArguments().containsKey(ARG_ITEM_ID)) {
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -onCreate-argument " + getArguments().getInt(ARG_ITEM_ID));
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-argument " + getArguments().getInt(ARG_ITEM_ID));
             int id = getArguments().getInt(ARG_ITEM_ID);
             exam = (Exam) getArguments().getSerializable(String.valueOf(id));
         }
@@ -59,8 +44,8 @@ public class ExamDashboardFragment extends BaseFragment implements View.OnClickL
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onCreateView-");
-        View rootView = inflater.inflate(R.layout.exam_dashboard_fragment, container, false);
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreateView-");
+        View rootView = inflater.inflate(R.layout.fragment_exam_dashboard, container, false);
 
         Button buttonPartecipate = rootView.findViewById(R.id.partecipate);
         Button buttonEvaluate = rootView.findViewById(R.id.evaluate);
@@ -72,16 +57,36 @@ public class ExamDashboardFragment extends BaseFragment implements View.OnClickL
         buttonHistory.setOnClickListener(this);
         buttonInformation.setOnClickListener(this);
 
+        if(Session.GEOFENCE_PERMISSION_GRANTED) {
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreateView-GEOFENCE_PERMISSION_GRANTED");
+            buttonPartecipate.setEnabled(true);
+        } else {
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreateView-GEOFENCE_PERMISSION_NOT_GRANTED");
+        }
+
         if (exam != null) {
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -onCreateView-exam not null. Exam" + exam);
-            getActivity().setTitle(exam.getName());
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreateView-exam not null. Exam" + exam);
+            Objects.requireNonNull(getActivity()).setTitle(exam.getName());
         }
         return rootView;
     }
 
     @Override
+    public void onAttach(@NonNull Context context) {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onAttach-");
+        super.onAttach(context);
+    }
+
+    @Override
+    public void onDetach() {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onDetach-");
+        super.onDetach();
+        callback = null;
+    }
+
+    @Override
     public void onClick(View view) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onClick-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onClick-");
         callback.onItemSelected(view.getId());
     }
 }

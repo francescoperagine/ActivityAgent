@@ -34,10 +34,9 @@ public class ExamListActivity extends BaseActivity {
      * device.
      */
     private boolean mTwoPane;
-    private int activityTitleResourse;
 
     protected void onCreate(Bundle savedInstanceState) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onCreate-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-");
         super.onCreate(savedInstanceState);
 
         if (findViewById(R.id.exam_detail_container) != null) {
@@ -55,29 +54,34 @@ public class ExamListActivity extends BaseActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
     protected int getLayoutResource() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -getLayoutResource-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -getLayoutResource-");
         return R.layout.activity_exam_list;
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -setupRecyclerView-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -setupRecyclerView-");
         new StudentCareer(loadClassList());
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, StudentCareer.getExamList(), mTwoPane));
     }
 
     private static JSONArray loadClassList() {
-        Log.i(Settings.TAG, ExamListActivity.class.getSimpleName() + " -loadClassList-");
+        Log.i(Constants.TAG, ExamListActivity.class.getSimpleName() + " -loadClassList-");
         JSONObject data = new JSONObject();
         JSONArray response = new JSONArray();
         try {
-            data.put(Settings.KEY_ACTION, Settings.GET_EXAMS_LIST);
-            data.put(Settings.KEY_USER_ID, Session.getUserID());
-            Log.i(Settings.TAG, ExamListActivity.class.getSimpleName() + " -loadClassList-data "+data);
+            data.put(Constants.KEY_ACTION, Constants.GET_EXAMS_LIST);
+            data.put(Constants.KEY_USER_ID, Session.getUserID());
+            Log.i(Constants.TAG, ExamListActivity.class.getSimpleName() + " -loadClassList-data "+data);
             AsyncTaskConnection asyncTaskConnection = new AsyncTaskConnection();
             asyncTaskConnection.execute(data);
             response = asyncTaskConnection.get();
-            Log.i(Settings.TAG, ExamListActivity.class.getSimpleName() + " -loadClassList-response "+response);
+            Log.i(Constants.TAG, ExamListActivity.class.getSimpleName() + " -loadClassList-response "+response);
         } catch (JSONException | ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -96,11 +100,11 @@ public class ExamListActivity extends BaseActivity {
             public void onClick(View view) {
                 Exam exam = StudentCareer.getExam((Integer) view.getTag());
 
-                Log.i(Settings.TAG, getClass().getSimpleName() + " SimpleItemRecyclerViewAdapter-OnClickListener- Exam " + exam);
+                Log.i(Constants.TAG, getClass().getSimpleName() + " SimpleItemRecyclerViewAdapter-OnClickListener- Exam " + exam);
                 if (mTwoPane) {
                     Bundle arguments = new Bundle();
                     arguments.putInt(ExamDashboardFragment.ARG_ITEM_ID, exam.getID());
-                    Log.i(Settings.TAG, getClass().getSimpleName() + " SimpleItemRecyclerViewAdapter-OnClickListener-mTwoPane- arguments " + ExamDashboardFragment.ARG_ITEM_ID + " " + exam.getID());
+                    Log.i(Constants.TAG, getClass().getSimpleName() + " SimpleItemRecyclerViewAdapter-OnClickListener-mTwoPane- arguments " + ExamDashboardFragment.ARG_ITEM_ID + " " + exam.getID());
                     ExamDashboardFragment fragment = new ExamDashboardFragment();
                     fragment.setArguments(arguments);
                     mParentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.exam_detail_container, fragment).commit();
@@ -108,14 +112,14 @@ public class ExamListActivity extends BaseActivity {
                     Context context = view.getContext();
                     Intent intent = new Intent(context, ExamDetailActivity.class);
                     intent.putExtra(ExamDashboardFragment.ARG_ITEM_ID, exam.getID());
-                    Log.i(Settings.TAG, getClass().getSimpleName() + " SimpleItemRecyclerViewAdapter-OnClickListener- putExtra " + ExamDashboardFragment.ARG_ITEM_ID + " " + exam.getID());
+                    Log.i(Constants.TAG, getClass().getSimpleName() + " SimpleItemRecyclerViewAdapter-OnClickListener- putExtra " + ExamDashboardFragment.ARG_ITEM_ID + " " + exam.getID());
                     context.startActivity(intent);
                 }
             }
         };
 
         SimpleItemRecyclerViewAdapter(ExamListActivity parent, ArrayList<Exam> examList, boolean twoPane) {
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -SimpleItemRecyclerViewAdapter-");
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -SimpleItemRecyclerViewAdapter-");
             this.examList = examList;
             mParentActivity = parent;
             mTwoPane = twoPane;
@@ -124,14 +128,14 @@ public class ExamListActivity extends BaseActivity {
         @NonNull
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -onCreateViewHolder-");
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreateViewHolder-");
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.exam_list_content, parent, false);
             return new ViewHolder(view);
         }
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -onBindViewHolder- Position " + position);
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -onBindViewHolder- Position " + position);
             holder.titleView.setText(examList.get(position).getName());
             holder.itemView.setTag(examList.get(position).getID());
             holder.itemView.setOnClickListener(mOnClickListener);
@@ -139,18 +143,16 @@ public class ExamListActivity extends BaseActivity {
 
         @Override
         public int getItemCount() {
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -onBindViewHolder-");
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -onBindViewHolder-");
             return examList.size();
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
-            final TextView idView;
             final TextView titleView;
 
             ViewHolder(View view) {
                 super(view);
-                Log.i(Settings.TAG, getClass().getSimpleName() + " -ViewHolder-");
-                idView = view.findViewById(R.id.id_text);
+                Log.i(Constants.TAG, getClass().getSimpleName() + " -ViewHolder-");
                 titleView = view.findViewById(R.id.content);
             }
         }

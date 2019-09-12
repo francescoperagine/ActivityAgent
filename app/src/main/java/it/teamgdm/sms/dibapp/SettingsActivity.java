@@ -11,7 +11,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onCreate-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         getSupportFragmentManager()
@@ -27,7 +27,7 @@ public class SettingsActivity extends AppCompatActivity {
     public static class SettingsFragment extends PreferenceFragmentCompat {
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -onCreatePreferences-");
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreatePreferences-");
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
         }
     }

@@ -54,9 +54,21 @@
     <string name="examListActivityTitle">Exams list</string>
     <string name="profileActivityTitle">Profile</string>
     <string name="partecipateButtonText">Enter</string>
-    <string name="evaluateButtonText">Evalutate</string>
+    <string name="evaluateButtonText">Evaluate</string>
     <string name="historyButtonText">History</string>
     <string name="informationButton">Informations</string>
     <string name="title_activity_profile">Profile</string>
+
+    <string name="geofence_insufficient_permissions_title">Insufficient permissions.</string>
+    <string name="geofence_insufficient_permissions_message">It won\'t be possible to register your presence prior to accepting the required permissions.</string>
+    <string name="unknown_geofence_error">Geofence unknown error</string>
+    <string name="geofence_not_available">Geofence is not available</string>
+    <string name="geofence_too_many_geofences">There are too many registered geofences.</string>
+    <string name="geofence_too_many_pending_intents">There are too many geofence intents.</string>
+    <string name="geofence_transition_invalid_type">Geofence transition invalid type</string>
+    <string name="geofence_transition_entered">Entered in geofence.</string>
+    <string name="geofence_transition_exited">Exited the geofence.</string>
+    <string name="unknown_geofence_transition">Geofence - unknown transition.</string>
+    <string name="geofence_permissions_ask">Allow access to your location.</string>
 
 </resources>

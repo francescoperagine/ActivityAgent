@@ -13,30 +13,30 @@ public class StudentCareer {
     private static ArrayList<Exam> examList;
 
     StudentCareer(JSONArray studentCareerData) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -StudentCareer-Constructor-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -StudentCareer-Constructor-");
         examList = new ArrayList<>();
         setExamList(studentCareerData);
     }
 
     public static ArrayList<Exam> getExamList() {
-        Log.i(Settings.TAG, StudentCareer.class.getSimpleName() + " -getExamList-");
+        Log.i(Constants.TAG, StudentCareer.class.getSimpleName() + " -getExamList-");
         return examList;
     }
 
     public static void setExamList(JSONArray studentCareerData) {
-        Log.i(Settings.TAG, StudentCareer.class.getSimpleName() + " -setExamList- "+studentCareerData);
+        Log.i(Constants.TAG, StudentCareer.class.getSimpleName() + " -setExamList- "+studentCareerData);
         for (int i=0; i< studentCareerData.length(); i++) {
             Exam exam = new Exam();
             try {
                 JSONObject o = studentCareerData.getJSONObject(i);
-                exam.setID(o.optInt(Settings.KEY_CLASS_ID));
-                exam.setName(o.optString(Settings.KEY_CLASS_NAME));
-                exam.setYear(o.optInt(Settings.KEY_CLASS_YEAR));
-                exam.setSemester(o.optInt(Settings.KEY_CLASS_SEMESTER));
-                exam.setPassed(o.optBoolean(Settings.KEY_PASSED));
-                exam.setVote(o.optInt(Settings.KEY_VOTE));
-                exam.setPraise(o.optBoolean(Settings.KEY_PRAISE));
-                exam.setPassedDate(o.optString(Settings.KEY_PASSED_DATE));
+                exam.setID(o.optInt(Constants.KEY_CLASS_ID));
+                exam.setName(o.optString(Constants.KEY_CLASS_NAME));
+                exam.setYear(o.optInt(Constants.KEY_CLASS_YEAR));
+                exam.setSemester(o.optInt(Constants.KEY_CLASS_SEMESTER));
+                exam.setPassed(o.optBoolean(Constants.KEY_PASSED));
+                exam.setVote(o.optInt(Constants.KEY_VOTE));
+                exam.setPraise(o.optBoolean(Constants.KEY_PRAISE));
+                exam.setPassedDate(o.optString(Constants.KEY_PASSED_DATE));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -46,7 +46,7 @@ public class StudentCareer {
 
     @NonNull
     public String toString() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -toString-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -toString-");
         return examList.toString();
     }
 

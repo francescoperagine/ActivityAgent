@@ -27,7 +27,7 @@ public class LoginActivity extends AppCompatActivity {
     @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onCreate-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-");
         super.onCreate(savedInstanceState);
 
         session = new Session(getApplicationContext());
@@ -45,7 +45,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     protected void onStart() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onStart-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onStart-");
         super.onStart();
 
         buttonSignIn.setOnClickListener(buttonSignInListener);
@@ -55,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
     private final OnClickListener buttonSignInListener = new OnClickListener() {
         @Override
         public void onClick(View view) {
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -OnClickListener-buttonSignInListener-onClick-");
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -OnClickListener-buttonSignInListener-onClick-");
             email = editTextEmail.getText().toString().toLowerCase().trim();
             password = editTextPassword.getText().toString().trim();
             loginInit();
@@ -63,13 +63,13 @@ public class LoginActivity extends AppCompatActivity {
     };
 
     private void loginInit() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -loginInit-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -loginInit-");
         boolean loginComplete = false;
         if(validateInputs()) {
             loginComplete = login();
         }
         if(loginComplete) {
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -loginInit-loginComplete-TRUE");
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -loginInit-loginComplete-TRUE");
             session.login(this, email);
             loadDashboard();
         }
@@ -78,20 +78,20 @@ public class LoginActivity extends AppCompatActivity {
     private final OnClickListener buttonRegisterListener = new OnClickListener() {
         @Override
         public void onClick(View view) {
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -OnClickListener-buttonRegisterListener-onClick-");
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -OnClickListener-buttonRegisterListener-onClick-");
             Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
             startActivity(registerIntent);
         }
     };
 
     private boolean validateInputs() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -validateInputs-");
-        if(email.equals(Settings.KEY_EMPTY) ){
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -validateInputs-");
+        if(email.equals(Constants.KEY_EMPTY) ){
             editTextEmail.setError(getResources().getString(R.string.emailPromptHint) + " " + getResources().getString(R.string.inputCannotBeEmpty));
             editTextEmail.requestFocus();
             return false;
         }
-        if(password.equals(Settings.KEY_EMPTY)){
+        if(password.equals(Constants.KEY_EMPTY)){
             editTextPassword.setError(getResources().getString(R.string.passwordPromptHint) + " " + getResources().getString(R.string.inputCannotBeEmpty));
             editTextPassword.requestFocus();
             return false;
@@ -105,36 +105,36 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private boolean isEmailValid(CharSequence email) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -isEmailValid-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -isEmailValid-");
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
     private boolean login() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -login-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -login-");
         JSONObject data = new JSONObject();
 
         //Populate the data parameters
         try {
-            data.put(Settings.KEY_ACTION, Settings.USER_LOGIN);
-            data.put(Settings.KEY_USER_EMAIL, email);
-            data.put(Settings.KEY_PASSWORD, password);
+            data.put(Constants.KEY_ACTION, Constants.USER_LOGIN);
+            data.put(Constants.KEY_USER_EMAIL, email);
+            data.put(Constants.KEY_PASSWORD, password);
             AsyncTaskConnection asyncTaskConnection = new AsyncTaskConnection();
             asyncTaskConnection.execute(data);
             JSONArray response = asyncTaskConnection.get();
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -login- response:" + response.toString());
-            String message = response.getJSONObject(0).getString(Settings.KEY_MESSAGE);
-            int codeResult = (int) response.getJSONObject(0).getInt(Settings.KEY_CODE);
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -login- response:" + response.toString());
+            String message = response.getJSONObject(0).getString(Constants.KEY_MESSAGE);
+            int codeResult = (int) response.getJSONObject(0).getInt(Constants.KEY_CODE);
 
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -login- Code: " + codeResult + " \tMessage: " + message);
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -login- Code: " + codeResult + " \tMessage: " + message);
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-            if (codeResult == Settings.LOGIN_OK_CODE) {
-                Log.i(Settings.TAG, getClass().getSimpleName() + " -login-Settings.LOGIN_OK_CODE-");
+            if (codeResult == Constants.LOGIN_OK_CODE) {
+                Log.i(Constants.TAG, getClass().getSimpleName() + " -login-Constants.LOGIN_OK_CODE-");
                 return true;
             } else {
-                Log.i(Settings.TAG, getClass().getSimpleName() + " -login-LOGIN_CODE_NOT_OK-");
+                Log.i(Constants.TAG, getClass().getSimpleName() + " -login-LOGIN_CODE_NOT_OK-");
             }
         } catch (Exception e) {
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -login- Exception-");
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -login- Exception-");
             Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
@@ -146,29 +146,29 @@ public class LoginActivity extends AppCompatActivity {
      *
      */
     private void loadDashboard() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -loadDashboard-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -loadDashboard-");
         Intent i = new Intent(this, ExamListActivity.class);
         startActivity(i);
     }
 
     @Override
     protected void onResume() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onResume-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onResume-");
         super.onResume();
     }
     @Override
     protected void onPause() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onPause-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onPause-");
         super.onPause();
     }
     @Override
     protected void onStop() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onStop-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onStop-");
         super.onStop();
     }
     @Override
     protected void onDestroy() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onDestroy-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onDestroy-");
         super.onDestroy();
     }
 }

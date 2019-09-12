@@ -23,7 +23,7 @@ class SpinnerListAdapter {
     private int rowItemLayout;
 
     SpinnerListAdapter(Context context, String spinnerArgument, int spinnerSelectItemText, int rowItemLayout) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -SpinnerListAdapter-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -SpinnerListAdapter-");
         this.context = context;
         this.spinnerArgument = spinnerArgument;
         this.spinnerSelectItemText = spinnerSelectItemText;
@@ -31,9 +31,9 @@ class SpinnerListAdapter {
     }
 
     ArrayAdapter<SpinnerElement> setInputList() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -setInputList-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -setInputList-");
 
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -setInputList- "+spinnerArgument);
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -setInputList- "+spinnerArgument);
         final JSONArray spinnerListData = loadSpinnerData(spinnerArgument);
         assert spinnerListData != null;
         ArrayList<SpinnerElement> spinnerElementList = setSpinnerList(spinnerListData, context.getResources().getString(spinnerSelectItemText));
@@ -43,18 +43,18 @@ class SpinnerListAdapter {
     }
 
     private JSONArray loadSpinnerData(String spinnerDataList) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -loadSpinnerData-" + spinnerDataList);
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -loadSpinnerData-" + spinnerDataList);
         JSONObject data = new JSONObject();
         JSONArray response = null;
         try {
-            data.put(Settings.KEY_ACTION, spinnerDataList);
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -loadSpinnerData-data: " + data);
+            data.put(Constants.KEY_ACTION, spinnerDataList);
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -loadSpinnerData-data: " + data);
             AsyncTaskConnection asyncTaskConnection = new AsyncTaskConnection();
             asyncTaskConnection.execute(data);
             response = asyncTaskConnection.get();
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -loadSpinnerData-response: " + response.toString());
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -loadSpinnerData-response: " + response.toString());
         } catch (ExecutionException | InterruptedException | JSONException e) {
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -loadSpinnerData-Exception");
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -loadSpinnerData-Exception");
             Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
             e.printStackTrace();
             return null;
@@ -63,19 +63,19 @@ class SpinnerListAdapter {
     }
 
     private ArrayList<SpinnerElement> setSpinnerList(JSONArray spinnerListData, String selectSpinnerValueText) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -setSpinnerList-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -setSpinnerList-");
         ArrayList<SpinnerElement> spinnerElementList = new ArrayList<>();
         SpinnerElement selectSpinnerElement = new SpinnerElement(selectSpinnerValueText);
         spinnerElementList.add(selectSpinnerElement);
         for(int i = 0; i<spinnerListData.length(); i++) {
             try {
-                SpinnerElement r = new SpinnerElement(spinnerListData.getJSONObject(i).optString(Settings.KEY_USER_NAME));
+                SpinnerElement r = new SpinnerElement(spinnerListData.getJSONObject(i).optString(Constants.KEY_USER_NAME));
                 spinnerElementList.add(r);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -setSpinnerList-spinnerElementList " + spinnerElementList);
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -setSpinnerList-spinnerElementList " + spinnerElementList);
         return spinnerElementList;
     }
 }

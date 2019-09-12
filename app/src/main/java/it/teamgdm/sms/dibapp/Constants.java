@@ -1,6 +1,6 @@
 package it.teamgdm.sms.dibapp;
 
-public final class Settings {
+public final class Constants {
 
     static final String TAG = "dibApp";
     static final String PREFERENCE_FILE_KEY = "it.teamgdm.dibApp.userSession";
@@ -43,4 +43,19 @@ public final class Settings {
     static final String KEY_VOTE = "vote";
     static final String KEY_PRAISE = "praise";
     static final String KEY_PASSED_DATE = "passedDate";
+
+    public static final int GEOFENCE_PERMISSION_REQUEST_CODE = 1;
+    static final String KEY_GEOFENCE_PERMISSION_GRANTED = "geofence_permission_granted";
+
+    static final int GEOFENCE_METER_RADIUS = 30;
+
+    static final String GEOFENCE_DIB_NAME = "Dipartimento di Informatica";
+    static final double GEOFENCE_DIB_LATITUDE = 41.109725;
+    static final double GEOFENCE_DIB_LONGITUDE = 16.881521;
+
+    static final String GEOFENCE_PDA_NAME = "Palazzo delle Aule";
+    static final double GEOFENCE_PDA_LATITUDE = 41.109388;
+    static final double GEOFENCE_PDA_LONGITUDE = 16.881759;
+
+    static final int GEOFENCE_TRANSITION_DWELL = 10*60*1000; // need to wait for at least 10 minutes before the trigger
 }

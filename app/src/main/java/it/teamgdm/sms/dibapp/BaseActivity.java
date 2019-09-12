@@ -15,7 +15,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     Toolbar toolbar;
 
     protected void onCreate(Bundle savedInstanceState) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onCreate-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-");
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResource());
         toolbar = findViewById(R.id.toolbar);
@@ -27,14 +27,14 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onCreateOptionsMenu-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreateOptionsMenu-");
         getMenuInflater().inflate(R.menu.app_menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onOptionsItemSelected-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onOptionsItemSelected-");
         int id = item.getItemId();
         switch (id) {
             case R.id.profileButton:

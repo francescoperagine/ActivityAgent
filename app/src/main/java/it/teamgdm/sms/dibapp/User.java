@@ -23,133 +23,133 @@ class User {
     }
 
     boolean isStudent() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -isStudent-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -isStudent-");
         return roleName.equals(R.string.studentRoleString);
     }
 
     boolean isTeacher() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -isTeacher-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -isTeacher-");
         return roleName.equals(R.string.teacherRoleString);
     }
 
     int getID() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -getID-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -getID-");
         return ID;
     }
 
     void setID(int ID) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -setID-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -setID-");
         this.ID = ID;
     }
 
     String getName() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -getName-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -getName-");
         return name;
     }
 
     void setName(String name) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -setName-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -setName-");
         this.name = name;
     }
 
     String getSurname() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -getSurname-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -getSurname-");
         return surname;
     }
 
     void setSurname(String surname) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -setSurname-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -setSurname-");
         this.surname = surname;
     }
 
     String getSsn() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -getSsn-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -getSsn-");
         return ssn;
     }
 
     void setSsn(String ssn) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -setSsn-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -setSsn-");
         this.ssn = ssn;
     }
 
     String getDegreeCourse() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -getDegreeCourse-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -getDegreeCourse-");
         return degreeCourse;
     }
 
     void setDegreeCourse(String degreeCourse) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -setDegreeCourse-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -setDegreeCourse-");
         this.degreeCourse = degreeCourse;
     }
 
     int getRoleID() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -getRoleID-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -getRoleID-");
         return roleID;
     }
 
     void setRoleID(int roleID) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -setRoleID-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -setRoleID-");
         this.roleID = roleID;
     }
 
     String getRoleName() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -getRoleName-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -getRoleName-");
         return roleName;
     }
 
     void setRole(String roleName) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -setRole-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -setRole-");
         this.roleName = roleName;
     }
 
     String getEmail() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -getEmail-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -getEmail-");
         return email;
     }
 
     void setEmail(String email) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -setEmail-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -setEmail-");
         this.email = email;
     }
 
     String getRegistrationDate() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -getRegistrationDate-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -getRegistrationDate-");
         return registrationDate;
     }
 
     void setRegistrationDate(String registrationDate) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -setRegistrationDate-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -setRegistrationDate-");
         this.registrationDate = registrationDate;
     }
 
     String getPassword() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -getPassword-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -getPassword-");
         return password;
     }
 
     void setPassword(String password) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -setPassword-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -setPassword-");
         this.password = password;
     }
 
     String getConfirmPassword() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -getConfirmPassword-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -getConfirmPassword-");
         return confirmPassword;
     }
 
     void setConfirmPassword(String confirmPassword) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -confirmPassword-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -confirmPassword-");
         this.confirmPassword = confirmPassword;
     }
 
     boolean isEmailValid() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -isEmailValid-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -isEmailValid-");
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
     @Override
     public String toString() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -toString-");
-        return name + Settings.KEY_BLANK + surname + Settings.KEY_BLANK + ssn + Settings.KEY_BLANK + roleName + Settings.KEY_BLANK + email + Settings.KEY_BLANK + password;
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -toString-");
+        return name + Constants.KEY_BLANK + surname + Constants.KEY_BLANK + ssn + Constants.KEY_BLANK + roleName + Constants.KEY_BLANK + email + Constants.KEY_BLANK + password;
     }
 }

@@ -29,24 +29,24 @@ class AsyncTaskConnection extends AsyncTask<JSONObject, Void, JSONArray> {
     private URL url;
 
     AsyncTaskConnection() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -Constructor-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -Constructor-");
         urlBuilder();
     }
 
     private void urlBuilder() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -urlBuilder-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -urlBuilder-");
         try {
             url = new URL(serverUrl);
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -urlBuilder-URL " + url);
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -urlBuilder-URL " + url);
         } catch (MalformedURLException e) {
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -urlBuilder- fault");
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -urlBuilder- fault");
             e.printStackTrace();
         }
     }
 
     @Override
     protected JSONArray doInBackground(JSONObject... dataArray) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -doInBackground-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -doInBackground-");
         HttpURLConnection urlConnection = null;
         BufferedReader bufferedReader = null;
         JSONArray response = null;
@@ -55,46 +55,46 @@ class AsyncTaskConnection extends AsyncTask<JSONObject, Void, JSONArray> {
         bufferedReader = setBufferedReader(dataArray[0], urlConnection);
         try {
             while ((text = bufferedReader.readLine()) != null) {
-                Log.i(Settings.TAG, getClass().getSimpleName() + " -doInBackground-while"+text);
+                Log.i(Constants.TAG, getClass().getSimpleName() + " -doInBackground-while"+text);
                 Object json = new JSONTokener(text).nextValue();
                 if(json instanceof JSONObject) {
-                    Log.i(Settings.TAG, getClass().getSimpleName() + " -doInBackground-while-JSONObject");
+                    Log.i(Constants.TAG, getClass().getSimpleName() + " -doInBackground-while-JSONObject");
                     // convert to JSONArray
                     response = new JSONArray();
                     response.put(json);
-                    Log.i(Settings.TAG, getClass().getSimpleName() + " -doInBackground-while-JSONObject-response"+ response.toString());
+                    Log.i(Constants.TAG, getClass().getSimpleName() + " -doInBackground-while-JSONObject-response"+ response.toString());
                 } else if (json instanceof JSONArray) {
-                    Log.i(Settings.TAG, getClass().getSimpleName() + " -doInBackground-while-JSONArray");
+                    Log.i(Constants.TAG, getClass().getSimpleName() + " -doInBackground-while-JSONArray");
                     // acquire the JSONArray
                     response = new JSONArray(text);
                 } else {
-                    Log.i(Settings.TAG, getClass().getSimpleName() + " -doInBackground-while-WTFisThis"+json);
+                    Log.i(Constants.TAG, getClass().getSimpleName() + " -doInBackground-while-WTFisThis"+json);
                 }
             }
         } catch (IOException | JSONException e) {
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -doInBackground-IOException");
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -doInBackground-IOException");
             e.printStackTrace();
         }
         return response;
     }
 
     private HttpURLConnection setConnection() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -setConnection-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -setConnection-");
         HttpURLConnection urlConnection = null;
         try {
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestProperty("Content-Type", "application/json");
-            urlConnection.setRequestMethod(Settings.REQUEST_METHOD);
+            urlConnection.setRequestMethod(Constants.REQUEST_METHOD);
             urlConnection.setDoOutput(true);
         } catch (IOException e) {
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -setConnection-cannot connect");
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -setConnection-cannot connect");
             e.printStackTrace();
         }
         return urlConnection;
     }
 
     private BufferedReader setBufferedReader(JSONObject data, HttpURLConnection urlConnection) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -setBufferedReader-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -setBufferedReader-");
         BufferedReader bufferedReader = null;
         try {
             OutputStream outputStream = new BufferedOutputStream(urlConnection.getOutputStream());
@@ -103,7 +103,7 @@ class AsyncTaskConnection extends AsyncTask<JSONObject, Void, JSONArray> {
             bufferedWriter.flush();
             bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
         } catch (IOException e) {
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -setBufferedReader-not working properly");
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -setBufferedReader-not working properly");
             e.printStackTrace();
         }
         return  bufferedReader;

@@ -18,6 +18,7 @@ import java.util.concurrent.ExecutionException;
 class Session {
 
     private final static String USER_STORED_OBJECT = "user";
+    public static boolean GEOFENCE_PERMISSION_GRANTED;
 
     private static Context applicationContext;
 
@@ -25,13 +26,14 @@ class Session {
     private static SharedPreferences sharedPreferences;
     private static User user;
     private static String USER_IS_LOGGED_IN = "userIsLoggedIn";
+    private static GeofenceAPI geofenceAPI;
     private long sessionExpireTime;
 
     @SuppressLint("CommitPrefEdits")
     Session(Context context) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -Constructor-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -Constructor-");
         applicationContext = context;
-        sharedPreferences = applicationContext.getSharedPreferences(Settings.PREFERENCE_FILE_KEY, Context.MODE_PRIVATE);
+        sharedPreferences = applicationContext.getSharedPreferences(Constants.PREFERENCE_FILE_KEY, Context.MODE_PRIVATE);
         sharedPreferencesEditor = sharedPreferences.edit();
     }
 
@@ -63,7 +65,7 @@ class Session {
     }
 
     void login(Context context, String email) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -login-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -login-");
         JSONObject userDetails = getUserDetails(context, email);
         assert userDetails != null;
         setUserDetails(userDetails);
@@ -71,18 +73,18 @@ class Session {
     }
 
     private JSONObject getUserDetails(Context context, String email) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -getUserDetails-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -getUserDetails-");
         JSONObject data = new JSONObject();
         try {
-            data.put(Settings.KEY_ACTION, Settings.GET_USER_DETAILS);
-            data.put(Settings.KEY_USER_EMAIL, email);
+            data.put(Constants.KEY_ACTION, Constants.GET_USER_DETAILS);
+            data.put(Constants.KEY_USER_EMAIL, email);
             AsyncTaskConnection asyncTaskConnection = new AsyncTaskConnection();
             asyncTaskConnection.execute(data);
             JSONArray response = asyncTaskConnection.get();
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -getUserDetails-response: " + response.toString());
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -getUserDetails-response: " + response.toString());
             return response.getJSONObject(0);
         } catch (ExecutionException | InterruptedException | JSONException e) {
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -getUserDetails-Exception");
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -getUserDetails-Exception");
             Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
             e.printStackTrace();
             return null;
@@ -90,90 +92,71 @@ class Session {
     }
 
     private void setUserDetails(JSONObject userDetails) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -setUserDetails-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -setUserDetails-");
         user = new User();
         try {
-            user.setID(userDetails.getInt(Settings.KEY_USER_ID));
-            user.setName(userDetails.getString(Settings.KEY_USER_NAME));
-            user.setSurname(userDetails.getString(Settings.KEY_USER_SURNAME));
-            user.setEmail(userDetails.getString(Settings.KEY_USER_EMAIL));
-            user.setRole(userDetails.getString(Settings.KEY_USER_ROLE_NAME));
-            user.setRegistrationDate(userDetails.getString(Settings.KEY_REGISTRATION_DATE));
+            user.setID(userDetails.getInt(Constants.KEY_USER_ID));
+            user.setName(userDetails.getString(Constants.KEY_USER_NAME));
+            user.setSurname(userDetails.getString(Constants.KEY_USER_SURNAME));
+            user.setEmail(userDetails.getString(Constants.KEY_USER_EMAIL));
+            user.setRole(userDetails.getString(Constants.KEY_USER_ROLE_NAME));
+            user.setRegistrationDate(userDetails.getString(Constants.KEY_REGISTRATION_DATE));
     //        user.setSessionExpireTime(getExpireSessionTime());
         } catch (JSONException e) {
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -setUserDetails-Exception");
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -setUserDetails-Exception");
             e.printStackTrace();
         }
     }
 
-    /**
-     * Stores the User object into the Sharedpreferences
-     */
-
     private void setUserInSharedPreferences() {
-        Log.i(Settings.TAG, Session.class.getSimpleName() + " -setSharedPreferences-");
+        Log.i(Constants.TAG, Session.class.getSimpleName() + " -setSharedPreferences-");
         Gson gson = new Gson();
         String jsonUser = gson.toJson(user);
         setSharedPreferences(USER_STORED_OBJECT, jsonUser);
         setSharedPreferences(USER_IS_LOGGED_IN, true);
     }
 
-    /**
-     * Retrieves the User object from the stored SharedPreferences
-     */
-
     void getUserFromSharedPreferences() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -getUserFromSharedPreferences-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -getUserFromSharedPreferences-");
         Gson gson = new Gson();
         String jsonUser = getSharedPreferences(USER_STORED_OBJECT, null);
         user = gson.fromJson(jsonUser, User.class);
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -getUserFromSharedPreferences- User- " + user);
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -getUserFromSharedPreferences- User- " + user);
     }
 
     boolean userIsLoggedIn() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -userIsLoggedIn-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -userIsLoggedIn-");
         if(getSharedPreferences(USER_IS_LOGGED_IN, false)) {
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -userIsLoggedIn-user is logged in");
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -userIsLoggedIn-user is logged in");
             return true;
         } else {
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -userIsLoggedIn-user is not logged in");
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -userIsLoggedIn-user is not logged in");
             return false;
         }
     }
 
-    /**
-     * Logs out user by clearing the session
-     */
-
     void logout(){
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -logout-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -logout-");
         sharedPreferencesEditor.clear().commit();
         Intent mainActivityIntent = new Intent(applicationContext, MainActivity.class);
         applicationContext.startActivity(mainActivityIntent);
     }
 
-    boolean isStudent() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -isStudent-");
-        return user.isStudent();
-    }
-
-    public boolean isTeacher() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -isTeacher-");
-        return user.isTeacher();
-    }
-
     static int getUserID() {
-        Log.i(Settings.TAG, Session.class.getSimpleName() + " -getUserID-");
+        Log.i(Constants.TAG, Session.class.getSimpleName() + " -getUserID-");
         return user.getID();
     }
 
-    void setSessionExpireTime(long sessionExpireTime) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -setSessionExpireTime-");
-        this.sessionExpireTime = sessionExpireTime;
+    static void setGeofenceAPI(Context context) {
+        Log.i(Constants.TAG, Session.class.getSimpleName() + " -setGeofenceAPI-");
+        geofenceAPI = new GeofenceAPI(context);
+        geofenceAPI.geofenceInit();
     }
 
-    long getSessionExpireTime() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -getSessionExpireTime-");
-        return this.sessionExpireTime;
+    static void removeGeofences() {
+        Log.i(Constants.TAG, Session.class.getSimpleName() + " -removeGeofences-");
+        if(GEOFENCE_PERMISSION_GRANTED) {
+            geofenceAPI.removeGeofences();
+        }
     }
 }

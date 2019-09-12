@@ -1,11 +1,16 @@
 package it.teamgdm.sms.dibapp;
 
+import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 /**
@@ -16,11 +21,24 @@ import androidx.fragment.app.Fragment;
  */
 public class ExamDetailActivity extends BaseActivity implements BaseFragment.OnClickedItemListener{
 
+    Bundle savedInstanceState;
     Exam exam;
+    Bundle arguments = new Bundle();
+    Fragment fragment;
 
     protected void onCreate(Bundle savedInstanceState) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onCreate-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-");
         super.onCreate(savedInstanceState);
+        this.savedInstanceState = savedInstanceState;
+        askGeofencePermissions();
+    }
+
+    protected void onStart() {
+
+        super.onStart();
+        if(Session.GEOFENCE_PERMISSION_GRANTED) {
+            Session.setGeofenceAPI(this);
+        }
 
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity
@@ -34,22 +52,21 @@ public class ExamDetailActivity extends BaseActivity implements BaseFragment.OnC
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
-            Bundle arguments = new Bundle();
             int examID = getIntent().getIntExtra(ExamDashboardFragment.ARG_ITEM_ID, 0);
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -onCreate- examID " + examID);
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate- examID " + examID);
             arguments.putInt(ExamDashboardFragment.ARG_ITEM_ID, examID);
             exam = StudentCareer.getExam(examID);
             arguments.putSerializable(String.valueOf(examID), exam);
             ExamDashboardFragment fragment = new ExamDashboardFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction().add(R.id.examDetailContainer, fragment).commit();
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -onCreate- Exam " + exam);
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate- Exam " + exam);
         }
     }
 
     @Override
     public void onAttachFragment(@NonNull Fragment fragment) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onAttachFragment-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onAttachFragment-");
         if(fragment instanceof BaseFragment) {
             BaseFragment baseFragment = (BaseFragment) fragment;
             baseFragment.setOnClickedItemListener(this);
@@ -58,13 +75,13 @@ public class ExamDetailActivity extends BaseActivity implements BaseFragment.OnC
 
     @Override
     int getLayoutResource() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -getLayoutResource-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -getLayoutResource-");
         return R.layout.activity_exam_detail;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onOptionsItemSelected-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onOptionsItemSelected-");
         int id = item.getItemId();
         if (id == android.R.id.home) {
             // This ID represents the Home or Up button. In the case of this
@@ -81,22 +98,63 @@ public class ExamDetailActivity extends BaseActivity implements BaseFragment.OnC
 
     @Override
     public void onItemSelected(int selectedActionResource) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onItemSelected-action " + selectedActionResource);
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onItemSelected-action " + selectedActionResource);
         switch (selectedActionResource) {
             case R.id.partecipate:
-
                 break;
             case R.id.evaluate:
-
+      //          fragment = new ExamEvaluateFragment();
+       //         fragment.setArguments(arguments);
                 break;
             case R.id.history:
-
+      //          fragment = new ExamHistoryFragment();
+      //          fragment.setArguments(arguments);
                 break;
             case R.id.information:
+                fragment = new ExamInformationFragment();
+                fragment.setArguments(arguments);
                 break;
             default:
                 break;
         }
+        getSupportFragmentManager().beginTransaction().add(R.id.examDetailContainer, fragment).commit();
     }
 
+    protected void onDestroy() {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onDestroy-");
+        super.onDestroy();
+        Session.removeGeofences();
+    }
+
+    void askGeofencePermissions() {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -askGeofencePermissions-");
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -askGeofencePermissions-PERMISSION DENIED");
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, Constants.GEOFENCE_PERMISSION_REQUEST_CODE);
+        } else {
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -askGeofencePermissions-PERMISSION GRANTED");
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onRequestPermissionsResult-");
+        // If request is cancelled, the result arrays are empty.
+        if(requestCode == Constants.GEOFENCE_PERMISSION_REQUEST_CODE) {
+            if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.i(Constants.TAG, getClass().getSimpleName() + " -onRequestPermissionsResult-PERMISSION GRANTED");
+                // permission was granted, yay!
+                Session.GEOFENCE_PERMISSION_GRANTED = true;
+            } else {
+                Log.i(Constants.TAG, getClass().getSimpleName() + " -onRequestPermissionsResult-PERMISSION DENIED");
+                Session.GEOFENCE_PERMISSION_GRANTED = false;
+                // permission denied, boo!
+                new AlertDialog.Builder(this)
+                        .setTitle(R.string.geofence_insufficient_permissions_title)
+                        .setMessage(R.string.geofence_insufficient_permissions_message)
+                        .create()
+                        .show();
+            }
+        }
+    }
 }

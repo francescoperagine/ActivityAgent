@@ -15,32 +15,32 @@ class Exam implements Serializable {
     private String passedDate;
 
     public int getID() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -getID-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -getID-");
         return ID;
     }
 
     public String getName() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -getName-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -getName-");
         return name;
     }
 
     public boolean isPassed() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -isPassed-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -isPassed-");
         return passed;
     }
 
     public int getVote() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -getVote-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -getVote-");
         return vote;
     }
 
     public boolean hasPraise() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -hasPraise-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -hasPraise-");
         return praise;
     }
 
     public String getPassedDate() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -getPassedDate-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -getPassedDate-");
         return passedDate;
     }
 

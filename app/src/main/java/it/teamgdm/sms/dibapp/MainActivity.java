@@ -1,29 +1,26 @@
 package it.teamgdm.sms.dibapp;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
-import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity {
 
     private static int firstLaunch = 0; //this flags checks if it's the first time that MainActivity is called
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onCreate- The activity is getting created.");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate- The activity is getting created.");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
 
     protected void onStart() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onStart- The activity is getting started.");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onStart- The activity is getting started.");
         super.onStart();
         // Calls LoginActivity if it's the first time MainActivity is called else closes the app
         if(firstLaunch == 0){
@@ -38,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onResume- The activity is being resumed.");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onResume- The activity is being resumed.");
         super.onResume();
         //Closes the app if MainActivity is not called for the first time
         if(firstLaunch != 0) {
@@ -48,17 +45,17 @@ public class MainActivity extends AppCompatActivity {
     }
     @Override
     protected void onPause() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onPause- The activity is being paused.");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onPause- The activity is being paused.");
         super.onPause();
     }
     @Override
     protected void onStop() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onStop- The activity is being stopped.");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onStop- The activity is being stopped.");
         super.onStop();
     }
     @Override
     protected void onDestroy() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onDestroy- The activity is being destroyed.");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onDestroy- The activity is being destroyed.");
         super.onDestroy();
     }
 }

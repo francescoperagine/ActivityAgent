@@ -9,7 +9,7 @@ public class BaseFragment extends Fragment {
     OnClickedItemListener callback;
 
     public void setOnClickedItemListener(OnClickedItemListener callback) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -setOnClickedItemListener-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -setOnClickedItemListener-");
         this.callback = callback;
     }
 
