@@ -18,7 +18,7 @@ import java.util.concurrent.ExecutionException;
 class Session {
 
     private final static String USER_STORED_OBJECT = "user";
-    public static boolean GEOFENCE_PERMISSION_GRANTED;
+    static boolean GEOFENCE_PERMISSION_GRANTED;
 
     private static Context applicationContext;
 
@@ -26,7 +26,7 @@ class Session {
     private static SharedPreferences sharedPreferences;
     private static User user;
     private static String USER_IS_LOGGED_IN = "userIsLoggedIn";
-    private static GeofenceAPI geofenceAPI;
+
     private long sessionExpireTime;
 
     @SuppressLint("CommitPrefEdits")
@@ -145,18 +145,5 @@ class Session {
     static int getUserID() {
         Log.i(Constants.TAG, Session.class.getSimpleName() + " -getUserID-");
         return user.getID();
-    }
-
-    static void setGeofenceAPI(Context context) {
-        Log.i(Constants.TAG, Session.class.getSimpleName() + " -setGeofenceAPI-");
-        geofenceAPI = new GeofenceAPI(context);
-        geofenceAPI.geofenceInit();
-    }
-
-    static void removeGeofences() {
-        Log.i(Constants.TAG, Session.class.getSimpleName() + " -removeGeofences-");
-        if(GEOFENCE_PERMISSION_GRANTED) {
-            geofenceAPI.removeGeofences();
-        }
     }
 }

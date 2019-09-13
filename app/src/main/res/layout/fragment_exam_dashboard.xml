@@ -16,7 +16,6 @@
         android:id="@+id/partecipate"
         android:layout_width="206dp"
         android:layout_height="0dp"
-        android:enabled="false"
         android:text="@string/partecipateButtonText"
         app:layout_constraintBottom_toTopOf="@+id/horizontalGuideline"
         app:layout_constraintEnd_toStartOf="@id/verticalGuideline"

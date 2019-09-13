@@ -2,7 +2,7 @@ package it.teamgdm.sms.dibapp;
 
 public final class Constants {
 
-    static final String TAG = "dibApp";
+        static final String TAG = "dibApp";
     static final String PREFERENCE_FILE_KEY = "it.teamgdm.dibApp.userSession";
 
     static final String KEY_REQUEST_METHOD = "requestMethod";
@@ -44,10 +44,11 @@ public final class Constants {
     static final String KEY_PRAISE = "praise";
     static final String KEY_PASSED_DATE = "passedDate";
 
-    public static final int GEOFENCE_PERMISSION_REQUEST_CODE = 1;
-    static final String KEY_GEOFENCE_PERMISSION_GRANTED = "geofence_permission_granted";
+    static final String GEOFENCE_TRANSITION_DWELLS = "Dwelling in geofence";
+    static final int GEOFENCE_PERMISSION_REQUEST_CODE = 1;
 
-    static final int GEOFENCE_METER_RADIUS = 30;
+    static final int GEOFENCE_METER_RADIUS_DIB = 30;
+    static final int GEOFENCE_METER_RADIUS_PDA = 20;
 
     static final String GEOFENCE_DIB_NAME = "Dipartimento di Informatica";
     static final double GEOFENCE_DIB_LATITUDE = 41.109725;
@@ -57,5 +58,5 @@ public final class Constants {
     static final double GEOFENCE_PDA_LATITUDE = 41.109388;
     static final double GEOFENCE_PDA_LONGITUDE = 16.881759;
 
-    static final int GEOFENCE_TRANSITION_DWELL = 10*60*1000; // need to wait for at least 10 minutes before the trigger
+    static final int GEOFENCE_TRANSITION_DWELL_TIME = 10*60*1000; // need to wait for at least 10 seconds before the trigger
 }

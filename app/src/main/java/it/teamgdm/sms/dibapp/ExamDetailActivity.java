@@ -25,6 +25,7 @@ public class ExamDetailActivity extends BaseActivity implements BaseFragment.OnC
     Exam exam;
     Bundle arguments = new Bundle();
     Fragment fragment;
+    GeofenceAPI geofenceAPI;
 
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-");
@@ -37,7 +38,8 @@ public class ExamDetailActivity extends BaseActivity implements BaseFragment.OnC
 
         super.onStart();
         if(Session.GEOFENCE_PERMISSION_GRANTED) {
-            Session.setGeofenceAPI(this);
+            geofenceAPI = new GeofenceAPI(this);
+            geofenceAPI.geofenceInit();
         }
 
         // savedInstanceState is non-null when there is fragment state
@@ -58,10 +60,17 @@ public class ExamDetailActivity extends BaseActivity implements BaseFragment.OnC
             exam = StudentCareer.getExam(examID);
             arguments.putSerializable(String.valueOf(examID), exam);
             ExamDashboardFragment fragment = new ExamDashboardFragment();
-            fragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction().add(R.id.examDetailContainer, fragment).commit();
+            initFragment(fragment);
             Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate- Exam " + exam);
         }
+        if(getIntent().getBooleanExtra(Constants.GEOFENCE_TRANSITION_DWELLS, false)) {
+            //TODO admin the intent from the receiver
+        }
+    }
+
+    private void initFragment(Fragment fragment) {
+        fragment.setArguments(arguments);
+        getSupportFragmentManager().beginTransaction().add(R.id.examDetailContainer, fragment).commit();
     }
 
     @Override
@@ -101,11 +110,9 @@ public class ExamDetailActivity extends BaseActivity implements BaseFragment.OnC
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onItemSelected-action " + selectedActionResource);
         switch (selectedActionResource) {
             case R.id.partecipate:
-                break;
             case R.id.evaluate:
       //          fragment = new ExamEvaluateFragment();
        //         fragment.setArguments(arguments);
-                break;
             case R.id.history:
       //          fragment = new ExamHistoryFragment();
       //          fragment.setArguments(arguments);
@@ -117,13 +124,13 @@ public class ExamDetailActivity extends BaseActivity implements BaseFragment.OnC
             default:
                 break;
         }
-        getSupportFragmentManager().beginTransaction().add(R.id.examDetailContainer, fragment).commit();
+        initFragment(fragment);
     }
 
     protected void onDestroy() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onDestroy-");
         super.onDestroy();
-        Session.removeGeofences();
+        geofenceAPI.removeGeofences();
     }
 
     void askGeofencePermissions() {
@@ -133,6 +140,7 @@ public class ExamDetailActivity extends BaseActivity implements BaseFragment.OnC
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, Constants.GEOFENCE_PERMISSION_REQUEST_CODE);
         } else {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -askGeofencePermissions-PERMISSION GRANTED");
+            Session.GEOFENCE_PERMISSION_GRANTED = true;
         }
     }
 

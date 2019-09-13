@@ -62,6 +62,7 @@ public class ExamDashboardFragment extends BaseFragment implements View.OnClickL
             buttonPartecipate.setEnabled(true);
         } else {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreateView-GEOFENCE_PERMISSION_NOT_GRANTED");
+            buttonPartecipate.setEnabled(false);
         }
 
         if (exam != null) {
