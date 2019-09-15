@@ -64,7 +64,8 @@ public class ExamDetailActivity extends BaseActivity implements BaseFragment.OnC
             Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate- Exam " + exam);
         }
         if(getIntent().getBooleanExtra(Constants.GEOFENCE_TRANSITION_DWELLS, false)) {
-            //TODO admin the intent from the receiver
+            //TODO handle the intent from the receiver
+
         }
     }
 

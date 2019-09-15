@@ -66,8 +66,8 @@
     <string name="geofence_too_many_geofences">There are too many registered geofences.</string>
     <string name="geofence_too_many_pending_intents">There are too many geofence intents.</string>
     <string name="geofence_transition_invalid_type">Geofence transition invalid type</string>
-    <string name="geofence_transition_entered">Entered in geofence.</string>
-    <string name="geofence_transition_exit">Left the geofence.</string>
+    <string name="geofence_transition_enter">Entered in geofence.</string>
+    <string name="geofence_transition_left">Left the geofence.</string>
     <string name="unknown_geofence_transition">Geofence - unknown transition.</string>
     <string name="geofence_permissions_ask">Allow access to your location.</string>
     <string name="geofence_transition_dwelling">Geofence dwelling</string>

@@ -22,7 +22,7 @@ import java.nio.charset.StandardCharsets;
 
 class AsyncTaskConnection extends AsyncTask<JSONObject, Void, JSONArray> {
     // private final static String serverUrl = "http://10.72.50.165:80/sms-dibapp-server/api_gateway.php";
-    private final static String serverUrl = "http://192.168.1.2:80/sms-dibapp-server/api_gateway.php";
+    private final static String serverUrl = "http://192.168.1.58:80/sms-dibapp-server/api_gateway.php";
     // private final static String serverUrl = "http://civicsensebari.altervista.org/api_gateway.php";
     // private final static String serverUrl = "http://192.168.1.178:80/sms-dibapp-server/api_gateway.php";
 
@@ -47,8 +47,8 @@ class AsyncTaskConnection extends AsyncTask<JSONObject, Void, JSONArray> {
     @Override
     protected JSONArray doInBackground(JSONObject... dataArray) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -doInBackground-");
-        HttpURLConnection urlConnection = null;
-        BufferedReader bufferedReader = null;
+        HttpURLConnection urlConnection;
+        BufferedReader bufferedReader;
         JSONArray response = null;
         String text;
         urlConnection = setConnection();
