@@ -14,12 +14,12 @@ import android.view.ViewGroup;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link ExamEvaluateFragment.OnFragmentInteractionListener} interface
+ * {@link ClassHistoryFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link ExamEvaluateFragment#newInstance} factory method to
+ * Use the {@link ClassHistoryFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ExamEvaluateFragment extends Fragment implements View.OnClickListener {
+public class ClassHistoryFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -31,7 +31,7 @@ public class ExamEvaluateFragment extends Fragment implements View.OnClickListen
 
     private OnFragmentInteractionListener mListener;
 
-    public ExamEvaluateFragment() {
+    public ClassHistoryFragment() {
         // Required empty public constructor
     }
 
@@ -41,11 +41,11 @@ public class ExamEvaluateFragment extends Fragment implements View.OnClickListen
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment ExamEvaluateFragment.
+     * @return A new instance of fragment ClassHistoryFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ExamEvaluateFragment newInstance(String param1, String param2) {
-        ExamEvaluateFragment fragment = new ExamEvaluateFragment();
+    public static ClassHistoryFragment newInstance(String param1, String param2) {
+        ClassHistoryFragment fragment = new ClassHistoryFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -66,7 +66,7 @@ public class ExamEvaluateFragment extends Fragment implements View.OnClickListen
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_exam_evaluate, container, false);
+        return inflater.inflate(R.layout.fragment_class_history, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -91,11 +91,6 @@ public class ExamEvaluateFragment extends Fragment implements View.OnClickListen
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
-
-    @Override
-    public void onClick(View view) {
-
     }
 
     /**

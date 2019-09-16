@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:fitsSystemWindows="true"
-    tools:context=".ExamDetailActivity">
+    tools:context=".ClassDetailActivity">
 
     <include
         layout="@layout/toolbar"

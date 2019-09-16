@@ -2,6 +2,8 @@ package it.teamgdm.sms.dibapp;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 class User {
 
     private int ID;
@@ -9,7 +11,6 @@ class User {
     private String surname;
     private String ssn;
     private String degreeCourse;
-    private int roleID;
     private String roleName;
     private String email;
     private int degreeCourseId;
@@ -82,16 +83,6 @@ class User {
         this.degreeCourse = degreeCourse;
     }
 
-    int getRoleID() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -getRoleID-");
-        return roleID;
-    }
-
-    void setRoleID(int roleID) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -setRoleID-");
-        this.roleID = roleID;
-    }
-
     String getRoleName() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -getRoleName-");
         return roleName;
@@ -110,16 +101,6 @@ class User {
     void setEmail(String email) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -setEmail-");
         this.email = email;
-    }
-
-    String getRegistrationDate() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -getRegistrationDate-");
-        return registrationDate;
-    }
-
-    void setRegistrationDate(String registrationDate) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -setRegistrationDate-");
-        this.registrationDate = registrationDate;
     }
 
     String getPassword() {
@@ -147,7 +128,7 @@ class User {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
-    @Override
+    @NonNull
     public String toString() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -toString-");
         return name + Constants.KEY_BLANK + surname + Constants.KEY_BLANK + ssn + Constants.KEY_BLANK + roleName + Constants.KEY_BLANK + email + Constants.KEY_BLANK + password;

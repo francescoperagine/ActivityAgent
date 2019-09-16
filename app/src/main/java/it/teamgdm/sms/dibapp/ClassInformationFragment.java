@@ -9,13 +9,13 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 
-public class ExamInformationFragment extends BaseFragment implements View.OnClickListener {
+public class ClassInformationFragment extends BaseFragment implements View.OnClickListener {
 
     static final String ARG_ITEM_ID = "item_id";
     private Exam exam;
 
-    public ExamInformationFragment() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -ExamInformationFragment-");
+    public ClassInformationFragment() {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -ClassInformationFragment-");
     }
 
     @Override
@@ -34,7 +34,7 @@ public class ExamInformationFragment extends BaseFragment implements View.OnClic
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_exam_information, container, false);
+        return inflater.inflate(R.layout.fragment_class_information, container, false);
     }
 
     @Override

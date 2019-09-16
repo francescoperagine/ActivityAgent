@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 
 import java.util.Objects;
 
-public class ExamDashboardFragment extends BaseFragment implements View.OnClickListener {
+public class ClassDashboardFragment extends BaseFragment implements View.OnClickListener {
 
     /**
      * The fragment argument representing the item ID that this fragment
@@ -26,8 +26,8 @@ public class ExamDashboardFragment extends BaseFragment implements View.OnClickL
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public ExamDashboardFragment() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -ExamDashboardFragment-");
+    public ClassDashboardFragment() {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -ClassDashboardFragment-");
     }
 
     @Override
@@ -47,7 +47,7 @@ public class ExamDashboardFragment extends BaseFragment implements View.OnClickL
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreateView-");
-        View rootView = inflater.inflate(R.layout.fragment_exam_dashboard, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_class_dashboard, container, false);
 
         Button buttonPartecipate = rootView.findViewById(R.id.partecipate);
         Button buttonEvaluate = rootView.findViewById(R.id.evaluate);

@@ -181,11 +181,11 @@ public class RegisterActivity extends AppCompatActivity {
             data.put(Constants.KEY_ACTION, Constants.USER_REGISTRATION);
             data.put(Constants.KEY_USER_NAME, tmpUser.getName());
             data.put(Constants.KEY_USER_SURNAME, tmpUser.getSurname());
-            data.put(Constants.KEY_SERIAL_NUMBER, tmpUser.getSsn());
+            data.put(Constants.KEY_USER_SERIAL_NUMBER, tmpUser.getSsn());
             data.put(Constants.KEY_DEGREECOURSE, tmpUser.getDegreeCourse());
             data.put(Constants.KEY_USER_ROLE_NAME, tmpUser.getRoleName());
             data.put(Constants.KEY_USER_EMAIL, tmpUser.getEmail());
-            data.put(Constants.KEY_PASSWORD, tmpUser.getPassword());
+            data.put(Constants.KEY_USER_PASSWORD, tmpUser.getPassword());
             AsyncTaskConnection asyncTaskConnection = new AsyncTaskConnection();
             asyncTaskConnection.execute(data);
             JSONArray response = asyncTaskConnection.get();

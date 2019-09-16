@@ -1,6 +1,5 @@
 package it.teamgdm.sms.dibapp;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,7 +23,6 @@ public class LoginActivity extends AppCompatActivity {
     private String email;
     private String password;
 
-    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-");
@@ -32,7 +30,6 @@ public class LoginActivity extends AppCompatActivity {
 
         session = new Session(getApplicationContext());
         if(session.userIsLoggedIn()){
-            session.getUserFromSharedPreferences();
             loadDashboard();
         }
         setContentView(R.layout.activity_login);
@@ -44,6 +41,7 @@ public class LoginActivity extends AppCompatActivity {
         buttonRegister = findViewById(R.id.registerButton);
     }
 
+    @Override
     protected void onStart() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onStart-");
         super.onStart();
@@ -117,7 +115,7 @@ public class LoginActivity extends AppCompatActivity {
         try {
             data.put(Constants.KEY_ACTION, Constants.USER_LOGIN);
             data.put(Constants.KEY_USER_EMAIL, email);
-            data.put(Constants.KEY_PASSWORD, password);
+            data.put(Constants.KEY_USER_PASSWORD, password);
             AsyncTaskConnection asyncTaskConnection = new AsyncTaskConnection();
             asyncTaskConnection.execute(data);
             JSONArray response = asyncTaskConnection.get();
@@ -147,8 +145,12 @@ public class LoginActivity extends AppCompatActivity {
      */
     private void loadDashboard() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -loadDashboard-");
-        Intent i = new Intent(this, ExamListActivity.class);
-        startActivity(i);
+        Intent classListActivityIntent = new Intent(this, ClassListActivity.class);
+        if(session.userIsProfessor()) {
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -loadDashboard-userIsProfessor");
+            classListActivityIntent.putExtra(Constants.KEY_ROLE_PROFESSOR, true);
+        }
+        startActivity(classListActivityIntent);
     }
 
     @Override

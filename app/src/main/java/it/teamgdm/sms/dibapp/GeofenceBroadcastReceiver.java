@@ -32,7 +32,7 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
 
         // Get the transition type.
         int geofenceTransition = geofencingEvent.getGeofenceTransition();
-        Intent geofenceTransitionIntent = new Intent(context, ExamDetailActivity.class);
+        Intent geofenceTransitionIntent = new Intent(context, ClassDetailActivity.class);
         List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
 
         // Get the geofences that were triggered.

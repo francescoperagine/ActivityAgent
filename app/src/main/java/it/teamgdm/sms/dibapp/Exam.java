@@ -1,7 +1,6 @@
 package it.teamgdm.sms.dibapp;
 
 import android.util.Log;
-
 import java.io.Serializable;
 
 class Exam implements Serializable {

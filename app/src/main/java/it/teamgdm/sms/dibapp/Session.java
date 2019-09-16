@@ -7,7 +7,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
+import androidx.annotation.NonNull;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,17 +17,13 @@ import java.util.concurrent.ExecutionException;
 
 class Session {
 
-    private final static String USER_STORED_OBJECT = "user";
     static boolean GEOFENCE_PERMISSION_GRANTED;
 
     private static Context applicationContext;
 
     private static SharedPreferences.Editor sharedPreferencesEditor;
     private static SharedPreferences sharedPreferences;
-    private static User user;
-    private static String USER_IS_LOGGED_IN = "userIsLoggedIn";
 
-    private long sessionExpireTime;
 
     @SuppressLint("CommitPrefEdits")
     Session(Context context) {
@@ -37,39 +33,11 @@ class Session {
         sharedPreferencesEditor = sharedPreferences.edit();
     }
 
-    static void setSharedPreferences(String key, String value) {
-        sharedPreferencesEditor.putString(key, value);
-        sharedPreferencesEditor.commit();
-    }
-
-    static void setSharedPreferences(String key, int value) {
-        sharedPreferencesEditor.putInt(key, value);
-        sharedPreferencesEditor.commit();
-    }
-
-    static void setSharedPreferences(String key, boolean value) {
-        sharedPreferencesEditor.putBoolean(key, value);
-        sharedPreferencesEditor.commit();
-    }
-
-    static String getSharedPreferences(String key, String defaultValue) {
-        return sharedPreferences.getString(key, defaultValue);
-    }
-
-    static int getSharedPreferences(String key, int defaultValue) {
-        return sharedPreferences.getInt(key, defaultValue);
-    }
-
-    static boolean getSharedPreferences(String key, boolean defaultValue) {
-        return sharedPreferences.getBoolean(key, defaultValue);
-    }
-
     void login(Context context, String email) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -login-");
         JSONObject userDetails = getUserDetails(context, email);
         assert userDetails != null;
-        setUserDetails(userDetails);
-        setUserInSharedPreferences();
+        setUserInSharedPreferences(userDetails);
     }
 
     private JSONObject getUserDetails(Context context, String email) {
@@ -91,42 +59,25 @@ class Session {
         }
     }
 
-    private void setUserDetails(JSONObject userDetails) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -setUserDetails-");
-        user = new User();
+    private void setUserInSharedPreferences(@NonNull JSONObject userDetails) {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -setUserInSharedPreferences-");
         try {
-            user.setID(userDetails.getInt(Constants.KEY_USER_ID));
-            user.setName(userDetails.getString(Constants.KEY_USER_NAME));
-            user.setSurname(userDetails.getString(Constants.KEY_USER_SURNAME));
-            user.setEmail(userDetails.getString(Constants.KEY_USER_EMAIL));
-            user.setRole(userDetails.getString(Constants.KEY_USER_ROLE_NAME));
-            user.setRegistrationDate(userDetails.getString(Constants.KEY_REGISTRATION_DATE));
-    //        user.setSessionExpireTime(getExpireSessionTime());
+            sharedPreferencesEditor.putInt(Constants.KEY_USER_ID, userDetails.getInt(Constants.KEY_USER_ID));
+            sharedPreferencesEditor.putString(Constants.KEY_USER_NAME, userDetails.getString(Constants.KEY_USER_NAME));
+            sharedPreferencesEditor.putString(Constants.KEY_USER_SURNAME, userDetails.getString(Constants.KEY_USER_SURNAME));
+            sharedPreferencesEditor.putString(Constants.KEY_USER_EMAIL, userDetails.getString(Constants.KEY_USER_EMAIL));
+            sharedPreferencesEditor.putString(Constants.KEY_USER_ROLE_NAME, userDetails.getString(Constants.KEY_USER_ROLE_NAME));
+            sharedPreferencesEditor.putString(Constants.KEY_USER_REGISTRATION_DATE, userDetails.getString(Constants.KEY_USER_REGISTRATION_DATE));
+            sharedPreferencesEditor.commit();
         } catch (JSONException e) {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -setUserDetails-Exception");
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -setUserInSharedPreferences-Exception");
             e.printStackTrace();
         }
     }
 
-    private void setUserInSharedPreferences() {
-        Log.i(Constants.TAG, Session.class.getSimpleName() + " -setSharedPreferences-");
-        Gson gson = new Gson();
-        String jsonUser = gson.toJson(user);
-        setSharedPreferences(USER_STORED_OBJECT, jsonUser);
-        setSharedPreferences(USER_IS_LOGGED_IN, true);
-    }
-
-    void getUserFromSharedPreferences() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -getUserFromSharedPreferences-");
-        Gson gson = new Gson();
-        String jsonUser = getSharedPreferences(USER_STORED_OBJECT, null);
-        user = gson.fromJson(jsonUser, User.class);
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -getUserFromSharedPreferences- User- " + user);
-    }
-
     boolean userIsLoggedIn() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -userIsLoggedIn-");
-        if(getSharedPreferences(USER_IS_LOGGED_IN, false)) {
+        if(sharedPreferences.getBoolean(Constants.USER_IS_LOGGED_IN, false)) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -userIsLoggedIn-user is logged in");
             return true;
         } else {
@@ -144,6 +95,11 @@ class Session {
 
     static int getUserID() {
         Log.i(Constants.TAG, Session.class.getSimpleName() + " -getUserID-");
-        return user.getID();
+        return sharedPreferences.getInt(Constants.KEY_USER_ID,0);
+    }
+
+    boolean userIsProfessor() {
+        Log.i(Constants.TAG, Session.class.getSimpleName() + " -userIsProfessor-");
+        return Constants.KEY_ROLE_PROFESSOR.equals(sharedPreferences.getString(Constants.KEY_USER_ROLE_NAME, null));
     }
 }

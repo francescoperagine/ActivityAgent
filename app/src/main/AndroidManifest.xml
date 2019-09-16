@@ -25,15 +25,15 @@
         tools:targetApi="n">
 
         <activity
-            android:name=".ExamListActivity"
+            android:name=".ClassListActivity"
             android:label="@string/title_exam_list" />
         <activity
-            android:name=".ExamDetailActivity"
+            android:name=".ClassDetailActivity"
             android:label="@string/title_exam_detail"
-            android:parentActivityName=".ExamListActivity">
+            android:parentActivityName=".ClassListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="it.teamgdm.sms.dibapp.ExamListActivity" />
+                android:value="it.teamgdm.sms.dibapp.ClassListActivity" />
         </activity>
         <activity
             android:name=".SplashActivity">

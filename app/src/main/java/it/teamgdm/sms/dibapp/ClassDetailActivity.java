@@ -17,9 +17,9 @@ import androidx.fragment.app.Fragment;
  * An activity representing a single Exam detail screen. This
  * activity is only used on narrow width devices. On tablet-size devices,
  * item details are presented side-by-side with a list of items
- * in a {@link ExamListActivity}.
+ * in a {@link ClassListActivity}.
  */
-public class ExamDetailActivity extends BaseActivity implements BaseFragment.OnClickedItemListener{
+public class ClassDetailActivity extends BaseActivity implements BaseFragment.OnClickedItemListener{
 
     Bundle savedInstanceState;
     Exam exam;
@@ -59,13 +59,13 @@ public class ExamDetailActivity extends BaseActivity implements BaseFragment.OnC
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
-            int examID = getIntent().getIntExtra(ExamDashboardFragment.ARG_ITEM_ID, 0);
+            int examID = getIntent().getIntExtra(ClassDashboardFragment.ARG_ITEM_ID, 0);
             Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate- examID " + examID);
-            arguments.putInt(ExamDashboardFragment.ARG_ITEM_ID, examID);
+            arguments.putInt(ClassDashboardFragment.ARG_ITEM_ID, examID);
             arguments.putBoolean(Constants.GEOFENCE_TRANSITION_DWELLS, userDwellsInGeofence);
-            exam = StudentCareer.getExam(examID);
+            exam = StudentCareer.getClassFromID(examID);
             arguments.putSerializable(String.valueOf(examID), exam);
-            ExamDashboardFragment fragment = new ExamDashboardFragment();
+            ClassDashboardFragment fragment = new ClassDashboardFragment();
             initFragment(fragment);
             Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate- Exam " + exam);
         }
@@ -89,7 +89,7 @@ public class ExamDetailActivity extends BaseActivity implements BaseFragment.OnC
     @Override
     int getLayoutResource() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -getLayoutResource-");
-        return R.layout.activity_exam_detail;
+        return R.layout.activity_class_detail;
     }
 
     @Override
@@ -103,7 +103,7 @@ public class ExamDetailActivity extends BaseActivity implements BaseFragment.OnC
             //
             // http://developer.android.com/design/patterns/navigation.html#up-vs-back
             //
-            navigateUpTo(new Intent(this, ExamListActivity.class));
+            navigateUpTo(new Intent(this, ClassListActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -116,14 +116,14 @@ public class ExamDetailActivity extends BaseActivity implements BaseFragment.OnC
             case R.id.partecipate:
 
             case R.id.evaluate:
-      //          fragment = new ExamEvaluateFragment();
+      //          fragment = new ClassEvaluateFragment();
        //         fragment.setArguments(arguments);
             case R.id.history:
-      //          fragment = new ExamHistoryFragment();
+      //          fragment = new ClassHistoryFragment();
       //          fragment.setArguments(arguments);
                 break;
             case R.id.information:
-                fragment = new ExamInformationFragment();
+                fragment = new ClassInformationFragment();
                 fragment.setArguments(arguments);
                 break;
             default:

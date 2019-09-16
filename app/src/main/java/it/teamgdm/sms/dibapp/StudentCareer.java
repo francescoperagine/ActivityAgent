@@ -1,4 +1,5 @@
 package it.teamgdm.sms.dibapp;
+
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -9,22 +10,14 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class StudentCareer {
-    private static ArrayList<Exam> examList;
+class StudentCareer extends ClassList{
 
-    StudentCareer(JSONArray studentCareerData) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -StudentCareer-Constructor-");
-        examList = new ArrayList<>();
-        setExamList(studentCareerData);
+    StudentCareer() {
     }
 
-    public static ArrayList<Exam> getExamList() {
-        Log.i(Constants.TAG, StudentCareer.class.getSimpleName() + " -getExamList-");
-        return examList;
-    }
-
-    public static void setExamList(JSONArray studentCareerData) {
-        Log.i(Constants.TAG, StudentCareer.class.getSimpleName() + " -setExamList- "+studentCareerData);
+    @Override
+    void setClassList(JSONArray studentCareerData) {
+        Log.i(Constants.TAG, StudentCareer.class.getSimpleName() + " -setClassList- "+studentCareerData);
         for (int i=0; i< studentCareerData.length(); i++) {
             Exam exam = new Exam();
             try {
@@ -40,23 +33,7 @@ public class StudentCareer {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            examList.add(exam);
+            classList.add(exam);
         }
-    }
-
-    @NonNull
-    public String toString() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -toString-");
-        return examList.toString();
-    }
-
-    static Exam getExam(int examID) {
-        Exam e = null;
-        for(int i=0; i<examList.size(); i++) {
-            if(examList.get(i).getID() == examID) {
-                e = examList.get(i);
-            }
-        }
-        return e;
     }
 }

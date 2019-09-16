@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".ExamListActivity">
+    tools:context=".ClassListActivity">
 
     <LinearLayout
         android:id="@+id/examListContainer"
@@ -14,7 +14,7 @@
         android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
         <include layout="@layout/toolbar" />
-        <include layout="@layout/exam_list" />
+        <include layout="@layout/class_list" />
     </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

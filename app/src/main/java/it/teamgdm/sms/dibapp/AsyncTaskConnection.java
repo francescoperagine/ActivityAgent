@@ -21,8 +21,8 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 class AsyncTaskConnection extends AsyncTask<JSONObject, Void, JSONArray> {
-    private final static String serverUrl = "http://10.72.50.176:80/sms-dibapp-server/api_gateway.php";
-    //private final static String serverUrl = "http://192.168.1.58:80/sms-dibapp-server/api_gateway.php";
+    // private final static String serverUrl = "http://10.72.50.176:80/sms-dibapp-server/api_gateway.php";
+    private final static String serverUrl = "http://192.168.1.58:80/sms-dibapp-server/api_gateway.php";
     // private final static String serverUrl = "http://civicsensebari.altervista.org/api_gateway.php";
     // private final static String serverUrl = "http://192.168.1.178:80/sms-dibapp-server/api_gateway.php";
 
