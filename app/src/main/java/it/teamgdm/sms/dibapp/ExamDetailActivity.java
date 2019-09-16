@@ -24,6 +24,7 @@ public class ExamDetailActivity extends BaseActivity implements BaseFragment.OnC
     Bundle savedInstanceState;
     Exam exam;
     Bundle arguments = new Bundle();
+    boolean userDwellsInGeofence;
     Fragment fragment;
     GeofenceAPI geofenceAPI;
 
@@ -51,22 +52,24 @@ public class ExamDetailActivity extends BaseActivity implements BaseFragment.OnC
         //
         // http://developer.android.com/guide/components/fragments.html
         //
+
+        if(getIntent() != null) {
+            userDwellsInGeofence = getIntent().getBooleanExtra(Constants.GEOFENCE_TRANSITION_DWELLS, false);
+        }
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             int examID = getIntent().getIntExtra(ExamDashboardFragment.ARG_ITEM_ID, 0);
             Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate- examID " + examID);
             arguments.putInt(ExamDashboardFragment.ARG_ITEM_ID, examID);
+            arguments.putBoolean(Constants.GEOFENCE_TRANSITION_DWELLS, userDwellsInGeofence);
             exam = StudentCareer.getExam(examID);
             arguments.putSerializable(String.valueOf(examID), exam);
             ExamDashboardFragment fragment = new ExamDashboardFragment();
             initFragment(fragment);
             Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate- Exam " + exam);
         }
-        if(getIntent().getBooleanExtra(Constants.GEOFENCE_TRANSITION_DWELLS, false)) {
-            //TODO handle the intent from the receiver
 
-        }
     }
 
     private void initFragment(Fragment fragment) {
@@ -111,6 +114,7 @@ public class ExamDetailActivity extends BaseActivity implements BaseFragment.OnC
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onItemSelected-action " + selectedActionResource);
         switch (selectedActionResource) {
             case R.id.partecipate:
+
             case R.id.evaluate:
       //          fragment = new ExamEvaluateFragment();
        //         fragment.setArguments(arguments);

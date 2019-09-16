@@ -19,6 +19,7 @@ public class ExamDashboardFragment extends BaseFragment implements View.OnClickL
      * represents.
      */
     static final String ARG_ITEM_ID = "item_id";
+    boolean userDwellsInGeofence;
     private Exam exam;
 
     /**
@@ -38,6 +39,7 @@ public class ExamDashboardFragment extends BaseFragment implements View.OnClickL
         if (getArguments().containsKey(ARG_ITEM_ID)) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-argument " + getArguments().getInt(ARG_ITEM_ID));
             int id = getArguments().getInt(ARG_ITEM_ID);
+            userDwellsInGeofence = getArguments().getBoolean(Constants.GEOFENCE_TRANSITION_DWELLS);
             exam = (Exam) getArguments().getSerializable(String.valueOf(id));
         }
     }
@@ -57,7 +59,7 @@ public class ExamDashboardFragment extends BaseFragment implements View.OnClickL
         buttonHistory.setOnClickListener(this);
         buttonInformation.setOnClickListener(this);
 
-        if(Session.GEOFENCE_PERMISSION_GRANTED) {
+        if(/* Session.GEOFENCE_PERMISSION_GRANTED && */ userDwellsInGeofence) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreateView-GEOFENCE_PERMISSION_GRANTED");
             buttonPartecipate.setEnabled(true);
         } else {
