@@ -33,7 +33,7 @@ class Session {
         sharedPreferencesEditor = sharedPreferences.edit();
     }
 
-    public static boolean getSharedPreference(String key, boolean defaultValue) {
+    static boolean getSharedPreference(String key, boolean defaultValue) {
         return sharedPreferences.getBoolean(key, defaultValue);
     }
 

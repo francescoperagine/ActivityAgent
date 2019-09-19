@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static int firstLaunch = 0; //this flags checks if it's the first time that MainActivity is called
+    private Session session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,40 +21,35 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onStart- The activity is getting started.");
         super.onStart();
-        // Calls LoginActivity if it's the first time MainActivity is called else closes the app
-        if(firstLaunch == 0){
-            Intent loginIntent = new Intent(this, LoginActivity.class);
-            firstLaunch++;
-            startActivity(loginIntent);
+
+        session = new Session(getApplicationContext());
+        if(session.userIsLoggedIn()){
+            loadDashboard();
         } else {
-            firstLaunch = 0;
-            finishAffinity();
+            Intent loginIntent = new Intent(this, LoginActivity.class);
+            startActivityForResult(loginIntent, Constants.LOGIN_OK_CODE);
         }
     }
 
     @Override
-    protected void onResume() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -onResume- The activity is being resumed.");
-        super.onResume();
-        //Closes the app if MainActivity is not called for the first time
-        if(firstLaunch != 0) {
-            firstLaunch = 0;
-            finishAffinity();
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onActivityResult-");
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == Constants.LOGIN_OK_CODE && resultCode == RESULT_OK) {
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -onActivityResult-RESULT_OK");
+            session.setAccess(this, data.getStringExtra(Constants.KEY_USER_EMAIL));
+            loadDashboard();
         }
     }
-    @Override
-    protected void onPause() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -onPause- The activity is being paused.");
-        super.onPause();
-    }
-    @Override
-    protected void onStop() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -onStop- The activity is being stopped.");
-        super.onStop();
-    }
-    @Override
-    protected void onDestroy() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -onDestroy- The activity is being destroyed.");
-        super.onDestroy();
+
+    private void loadDashboard() {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -loadDashboard-");
+        Intent classListActivityIntent = new Intent(this, ClassListActivity.class);
+        if(session.userIsProfessor()) {
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -loadDashboard-userIsProfessor");
+            classListActivityIntent.putExtra(Constants.KEY_ROLE_PROFESSOR, true);
+        }
+        startActivity(classListActivityIntent);
+        finish();
     }
 }

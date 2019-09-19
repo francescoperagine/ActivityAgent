@@ -2,8 +2,8 @@ package it.teamgdm.sms.dibapp;
 
 public final class Constants {
 
-    public static final String CLASS_LIST_ACTION = "classDetail";
-    public static final String GEOFENCE_RECEIVER_ACTION = "geofenceBroadcastReceiverAction";
+    static final String CLASS_LIST_ACTION = "classDetail";
+    static final String GEOFENCE_RECEIVER_ACTION = "geofenceBroadcastReceiverAction";
     static final String TAG = "dibApp";
     static final String PREFERENCE_FILE_KEY = "it.teamgdm.dibApp.userSession";
 
@@ -16,6 +16,7 @@ public final class Constants {
 
     static String USER_IS_LOGGED_IN = "userIsLoggedIn";
 
+    static final String KEY_ITEM_ID = "item_id";
     static final String KEY_USER_ID = "ID";
     static final String KEY_USER_NAME = "name";
     static final String KEY_USER_SURNAME = "surname";

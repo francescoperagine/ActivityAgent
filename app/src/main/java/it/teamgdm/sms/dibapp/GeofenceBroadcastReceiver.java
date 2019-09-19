@@ -14,22 +14,23 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -onReceive-" + intent.toString());
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onReceive-");
         this.context = context;
 
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
+
+        // Gets the transition event
+        int geofenceTransition = geofencingEvent.getGeofenceTransition();
+
+        // Forwards the transition event only if there's a variation
+        if(geofenceTransition == geofenceLastTriggeredAction) return;
+        geofenceLastTriggeredAction = geofenceTransition;
 
         if (geofencingEvent.hasError()) {
             String errorMessage = GeofenceErrorMessages.getErrorString(context, geofencingEvent.getErrorCode());
             Log.i(Constants.TAG, getClass().getSimpleName() + " -onReceive-ERROR-" + errorMessage);
             return;
         }
-
-        // Gets the transition type and forwards it to the ClassDetailActivity
-        int geofenceTransition = geofencingEvent.getGeofenceTransition();
-
-        if(geofenceTransition == geofenceLastTriggeredAction) return;
-        geofenceLastTriggeredAction = geofenceTransition;
 
         Intent geofenceTransitionIntent = new Intent(context, ClassDetailActivity.class);
         geofenceTransitionIntent.setAction(Constants.GEOFENCE_RECEIVER_ACTION);

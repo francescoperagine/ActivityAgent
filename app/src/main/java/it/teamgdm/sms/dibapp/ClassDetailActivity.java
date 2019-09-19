@@ -24,17 +24,18 @@ public class ClassDetailActivity extends BaseActivity implements BaseFragment.On
 
     Bundle savedInstanceState;
     Bundle arguments = new Bundle();
-    ClassDashboardFragment fragment = new ClassDashboardFragment();
-
-    GeofenceBroadcastReceiver geofenceBroadcastReceiver = new GeofenceBroadcastReceiver();
-    int geofenceReceiverLastAction = 0;
-    GeofenceAPI geofenceAPI = new GeofenceAPI(this);
+    ClassDashboardFragment fragment;
+    GeofenceBroadcastReceiver geofenceBroadcastReceiver;
+    GeofenceAPI geofenceAPI;
+    static private int geofenceReceiverLastAction = 0;
 
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-");
         super.onCreate(savedInstanceState);
         this.savedInstanceState = savedInstanceState;
         askGeofencePermissions();
+        geofenceBroadcastReceiver = new GeofenceBroadcastReceiver();
+        geofenceAPI = new GeofenceAPI(this);
         geofenceAPI.geofenceInit();
         // Sets the BroadcastReceiver to receive only the transition's updates from the GeofenceAPI pending intent
         IntentFilter intentFilter = new IntentFilter(Constants.GEOFENCE_TRANSITION_ACTION);
@@ -55,23 +56,24 @@ public class ClassDetailActivity extends BaseActivity implements BaseFragment.On
         // http://developer.android.com/guide/components/fragments.html
         //
 
-        actionHandler();
-
         if (savedInstanceState == null) {
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -onStart-adding fragment");
             // Create the detail fragment and add it to the activity using a fragment transaction.
+            fragment = new ClassDashboardFragment();
+            setArguments();
             fragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction().add(R.id.examDetailContainer, fragment).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.examDetailContainer, fragment).commit();
         }
     }
 
-    void actionHandler() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -actionHandler-");
+    void setArguments() {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -setArguments-");
         switch (Objects.requireNonNull(getIntent().getAction())) {
             case Constants.CLASS_LIST_ACTION:
                 // Sends the exam details to the fragment
-                int examID = Objects.requireNonNull(getIntent()).getIntExtra(ClassDashboardFragment.ARG_ITEM_ID, 0);
+                int examID = Objects.requireNonNull(getIntent()).getIntExtra(Constants.KEY_ITEM_ID, 0);
                 Exam exam = StudentCareer.getClassFromID(examID);
-                arguments.putInt(ClassDashboardFragment.ARG_ITEM_ID, examID);
+                arguments.putInt(Constants.KEY_ITEM_ID, examID);
                 arguments.putSerializable(String.valueOf(examID), exam);
                 break;
             case Constants.GEOFENCE_RECEIVER_ACTION:
@@ -120,15 +122,6 @@ public class ClassDetailActivity extends BaseActivity implements BaseFragment.On
         }
     }
 
-    @Override
-    public void onAttachFragment(@NonNull Fragment fragment) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -onAttachFragment-");
-        if(fragment instanceof BaseFragment) {
-            BaseFragment baseFragment = (BaseFragment) fragment;
-            baseFragment.setOnClickedItemListener(this);
-        }
-    }
-
     int getLayoutResource() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -getLayoutResource-");
         return R.layout.activity_class_detail;
@@ -167,19 +160,8 @@ public class ClassDetailActivity extends BaseActivity implements BaseFragment.On
         } else {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -setClassAttendance-TRUE");
             arguments.putBoolean(Constants.KEY_CLASS_PARTECIPATION, true);
+            // Register the lesson's attendance into the DB
         }
-    }
-
-    @Override
-    protected void onResume() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -onResume-");
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -onPause-");
-        super.onPause();
     }
 
     @Override

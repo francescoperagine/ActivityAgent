@@ -1,5 +1,6 @@
 package it.teamgdm.sms.dibapp;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,7 +17,7 @@ import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private Session session;
+
     private EditText editTextEmail, editTextPassword;
     private Button buttonSignIn;
     private Button buttonRegister;
@@ -27,11 +28,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-");
         super.onCreate(savedInstanceState);
-
-        session = new Session(getApplicationContext());
-        if(session.userIsLoggedIn()){
-            loadDashboard();
-        }
         setContentView(R.layout.activity_login);
 
         editTextEmail = findViewById(R.id.email);
@@ -60,17 +56,16 @@ public class LoginActivity extends AppCompatActivity {
         }
     };
 
-    private void loginInit() {
+    public void loginInit() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -loginInit-");
-        boolean loginComplete = false;
-        if(validateInputs()) {
-            loginComplete = login();
+        Intent mainActivityIntent = new Intent();
+        mainActivityIntent.putExtra(Constants.KEY_USER_EMAIL, email);
+        if(validateInputs() & login()) {
+            setResult(Activity.RESULT_OK, mainActivityIntent);
+        } else {
+            setResult(Activity.RESULT_CANCELED, mainActivityIntent);
         }
-        if(loginComplete) {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -loginInit-loginComplete-TRUE");
-            session.setAccess(this, email);
-            loadDashboard();
-        }
+        finish();
     }
 
     private final OnClickListener buttonRegisterListener = new OnClickListener() {
@@ -121,7 +116,7 @@ public class LoginActivity extends AppCompatActivity {
             JSONArray response = asyncTaskConnection.get();
             Log.i(Constants.TAG, getClass().getSimpleName() + " -setAccess- response:" + response.toString());
             String message = response.getJSONObject(0).getString(Constants.KEY_MESSAGE);
-            int codeResult = (int) response.getJSONObject(0).getInt(Constants.KEY_CODE);
+            int codeResult = response.getJSONObject(0).getInt(Constants.KEY_CODE);
 
             Log.i(Constants.TAG, getClass().getSimpleName() + " -setAccess- Code: " + codeResult + " \tMessage: " + message);
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
@@ -137,40 +132,5 @@ public class LoginActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return false;
-    }
-
-    /**
-     * Launch Dashboard Activity on Successful Login
-     *
-     */
-    private void loadDashboard() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -loadDashboard-");
-        Intent classListActivityIntent = new Intent(this, ClassListActivity.class);
-        if(session.userIsProfessor()) {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -loadDashboard-userIsProfessor");
-            classListActivityIntent.putExtra(Constants.KEY_ROLE_PROFESSOR, true);
-        }
-        startActivity(classListActivityIntent);
-    }
-
-    @Override
-    protected void onResume() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -onResume-");
-        super.onResume();
-    }
-    @Override
-    protected void onPause() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -onPause-");
-        super.onPause();
-    }
-    @Override
-    protected void onStop() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -onStop-");
-        super.onStop();
-    }
-    @Override
-    protected void onDestroy() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -onDestroy-");
-        super.onDestroy();
     }
 }

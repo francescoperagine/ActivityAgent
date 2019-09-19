@@ -53,7 +53,7 @@ class GeofenceAPI {
         builder.setRequestId(geofenceName);
         builder.setCircularRegion(latitude, longitude, circularMeterRadius);
         builder.setExpirationDuration(Geofence.NEVER_EXPIRE);
-        builder.setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_DWELL);
+        builder.setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_DWELL | Geofence.GEOFENCE_TRANSITION_EXIT);
         builder.setLoiteringDelay(Constants.GEOFENCE_TRANSITION_DWELL_TIME);
         builder.setRequestId(requestID);
         return builder.build();
@@ -119,20 +119,6 @@ class GeofenceAPI {
         if(Session.geofencePermissionGranted) {
             geofencingClient.removeGeofences(geofencePendingIntent);
             Log.i(Constants.TAG, getClass().getSimpleName() + " -removeGeofences-Geofences removed from pending intent");
-        }
-    }
-
-    String getTransitionString(int transitionType) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -getTransitionString-");
-        switch (transitionType) {
-            case Geofence.GEOFENCE_TRANSITION_ENTER:
-                return context.getString(R.string.geofence_transition_enter);
-            case Geofence.GEOFENCE_TRANSITION_DWELL:
-                return context.getString(R.string.geofence_transition_dwelling);
-            case Geofence.GEOFENCE_TRANSITION_EXIT:
-                return context.getString(R.string.geofence_transition_left);
-            default:
-                return context.getString(R.string.unknown_geofence_transition);
         }
     }
 }

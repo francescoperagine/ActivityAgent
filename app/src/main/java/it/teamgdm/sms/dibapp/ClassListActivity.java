@@ -129,18 +129,18 @@ public class ClassListActivity extends BaseActivity {
                 Log.i(Constants.TAG, getClass().getSimpleName() + " SimpleItemRecyclerViewAdapter-OnClickListener- Exam " + exam);
                 if (mTwoPane) {
                     Bundle arguments = new Bundle();
-                    arguments.putInt(ClassDashboardFragment.ARG_ITEM_ID, exam.getID());
-                    Log.i(Constants.TAG, getClass().getSimpleName() + " SimpleItemRecyclerViewAdapter-OnClickListener-mTwoPane- arguments " + ClassDashboardFragment.ARG_ITEM_ID + " " + exam.getID());
+                    arguments.putInt(Constants.KEY_ITEM_ID, exam.getID());
+                    Log.i(Constants.TAG, getClass().getSimpleName() + " SimpleItemRecyclerViewAdapter-OnClickListener-mTwoPane- arguments " + Constants.KEY_ITEM_ID + " " + exam.getID());
                     ClassDashboardFragment fragment = new ClassDashboardFragment();
                     fragment.setArguments(arguments);
                     mParentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.exam_detail_container, fragment).commit();
                 } else {
                     Context context = view.getContext();
-                    Intent intent = new Intent(context, ClassDetailActivity.class);
-                    intent.setAction(Constants.CLASS_LIST_ACTION);
-                    intent.putExtra(ClassDashboardFragment.ARG_ITEM_ID, exam.getID());
-                    Log.i(Constants.TAG, getClass().getSimpleName() + " SimpleItemRecyclerViewAdapter-OnClickListener- putExtra " + ClassDashboardFragment.ARG_ITEM_ID + " " + exam.getID());
-                    context.startActivity(intent);
+                    Intent classDetailIntent = new Intent(context, ClassDetailActivity.class);
+                    classDetailIntent.setAction(Constants.CLASS_LIST_ACTION);
+                    classDetailIntent.putExtra(Constants.KEY_ITEM_ID, exam.getID());
+                    Log.i(Constants.TAG, getClass().getSimpleName() + " SimpleItemRecyclerViewAdapter-OnClickListener- putExtra " + Constants.KEY_ITEM_ID + " " + exam.getID());
+                    context.startActivity(classDetailIntent);
                 }
             }
         };

@@ -1,6 +1,5 @@
 package it.teamgdm.sms.dibapp;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,23 +9,15 @@ import android.widget.Button;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import androidx.annotation.NonNull;
-
 import com.google.android.gms.location.Geofence;
 
 import java.util.Objects;
 
 public class ClassDashboardFragment extends BaseFragment implements View.OnClickListener {
 
-    /**
-     * The fragment argument representing the item ID that this fragment
-     * represents.
-     */
-    static final String ARG_ITEM_ID = "item_id";
     private boolean classPartecipation;
     private Exam exam;
-    ToggleButton buttonPartecipate;
-    Button buttonEvaluate, buttonHistory, buttonInformation;
+    private ToggleButton buttonPartecipate;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -42,9 +33,9 @@ public class ClassDashboardFragment extends BaseFragment implements View.OnClick
         super.onCreate(savedInstanceState);
 
         assert getArguments() != null;
-        if (getArguments().containsKey(ARG_ITEM_ID)) {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-argument " + getArguments().getInt(ARG_ITEM_ID));
-            int id = getArguments().getInt(ARG_ITEM_ID);
+        if (getArguments().containsKey(Constants.KEY_ITEM_ID)) {
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-argument " + getArguments().getInt(Constants.KEY_ITEM_ID));
+            int id = getArguments().getInt(Constants.KEY_ITEM_ID);
             exam = (Exam) getArguments().getSerializable(String.valueOf(id));
         }
 
@@ -59,9 +50,9 @@ public class ClassDashboardFragment extends BaseFragment implements View.OnClick
         View rootView = inflater.inflate(R.layout.fragment_class_dashboard, container, false);
 
         buttonPartecipate = rootView.findViewById(R.id.partecipate);
-        buttonEvaluate = rootView.findViewById(R.id.evaluate);
-        buttonHistory = rootView.findViewById(R.id.history);
-        buttonInformation = rootView.findViewById(R.id.information);
+        Button buttonEvaluate = rootView.findViewById(R.id.evaluate);
+        Button buttonHistory = rootView.findViewById(R.id.history);
+        Button buttonInformation = rootView.findViewById(R.id.information);
 
         buttonPartecipate.setOnClickListener(this);
         buttonEvaluate.setOnClickListener(this);
@@ -71,6 +62,7 @@ public class ClassDashboardFragment extends BaseFragment implements View.OnClick
         buttonPartecipate.setEnabled(false);
         buttonEvaluate.setEnabled(false);
 
+        assert getArguments() != null;
         if(getArguments().containsKey(Constants.GEOFENCE_RECEIVER_ACTION)) {
             buttonHandler(getArguments().getInt(Constants.GEOFENCE_RECEIVER_ACTION));
         }
@@ -84,12 +76,14 @@ public class ClassDashboardFragment extends BaseFragment implements View.OnClick
 
     private void buttonHandler(int geofenceAction) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -toggleEnabler-");
-        Toast.makeText(getContext(), Constants.GEOFENCE_TRANSITION_ACTION + " " + geofenceAction, Toast.LENGTH_LONG).show();
         if(geofenceAction == Geofence.GEOFENCE_TRANSITION_EXIT) {
+            Toast.makeText(getContext(), getResources().getString(R.string.geofence_transition_left), Toast.LENGTH_LONG).show();
             buttonPartecipate.setEnabled(false);
         } else if (geofenceAction == Geofence.GEOFENCE_TRANSITION_ENTER) {
+            Toast.makeText(getContext(), getResources().getString(R.string.geofence_transition_enter), Toast.LENGTH_LONG).show();
             buttonPartecipate.setEnabled(true);
         } else { //user is dwelling in the geofence
+            Toast.makeText(getContext(), getResources().getString(R.string.geofence_transition_dwelling), Toast.LENGTH_LONG).show();
             buttonPartecipate.setEnabled(true);
             attendanceHandler();
         }
@@ -104,12 +98,6 @@ public class ClassDashboardFragment extends BaseFragment implements View.OnClick
             Log.i(Constants.TAG, getClass().getSimpleName() + " -setAttendance-checked FALSE");
             buttonPartecipate.setChecked(false);
         }
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -onAttach-");
-        super.onAttach(context);
     }
 
     @Override
