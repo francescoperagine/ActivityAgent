@@ -5,6 +5,7 @@
     package="it.teamgdm.sms.dibapp"
     tools:ignore="GoogleAppIndexingWarning">
 
+
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" tools:ignore="ManifestOrder" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -25,6 +26,16 @@
         tools:targetApi="n">
 
         <activity
+            android:name=".SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".MainActivity" />
+        <activity android:name=".RegisterActivity" />
+        <activity android:name=".LoginActivity"/>
+        <activity
             android:name=".ClassListActivity"
             android:label="@string/title_exam_list" />
         <activity
@@ -35,21 +46,16 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="it.teamgdm.sms.dibapp.ClassListActivity" />
         </activity>
-        <activity
-            android:name=".SplashActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <activity android:name=".ProfileActivity" />
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" />
-        <activity android:name=".RegisterActivity" />
-        <activity android:name=".LoginActivity"/>
-        <activity android:name=".MainActivity" />
-        <receiver android:name=".GeofenceBroadcastReceiver"/>
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.geo.dibapp"
+            android:value="AIzaSyDFaIq_Xvymvwd1HfwALGlA565CfNH_vds" />
     </application>
 
 </manifest>

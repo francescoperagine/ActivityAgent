@@ -2,6 +2,8 @@ package it.teamgdm.sms.dibapp;
 
 public final class Constants {
 
+    public static final String CLASS_LIST_ACTION = "classDetail";
+    public static final String GEOFENCE_RECEIVER_ACTION = "geofenceBroadcastReceiverAction";
     static final String TAG = "dibApp";
     static final String PREFERENCE_FILE_KEY = "it.teamgdm.dibApp.userSession";
 
@@ -41,6 +43,7 @@ public final class Constants {
     static final String GET_CLASS_LIST = "getClassList";
     static final String GET_ROLE_LIST = "getRoleList";
     static final String GET_DEGREECOURSE_LIST = "getDegreecourseList";
+    static final String KEY_CLASS_PARTECIPATION = "classPartecipation";
 
     // DB STUDENT_CAREER TABLE ATTRIBUTES
 
@@ -55,16 +58,17 @@ public final class Constants {
 
     // GEOFENCE
 
-    static final String GEOFENCE_TRANSITION_DWELLS = "Dwelling in geofence";
+    static final String GEOFENCE_TRANSITION_ACTION = "geoFenceTransitionAction";
 
-    static final int GEOFENCE_TRANSITION_DWELL_TIME = 10*60*1000; // need to wait for at least 10 seconds before the trigger
+    static final int GEOFENCE_TRANSITION_DWELL_TIME = 10*1000; // need to wait for at least some seconds before the trigger
     static final int GEOFENCE_PERMISSION_REQUEST_CODE = 1;
-    static final int GEOFENCE_METER_RADIUS_DIB = 30;
-    static final int GEOFENCE_METER_RADIUS_PDA = 20;
+    static final int GEOFENCE_METER_RADIUS_DIB = 100;
+    static final int GEOFENCE_METER_RADIUS_PDA = 100;
 
     static final String GEOFENCE_DIB_NAME = "Dipartimento di Informatica";
     static final double GEOFENCE_DIB_LATITUDE = 41.109725;
     static final double GEOFENCE_DIB_LONGITUDE = 16.881521;
+
 
     static final String GEOFENCE_PDA_NAME = "Palazzo delle Aule";
     static final double GEOFENCE_PDA_LATITUDE = 41.109388;

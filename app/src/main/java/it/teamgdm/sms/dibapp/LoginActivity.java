@@ -68,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
         }
         if(loginComplete) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -loginInit-loginComplete-TRUE");
-            session.login(this, email);
+            session.setAccess(this, email);
             loadDashboard();
         }
     }
@@ -108,7 +108,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private boolean login() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -login-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -setAccess-");
         JSONObject data = new JSONObject();
 
         //Populate the data parameters
@@ -119,20 +119,20 @@ public class LoginActivity extends AppCompatActivity {
             AsyncTaskConnection asyncTaskConnection = new AsyncTaskConnection();
             asyncTaskConnection.execute(data);
             JSONArray response = asyncTaskConnection.get();
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -login- response:" + response.toString());
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -setAccess- response:" + response.toString());
             String message = response.getJSONObject(0).getString(Constants.KEY_MESSAGE);
             int codeResult = (int) response.getJSONObject(0).getInt(Constants.KEY_CODE);
 
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -login- Code: " + codeResult + " \tMessage: " + message);
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -setAccess- Code: " + codeResult + " \tMessage: " + message);
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
             if (codeResult == Constants.LOGIN_OK_CODE) {
-                Log.i(Constants.TAG, getClass().getSimpleName() + " -login-Constants.LOGIN_OK_CODE-");
+                Log.i(Constants.TAG, getClass().getSimpleName() + " -setAccess-Constants.LOGIN_OK_CODE-");
                 return true;
             } else {
-                Log.i(Constants.TAG, getClass().getSimpleName() + " -login-LOGIN_CODE_NOT_OK-");
+                Log.i(Constants.TAG, getClass().getSimpleName() + " -setAccess-LOGIN_CODE_NOT_OK-");
             }
         } catch (Exception e) {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -login- Exception-");
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -setAccess- Exception-");
             Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }

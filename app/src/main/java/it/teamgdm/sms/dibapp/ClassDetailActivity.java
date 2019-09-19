@@ -2,16 +2,17 @@ package it.teamgdm.sms.dibapp;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+
+import java.util.Objects;
 
 /**
  * An activity representing a single Exam detail screen. This
@@ -22,26 +23,27 @@ import androidx.fragment.app.Fragment;
 public class ClassDetailActivity extends BaseActivity implements BaseFragment.OnClickedItemListener{
 
     Bundle savedInstanceState;
-    Exam exam;
     Bundle arguments = new Bundle();
-    boolean userDwellsInGeofence;
-    Fragment fragment;
-    GeofenceAPI geofenceAPI;
+    ClassDashboardFragment fragment = new ClassDashboardFragment();
+
+    GeofenceBroadcastReceiver geofenceBroadcastReceiver = new GeofenceBroadcastReceiver();
+    int geofenceReceiverLastAction = 0;
+    GeofenceAPI geofenceAPI = new GeofenceAPI(this);
 
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-");
         super.onCreate(savedInstanceState);
         this.savedInstanceState = savedInstanceState;
         askGeofencePermissions();
+        geofenceAPI.geofenceInit();
+        // Sets the BroadcastReceiver to receive only the transition's updates from the GeofenceAPI pending intent
+        IntentFilter intentFilter = new IntentFilter(Constants.GEOFENCE_TRANSITION_ACTION);
+        registerReceiver(geofenceBroadcastReceiver, intentFilter);
     }
 
     protected void onStart() {
-
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onStart-");
         super.onStart();
-        if(Session.GEOFENCE_PERMISSION_GRANTED) {
-            geofenceAPI = new GeofenceAPI(this);
-            geofenceAPI.geofenceInit();
-        }
 
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity
@@ -53,89 +55,36 @@ public class ClassDetailActivity extends BaseActivity implements BaseFragment.On
         // http://developer.android.com/guide/components/fragments.html
         //
 
-        if(getIntent() != null) {
-            userDwellsInGeofence = getIntent().getBooleanExtra(Constants.GEOFENCE_TRANSITION_DWELLS, false);
-        }
+        actionHandler();
+
         if (savedInstanceState == null) {
-            // Create the detail fragment and add it to the activity
-            // using a fragment transaction.
-            int examID = getIntent().getIntExtra(ClassDashboardFragment.ARG_ITEM_ID, 0);
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate- examID " + examID);
-            arguments.putInt(ClassDashboardFragment.ARG_ITEM_ID, examID);
-            arguments.putBoolean(Constants.GEOFENCE_TRANSITION_DWELLS, userDwellsInGeofence);
-            exam = StudentCareer.getClassFromID(examID);
-            arguments.putSerializable(String.valueOf(examID), exam);
-            ClassDashboardFragment fragment = new ClassDashboardFragment();
-            initFragment(fragment);
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate- Exam " + exam);
-        }
-
-    }
-
-    private void initFragment(Fragment fragment) {
-        fragment.setArguments(arguments);
-        getSupportFragmentManager().beginTransaction().add(R.id.examDetailContainer, fragment).commit();
-    }
-
-    @Override
-    public void onAttachFragment(@NonNull Fragment fragment) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -onAttachFragment-");
-        if(fragment instanceof BaseFragment) {
-            BaseFragment baseFragment = (BaseFragment) fragment;
-            baseFragment.setOnClickedItemListener(this);
+            // Create the detail fragment and add it to the activity using a fragment transaction.
+            fragment.setArguments(arguments);
+            getSupportFragmentManager().beginTransaction().add(R.id.examDetailContainer, fragment).commit();
         }
     }
 
-    @Override
-    int getLayoutResource() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -getLayoutResource-");
-        return R.layout.activity_class_detail;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -onOptionsItemSelected-");
-        int id = item.getItemId();
-        if (id == android.R.id.home) {
-            // This ID represents the Home or Up button. In the case of this
-            // activity, the Up button is shown. For
-            // more details, see the Navigation pattern on Android Design:
-            //
-            // http://developer.android.com/design/patterns/navigation.html#up-vs-back
-            //
-            navigateUpTo(new Intent(this, ClassListActivity.class));
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onItemSelected(int selectedActionResource) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -onItemSelected-action " + selectedActionResource);
-        switch (selectedActionResource) {
-            case R.id.partecipate:
-
-            case R.id.evaluate:
-      //          fragment = new ClassEvaluateFragment();
-       //         fragment.setArguments(arguments);
-            case R.id.history:
-      //          fragment = new ClassHistoryFragment();
-      //          fragment.setArguments(arguments);
+    void actionHandler() {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -actionHandler-");
+        switch (Objects.requireNonNull(getIntent().getAction())) {
+            case Constants.CLASS_LIST_ACTION:
+                // Sends the exam details to the fragment
+                int examID = Objects.requireNonNull(getIntent()).getIntExtra(ClassDashboardFragment.ARG_ITEM_ID, 0);
+                Exam exam = StudentCareer.getClassFromID(examID);
+                arguments.putInt(ClassDashboardFragment.ARG_ITEM_ID, examID);
+                arguments.putSerializable(String.valueOf(examID), exam);
                 break;
-            case R.id.information:
-                fragment = new ClassInformationFragment();
-                fragment.setArguments(arguments);
+            case Constants.GEOFENCE_RECEIVER_ACTION:
+                int geofenceTransitionAction = getIntent().getIntExtra(Constants.GEOFENCE_RECEIVER_ACTION, 0);
+                if(geofenceTransitionAction != geofenceReceiverLastAction) {
+                    // Forwards the new geofence's transition code to the fragment
+                    arguments.putInt(Constants.GEOFENCE_RECEIVER_ACTION, geofenceTransitionAction);
+                    geofenceReceiverLastAction = geofenceTransitionAction;
+                }
                 break;
             default:
                 break;
         }
-        initFragment(fragment);
-    }
-
-    protected void onDestroy() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -onDestroy-");
-        super.onDestroy();
-        geofenceAPI.removeGeofences();
     }
 
     void askGeofencePermissions() {
@@ -145,7 +94,7 @@ public class ClassDetailActivity extends BaseActivity implements BaseFragment.On
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, Constants.GEOFENCE_PERMISSION_REQUEST_CODE);
         } else {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -askGeofencePermissions-PERMISSION GRANTED");
-            Session.GEOFENCE_PERMISSION_GRANTED = true;
+            Session.geofencePermissionGranted = true;
         }
     }
 
@@ -157,10 +106,10 @@ public class ClassDetailActivity extends BaseActivity implements BaseFragment.On
             if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Log.i(Constants.TAG, getClass().getSimpleName() + " -onRequestPermissionsResult-PERMISSION GRANTED");
                 // permission was granted, yay!
-                Session.GEOFENCE_PERMISSION_GRANTED = true;
+                Session.geofencePermissionGranted = true;
             } else {
                 Log.i(Constants.TAG, getClass().getSimpleName() + " -onRequestPermissionsResult-PERMISSION DENIED");
-                Session.GEOFENCE_PERMISSION_GRANTED = false;
+                Session.geofencePermissionGranted = false;
                 // permission denied, boo!
                 new AlertDialog.Builder(this)
                         .setTitle(R.string.geofence_insufficient_permissions_title)
@@ -169,5 +118,75 @@ public class ClassDetailActivity extends BaseActivity implements BaseFragment.On
                         .show();
             }
         }
+    }
+
+    @Override
+    public void onAttachFragment(@NonNull Fragment fragment) {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onAttachFragment-");
+        if(fragment instanceof BaseFragment) {
+            BaseFragment baseFragment = (BaseFragment) fragment;
+            baseFragment.setOnClickedItemListener(this);
+        }
+    }
+
+    int getLayoutResource() {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -getLayoutResource-");
+        return R.layout.activity_class_detail;
+    }
+
+    public void onItemSelected(int selectedActionResource) {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onItemSelected-action " + selectedActionResource);
+        Fragment fragment = null;
+        switch (selectedActionResource) {
+            case R.id.partecipate:
+                setClassAttendance();
+                fragment = new ClassDashboardFragment();
+                break;
+            case R.id.evaluate:
+                //          fragment = new ClassEvaluateFragment();
+                break;
+            case R.id.history:
+                //          fragment = new ClassHistoryFragment();
+                break;
+            case R.id.information:
+                //          fragment = new ClassInformationFragment();
+                break;
+            default:
+                break;
+        }
+        assert fragment != null;
+        fragment.setArguments(arguments);
+    }
+
+    // Updates the class attendance flag
+    private void setClassAttendance() {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -setClassAttendance-");
+        if(Session.getSharedPreference(Constants.KEY_CLASS_PARTECIPATION, false)) {
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -setClassAttendance-FALSE");
+            arguments.putBoolean(Constants.KEY_CLASS_PARTECIPATION, false);
+        } else {
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -setClassAttendance-TRUE");
+            arguments.putBoolean(Constants.KEY_CLASS_PARTECIPATION, true);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onResume-");
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onPause-");
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onDestroy-");
+        super.onDestroy();
+        geofenceAPI.removeGeofences();
+        unregisterReceiver(geofenceBroadcastReceiver);
     }
 }

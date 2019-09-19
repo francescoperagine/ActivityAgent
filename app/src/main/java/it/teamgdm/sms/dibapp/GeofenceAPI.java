@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.location.LocationManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -61,18 +63,28 @@ class GeofenceAPI {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -registerGeofences-");
 
         geofencingClient.addGeofences(getGeofencingRequest(), getGeofencePendingIntent())
-                .addOnSuccessListener((Activity) context, new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.i(Constants.TAG, getClass().getSimpleName() + " -registerGeofences-onSuccess");
+            .addOnSuccessListener((Activity) context, new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Log.i(Constants.TAG, getClass().getSimpleName() + " -registerGeofences-onSuccess");
+                    Toast.makeText(context, R.string.geofence_is_up, Toast.LENGTH_SHORT).show();
+                }
+            })
+            .addOnFailureListener((Activity) context, new OnFailureListener() {
+            @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.i(Constants.TAG, getClass().getSimpleName() + " -registerGeofences-onFailure " );
+                    e.printStackTrace();
+                    LocationManager manager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+                    assert manager != null;
+                    if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+                        Log.e("Provider", "Provider is not avaible");
                     }
-                })
-                .addOnFailureListener((Activity) context, new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.i(Constants.TAG, getClass().getSimpleName() + " -registerGeofences-onFailure");
+                    if (!manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
+                        Log.e("Network Provider", "Provider is not avaible");
                     }
-                });
+                }
+            });
     }
 
     private GeofencingRequest getGeofencingRequest() {
@@ -89,22 +101,38 @@ class GeofenceAPI {
         // Reuse the PendingIntent if we already have it.
         if (geofencePendingIntent == null) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -getGeofencePendingIntent-NULL");
-            Intent geofenceBroadcastReceiverIntent = new Intent(context, GeofenceBroadcastReceiver.class);
+            Intent geofenceBroadcastIntent = new Intent(Constants.GEOFENCE_TRANSITION_ACTION);
             // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when
             // calling addGeofences() and removeGeofences().
-            geofencePendingIntent = PendingIntent.getBroadcast(context.getApplicationContext(), requestID, geofenceBroadcastReceiverIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            geofencePendingIntent = PendingIntent.getBroadcast(context.getApplicationContext(), requestID, geofenceBroadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         }
         if (geofencePendingIntent == null) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -getGeofencePendingIntent-STILL NULL!!!");
+        } else {
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -getGeofencePendingIntent-NOT NULL ANYMORE.");
         }
         return geofencePendingIntent;
     }
 
     void removeGeofences() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -removeGeofences-");
-        if(Session.GEOFENCE_PERMISSION_GRANTED) {
+        if(Session.geofencePermissionGranted) {
             geofencingClient.removeGeofences(geofencePendingIntent);
             Log.i(Constants.TAG, getClass().getSimpleName() + " -removeGeofences-Geofences removed from pending intent");
+        }
+    }
+
+    String getTransitionString(int transitionType) {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -getTransitionString-");
+        switch (transitionType) {
+            case Geofence.GEOFENCE_TRANSITION_ENTER:
+                return context.getString(R.string.geofence_transition_enter);
+            case Geofence.GEOFENCE_TRANSITION_DWELL:
+                return context.getString(R.string.geofence_transition_dwelling);
+            case Geofence.GEOFENCE_TRANSITION_EXIT:
+                return context.getString(R.string.geofence_transition_left);
+            default:
+                return context.getString(R.string.unknown_geofence_transition);
         }
     }
 }

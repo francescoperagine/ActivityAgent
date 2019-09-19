@@ -12,13 +12,14 @@
     tools:context=".ClassDetailActivity"
     tools:ignore="MergeRootFrame">
 
-    <Button
+    <ToggleButton
         android:id="@+id/partecipate"
-        android:layout_width="206dp"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:text="@string/partecipateButtonText"
+        android:textOff="@string/partecipateButtonText"
+        android:textOn="@string/partecipateUndoButtonText"
         app:layout_constraintBottom_toTopOf="@+id/horizontalGuideline"
-        app:layout_constraintEnd_toStartOf="@id/verticalGuideline"
+        app:layout_constraintEnd_toStartOf="@+id/verticalGuideline"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

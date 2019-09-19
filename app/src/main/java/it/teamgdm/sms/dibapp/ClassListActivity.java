@@ -69,16 +69,19 @@ public class ClassListActivity extends BaseActivity {
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -setupRecyclerView-");
         ArrayList<Exam> classList;
+        JSONArray classListLoader;
 
         if(loginIntent.hasExtra(Constants.KEY_ROLE_PROFESSOR)) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -setupRecyclerView-professorTeaching");
             ProfessorTeaching professorTeaching = new ProfessorTeaching();
-            professorTeaching.setClassList(loadClassList(Constants.KEY_ROLE_PROFESSOR));
+            classListLoader = loadClassList(Constants.KEY_ROLE_PROFESSOR);
+            professorTeaching.setClassList(classListLoader);
             classList = professorTeaching.getClassList();
         } else {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -setupRecyclerView-studentCareer");
             StudentCareer studentCareer = new StudentCareer();
-            studentCareer.setClassList(loadClassList(Constants.KEY_ROLE_STUDENT));
+            classListLoader = loadClassList(Constants.KEY_ROLE_STUDENT);
+            studentCareer.setClassList(classListLoader);
             classList = studentCareer.getClassList();
         }
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, classList, mTwoPane));
@@ -134,14 +137,13 @@ public class ClassListActivity extends BaseActivity {
                 } else {
                     Context context = view.getContext();
                     Intent intent = new Intent(context, ClassDetailActivity.class);
+                    intent.setAction(Constants.CLASS_LIST_ACTION);
                     intent.putExtra(ClassDashboardFragment.ARG_ITEM_ID, exam.getID());
                     Log.i(Constants.TAG, getClass().getSimpleName() + " SimpleItemRecyclerViewAdapter-OnClickListener- putExtra " + ClassDashboardFragment.ARG_ITEM_ID + " " + exam.getID());
                     context.startActivity(intent);
                 }
             }
         };
-
-
 
         @NonNull
         @Override

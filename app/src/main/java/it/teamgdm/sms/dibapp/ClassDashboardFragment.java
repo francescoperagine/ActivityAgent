@@ -7,8 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
+
+import com.google.android.gms.location.Geofence;
 
 import java.util.Objects;
 
@@ -19,8 +23,10 @@ public class ClassDashboardFragment extends BaseFragment implements View.OnClick
      * represents.
      */
     static final String ARG_ITEM_ID = "item_id";
-    boolean userDwellsInGeofence;
+    private boolean classPartecipation;
     private Exam exam;
+    ToggleButton buttonPartecipate;
+    Button buttonEvaluate, buttonHistory, buttonInformation;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -39,8 +45,11 @@ public class ClassDashboardFragment extends BaseFragment implements View.OnClick
         if (getArguments().containsKey(ARG_ITEM_ID)) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-argument " + getArguments().getInt(ARG_ITEM_ID));
             int id = getArguments().getInt(ARG_ITEM_ID);
-            userDwellsInGeofence = getArguments().getBoolean(Constants.GEOFENCE_TRANSITION_DWELLS);
             exam = (Exam) getArguments().getSerializable(String.valueOf(id));
+        }
+
+        if(getArguments().containsKey(Constants.KEY_CLASS_PARTECIPATION)) {
+            classPartecipation = getArguments().getBoolean(Constants.KEY_CLASS_PARTECIPATION);
         }
     }
 
@@ -49,22 +58,21 @@ public class ClassDashboardFragment extends BaseFragment implements View.OnClick
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreateView-");
         View rootView = inflater.inflate(R.layout.fragment_class_dashboard, container, false);
 
-        Button buttonPartecipate = rootView.findViewById(R.id.partecipate);
-        Button buttonEvaluate = rootView.findViewById(R.id.evaluate);
-        Button buttonHistory = rootView.findViewById(R.id.history);
-        Button buttonInformation = rootView.findViewById(R.id.information);
+        buttonPartecipate = rootView.findViewById(R.id.partecipate);
+        buttonEvaluate = rootView.findViewById(R.id.evaluate);
+        buttonHistory = rootView.findViewById(R.id.history);
+        buttonInformation = rootView.findViewById(R.id.information);
 
         buttonPartecipate.setOnClickListener(this);
         buttonEvaluate.setOnClickListener(this);
         buttonHistory.setOnClickListener(this);
         buttonInformation.setOnClickListener(this);
 
-        if(/* Session.GEOFENCE_PERMISSION_GRANTED && */ userDwellsInGeofence) {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreateView-GEOFENCE_PERMISSION_GRANTED");
-            buttonPartecipate.setEnabled(true);
-        } else {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreateView-GEOFENCE_PERMISSION_NOT_GRANTED");
-            buttonPartecipate.setEnabled(false);
+        buttonPartecipate.setEnabled(false);
+        buttonEvaluate.setEnabled(false);
+
+        if(getArguments().containsKey(Constants.GEOFENCE_RECEIVER_ACTION)) {
+            buttonHandler(getArguments().getInt(Constants.GEOFENCE_RECEIVER_ACTION));
         }
 
         if (exam != null) {
@@ -72,6 +80,30 @@ public class ClassDashboardFragment extends BaseFragment implements View.OnClick
             Objects.requireNonNull(getActivity()).setTitle(exam.getName());
         }
         return rootView;
+    }
+
+    private void buttonHandler(int geofenceAction) {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -toggleEnabler-");
+        Toast.makeText(getContext(), Constants.GEOFENCE_TRANSITION_ACTION + " " + geofenceAction, Toast.LENGTH_LONG).show();
+        if(geofenceAction == Geofence.GEOFENCE_TRANSITION_EXIT) {
+            buttonPartecipate.setEnabled(false);
+        } else if (geofenceAction == Geofence.GEOFENCE_TRANSITION_ENTER) {
+            buttonPartecipate.setEnabled(true);
+        } else { //user is dwelling in the geofence
+            buttonPartecipate.setEnabled(true);
+            attendanceHandler();
+        }
+    }
+
+    private void attendanceHandler() {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -setAttendance-");
+        if(classPartecipation) {
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -setAttendance-checked TRUE");
+            buttonPartecipate.setChecked(true);
+        } else {
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -setAttendance-checked FALSE");
+            buttonPartecipate.setChecked(false);
+        }
     }
 
     @Override

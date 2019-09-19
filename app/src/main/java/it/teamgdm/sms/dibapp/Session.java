@@ -17,7 +17,7 @@ import java.util.concurrent.ExecutionException;
 
 class Session {
 
-    static boolean GEOFENCE_PERMISSION_GRANTED;
+    static boolean geofencePermissionGranted;
 
     private static Context applicationContext;
 
@@ -33,8 +33,13 @@ class Session {
         sharedPreferencesEditor = sharedPreferences.edit();
     }
 
-    void login(Context context, String email) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -login-");
+    public static boolean getSharedPreference(String key, boolean defaultValue) {
+        return sharedPreferences.getBoolean(key, defaultValue);
+    }
+
+    void setAccess(Context context, String email) {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -setAccess-");
+        sharedPreferencesEditor.putBoolean(Constants.USER_IS_LOGGED_IN, true);
         JSONObject userDetails = getUserDetails(context, email);
         assert userDetails != null;
         setUserInSharedPreferences(userDetails);
@@ -99,7 +104,7 @@ class Session {
     }
 
     boolean userIsProfessor() {
-        Log.i(Constants.TAG, Session.class.getSimpleName() + " -userIsProfessor-");
+        Log.i(Constants.TAG, Session.class.getSimpleName() + " -userIsProfessor?-");
         return Constants.KEY_ROLE_PROFESSOR.equals(sharedPreferences.getString(Constants.KEY_USER_ROLE_NAME, null));
     }
 }
