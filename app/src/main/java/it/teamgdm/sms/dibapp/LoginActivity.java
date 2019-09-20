@@ -1,6 +1,5 @@
 package it.teamgdm.sms.dibapp;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,12 +9,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import org.json.JSONArray;
-import org.json.JSONObject;
+import org.json.JSONException;
 
-public class LoginActivity extends AppCompatActivity {
+import java.util.HashMap;
+
+public class LoginActivity extends BaseActivity {
 
 
     private EditText editTextEmail, editTextPassword;
@@ -28,13 +27,17 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
 
         editTextEmail = findViewById(R.id.email);
         editTextPassword = findViewById(R.id.password);
 
         buttonSignIn = findViewById(R.id.sign_inButton);
         buttonRegister = findViewById(R.id.registerButton);
+    }
+
+    @Override
+    int getLayoutResource() {
+        return R.layout.activity_login;
     }
 
     @Override
@@ -58,13 +61,17 @@ public class LoginActivity extends AppCompatActivity {
 
     public void loginInit() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -loginInit-");
-        Intent mainActivityIntent = new Intent();
-        mainActivityIntent.putExtra(Constants.KEY_USER_EMAIL, email);
+        Intent mainActivityIntent = new Intent(this, MainActivity.class);
         if(validateInputs() & login()) {
-            setResult(Activity.RESULT_OK, mainActivityIntent);
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -loginInit-RESULT_OK");
+            mainActivityIntent.putExtra(Constants.USER_LOGIN, Constants.LOGIN_OK_CODE);
+            mainActivityIntent.putExtra(Constants.KEY_USER_EMAIL, email);
         } else {
-            setResult(Activity.RESULT_CANCELED, mainActivityIntent);
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -loginInit-RESULT_CANCELED");
+            mainActivityIntent.putExtra(Constants.USER_LOGIN, Constants.LOGIN_FAILED_CODE);
+            finish();
         }
+        startActivity(mainActivityIntent);
         finish();
     }
 
@@ -74,6 +81,7 @@ public class LoginActivity extends AppCompatActivity {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -OnClickListener-buttonRegisterListener-onClick-");
             Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
             startActivity(registerIntent);
+            finish();
         }
     };
 
@@ -103,32 +111,24 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private boolean login() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -setAccess-");
-        JSONObject data = new JSONObject();
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -login-");
+        HashMap<String, String> params = new HashMap<>();
+        params.put(Constants.KEY_ACTION, Constants.USER_LOGIN);
+        params.put(Constants.KEY_USER_EMAIL, email);
+        params.put(Constants.KEY_USER_PASSWORD, password);
+        JSONArray response = getFromDB(params);
 
-        //Populate the data parameters
         try {
-            data.put(Constants.KEY_ACTION, Constants.USER_LOGIN);
-            data.put(Constants.KEY_USER_EMAIL, email);
-            data.put(Constants.KEY_USER_PASSWORD, password);
-            AsyncTaskConnection asyncTaskConnection = new AsyncTaskConnection();
-            asyncTaskConnection.execute(data);
-            JSONArray response = asyncTaskConnection.get();
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -setAccess- response:" + response.toString());
             String message = response.getJSONObject(0).getString(Constants.KEY_MESSAGE);
-            int codeResult = response.getJSONObject(0).getInt(Constants.KEY_CODE);
-
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -setAccess- Code: " + codeResult + " \tMessage: " + message);
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+            int codeResult = response.getJSONObject(0).getInt(Constants.KEY_CODE);
             if (codeResult == Constants.LOGIN_OK_CODE) {
                 Log.i(Constants.TAG, getClass().getSimpleName() + " -setAccess-Constants.LOGIN_OK_CODE-");
                 return true;
             } else {
                 Log.i(Constants.TAG, getClass().getSimpleName() + " -setAccess-LOGIN_CODE_NOT_OK-");
             }
-        } catch (Exception e) {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -setAccess- Exception-");
-            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         return false;

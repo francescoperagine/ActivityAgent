@@ -13,14 +13,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.concurrent.ExecutionException;
+import java.util.HashMap;
 
 class Session {
 
     static boolean geofencePermissionGranted;
 
     private static Context applicationContext;
-
     private static SharedPreferences.Editor sharedPreferencesEditor;
     private static SharedPreferences sharedPreferences;
 
@@ -40,27 +39,17 @@ class Session {
     void setAccess(Context context, String email) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -setAccess-");
         sharedPreferencesEditor.putBoolean(Constants.USER_IS_LOGGED_IN, true);
-        JSONObject userDetails = getUserDetails(context, email);
-        assert userDetails != null;
-        setUserInSharedPreferences(userDetails);
-    }
-
-    private JSONObject getUserDetails(Context context, String email) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -getUserDetails-");
-        JSONObject data = new JSONObject();
+        sharedPreferencesEditor.putString(Constants.KEY_USER_EMAIL, email);
+        HashMap<String, String> param = new HashMap<>();
+        param.put(Constants.KEY_ACTION, Constants.GET_USER_DETAILS);
+        param.put(Constants.KEY_USER_EMAIL, email);
+        JSONArray response = BaseActivity.getFromDB(param);
         try {
-            data.put(Constants.KEY_ACTION, Constants.GET_USER_DETAILS);
-            data.put(Constants.KEY_USER_EMAIL, email);
-            AsyncTaskConnection asyncTaskConnection = new AsyncTaskConnection();
-            asyncTaskConnection.execute(data);
-            JSONArray response = asyncTaskConnection.get();
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -getUserDetails-response: " + response.toString());
-            return response.getJSONObject(0);
-        } catch (ExecutionException | InterruptedException | JSONException e) {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -getUserDetails-Exception");
+            JSONObject userDetails = response.getJSONObject(0);
+            setUserInSharedPreferences(userDetails);
+        } catch (JSONException e) {
             Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
             e.printStackTrace();
-            return null;
         }
     }
 
@@ -101,6 +90,11 @@ class Session {
     static int getUserID() {
         Log.i(Constants.TAG, Session.class.getSimpleName() + " -getUserID-");
         return sharedPreferences.getInt(Constants.KEY_USER_ID,0);
+    }
+
+    static String getUserEmail() {
+        Log.i(Constants.TAG, Session.class.getSimpleName() + " -getUserEmail-");
+        return sharedPreferences.getString(Constants.KEY_USER_EMAIL, Constants.KEY_EMPTY);
     }
 
     boolean userIsProfessor() {

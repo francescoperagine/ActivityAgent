@@ -23,28 +23,23 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
 
         session = new Session(getApplicationContext());
-        if(session.userIsLoggedIn()){
+        if(session.userIsLoggedIn()) {
+            session.setAccess(this, Session.getUserEmail());
+            loadDashboard();
+        } else if(getIntent().hasExtra(Constants.USER_LOGIN) & getIntent().getIntExtra(Constants.USER_LOGIN,0) == Constants.LOGIN_OK_CODE){
+            String email = getIntent().getStringExtra(Constants.KEY_USER_EMAIL);
+            session.setAccess(this, email);
             loadDashboard();
         } else {
             Intent loginIntent = new Intent(this, LoginActivity.class);
-            startActivityForResult(loginIntent, Constants.LOGIN_OK_CODE);
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -onActivityResult-");
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == Constants.LOGIN_OK_CODE && resultCode == RESULT_OK) {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -onActivityResult-RESULT_OK");
-            session.setAccess(this, data.getStringExtra(Constants.KEY_USER_EMAIL));
-            loadDashboard();
+            startActivity(loginIntent);
         }
     }
 
     private void loadDashboard() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -loadDashboard-");
         Intent classListActivityIntent = new Intent(this, ClassListActivity.class);
+
         if(session.userIsProfessor()) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -loadDashboard-userIsProfessor");
             classListActivityIntent.putExtra(Constants.KEY_ROLE_PROFESSOR, true);

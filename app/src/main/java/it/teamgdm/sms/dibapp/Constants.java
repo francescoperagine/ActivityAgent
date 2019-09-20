@@ -29,6 +29,7 @@ public final class Constants {
     static final String KEY_EMPTY = "";
     static final String KEY_BLANK = " ";
     static final int LOGIN_OK_CODE = 201;
+    static final int LOGIN_FAILED_CODE = 301;
     static final int USER_CREATED_CODE = 202;
 
     // USER ROLES
@@ -44,6 +45,7 @@ public final class Constants {
     static final String GET_CLASS_LIST = "getClassList";
     static final String GET_ROLE_LIST = "getRoleList";
     static final String GET_DEGREECOURSE_LIST = "getDegreecourseList";
+    static final String GET_CLASS_DETAIL = "getClassDetail";
     static final String KEY_CLASS_PARTECIPATION = "classPartecipation";
 
     // DB STUDENT_CAREER TABLE ATTRIBUTES

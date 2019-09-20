@@ -13,11 +13,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
+import java.util.HashMap;
 
 /**
  * An activity representing a list of Exams. This activity
@@ -68,43 +66,24 @@ public class ClassListActivity extends BaseActivity {
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -setupRecyclerView-");
-        ArrayList<Exam> classList;
-        JSONArray classListLoader;
-
+        ClassList classListData;
+        HashMap<String, String> params = new HashMap<>();
+        params.put(Constants.KEY_ACTION, Constants.GET_CLASS_LIST);
+        params.put(Constants.KEY_USER_ID, String.valueOf(Session.getUserID()));
         if(loginIntent.hasExtra(Constants.KEY_ROLE_PROFESSOR)) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -setupRecyclerView-professorTeaching");
-            ProfessorTeaching professorTeaching = new ProfessorTeaching();
-            classListLoader = loadClassList(Constants.KEY_ROLE_PROFESSOR);
-            professorTeaching.setClassList(classListLoader);
-            classList = professorTeaching.getClassList();
+            params.put(Constants.KEY_USER_ROLE_NAME, Constants.KEY_ROLE_PROFESSOR);
+            classListData = new ProfessorTeaching();
         } else {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -setupRecyclerView-studentCareer");
-            StudentCareer studentCareer = new StudentCareer();
-            classListLoader = loadClassList(Constants.KEY_ROLE_STUDENT);
-            studentCareer.setClassList(classListLoader);
-            classList = studentCareer.getClassList();
+            params.put(Constants.KEY_USER_ROLE_NAME, Constants.KEY_ROLE_STUDENT);
+            classListData = new StudentCareer();
         }
+        JSONArray classListLoader = getFromDB(params);
+        classListData.setClassList(classListLoader);
+        ArrayList<Exam> classList = classListData.getClassList();
+
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, classList, mTwoPane));
-    }
-
-    private static JSONArray loadClassList(String userRole) {
-        Log.i(Constants.TAG, ClassListActivity.class.getSimpleName() + " -loadClassList-");
-        JSONObject data = new JSONObject();
-        JSONArray response = new JSONArray();
-        try {
-            data.put(Constants.KEY_ACTION, Constants.GET_CLASS_LIST);
-            data.put(Constants.KEY_USER_ID, Session.getUserID());
-            data.put(Constants.KEY_USER_ROLE_NAME, userRole);
-
-            Log.i(Constants.TAG, ClassListActivity.class.getSimpleName() + " -loadClassList-data "+data);
-            AsyncTaskConnection asyncTaskConnection = new AsyncTaskConnection();
-            asyncTaskConnection.execute(data);
-            response = asyncTaskConnection.get();
-            Log.i(Constants.TAG, ClassListActivity.class.getSimpleName() + " -loadClassList-response "+response);
-        } catch (JSONException | ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
-        return response;
     }
 
     public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
@@ -125,8 +104,8 @@ public class ClassListActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 Exam exam = ClassList.getClassFromID((Integer) view.getTag());
-
                 Log.i(Constants.TAG, getClass().getSimpleName() + " SimpleItemRecyclerViewAdapter-OnClickListener- Exam " + exam);
+
                 if (mTwoPane) {
                     Bundle arguments = new Bundle();
                     arguments.putInt(Constants.KEY_ITEM_ID, exam.getID());
