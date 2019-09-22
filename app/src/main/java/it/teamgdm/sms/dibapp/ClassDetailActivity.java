@@ -1,15 +1,8 @@
 package it.teamgdm.sms.dibapp;
 
-import android.Manifest;
-import android.app.AlertDialog;
-import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import java.util.Objects;
@@ -24,22 +17,12 @@ public class ClassDetailActivity extends BaseActivity implements BaseFragment.On
 
     Bundle savedInstanceState;
     Bundle arguments = new Bundle();
-    ClassDashboardFragment fragment;
-    GeofenceBroadcastReceiver geofenceBroadcastReceiver;
-    GeofenceAPI geofenceAPI;
-    static private int geofenceReceiverLastAction = 0;
 
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-");
         super.onCreate(savedInstanceState);
         this.savedInstanceState = savedInstanceState;
-        askGeofencePermissions();
-        geofenceBroadcastReceiver = new GeofenceBroadcastReceiver();
-        geofenceAPI = new GeofenceAPI(this);
-        geofenceAPI.geofenceInit();
-        // Sets the BroadcastReceiver to receive only the transition's updates from the GeofenceAPI pending intent
-        IntentFilter intentFilter = new IntentFilter(Constants.GEOFENCE_TRANSITION_ACTION);
-        registerReceiver(geofenceBroadcastReceiver, intentFilter);
+
     }
 
     protected void onStart() {
@@ -57,31 +40,32 @@ public class ClassDetailActivity extends BaseActivity implements BaseFragment.On
         //
 
         if (savedInstanceState == null) {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -onStart-adding fragment");
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -onStart-");
             // Create the detail fragment and add it to the activity using a fragment transaction.
-            fragment = new ClassDashboardFragment();
-            setArguments();
-            fragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction().replace(R.id.examDetailContainer, fragment).commit();
+            intentHandler();
         }
     }
 
-    void setArguments() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -setArguments-");
+    void intentHandler() {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -intentHandler-");
         switch (Objects.requireNonNull(getIntent().getAction())) {
             case Constants.CLASS_LIST_ACTION:
+                Log.i(Constants.TAG, getClass().getSimpleName() + " -intentHandler-CLASS_LIST_ACTION");
                 // Sends the exam details to the fragment
                 int examID = Objects.requireNonNull(getIntent()).getIntExtra(Constants.KEY_ITEM_ID, 0);
                 Exam exam = StudentCareer.getClassFromID(examID);
                 arguments.putInt(Constants.KEY_ITEM_ID, examID);
                 arguments.putSerializable(String.valueOf(examID), exam);
+                startFragment();
                 break;
             case Constants.GEOFENCE_RECEIVER_ACTION:
+                Log.i(Constants.TAG, getClass().getSimpleName() + " -intentHandler-GEOFENCE_RECEIVER_ACTION");
                 int geofenceTransitionAction = getIntent().getIntExtra(Constants.GEOFENCE_RECEIVER_ACTION, 0);
-                if(geofenceTransitionAction != geofenceReceiverLastAction) {
+                if(geofenceTransitionAction != GeofenceFragment.geofenceReceiverLastAction) {
                     // Forwards the new geofence's transition code to the fragment
                     arguments.putInt(Constants.GEOFENCE_RECEIVER_ACTION, geofenceTransitionAction);
-                    geofenceReceiverLastAction = geofenceTransitionAction;
+                    GeofenceFragment.geofenceReceiverLastAction = geofenceTransitionAction;
+                    startFragment();
                 }
                 break;
             default:
@@ -89,37 +73,11 @@ public class ClassDetailActivity extends BaseActivity implements BaseFragment.On
         }
     }
 
-    void askGeofencePermissions() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -askGeofencePermissions-");
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -askGeofencePermissions-PERMISSION DENIED");
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, Constants.GEOFENCE_PERMISSION_REQUEST_CODE);
-        } else {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -askGeofencePermissions-PERMISSION GRANTED");
-            Session.geofencePermissionGranted = true;
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -onRequestPermissionsResult-");
-        // If request is cancelled, the result arrays are empty.
-        if(requestCode == Constants.GEOFENCE_PERMISSION_REQUEST_CODE) {
-            if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Log.i(Constants.TAG, getClass().getSimpleName() + " -onRequestPermissionsResult-PERMISSION GRANTED");
-                // permission was granted, yay!
-                Session.geofencePermissionGranted = true;
-            } else {
-                Log.i(Constants.TAG, getClass().getSimpleName() + " -onRequestPermissionsResult-PERMISSION DENIED");
-                Session.geofencePermissionGranted = false;
-                // permission denied, boo!
-                new AlertDialog.Builder(this)
-                        .setTitle(R.string.geofence_insufficient_permissions_title)
-                        .setMessage(R.string.geofence_insufficient_permissions_message)
-                        .create()
-                        .show();
-            }
-        }
+    private void startFragment() {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -startFragment-");
+        ClassDashboardFragment fragment = new ClassDashboardFragment();
+        fragment.setArguments(arguments);
+        getSupportFragmentManager().beginTransaction().replace(R.id.classDetailContainer, fragment).commit();
     }
 
     int getLayoutResource() {
@@ -141,9 +99,6 @@ public class ClassDetailActivity extends BaseActivity implements BaseFragment.On
             case R.id.history:
                 //          fragment = new ClassHistoryFragment();
                 break;
-            case R.id.information:
-                //          fragment = new ClassInformationFragment();
-                break;
             default:
                 break;
         }
@@ -164,11 +119,4 @@ public class ClassDetailActivity extends BaseActivity implements BaseFragment.On
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -onDestroy-");
-        super.onDestroy();
-        geofenceAPI.removeGeofences();
-        unregisterReceiver(geofenceBroadcastReceiver);
-    }
 }

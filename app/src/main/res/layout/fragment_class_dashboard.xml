@@ -45,16 +45,6 @@
         app:layout_constraintTop_toTopOf="@+id/horizontalGuideline"
         app:layout_constraintVertical_bias="1.0" />
 
-    <Button
-        android:id="@+id/information"
-        android:layout_width="206dp"
-        android:layout_height="0dp"
-        android:text="@string/informationButton"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/verticalGuideline"
-        app:layout_constraintTop_toTopOf="@+id/horizontalGuideline" />
-
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/horizontalGuideline"
         android:layout_width="wrap_content"

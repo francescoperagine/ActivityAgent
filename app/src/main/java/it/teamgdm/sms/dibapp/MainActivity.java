@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
 
         session = new Session(getApplicationContext());
-        if(session.userIsLoggedIn()) {
+        if(session.userIsLoggedIn() & ! Session.getUserEmail().equals(Constants.KEY_EMPTY)) {
             session.setAccess(this, Session.getUserEmail());
             loadDashboard();
         } else if(getIntent().hasExtra(Constants.USER_LOGIN) & getIntent().getIntExtra(Constants.USER_LOGIN,0) == Constants.LOGIN_OK_CODE){

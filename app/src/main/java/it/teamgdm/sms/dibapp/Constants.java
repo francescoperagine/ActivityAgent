@@ -14,7 +14,7 @@ public final class Constants {
 
     // USER DETAILS
 
-    static String USER_IS_LOGGED_IN = "userIsLoggedIn";
+    static final String USER_IS_LOGGED_IN = "userIsLoggedIn";
 
     static final String KEY_ITEM_ID = "item_id";
     static final String KEY_USER_ID = "ID";
@@ -42,10 +42,10 @@ public final class Constants {
     static final String USER_LOGIN = "login";
     static final String USER_REGISTRATION = "registration";
     static final String GET_USER_DETAILS = "getUserDetails";
-    static final String GET_CLASS_LIST = "getClassList";
+    static final String GET_CLASS_DETAIL = "getClassDetail";
     static final String GET_ROLE_LIST = "getRoleList";
     static final String GET_DEGREECOURSE_LIST = "getDegreecourseList";
-    static final String GET_CLASS_DETAIL = "getClassDetail";
+    static final String GET_CURRENT_CLASS_LIST = "getCurrentClassList";
     static final String KEY_CLASS_PARTECIPATION = "classPartecipation";
 
     // DB STUDENT_CAREER TABLE ATTRIBUTES

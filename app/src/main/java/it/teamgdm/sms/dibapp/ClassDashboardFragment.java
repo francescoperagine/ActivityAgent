@@ -13,7 +13,7 @@ import com.google.android.gms.location.Geofence;
 
 import java.util.Objects;
 
-public class ClassDashboardFragment extends BaseFragment implements View.OnClickListener {
+public class ClassDashboardFragment extends GeofenceFragment implements View.OnClickListener {
 
     private boolean classPartecipation;
     private Exam exam;
@@ -52,12 +52,10 @@ public class ClassDashboardFragment extends BaseFragment implements View.OnClick
         buttonPartecipate = rootView.findViewById(R.id.partecipate);
         Button buttonEvaluate = rootView.findViewById(R.id.evaluate);
         Button buttonHistory = rootView.findViewById(R.id.history);
-        Button buttonInformation = rootView.findViewById(R.id.information);
 
         buttonPartecipate.setOnClickListener(this);
         buttonEvaluate.setOnClickListener(this);
         buttonHistory.setOnClickListener(this);
-        buttonInformation.setOnClickListener(this);
 
         buttonPartecipate.setEnabled(false);
         buttonEvaluate.setEnabled(false);

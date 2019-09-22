@@ -73,6 +73,7 @@
     <string name="unknown_geofence_transition">Geofence - unknown transition.</string>
     <string name="geofence_permissions_ask">Allow access to your location.</string>
     <string name="geofence_is_up">Geofence up</string>
+    <string name="class_list_empty_text">No classes scheduled for today.</string>
 
 
 </resources>

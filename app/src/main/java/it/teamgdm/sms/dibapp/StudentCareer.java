@@ -31,7 +31,7 @@ class StudentCareer extends ClassList{
                 exam.setPraise(o.optBoolean(Constants.KEY_PRAISE));
                 exam.setPassedDate(o.optString(Constants.KEY_PASSED_DATE));
             } catch (JSONException e) {
-                e.printStackTrace();
+                Log.i(Constants.TAG, StudentCareer.class.getSimpleName() + " -setClassList- IS NULL");
             }
             classList.add(exam);
         }

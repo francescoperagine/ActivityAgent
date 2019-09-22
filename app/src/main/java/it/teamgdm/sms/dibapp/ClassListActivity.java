@@ -33,6 +33,9 @@ public class ClassListActivity extends BaseActivity {
      */
     private boolean mTwoPane;
     Intent loginIntent;
+    RecyclerView recyclerView;
+    TextView textViewEmptyClassList;
+
 
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-");
@@ -47,10 +50,10 @@ public class ClassListActivity extends BaseActivity {
             mTwoPane = true;
         }
 
-        View recyclerView = findViewById(R.id.exam_list);
+        recyclerView = findViewById(R.id.class_list);
+        textViewEmptyClassList = findViewById(R.id.class_list_empty);
 
-        assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
+        setupRecyclerView();
     }
 
     @Override
@@ -64,11 +67,11 @@ public class ClassListActivity extends BaseActivity {
         return R.layout.activity_class_list;
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
+    private void setupRecyclerView() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -setupRecyclerView-");
         ClassList classListData;
         HashMap<String, String> params = new HashMap<>();
-        params.put(Constants.KEY_ACTION, Constants.GET_CLASS_LIST);
+        params.put(Constants.KEY_ACTION, Constants.GET_CURRENT_CLASS_LIST);
         params.put(Constants.KEY_USER_ID, String.valueOf(Session.getUserID()));
         if(loginIntent.hasExtra(Constants.KEY_ROLE_PROFESSOR)) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -setupRecyclerView-professorTeaching");
@@ -82,18 +85,24 @@ public class ClassListActivity extends BaseActivity {
         JSONArray classListLoader = getFromDB(params);
         classListData.setClassList(classListLoader);
         ArrayList<Exam> classList = classListData.getClassList();
-
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, classList, mTwoPane));
+        if(classList.isEmpty()) {
+            recyclerView.setVisibility(View.GONE);
+            textViewEmptyClassList.setVisibility(View.VISIBLE);
+        } else {
+            recyclerView.setVisibility(View.VISIBLE);
+            recyclerView.setAdapter(new ClassRecyclerViewAdapter(this, classList, mTwoPane));
+            textViewEmptyClassList.setVisibility(View.GONE);
+        }
     }
 
-    public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
+    public class ClassRecyclerViewAdapter extends RecyclerView.Adapter<ClassRecyclerViewAdapter.ViewHolder> {
 
         private final ClassListActivity mParentActivity;
         private final boolean mTwoPane;
         ArrayList<Exam> classList;
 
-        SimpleItemRecyclerViewAdapter(ClassListActivity parent, ArrayList<Exam> classList, boolean twoPane) {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -SimpleItemRecyclerViewAdapter-");
+        ClassRecyclerViewAdapter(ClassListActivity parent, ArrayList<Exam> classList, boolean twoPane) {
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -ClassRecyclerViewAdapter-");
             this.classList = classList;
             mParentActivity = parent;
             mTwoPane = twoPane;
@@ -104,12 +113,12 @@ public class ClassListActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 Exam exam = ClassList.getClassFromID((Integer) view.getTag());
-                Log.i(Constants.TAG, getClass().getSimpleName() + " SimpleItemRecyclerViewAdapter-OnClickListener- Exam " + exam);
+                Log.i(Constants.TAG, getClass().getSimpleName() + " ClassRecyclerViewAdapter-OnClickListener- Exam " + exam);
 
                 if (mTwoPane) {
                     Bundle arguments = new Bundle();
                     arguments.putInt(Constants.KEY_ITEM_ID, exam.getID());
-                    Log.i(Constants.TAG, getClass().getSimpleName() + " SimpleItemRecyclerViewAdapter-OnClickListener-mTwoPane- arguments " + Constants.KEY_ITEM_ID + " " + exam.getID());
+                    Log.i(Constants.TAG, getClass().getSimpleName() + " ClassRecyclerViewAdapter-OnClickListener-mTwoPane- arguments " + Constants.KEY_ITEM_ID + " " + exam.getID());
                     ClassDashboardFragment fragment = new ClassDashboardFragment();
                     fragment.setArguments(arguments);
                     mParentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.exam_detail_container, fragment).commit();
@@ -118,7 +127,7 @@ public class ClassListActivity extends BaseActivity {
                     Intent classDetailIntent = new Intent(context, ClassDetailActivity.class);
                     classDetailIntent.setAction(Constants.CLASS_LIST_ACTION);
                     classDetailIntent.putExtra(Constants.KEY_ITEM_ID, exam.getID());
-                    Log.i(Constants.TAG, getClass().getSimpleName() + " SimpleItemRecyclerViewAdapter-OnClickListener- putExtra " + Constants.KEY_ITEM_ID + " " + exam.getID());
+                    Log.i(Constants.TAG, getClass().getSimpleName() + " ClassRecyclerViewAdapter-OnClickListener- putExtra " + Constants.KEY_ITEM_ID + " " + exam.getID());
                     context.startActivity(classDetailIntent);
                 }
             }

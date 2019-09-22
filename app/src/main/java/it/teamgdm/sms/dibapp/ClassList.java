@@ -21,9 +21,7 @@ class ClassList {
         return classList;
     }
 
-    void setClassList(JSONArray studentCareerData) {
-
-    }
+    void setClassList(JSONArray studentCareerData) {}
 
     @NonNull
     public String toString() {

@@ -21,7 +21,7 @@ class ProfessorTeaching extends ClassList{
                 exam.setID(o.optInt(Constants.KEY_CLASS_ID));
                 exam.setName(o.optString(Constants.KEY_CLASS_NAME));
             } catch (JSONException e) {
-                e.printStackTrace();
+                Log.i(Constants.TAG, StudentCareer.class.getSimpleName() + " -setClassList- IS NULL");
             }
             classList.add(exam);
         }

@@ -1,14 +1,17 @@
 package it.teamgdm.sms.dibapp;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingClient;
@@ -67,7 +70,6 @@ class GeofenceAPI {
                 @Override
                 public void onSuccess(Void aVoid) {
                     Log.i(Constants.TAG, getClass().getSimpleName() + " -registerGeofences-onSuccess");
-                    Toast.makeText(context, R.string.geofence_is_up, Toast.LENGTH_SHORT).show();
                 }
             })
             .addOnFailureListener((Activity) context, new OnFailureListener() {
@@ -121,4 +123,46 @@ class GeofenceAPI {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -removeGeofences-Geofences removed from pending intent");
         }
     }
+
+    boolean checkGeofencePermissions() {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -checkGeofencePermissions-");
+        String[] permissions = setGeofencePermissions();
+        if (hasGeofencePermissions(permissions)) {
+            Session.geofencePermissionGranted = true;
+        } else {
+            askGeofencePermissions(permissions);
+        }
+        return hasGeofencePermissions(permissions);
+    }
+
+    private String[] setGeofencePermissions() {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -setGeofencePermissions-");
+        String[] permissions;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            permissions = new String[] {
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
+            };
+        } else {
+            permissions = new String[]{
+                    Manifest.permission.ACCESS_FINE_LOCATION
+            };
+        }
+        return permissions;
+    }
+
+    private boolean hasGeofencePermissions(String[] permissions) {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -hasGeofencePermissions-");
+        for(String permission : permissions) {
+            if(ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_DENIED) {
+                return false;
+            }
+        } return true;
+    }
+
+    private void askGeofencePermissions(String[] permissions) {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -askGeofencePermissions-");
+        ActivityCompat.requestPermissions((Activity) context, permissions, Constants.GEOFENCE_PERMISSION_REQUEST_CODE);
+    }
+
 }
