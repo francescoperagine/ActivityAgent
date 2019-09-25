@@ -8,35 +8,48 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import java.util.Objects;
-
-public abstract class GeofenceFragment extends BaseFragment {
+public abstract class GeofenceActivity extends BaseActivity implements GeofenceBroadcastReceiver.GeofenceBroadcastReceiverCallback {
 
     private GeofenceBroadcastReceiver geofenceBroadcastReceiver;
     private GeofenceAPI geofenceAPI;
+    Bundle savedInstanceState;
     static int geofenceReceiverLastAction = 0;
+    IntentFilter intentFilter;
+    Bundle arguments;
 
-    public void onCreate(Bundle savedInstanceState) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-");
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Sets the BroadcastReceiver to receive only the transition's updates from the GeofenceAPI pending intent
+        this.savedInstanceState = savedInstanceState;
+        geofenceBroadcastReceiver = new GeofenceBroadcastReceiver(this);
+        geofenceAPI = new GeofenceAPI(this);
+        intentFilter = new IntentFilter(Constants.GEOFENCE_TRANSITION_ACTION);
+        arguments  = new Bundle();
+        registerReceiver(geofenceBroadcastReceiver, intentFilter);
+        geofenceHandler();
     }
 
-    public void onStart() {
+    @Override
+    protected void onStart() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onStart-");
         super.onStart();
-        geofenceHandler();
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onPause-");
+        super.onDestroy();
+        geofenceAPI.removeGeofences();
+        unregisterReceiver(geofenceBroadcastReceiver);
     }
 
     private void geofenceHandler(){
         Log.i(Constants.TAG, getClass().getSimpleName() + " -geofenceHandler-");
-        geofenceAPI = new GeofenceAPI(getContext());
-        if(geofenceAPI.checkGeofencePermissions()) {
-            geofenceBroadcastReceiver = new GeofenceBroadcastReceiver();
-            IntentFilter intentFilter = new IntentFilter(Constants.GEOFENCE_TRANSITION_ACTION);
-            Objects.requireNonNull(getContext()).registerReceiver(geofenceBroadcastReceiver, intentFilter);
-
+        if(geofenceAPI.hasGeofencePermissions()) {
             geofenceAPI.geofenceInit();
+        } else {
+            geofenceAPI.askGeofencePermissions();
         }
     }
 
@@ -53,7 +66,7 @@ public abstract class GeofenceFragment extends BaseFragment {
                 Log.i(Constants.TAG, getClass().getSimpleName() + " -onRequestPermissionsResult-PERMISSION DENIED");
                 Session.geofencePermissionGranted = false;
                 // permission denied, boo!
-                new AlertDialog.Builder(getContext())
+                new AlertDialog.Builder(this)
                         .setTitle(R.string.geofence_insufficient_permissions_title)
                         .setMessage(R.string.geofence_insufficient_permissions_message)
                         .create()
@@ -62,12 +75,5 @@ public abstract class GeofenceFragment extends BaseFragment {
         }
     }
 
-    @Override
-    public void onPause() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -onPause-");
-        super.onPause();
-        geofenceAPI.removeGeofences();
-        getContext().unregisterReceiver(geofenceBroadcastReceiver);
-    }
 
 }

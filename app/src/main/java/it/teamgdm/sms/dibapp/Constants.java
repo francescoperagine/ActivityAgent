@@ -2,8 +2,8 @@ package it.teamgdm.sms.dibapp;
 
 public final class Constants {
 
+
     static final String CLASS_LIST_ACTION = "classDetail";
-    static final String GEOFENCE_RECEIVER_ACTION = "geofenceBroadcastReceiverAction";
     static final String TAG = "dibApp";
     static final String PREFERENCE_FILE_KEY = "it.teamgdm.dibApp.userSession";
 
@@ -16,8 +16,8 @@ public final class Constants {
 
     static final String USER_IS_LOGGED_IN = "userIsLoggedIn";
 
-    static final String KEY_ITEM_ID = "item_id";
-    static final String KEY_USER_ID = "ID";
+    static final String KEY_ITEM_ID = "itemID";
+    static final String KEY_USER_ID = "userID";
     static final String KEY_USER_NAME = "name";
     static final String KEY_USER_SURNAME = "surname";
     static final String KEY_USER_SERIAL_NUMBER = "serialNumber";
@@ -32,6 +32,10 @@ public final class Constants {
     static final int LOGIN_FAILED_CODE = 301;
     static final int USER_CREATED_CODE = 202;
 
+    // CLASS LESSON DETAIL
+
+
+
     // USER ROLES
 
     static final String KEY_ROLE_PROFESSOR = "professor";
@@ -42,7 +46,7 @@ public final class Constants {
     static final String USER_LOGIN = "login";
     static final String USER_REGISTRATION = "registration";
     static final String GET_USER_DETAILS = "getUserDetails";
-    static final String GET_CLASS_DETAIL = "getClassDetail";
+    static final String GET_CLASS_LESSON_DETAIL = "getClassLessonDetail";
     static final String GET_ROLE_LIST = "getRoleList";
     static final String GET_DEGREECOURSE_LIST = "getDegreecourseList";
     static final String GET_CURRENT_CLASS_LIST = "getCurrentClassList";
@@ -52,8 +56,15 @@ public final class Constants {
 
     static final String KEY_CLASS_ID = "classID";
     static final String KEY_CLASS_NAME = "className";
-    static final String KEY_CLASS_YEAR = "year";
-    static final String KEY_CLASS_SEMESTER = "semester";
+    static final String KEY_CLASS_CODE = "classCode";
+    static final String KEY_CLASS_DESCRIPTION = "classDescription";
+    static final String KEY_CLASS_LESSON_YEAR = "classYear";
+    static final String KEY_CLASS_LESSON_SEMESTER = "classSemester";
+    static final String KEY_CLASS_LESSON_DATE = "classLessonDate";
+    static final String KEY_CLASS_LESSON_TIME_START = "classLessonTimeStart";
+    static final String KEY_CLASS_LESSON_TIME_END ="classLessonTimeEnd";
+    static final String KEY_CLASS_LESSON_SUMMARY = "classLessonSummary";
+    static final String KEY_CLASS_LESSON_DESCRIPTION = "classLessonDescription";
     static final String KEY_PASSED = "passed";
     static final String KEY_VOTE = "vote";
     static final String KEY_PRAISE = "praise";
@@ -61,7 +72,7 @@ public final class Constants {
 
     // GEOFENCE
 
-    static final String GEOFENCE_TRANSITION_ACTION = "geoFenceTransitionAction";
+    static final String GEOFENCE_TRANSITION_ACTION = "geofenceTransitionAction";
 
     static final int GEOFENCE_TRANSITION_DWELL_TIME = 10*1000; // need to wait for at least some seconds before the trigger
     static final int GEOFENCE_PERMISSION_REQUEST_CODE = 1;

@@ -9,14 +9,14 @@ import java.util.ArrayList;
 
 class ClassList {
 
-    static ArrayList<Exam> classList;
+    static ArrayList<ClassLesson> classList;
 
     ClassList() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -ClassList-Constructor-");
         classList = new ArrayList<>();
     }
 
-    ArrayList<Exam> getClassList() {
+    ArrayList<ClassLesson> getClassList() {
         Log.i(Constants.TAG, StudentCareer.class.getSimpleName() + " -getClassList-");
         return classList;
     }

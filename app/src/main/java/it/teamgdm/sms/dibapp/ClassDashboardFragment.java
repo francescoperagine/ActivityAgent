@@ -1,47 +1,76 @@
 package it.teamgdm.sms.dibapp;
 
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import androidx.annotation.RequiresApi;
+
 import com.google.android.gms.location.Geofence;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.Objects;
 
-public class ClassDashboardFragment extends GeofenceFragment implements View.OnClickListener {
+public class ClassDashboardFragment extends BaseFragment implements View.OnClickListener {
 
+    private ClassLesson classLesson;
     private boolean classPartecipation;
-    private Exam exam;
-    private ToggleButton buttonPartecipate;
+
+    ToggleButton buttonPartecipate;
+    Button buttonEvaluate, buttonHistory;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public ClassDashboardFragment() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -ClassDashboardFragment-");
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-");
         super.onCreate(savedInstanceState);
+        if(getArguments() != null) {
+            if (getArguments().containsKey(Constants.KEY_ITEM_ID)) {
+                Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-argument " + getArguments().getInt(Constants.KEY_ITEM_ID));
 
-        assert getArguments() != null;
-        if (getArguments().containsKey(Constants.KEY_ITEM_ID)) {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-argument " + getArguments().getInt(Constants.KEY_ITEM_ID));
-            int id = getArguments().getInt(Constants.KEY_ITEM_ID);
-            exam = (Exam) getArguments().getSerializable(String.valueOf(id));
-        }
+                int classLessonID = getArguments().getInt(Constants.KEY_ITEM_ID);
+                classLesson = getClassLessonDetail(classLessonID);
+            }
 
-        if(getArguments().containsKey(Constants.KEY_CLASS_PARTECIPATION)) {
-            classPartecipation = getArguments().getBoolean(Constants.KEY_CLASS_PARTECIPATION);
+            if(getArguments().containsKey(Constants.KEY_CLASS_PARTECIPATION)) {
+                classPartecipation = getArguments().getBoolean(Constants.KEY_CLASS_PARTECIPATION);
+            }
         }
+    }
+
+    private ClassLesson getClassLessonDetail(int classLessonID) {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -getClassLessonDetail-");
+        HashMap<String, String> params = new HashMap<>();
+        params.put(Constants.KEY_ACTION, Constants.GET_CLASS_LESSON_DETAIL);
+        params.put(Constants.KEY_CLASS_ID, String.valueOf(classLessonID));
+        JSONArray classLessonDetailLoader = BaseActivity.getFromDB(params);
+        ClassLesson classLesson = null;
+        try {
+            JSONObject classLessonDetail = classLessonDetailLoader.getJSONObject(0);
+            classLesson = new ClassLesson();
+            classLesson.setClassLesson(classLessonDetail);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return classLesson;
     }
 
     @Override
@@ -49,31 +78,117 @@ public class ClassDashboardFragment extends GeofenceFragment implements View.OnC
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreateView-");
         View rootView = inflater.inflate(R.layout.fragment_class_dashboard, container, false);
 
-        buttonPartecipate = rootView.findViewById(R.id.partecipate);
-        Button buttonEvaluate = rootView.findViewById(R.id.evaluate);
-        Button buttonHistory = rootView.findViewById(R.id.history);
+        TextView className = rootView.findViewById(R.id.className);
+        TextView classYear = rootView.findViewById(R.id.classYear);
+        TextView classSemester = rootView.findViewById(R.id.classSemester);
+        TextView classCode = rootView.findViewById(R.id.classCode);
+        TextView classDescription = rootView.findViewById(R.id.classDescription);
+        TextView classLessonDate = rootView.findViewById(R.id.classLessonDate);
+        TextView classLessonTimeStart = rootView.findViewById(R.id.classLessonTimeStart);
+        TextView classLessonTimeEnd = rootView.findViewById(R.id.classLessonTimeEnd);
+        TextView classLessonSummary = rootView.findViewById(R.id.classLessonSummary);
+        TextView classLessonDescription = rootView.findViewById(R.id.classLessonDescription);
+        TextView classLessonInProgress = rootView.findViewById(R.id.classLessonInProgress);
 
-        buttonPartecipate.setOnClickListener(this);
-        buttonEvaluate.setOnClickListener(this);
-        buttonHistory.setOnClickListener(this);
+        className.setText(classLesson.name);
 
-        buttonPartecipate.setEnabled(false);
-        buttonEvaluate.setEnabled(false);
+        String year = getString(R.string.classYearText) + ": " + classLesson.year;
+        classYear.setText(year);
 
-        assert getArguments() != null;
-        if(getArguments().containsKey(Constants.GEOFENCE_RECEIVER_ACTION)) {
-            buttonHandler(getArguments().getInt(Constants.GEOFENCE_RECEIVER_ACTION));
+        String semester = getString(R.string.classSemesterText) + ": " + classLesson.semester;
+        classSemester.setText(semester);
+
+        String code = getString(R.string.classCodeText) + ": " + classLesson.code;
+        classCode.setText(code);
+
+        if(classLesson.classDescription.equals("null")) {
+            classDescription.setText(getString(R.string.noClassDescriptionSetText));
+        } else {
+            classDescription.setText(classLesson.classDescription);
         }
 
-        if (exam != null) {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreateView-exam not null. Exam" + exam);
-            Objects.requireNonNull(getActivity()).setTitle(exam.getName());
+        String lessonDate = getString(R.string.lessonDate) + "\n" + classLesson.getDateString();
+        classLessonDate.setText(lessonDate);
+
+        String lessonTimeStart = getString(R.string.lessonStartAt) + "\n" + classLesson.getTimeStartString();
+        classLessonTimeStart.setText(lessonTimeStart);
+
+        String lessonTimeEnd = getString(R.string.lessonEndAt) + "\n" + classLesson.getTimeEndString();
+        classLessonTimeEnd.setText(lessonTimeEnd);
+
+        if(classLesson.lessonSummary.equals("null")) {
+            classLessonSummary.setText(getString(R.string.noSummarySetText));
+        } else {
+            classLessonSummary.setText(classLesson.lessonSummary);
+        }
+
+        if(classLesson.lessonDescription.equals("null")) {
+            classLessonDescription.setText(getString(R.string.noLessonDescriptionSetText));
+        } else {
+            classLessonDescription.setText(classLesson.lessonDescription);
+        }
+
+        buttonPartecipate = rootView.findViewById(R.id.partecipate);
+        buttonEvaluate = rootView.findViewById(R.id.evaluate);
+        buttonHistory = rootView.findViewById(R.id.history);
+
+        buttonPartecipate.setOnClickListener(buttonPartecipateListener);
+        buttonEvaluate.setOnClickListener(buttonEvaluateListener);
+        buttonHistory.setOnClickListener(buttonHistoryListener);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            colorLessonInProgress(classLessonInProgress);
+        }
+
+        if(getArguments() != null && getArguments().containsKey(Constants.GEOFENCE_TRANSITION_ACTION)) {
+            int geofenceTransitionAction = getArguments().getInt(Constants.GEOFENCE_TRANSITION_ACTION);
+            buttonRangeEnabler(geofenceTransitionAction);
+            setAttendance();
+            setEvaluation();
+        }
+
+        if (classLesson != null) {
+            Objects.requireNonNull(getActivity()).setTitle(classLesson.getName());
         }
         return rootView;
     }
 
-    private void buttonHandler(int geofenceAction) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -toggleEnabler-");
+    private final View.OnClickListener buttonPartecipateListener = v -> {
+
+    };
+
+    private final View.OnClickListener buttonEvaluateListener = v -> {
+
+    };
+
+    private final View.OnClickListener buttonHistoryListener = v -> {
+
+    };
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void colorLessonInProgress(TextView classLessonInProgress) {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -colorLessonInProgress-");
+
+        DateTimeFormatter f = DateTimeFormatter.ofPattern("HH:mm:ss");
+        LocalTime timeStart = LocalTime.parse(String.valueOf(classLesson.timeStart), f);
+        LocalTime timeEnd = LocalTime.parse(String.valueOf(classLesson.timeEnd), f);
+        LocalTime now = LocalTime.now();
+
+        if(now.isAfter(timeStart) && now.isBefore(timeEnd)) {
+            classLessonInProgress.setText(R.string.classLessonInProgress);
+            classLessonInProgress.setBackgroundColor(Color.GREEN);
+        } else {
+            classLessonInProgress.setText(R.string.classLessonNotInProgress);
+            classLessonInProgress.setEnabled(false);
+        }
+    }
+
+    /**
+     * Enables or disables the partecipateButton
+     */
+
+    private void buttonRangeEnabler(int geofenceAction) {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -buttonRangeEnabler-");
         if(geofenceAction == Geofence.GEOFENCE_TRANSITION_EXIT) {
             Toast.makeText(getContext(), getResources().getString(R.string.geofence_transition_left), Toast.LENGTH_LONG).show();
             buttonPartecipate.setEnabled(false);
@@ -83,18 +198,26 @@ public class ClassDashboardFragment extends GeofenceFragment implements View.OnC
         } else { //user is dwelling in the geofence
             Toast.makeText(getContext(), getResources().getString(R.string.geofence_transition_dwelling), Toast.LENGTH_LONG).show();
             buttonPartecipate.setEnabled(true);
-            attendanceHandler();
         }
     }
 
-    private void attendanceHandler() {
+    private void setAttendance() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -setAttendance-");
         if(classPartecipation) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -setAttendance-checked TRUE");
-            buttonPartecipate.setChecked(true);
+            buttonPartecipate.setEnabled(true);
         } else {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -setAttendance-checked FALSE");
-            buttonPartecipate.setChecked(false);
+            buttonPartecipate.setEnabled(false);
+        }
+    }
+
+    private void setEvaluation() {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -setEvaluation-");
+        if(classPartecipation) {
+            buttonEvaluate.setEnabled(true);
+        } else {
+            buttonEvaluate.setEnabled(false);
         }
     }
 
@@ -102,12 +225,12 @@ public class ClassDashboardFragment extends GeofenceFragment implements View.OnC
     public void onDetach() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onDetach-");
         super.onDetach();
-        callback = null;
+        fragmentCallback = null;
     }
 
     @Override
     public void onClick(View view) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onClick-");
-        callback.onItemSelected(view.getId());
+        fragmentCallback.onItemSelected(view.getId());
     }
 }

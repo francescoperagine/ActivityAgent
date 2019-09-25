@@ -28,11 +28,13 @@ class GeofenceAPI {
     private ArrayList<Geofence> geofenceList;
     private PendingIntent geofencePendingIntent;
     private GeofencingClient geofencingClient;
+    private String[] permissions;
 
     GeofenceAPI(Context context) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -constructor-");
         this.context = context;
         geofenceList = new ArrayList<>();
+        permissions  = setGeofencePermissions();
     }
 
     void geofenceInit() {
@@ -124,17 +126,6 @@ class GeofenceAPI {
         }
     }
 
-    boolean checkGeofencePermissions() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -checkGeofencePermissions-");
-        String[] permissions = setGeofencePermissions();
-        if (hasGeofencePermissions(permissions)) {
-            Session.geofencePermissionGranted = true;
-        } else {
-            askGeofencePermissions(permissions);
-        }
-        return hasGeofencePermissions(permissions);
-    }
-
     private String[] setGeofencePermissions() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -setGeofencePermissions-");
         String[] permissions;
@@ -151,16 +142,18 @@ class GeofenceAPI {
         return permissions;
     }
 
-    private boolean hasGeofencePermissions(String[] permissions) {
+    boolean hasGeofencePermissions() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -hasGeofencePermissions-");
         for(String permission : permissions) {
             if(ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_DENIED) {
                 return false;
             }
-        } return true;
+        }
+        Session.geofencePermissionGranted = true;
+        return true;
     }
 
-    private void askGeofencePermissions(String[] permissions) {
+    void askGeofencePermissions() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -askGeofencePermissions-");
         ActivityCompat.requestPermissions((Activity) context, permissions, Constants.GEOFENCE_PERMISSION_REQUEST_CODE);
     }

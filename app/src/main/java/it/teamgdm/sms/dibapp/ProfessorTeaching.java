@@ -15,15 +15,15 @@ class ProfessorTeaching extends ClassList{
     void setClassList(JSONArray professorTeachingData) {
         Log.i(Constants.TAG, StudentCareer.class.getSimpleName() + " -setClassList- "+professorTeachingData);
         for (int i=0; i< professorTeachingData.length(); i++) {
-            Exam exam = new Exam();
+            ClassLesson classLesson = new ClassLesson();
             try {
                 JSONObject o = professorTeachingData.getJSONObject(i);
-                exam.setID(o.optInt(Constants.KEY_CLASS_ID));
-                exam.setName(o.optString(Constants.KEY_CLASS_NAME));
+                classLesson.setID(o.optInt(Constants.KEY_CLASS_ID));
+                classLesson.setName(o.optString(Constants.KEY_CLASS_NAME));
             } catch (JSONException e) {
                 Log.i(Constants.TAG, StudentCareer.class.getSimpleName() + " -setClassList- IS NULL");
             }
-            classList.add(exam);
+            classList.add(classLesson);
         }
     }
 }

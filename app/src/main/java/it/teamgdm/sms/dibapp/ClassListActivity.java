@@ -42,7 +42,7 @@ public class ClassListActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         loginIntent = getIntent();
 
-        if (findViewById(R.id.exam_detail_container) != null) {
+        if (findViewById(R.id.class_detail_container) != null) {
             // The detail container view will be present only in the
             // large-screen layouts (res/values-w900dp).
             // If this view is present, then the
@@ -84,7 +84,7 @@ public class ClassListActivity extends BaseActivity {
         }
         JSONArray classListLoader = getFromDB(params);
         classListData.setClassList(classListLoader);
-        ArrayList<Exam> classList = classListData.getClassList();
+        ArrayList<ClassLesson> classList = classListData.getClassList();
         if(classList.isEmpty()) {
             recyclerView.setVisibility(View.GONE);
             textViewEmptyClassList.setVisibility(View.VISIBLE);
@@ -99,9 +99,9 @@ public class ClassListActivity extends BaseActivity {
 
         private final ClassListActivity mParentActivity;
         private final boolean mTwoPane;
-        ArrayList<Exam> classList;
+        ArrayList<ClassLesson> classList;
 
-        ClassRecyclerViewAdapter(ClassListActivity parent, ArrayList<Exam> classList, boolean twoPane) {
+        ClassRecyclerViewAdapter(ClassListActivity parent, ArrayList<ClassLesson> classList, boolean twoPane) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -ClassRecyclerViewAdapter-");
             this.classList = classList;
             mParentActivity = parent;
@@ -121,7 +121,7 @@ public class ClassListActivity extends BaseActivity {
                     Log.i(Constants.TAG, getClass().getSimpleName() + " ClassRecyclerViewAdapter-OnClickListener-mTwoPane- arguments " + Constants.KEY_ITEM_ID + " " + exam.getID());
                     ClassDashboardFragment fragment = new ClassDashboardFragment();
                     fragment.setArguments(arguments);
-                    mParentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.exam_detail_container, fragment).commit();
+                    mParentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.class_detail_container, fragment).commit();
                 } else {
                     Context context = view.getContext();
                     Intent classDetailIntent = new Intent(context, ClassDetailActivity.class);

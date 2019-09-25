@@ -10,12 +10,15 @@ import com.google.android.gms.location.GeofencingEvent;
 public class GeofenceBroadcastReceiver extends BroadcastReceiver {
 
     static int geofenceLastTriggeredAction = 0;
-    Context context;
+    private GeofenceBroadcastReceiverCallback geofenceBroadcastReceiverCallback;
+
+    GeofenceBroadcastReceiver(GeofenceBroadcastReceiverCallback callback) {
+        this.geofenceBroadcastReceiverCallback = callback;
+    }
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -onReceive-");
-        this.context = context;
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onReceive-" + intent);
 
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
 
@@ -31,11 +34,10 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -onReceive-ERROR-" + errorMessage);
             return;
         }
+        geofenceBroadcastReceiverCallback.onTransitionAction(geofenceTransition);
+    }
 
-        Intent geofenceTransitionIntent = new Intent(context, ClassDetailActivity.class);
-        geofenceTransitionIntent.setAction(Constants.GEOFENCE_RECEIVER_ACTION);
-        geofenceTransitionIntent.putExtra(Constants.GEOFENCE_RECEIVER_ACTION, geofenceTransition);
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -onReceive-GEOFENCE_TRANSITION_ACTION-RECEIVED code " + geofenceTransition);
-        context.startActivity(geofenceTransitionIntent);
+    public interface GeofenceBroadcastReceiverCallback{
+        void onTransitionAction(int geofenceReceiverAction);
     }
 }

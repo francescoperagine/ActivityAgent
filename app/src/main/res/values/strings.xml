@@ -74,6 +74,17 @@
     <string name="geofence_permissions_ask">Allow access to your location.</string>
     <string name="geofence_is_up">Geofence up</string>
     <string name="class_list_empty_text">No classes scheduled for today.</string>
+    <string name="noClassDescriptionSetText">No description set for this class.</string>
+    <string name="classLessonInProgress">Lesson in progress...</string>
+    <string name="classLessonNotInProgress">No lesson at this time.</string>
+    <string name="classYearText">Year</string>
+    <string name="classSemesterText">Semester</string>
+    <string name="lessonStartAt">Start</string>
+    <string name="lessonDate">Date</string>
+    <string name="lessonEndAt">End</string>
+    <string name="noSummarySetText">No summary set.</string>
+    <string name="classCodeText">Code</string>
+    <string name="noLessonDescriptionSetText">No description has been set for this lesson.</string>
 
 
 </resources>
