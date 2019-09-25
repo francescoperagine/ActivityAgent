@@ -1,6 +1,5 @@
 package it.teamgdm.sms.dibapp;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,32 +9,24 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import org.json.JSONArray;
-import org.json.JSONObject;
+import org.json.JSONException;
 
-public class LoginActivity extends AppCompatActivity {
+import java.util.HashMap;
 
-    private Session session;
+public class LoginActivity extends BaseActivity {
+
+
     private EditText editTextEmail, editTextPassword;
     private Button buttonSignIn;
     private Button buttonRegister;
     private String email;
     private String password;
 
-    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onCreate-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-");
         super.onCreate(savedInstanceState);
-
-        session = new Session(getApplicationContext());
-        if(session.isLoggedIn()){
-            session.getUserFromSharedPreferences();
-            loadDashboard();
-        }
-        setContentView(R.layout.activity_login);
 
         editTextEmail = findViewById(R.id.email);
         editTextPassword = findViewById(R.id.password);
@@ -44,74 +35,64 @@ public class LoginActivity extends AppCompatActivity {
         buttonRegister = findViewById(R.id.registerButton);
     }
 
+    @Override
+    int getLayoutResource() {
+        return R.layout.activity_login;
+    }
+
+    @Override
     protected void onStart() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onStart-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onStart-");
         super.onStart();
 
         buttonSignIn.setOnClickListener(buttonSignInListener);
         buttonRegister.setOnClickListener(buttonRegisterListener);
     }
-    @Override
-    protected void onResume() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onResume-");
-        super.onResume();
-    }
-    @Override
-    protected void onPause() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onPause-");
-        super.onPause();
-    }
-    @Override
-    protected void onStop() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onStop-");
-        super.onStop();
-    }
-    @Override
-    protected void onDestroy() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onDestroy-");
-        super.onDestroy();
-    }
 
     private final OnClickListener buttonSignInListener = new OnClickListener() {
         @Override
         public void onClick(View view) {
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -OnClickListener-buttonSignInListener-onClick-");
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -OnClickListener-buttonSignInListener-onClick-");
             email = editTextEmail.getText().toString().toLowerCase().trim();
             password = editTextPassword.getText().toString().trim();
             loginInit();
         }
     };
 
-    private void loginInit() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -loginInit-");
-        boolean loginComplete = false;
-        if(validateInputs()) {
-            loginComplete = login();
+    public void loginInit() {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -loginInit-");
+        Intent mainActivityIntent = new Intent(this, MainActivity.class);
+        if(validateInputs() & login()) {
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -loginInit-RESULT_OK");
+            mainActivityIntent.putExtra(Constants.USER_LOGIN, Constants.LOGIN_OK_CODE);
+            mainActivityIntent.putExtra(Constants.KEY_USER_EMAIL, email);
+        } else {
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -loginInit-RESULT_CANCELED");
+            mainActivityIntent.putExtra(Constants.USER_LOGIN, Constants.LOGIN_FAILED_CODE);
+            finish();
         }
-        if(loginComplete) {
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -loginInit-loginComplete-TRUE");
-            session.login(email);
-            loadDashboard();
-        }
+        startActivity(mainActivityIntent);
+        finish();
     }
 
     private final OnClickListener buttonRegisterListener = new OnClickListener() {
         @Override
         public void onClick(View view) {
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -OnClickListener-buttonRegisterListener-onClick-");
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -OnClickListener-buttonRegisterListener-onClick-");
             Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
             startActivity(registerIntent);
+            finish();
         }
     };
 
     private boolean validateInputs() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -validateInputs-");
-        if(email.equals(Settings.KEY_EMPTY) ){
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -validateInputs-");
+        if(email.equals(Constants.KEY_EMPTY) ){
             editTextEmail.setError(getResources().getString(R.string.emailPromptHint) + " " + getResources().getString(R.string.inputCannotBeEmpty));
             editTextEmail.requestFocus();
             return false;
         }
-        if(password.equals(Settings.KEY_EMPTY)){
+        if(password.equals(Constants.KEY_EMPTY)){
             editTextPassword.setError(getResources().getString(R.string.passwordPromptHint) + " " + getResources().getString(R.string.inputCannotBeEmpty));
             editTextPassword.requestFocus();
             return false;
@@ -125,49 +106,31 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private boolean isEmailValid(CharSequence email) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -isEmailValid-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -isEmailValid-");
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
     private boolean login() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -login-");
-        JSONObject data = new JSONObject();
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -login-");
+        HashMap<String, String> params = new HashMap<>();
+        params.put(Constants.KEY_ACTION, Constants.USER_LOGIN);
+        params.put(Constants.KEY_USER_EMAIL, email);
+        params.put(Constants.KEY_USER_PASSWORD, password);
+        JSONArray response = getFromDB(params);
 
-        //Populate the data parameters
         try {
-            data.put(Settings.KEY_ACTION, Settings.USER_LOGIN);
-            data.put(Settings.KEY_USER_EMAIL, email);
-            data.put(Settings.KEY_PASSWORD, password);
-            AsyncTaskConnection asyncTaskConnection = new AsyncTaskConnection();
-            asyncTaskConnection.execute(data);
-            JSONArray response = asyncTaskConnection.get();
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -login- response:" + response.toString());
-            String message = response.getJSONObject(0).getString(Settings.KEY_MESSAGE);
-            int codeResult = (int) response.getJSONObject(0).getInt(Settings.KEY_CODE);
-
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -login- Code: " + codeResult + " \tMessage: " + message);
+            String message = response.getJSONObject(0).getString(Constants.KEY_MESSAGE);
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-            if (codeResult == Settings.LOGIN_OK_CODE) {
-                Log.i(Settings.TAG, getClass().getSimpleName() + " -login-Settings.LOGIN_OK_CODE-");
+            int codeResult = response.getJSONObject(0).getInt(Constants.KEY_CODE);
+            if (codeResult == Constants.LOGIN_OK_CODE) {
+                Log.i(Constants.TAG, getClass().getSimpleName() + " -setAccess-Constants.LOGIN_OK_CODE-");
                 return true;
             } else {
-                Log.i(Settings.TAG, getClass().getSimpleName() + " -login-LOGIN_CODE_NOT_OK-");
+                Log.i(Constants.TAG, getClass().getSimpleName() + " -setAccess-LOGIN_CODE_NOT_OK-");
             }
-        } catch (Exception e) {
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -login- Exception-");
-            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         return false;
-    }
-
-    /**
-     * Launch Dashboard Activity on Successful Login
-     *
-     */
-    private void loadDashboard() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -loadDashboard-");
-        Intent i = new Intent(this, DashboardActivity.class);
-        startActivity(i);
     }
 }

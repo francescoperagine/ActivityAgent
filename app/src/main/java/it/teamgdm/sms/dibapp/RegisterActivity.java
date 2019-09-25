@@ -11,15 +11,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.util.concurrent.ExecutionException;
+import java.util.HashMap;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends BaseActivity {
 
     private EditText editTextName, editTextSurname, editTextSerialNumber, editTextEmail, editTextPassword, editTextConfirmPassword;
 
@@ -28,10 +25,8 @@ public class RegisterActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onCreate-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-");
         super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_register);
 
         editTextName = findViewById(R.id.name);
         editTextSurname = findViewById(R.id.surname);
@@ -46,12 +41,17 @@ public class RegisterActivity extends AppCompatActivity {
         buttonSignIn = findViewById(R.id.sign_inButton);
     }
 
+    @Override
+    int getLayoutResource() {
+        return R.layout.activity_register;
+    }
+
     protected void onStart() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onStart-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onStart-");
         super.onStart();
         setSpinners();
-        buttonSignIn.setOnClickListener(buttonSignInListener);
         buttonRegister.setOnClickListener(buttonRegisterListener);
+        buttonSignIn.setOnClickListener(buttonSignInListener);
     }
 
     /**
@@ -59,29 +59,28 @@ public class RegisterActivity extends AppCompatActivity {
      */
 
     private void setSpinners() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -setSpinners-");
-        SpinnerListAdapter spinnerDegreecourseAdapter = new SpinnerListAdapter(this, Settings.GET_DEGREECOURSE_LIST, R.string.selectDegreecourseText, android.R.layout.simple_spinner_dropdown_item);
-        spinnerDegreecourse.setAdapter(spinnerDegreecourseAdapter.setInputList());
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -setSpinners-");
+        SpinnerListAdapter spinnerDegreecourseAdapter = new SpinnerListAdapter(this, R.string.selectDegreecourseText, android.R.layout.simple_spinner_dropdown_item);
+        spinnerDegreecourse.setAdapter(spinnerDegreecourseAdapter.setInputList(Constants.GET_DEGREECOURSE_LIST));
         spinnerDegreecourse.setSelection(0);
-        SpinnerListAdapter spinnerRoleAdapter = new SpinnerListAdapter(this, Settings.GET_ROLE_LIST, R.string.selectRoleText, android.R.layout.simple_spinner_dropdown_item);
-        spinnerRole.setAdapter(spinnerRoleAdapter.setInputList());
+        SpinnerListAdapter spinnerRoleAdapter = new SpinnerListAdapter(this, R.string.selectRoleText, android.R.layout.simple_spinner_dropdown_item);
+        spinnerRole.setAdapter(spinnerRoleAdapter.setInputList(Constants.GET_ROLE_LIST));
         spinnerRole.setSelection(0);
     }
-
-    private final View.OnClickListener buttonSignInListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -OnClickListener-buttonSignInListener-onClick-");
-            Intent signInIntent = new Intent(RegisterActivity.this, LoginActivity.class);
-            startActivity(signInIntent);
-        }
-    };
 
     private final View.OnClickListener buttonRegisterListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -OnClickListener-buttonRegisterListener-onClick-");
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -OnClickListener-buttonRegisterListener-onClick-");
             registrationInit();
+        }
+    };
+
+    private final View.OnClickListener buttonSignInListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -OnClickListener-buttonSignInListener-onClick-");
+            toLogin();
         }
     };
 
@@ -90,7 +89,7 @@ public class RegisterActivity extends AppCompatActivity {
      */
 
     private void registrationInit() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -registrationInit-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -registrationInit-");
 
         User tmpUser = new User();
 
@@ -104,31 +103,35 @@ public class RegisterActivity extends AppCompatActivity {
         tmpUser.setConfirmPassword(editTextConfirmPassword.getText().toString().trim());
 
         if(validateInputs(tmpUser) && register(tmpUser)) {
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -registrationInit-registrationComplete-"+tmpUser);
-            Intent loginIntent = new Intent(this, LoginActivity.class);
-            startActivity(loginIntent);
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -registrationInit-registrationComplete-"+tmpUser);
+            toLogin();
         }
+    }
+
+    private void toLogin() {
+        Intent loginIntent = new Intent(this, LoginActivity.class);
+        startActivity(loginIntent);
+        finish();
     }
 
     /**
      * Validates inputs and shows error if any
      *
-     * @param tmpUser
      */
     private boolean validateInputs(User tmpUser) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -validateInputs-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -validateInputs-");
 
-        if (Settings.KEY_EMPTY.equals(tmpUser.getName())) {
+        if (Constants.KEY_EMPTY.equals(tmpUser.getName())) {
             editTextName.setError(getResources().getString(R.string.namePromptHint) + " " + getResources().getString(R.string.inputCannotBeEmpty));
             editTextName.requestFocus();
             return false;
         }
-        if (Settings.KEY_EMPTY.equals(tmpUser.getSurname())) {
+        if (Constants.KEY_EMPTY.equals(tmpUser.getSurname())) {
             editTextSurname.setError(getResources().getString(R.string.surnamePromptHint) + " " + getResources().getString(R.string.inputCannotBeEmpty));
             editTextSurname.requestFocus();
             return false;
         }
-        if (Settings.KEY_EMPTY.equals(tmpUser.getSsn())) {
+        if (Constants.KEY_EMPTY.equals(tmpUser.getSsn())) {
             editTextSerialNumber.setError(getResources().getString(R.string.ssnPromptHint) + " " + getResources().getString(R.string.inputCannotBeEmpty));
             editTextSerialNumber.requestFocus();
             return false;
@@ -140,7 +143,7 @@ public class RegisterActivity extends AppCompatActivity {
             errorText.setText(getResources().getString(R.string.degreecourseSelectionErrorText));
             return false;
         }
-        if (tmpUser.getRole().equals(getResources().getString(R.string.selectRoleText))) {
+        if (tmpUser.getRoleName().equals(getResources().getString(R.string.selectRoleText))) {
             TextView errorText = (TextView) spinnerRole.getSelectedView();
             errorText.setError("");
             errorText.setTextColor(Color.RED);
@@ -148,12 +151,12 @@ public class RegisterActivity extends AppCompatActivity {
             return false;
         }
         if(!tmpUser.isEmailValid()) {
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -validateInputs-!isEmailValid" + tmpUser.getEmail());
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -validateInputs-!isEmailValid" + tmpUser.getEmail());
             editTextEmail.setError(getResources().getString(R.string.emailNotValid));
             editTextEmail.requestFocus();
             return false;
         }
-        if (Settings.KEY_EMPTY.equals(tmpUser.getPassword())) {
+        if (Constants.KEY_EMPTY.equals(tmpUser.getPassword())) {
             editTextPassword.setError(getResources().getString(R.string.passwordPromptHint) + " " + getResources().getString(R.string.inputCannotBeEmpty));
             editTextPassword.requestFocus();
             return false;
@@ -169,66 +172,40 @@ public class RegisterActivity extends AppCompatActivity {
     /**
      * Sends form data to the webserver with the default request method
      * @return true if the server returns USER_CREATED_CODE
-     * @param tmpUser
+     *
      */
 
     private boolean register(User tmpUser) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -register-");
-        JSONObject data = new JSONObject();
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -register-");
+        HashMap<String, String> params = new HashMap<>();
+        params.put(Constants.KEY_ACTION, Constants.USER_REGISTRATION);
+        params.put(Constants.KEY_USER_NAME, tmpUser.getName());
+        params.put(Constants.KEY_USER_SURNAME, tmpUser.getSurname());
+        params.put(Constants.KEY_USER_SERIAL_NUMBER, tmpUser.getSsn());
+        params.put(Constants.KEY_DEGREECOURSE, tmpUser.getDegreeCourse());
+        params.put(Constants.KEY_USER_ROLE_NAME, tmpUser.getRoleName());
+        params.put(Constants.KEY_USER_EMAIL, tmpUser.getEmail());
+        params.put(Constants.KEY_USER_PASSWORD, tmpUser.getPassword());
 
-        //Populate the data parameters
+        JSONArray response = getFromDB(params);
+
         try {
-            data.put(Settings.KEY_ACTION, Settings.USER_REGISTRATION);
-            data.put(Settings.KEY_USER_NAME, tmpUser.getName());
-            data.put(Settings.KEY_USER_SURNAME, tmpUser.getSurname());
-            data.put(Settings.KEY_SERIAL_NUMBER, tmpUser.getSsn());
-            data.put(Settings.KEY_DEGREECOURSE, tmpUser.getDegreeCourse());
-            data.put(Settings.KEY_USER_ROLE_NAME, tmpUser.getRole());
-            data.put(Settings.KEY_USER_EMAIL, tmpUser.getEmail());
-            data.put(Settings.KEY_PASSWORD, tmpUser.getPassword());
-            AsyncTaskConnection asyncTaskConnection = new AsyncTaskConnection();
-            asyncTaskConnection.execute(data);
-            JSONArray response = asyncTaskConnection.get();
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -register- Response: " + response.toString());
-
-            String message = response.getJSONObject(0).getString(Settings.KEY_MESSAGE);
-            int codeResult = (int) response.getJSONObject(0).get(Settings.KEY_CODE);
+            String message = response.getJSONObject(0).getString(Constants.KEY_MESSAGE);
+            int codeResult = (int) response.getJSONObject(0).get(Constants.KEY_CODE);
 
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-            if (codeResult == Settings.USER_CREATED_CODE) {
-                Log.i(Settings.TAG, getClass().getSimpleName() + " -register-"+message);
+            if (codeResult == Constants.USER_CREATED_CODE) {
+                Log.i(Constants.TAG, getClass().getSimpleName() + " -register-"+message);
                 return true;
             } else {
-                Log.i(Settings.TAG, getClass().getSimpleName() + " -register-REGISTRATION_NOT_OK");
+                Log.i(Constants.TAG, getClass().getSimpleName() + " -register-REGISTRATION_NOT_OK");
                 return false;
             }
-        } catch (JSONException | ExecutionException | InterruptedException e) {
-            Log.i(Settings.TAG, getClass().getSimpleName() + " -register-Exception-");
+        } catch (JSONException e) {
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -register-Exception-");
             System.out.println("\n\t" + "\n\t" + e.getMessage());
             e.printStackTrace();
         }
         return false;
     }
-
-    @Override
-    protected void onResume() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onResume-");
-        super.onResume();
-    }
-    @Override
-    protected void onPause() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onPause-");
-        super.onPause();
-    }
-    @Override
-    protected void onStop() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onStop-");
-        super.onStop();
-    }
-    @Override
-    protected void onDestroy() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onDestroy-");
-        super.onDestroy();
-    }
-
 }

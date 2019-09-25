@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/exam_detail_fragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    tools:context=".ClassDetailActivity"
+    tools:ignore="MergeRootFrame">
+
+    <Button
+        android:id="@+id/evaluate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/textDefaultPadding"
+        android:lines="3"
+        android:text="@string/evaluateButtonText"
+        app:layout_constraintBottom_toBottomOf="@id/partecipate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/partecipate"
+        app:layout_constraintTop_toTopOf="@id/partecipate" />
+
+    <Button
+        android:id="@+id/history"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/textDefaultPadding"
+        android:text="@string/historyButtonText"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/partecipate" />
+
+    <TextView
+        android:id="@+id/classDescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/textDefaultPadding"
+        android:ems="10"
+        android:gravity="start|top"
+        android:importantForAutofill="no"
+        android:lines="2"
+        android:padding="@dimen/textDefaultPadding"
+        app:layout_constraintBottom_toTopOf="@+id/classLessonSummary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/classLessonDate" />
+
+    <TextView
+        android:id="@+id/classLessonDescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/textDefaultPadding"
+        android:ems="10"
+        android:gravity="start|top"
+        android:importantForAutofill="no"
+        android:lines="2"
+        android:padding="@dimen/textDefaultPadding"
+        app:layout_constraintBottom_toTopOf="@id/classLessonInProgress"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/classLessonSummary" />
+
+    <TextView
+        android:id="@+id/className"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/textDefaultPadding"
+        android:includeFontPadding="false"
+        android:padding="@dimen/textDefaultPadding"
+        app:layout_constraintBottom_toTopOf="@id/classYear"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/classYear"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/textDefaultPadding"
+        android:padding="@dimen/textDefaultPadding"
+        app:layout_constraintBottom_toTopOf="@+id/classLessonDate"
+        app:layout_constraintEnd_toStartOf="@+id/classSemester"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/className" />
+
+    <TextView
+        android:id="@+id/classSemester"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/textDefaultPadding"
+        android:padding="@dimen/textDefaultPadding"
+        app:layout_constraintBottom_toBottomOf="@+id/classYear"
+        app:layout_constraintEnd_toStartOf="@id/classCode"
+        app:layout_constraintStart_toEndOf="@id/classYear"
+        app:layout_constraintTop_toTopOf="@+id/classYear" />
+
+    <TextView
+        android:id="@+id/classLessonDate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/textDefaultPadding"
+        android:layout_marginStart="16dp"
+        android:lineSpacingExtra="10sp"
+        android:lines="2"
+        android:padding="@dimen/textDefaultPadding"
+        app:layout_constraintBottom_toTopOf="@+id/classDescription"
+        app:layout_constraintEnd_toStartOf="@id/classLessonTimeStart"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/classYear" />
+
+    <TextView
+        android:id="@+id/classLessonTimeStart"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/textDefaultPadding"
+        android:lineSpacingExtra="10sp"
+        android:lines="2"
+        android:padding="@dimen/textDefaultPadding"
+        app:layout_constraintBottom_toBottomOf="@+id/classLessonDate"
+        app:layout_constraintEnd_toStartOf="@id/classLessonTimeEnd"
+        app:layout_constraintStart_toEndOf="@+id/classLessonDate"
+        app:layout_constraintTop_toTopOf="@+id/classLessonDate" />
+
+    <TextView
+        android:id="@+id/classLessonTimeEnd"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/textDefaultPadding"
+        android:lineSpacingExtra="10sp"
+        android:lines="2"
+        android:padding="@dimen/textDefaultPadding"
+        app:layout_constraintBottom_toBottomOf="@+id/classLessonTimeStart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/classLessonTimeStart"
+        app:layout_constraintTop_toTopOf="@+id/classLessonTimeStart" />
+
+    <TextView
+        android:id="@+id/classLessonSummary"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/textDefaultPadding"
+        android:padding="@dimen/textDefaultPadding"
+        app:layout_constraintBottom_toTopOf="@id/classLessonDescription"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/classDescription" />
+
+    <TextView
+        android:id="@+id/classLessonInProgress"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/textDefaultPadding"
+        android:gravity="center"
+        android:padding="@dimen/textDefaultPadding"
+        app:layout_constraintBottom_toTopOf="@+id/partecipate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/classLessonDescription" />
+
+    <ToggleButton
+        android:id="@+id/partecipate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/textDefaultPadding"
+        android:lines="3"
+        android:textOff="@string/partecipateButtonText"
+        android:textOn="@string/partecipateUndoButtonText"
+        app:layout_constraintBottom_toTopOf="@+id/history"
+        app:layout_constraintEnd_toStartOf="@id/evaluate"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/classLessonInProgress" />
+
+    <TextView
+        android:id="@+id/classCode"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/textDefaultPadding"
+        android:padding="@dimen/textDefaultPadding"
+        app:layout_constraintBottom_toBottomOf="@+id/classSemester"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/classSemester"
+        app:layout_constraintTop_toTopOf="@+id/classSemester" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

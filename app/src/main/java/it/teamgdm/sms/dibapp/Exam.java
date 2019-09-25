@@ -1,77 +1,62 @@
 package it.teamgdm.sms.dibapp;
 
+import android.annotation.SuppressLint;
 import android.util.Log;
 
-class Exam {
-    private int ID;
-    private String name;
-    private int year;
-    private int semester;
-    private boolean passed;
-    private int vote;
-    private boolean praise;
-    private String passedDate;
+import java.io.Serializable;
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
-    public int getID() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -getID-");
+class Exam implements Serializable {
+    int ID;
+    String name;
+    int code;
+    String classDescription;
+    boolean passed;
+    int vote;
+    boolean praise;
+    Date passedDate;
+
+    int getID() {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -getID-");
         return ID;
     }
 
-    public String getName() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -getName-");
+    String getName() {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -getName-");
         return name;
     }
 
-    public boolean isPassed() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -isPassed-");
-        return passed;
-    }
-
-    public int getVote() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -getVote-");
-        return vote;
-    }
-
-    public boolean hasPraise() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -hasPraise-");
-        return praise;
-    }
-
-    public String getPassedDate() {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -getPassedDate-");
-        return passedDate;
-    }
-
-    public void setID(int ID) {
+    void setID(int ID) {
         this.ID = ID;
     }
 
-    public void setName(String name) {
+    void setName(String name) {
         this.name = name;
     }
 
-    public void setYear(int year) {
-        this.year = year;
-    }
-
-    public void setSemester(int semester) {
-        this.semester = semester;
-    }
-
-    public void setPassed(boolean passed) {
+    void setPassed(boolean passed) {
         this.passed = passed;
     }
 
-    public void setVote(int vote) {
+    void setVote(int vote) {
         this.vote = vote;
     }
 
-    public void setPraise(boolean praise) {
+    void setPraise(boolean praise) {
         this.praise = praise;
     }
 
-    public void setPassedDate(String passedDate) {
-        this.passedDate = passedDate;
+    void setPassedDate(String passedDate) {
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = null;
+        try {
+            date = (Date) simpleDateFormat.parse(passedDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        this.passedDate = date;
     }
 
     public String toString() {

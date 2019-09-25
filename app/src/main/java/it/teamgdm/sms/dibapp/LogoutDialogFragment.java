@@ -15,14 +15,14 @@ public class LogoutDialogFragment extends DialogFragment {
     private final Context applicationContext;
 
     LogoutDialogFragment(Context applicationContext) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -LogoutDialogFragment-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -LogoutDialogFragment-");
         this.applicationContext = applicationContext;
     }
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Log.i(Settings.TAG, getClass().getSimpleName() + " -onCreateDialog-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreateDialog-");
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(R.string.logout_dialog_confirm)
                 .setPositiveButton(R.string.logout_dialog_confirm_yes, new DialogInterface.OnClickListener() {
