@@ -1,5 +1,6 @@
 /captures
 .idea/
+.idea/codeStyles
 *.iml
 .gradle/
 /gradle
