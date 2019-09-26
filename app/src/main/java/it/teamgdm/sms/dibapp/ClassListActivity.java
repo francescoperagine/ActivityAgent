@@ -145,6 +145,7 @@ public class ClassListActivity extends BaseActivity {
         public void onBindViewHolder(final ViewHolder holder, int position) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -onBindViewHolder- Position " + position);
             holder.titleView.setText(classList.get(position).getName());
+        //    if(classList.get(position).isInProgress()) holder.titleView.setBackgroundColor(Color.GREEN);
             holder.itemView.setTag(classList.get(position).getID());
             holder.itemView.setOnClickListener(mOnClickListener);
         }

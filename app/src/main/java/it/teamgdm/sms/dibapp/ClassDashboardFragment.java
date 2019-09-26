@@ -1,7 +1,6 @@
 package it.teamgdm.sms.dibapp;
 
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,16 +11,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import androidx.annotation.RequiresApi;
-
 import com.google.android.gms.location.Geofence;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -136,9 +131,7 @@ public class ClassDashboardFragment extends BaseFragment implements View.OnClick
         buttonEvaluate.setOnClickListener(buttonEvaluateListener);
         buttonHistory.setOnClickListener(buttonHistoryListener);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            colorLessonInProgress(classLessonInProgress);
-        }
+        colorLessonInProgress(classLessonInProgress);
 
         if(getArguments() != null && getArguments().containsKey(Constants.GEOFENCE_TRANSITION_ACTION)) {
             int geofenceTransitionAction = getArguments().getInt(Constants.GEOFENCE_TRANSITION_ACTION);
@@ -153,6 +146,15 @@ public class ClassDashboardFragment extends BaseFragment implements View.OnClick
         return rootView;
     }
 
+    private void colorLessonInProgress(TextView classLessonInProgress) {
+        if(classLesson.isInProgress()) {
+            classLessonInProgress.setBackgroundColor(Color.GREEN);
+            classLessonInProgress.setEnabled(true);
+        } else {
+            classLessonInProgress.setEnabled(false);
+        }
+    }
+
     private final View.OnClickListener buttonPartecipateListener = v -> {
 
     };
@@ -164,24 +166,6 @@ public class ClassDashboardFragment extends BaseFragment implements View.OnClick
     private final View.OnClickListener buttonHistoryListener = v -> {
 
     };
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private void colorLessonInProgress(TextView classLessonInProgress) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -colorLessonInProgress-");
-
-        DateTimeFormatter f = DateTimeFormatter.ofPattern("HH:mm:ss");
-        LocalTime timeStart = LocalTime.parse(String.valueOf(classLesson.timeStart), f);
-        LocalTime timeEnd = LocalTime.parse(String.valueOf(classLesson.timeEnd), f);
-        LocalTime now = LocalTime.now();
-
-        if(now.isAfter(timeStart) && now.isBefore(timeEnd)) {
-            classLessonInProgress.setText(R.string.classLessonInProgress);
-            classLessonInProgress.setBackgroundColor(Color.GREEN);
-        } else {
-            classLessonInProgress.setText(R.string.classLessonNotInProgress);
-            classLessonInProgress.setEnabled(false);
-        }
-    }
 
     /**
      * Enables or disables the partecipateButton
