@@ -9,18 +9,21 @@ import androidx.annotation.RequiresApi;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.sql.Date;
-import java.sql.Time;
+import java.time.Instant;
+import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 public class ClassLesson extends Exam {
 
     int year;
     int semester;
     Date date;
-    Time timeStart;
-    Time timeEnd;
+    Date timeStart;
+    Date timeEnd;
     String lessonSummary;
     String lessonDescription;
 
@@ -37,9 +40,9 @@ public class ClassLesson extends Exam {
             classDescription = classLesson.getString(Constants.KEY_CLASS_DESCRIPTION);
             year = classLesson.getInt(Constants.KEY_CLASS_LESSON_YEAR);
             semester = classLesson.getInt(Constants.KEY_CLASS_LESSON_SEMESTER);
-            date = Date.valueOf((classLesson.getString(Constants.KEY_CLASS_LESSON_DATE)));
-            timeStart = Time.valueOf(classLesson.getString(Constants.KEY_CLASS_LESSON_TIME_START));
-            timeEnd =  Time.valueOf(classLesson.getString(Constants.KEY_CLASS_LESSON_TIME_END));
+            date = setDate((classLesson.getString(Constants.KEY_CLASS_LESSON_DATE)));
+            timeStart = setTime(classLesson.getString(Constants.KEY_CLASS_LESSON_TIME_START));
+            timeEnd =  setTime(classLesson.getString(Constants.KEY_CLASS_LESSON_TIME_END));
             lessonSummary = classLesson.getString(Constants.KEY_CLASS_LESSON_SUMMARY);
             lessonDescription = classLesson.getString(Constants.KEY_CLASS_LESSON_DESCRIPTION);
         } catch (JSONException ignored) {
@@ -53,16 +56,6 @@ public class ClassLesson extends Exam {
                 "\nlessonSummary \t" + lessonSummary + "\nlessonDescription \t" + lessonDescription;
     }
 
-    void setYear(int year) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -setYear-");
-        this.year = year;
-    }
-
-    void setSemester(int semester) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -setSemester-");
-        this.semester = semester;
-    }
-
     String getDateString() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -getDateString-");
         return String.valueOf(date);
@@ -73,11 +66,24 @@ public class ClassLesson extends Exam {
         return String.valueOf(timeStart);
     }
 
-    String getTimeEndString() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -getTimeEndString-");
-        return String.valueOf(timeEnd);
+    Date setTime(String time) {
+        Date sdf = null;
+        try {
+            sdf = new SimpleDateFormat("hh:mm:ss", Locale.getDefault()).parse(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return sdf;
     }
-
+    private Date setDate(String time) {
+        Date sdf = null;
+        try {
+            sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return sdf;
+    }
 
     boolean isInProgress() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -isInProgress-");
@@ -89,20 +95,12 @@ public class ClassLesson extends Exam {
 
     }
 
-
-
     @RequiresApi(api = Build.VERSION_CODES.O)
     private boolean isInProgressOreo() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -isInProgressOreo-timestart " + timeStart + " timeEnd " + timeEnd);
-        DateTimeFormatter f = DateTimeFormatter.ofPattern("HH:mm:ss");
-        LocalTime localTimeStart = LocalTime.parse(String.valueOf(timeStart), f);
-        LocalTime localTimeEnd = LocalTime.parse(String.valueOf(timeEnd), f);
-        LocalTime now = LocalTime.now();
-        if(now.isAfter(localTimeStart) && now.isBefore(localTimeEnd)){
-            return true;
-        } else {
-            return false;
-        }
+
+        Date now = Date.from(Instant.now());
+        return now.after(timeStart) && now.before(timeEnd);
     }
 
     private boolean isInProgressDefault() {

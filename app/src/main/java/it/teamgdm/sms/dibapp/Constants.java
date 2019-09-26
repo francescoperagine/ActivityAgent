@@ -1,7 +1,8 @@
 package it.teamgdm.sms.dibapp;
 
-public final class Constants {
+import java.util.Locale;
 
+public final class Constants {
 
     static final String CLASS_LIST_ACTION = "classDetail";
     static final String TAG = "dibApp";

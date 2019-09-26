@@ -28,26 +28,6 @@ class Exam implements Serializable {
         return name;
     }
 
-    void setID(int ID) {
-        this.ID = ID;
-    }
-
-    void setName(String name) {
-        this.name = name;
-    }
-
-    void setPassed(boolean passed) {
-        this.passed = passed;
-    }
-
-    void setVote(int vote) {
-        this.vote = vote;
-    }
-
-    void setPraise(boolean praise) {
-        this.praise = praise;
-    }
-
     void setPassedDate(String passedDate) {
         @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date date = null;

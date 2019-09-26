@@ -105,10 +105,10 @@ public class ClassDashboardFragment extends BaseFragment implements View.OnClick
         String lessonDate = getString(R.string.lessonDate) + "\n" + classLesson.getDateString();
         classLessonDate.setText(lessonDate);
 
-        String lessonTimeStart = getString(R.string.lessonStartAt) + "\n" + classLesson.getTimeStartString();
+        String lessonTimeStart = getString(R.string.lessonStartAt) + "\n" + classLesson.timeStart;
         classLessonTimeStart.setText(lessonTimeStart);
 
-        String lessonTimeEnd = getString(R.string.lessonEndAt) + "\n" + classLesson.getTimeEndString();
+        String lessonTimeEnd = getString(R.string.lessonEndAt) + "\n" + classLesson.timeEnd;
         classLessonTimeEnd.setText(lessonTimeEnd);
 
         if(classLesson.lessonSummary.equals("null")) {

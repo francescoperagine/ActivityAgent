@@ -2,6 +2,7 @@ package it.teamgdm.sms.dibapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -89,6 +90,7 @@ public class ClassListActivity extends BaseActivity {
             recyclerView.setVisibility(View.GONE);
             textViewEmptyClassList.setVisibility(View.VISIBLE);
         } else {
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -setupRecyclerView-CLASS LIST DATA " + classList);
             recyclerView.setVisibility(View.VISIBLE);
             recyclerView.setAdapter(new ClassRecyclerViewAdapter(this, classList, mTwoPane));
             textViewEmptyClassList.setVisibility(View.GONE);
@@ -143,9 +145,9 @@ public class ClassListActivity extends BaseActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -onBindViewHolder- Position " + position);
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -onBindViewHolder- Position " + position + " lesson " + classList.get(position));
             holder.titleView.setText(classList.get(position).getName());
-        //    if(classList.get(position).isInProgress()) holder.titleView.setBackgroundColor(Color.GREEN);
+            if(classList.get(position).isInProgress()) holder.titleView.setBackgroundColor(Color.GREEN);
             holder.itemView.setTag(classList.get(position).getID());
             holder.itemView.setOnClickListener(mOnClickListener);
         }

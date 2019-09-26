@@ -18,8 +18,8 @@ class ProfessorTeaching extends ClassList{
             ClassLesson classLesson = new ClassLesson();
             try {
                 JSONObject o = professorTeachingData.getJSONObject(i);
-                classLesson.setID(o.optInt(Constants.KEY_CLASS_ID));
-                classLesson.setName(o.optString(Constants.KEY_CLASS_NAME));
+                classLesson.ID = o.optInt(Constants.KEY_CLASS_ID);
+                classLesson.name = o.optString(Constants.KEY_CLASS_NAME);
             } catch (JSONException e) {
                 Log.i(Constants.TAG, StudentCareer.class.getSimpleName() + " -setClassList- IS NULL");
             }
