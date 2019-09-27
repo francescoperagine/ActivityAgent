@@ -51,6 +51,17 @@
         app:layout_constraintTop_toBottomOf="@id/classLessonDate" />
 
     <TextView
+        android:id="@+id/classLessonSummary"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/textDefaultPadding"
+        android:padding="@dimen/textDefaultPadding"
+        app:layout_constraintBottom_toTopOf="@id/classLessonDescription"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/classDescription" />
+
+    <TextView
         android:id="@+id/classLessonDescription"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -138,17 +149,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/classLessonTimeStart"
         app:layout_constraintTop_toTopOf="@+id/classLessonTimeStart" />
-
-    <TextView
-        android:id="@+id/classLessonSummary"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/textDefaultPadding"
-        android:padding="@dimen/textDefaultPadding"
-        app:layout_constraintBottom_toTopOf="@id/classLessonDescription"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/classDescription" />
 
     <TextView
         android:id="@+id/classLessonInProgress"

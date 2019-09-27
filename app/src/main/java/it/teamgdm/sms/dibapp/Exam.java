@@ -23,11 +23,6 @@ class Exam implements Serializable {
         return ID;
     }
 
-    String getName() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -getName-");
-        return name;
-    }
-
     void setPassedDate(String passedDate) {
         @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date date = null;

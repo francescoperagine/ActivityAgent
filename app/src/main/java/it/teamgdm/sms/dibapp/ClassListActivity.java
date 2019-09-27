@@ -114,22 +114,22 @@ public class ClassListActivity extends BaseActivity {
 
             @Override
             public void onClick(View view) {
-                Exam exam = ClassList.getClassFromID((Integer) view.getTag());
-                Log.i(Constants.TAG, getClass().getSimpleName() + " ClassRecyclerViewAdapter-OnClickListener- Exam " + exam);
+                ClassLesson classLesson = ClassList.getClassFromID((Integer) view.getTag());
+                Log.i(Constants.TAG, getClass().getSimpleName() + " ClassRecyclerViewAdapter-OnClickListener-\nClassLesson\n " + classLesson);
 
                 if (mTwoPane) {
                     Bundle arguments = new Bundle();
-                    arguments.putInt(Constants.KEY_ITEM_ID, exam.getID());
-                    Log.i(Constants.TAG, getClass().getSimpleName() + " ClassRecyclerViewAdapter-OnClickListener-mTwoPane- arguments " + Constants.KEY_ITEM_ID + " " + exam.getID());
+                    arguments.putInt(Constants.KEY_CLASS_ID, classLesson.ID);
+                    arguments.putSerializable(String.valueOf(classLesson.ID), classLesson);
+                    Log.i(Constants.TAG, getClass().getSimpleName() + " ClassRecyclerViewAdapter-OnClickListener-mTwoPane- arguments");
                     ClassDashboardFragment fragment = new ClassDashboardFragment();
                     fragment.setArguments(arguments);
                     mParentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.class_detail_container, fragment).commit();
                 } else {
                     Context context = view.getContext();
                     Intent classDetailIntent = new Intent(context, ClassDetailActivity.class);
-                    classDetailIntent.setAction(Constants.CLASS_LIST_ACTION);
-                    classDetailIntent.putExtra(Constants.KEY_ITEM_ID, exam.getID());
-                    Log.i(Constants.TAG, getClass().getSimpleName() + " ClassRecyclerViewAdapter-OnClickListener- putExtra " + Constants.KEY_ITEM_ID + " " + exam.getID());
+                    classDetailIntent.setAction(Constants.KEY_CLASS_LESSON_DETAIL_ACTION);
+                    classDetailIntent.putExtra(Constants.KEY_CLASS_LESSON, classLesson);
                     context.startActivity(classDetailIntent);
                 }
             }
@@ -146,7 +146,7 @@ public class ClassListActivity extends BaseActivity {
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -onBindViewHolder- Position " + position + " lesson " + classList.get(position));
-            holder.titleView.setText(classList.get(position).getName());
+            holder.titleView.setText(classList.get(position).name);
             if(classList.get(position).isInProgress()) holder.titleView.setBackgroundColor(Color.GREEN);
             holder.itemView.setTag(classList.get(position).getID());
             holder.itemView.setOnClickListener(mOnClickListener);

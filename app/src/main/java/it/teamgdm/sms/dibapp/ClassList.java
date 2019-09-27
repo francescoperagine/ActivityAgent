@@ -7,7 +7,7 @@ import org.json.JSONArray;
 
 import java.util.ArrayList;
 
-class ClassList {
+abstract class ClassList {
 
     static ArrayList<ClassLesson> classList;
 
@@ -21,7 +21,7 @@ class ClassList {
         return classList;
     }
 
-    void setClassList(JSONArray studentCareerData) {}
+    abstract void setClassList(JSONArray classListData);
 
     @NonNull
     public String toString() {
@@ -29,13 +29,13 @@ class ClassList {
         return classList.toString();
     }
 
-    static Exam getClassFromID(int examID) {
-        Exam e = null;
+    static ClassLesson getClassFromID(int classLessonID) {
+        ClassLesson classLesson = null;
         for(int i=0; i<classList.size(); i++) {
-            if(classList.get(i).getID() == examID) {
-                e = classList.get(i);
+            if(classList.get(i).getID() == classLessonID) {
+                classLesson = classList.get(i);
             }
         }
-        return e;
+        return classLesson;
     }
 }

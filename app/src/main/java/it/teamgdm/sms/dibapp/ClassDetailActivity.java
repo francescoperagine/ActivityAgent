@@ -31,7 +31,7 @@ public class ClassDetailActivity extends GeofenceActivity implements BaseFragmen
         if (savedInstanceState == null) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -onStart-");
             // Create the detail fragment and add it to the activity using a fragment transaction.
-            if(getIntent().getAction() != null) {
+            if(getIntent().getAction().equals(Constants.KEY_CLASS_LESSON_DETAIL_ACTION)) {
                 intentHandler();
                 startFragment();
             }
@@ -40,10 +40,11 @@ public class ClassDetailActivity extends GeofenceActivity implements BaseFragmen
 
     void intentHandler() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -intentHandler-");
-        if(Objects.equals(getIntent().getAction(), Constants.CLASS_LIST_ACTION) & getIntent().hasExtra(Constants.KEY_ITEM_ID)) {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -intentHandler-CLASS_LIST_ACTION"+ getIntent().getAction());
-            int examID = getIntent().getIntExtra(Constants.KEY_ITEM_ID, 0);
-            arguments.putInt(Constants.KEY_ITEM_ID, examID);
+        if(Objects.equals(getIntent().getAction(), Constants.KEY_CLASS_LESSON_DETAIL_ACTION) & getIntent().hasExtra(Constants.KEY_CLASS_LESSON)) {
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -intentHandler-KEY_CLASS_LESSON_DETAIL_ACTION"+ getIntent().getAction());
+            ClassLesson classLesson = (ClassLesson) getIntent().getSerializableExtra(Constants.KEY_CLASS_LESSON);
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -intentHandler-KEY_CLASS_LESSON_DETAIL_ACTION"+ classLesson);
+            arguments.putSerializable(Constants.KEY_CLASS_LESSON, classLesson);
         }
     }
 

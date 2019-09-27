@@ -13,11 +13,6 @@ import android.widget.ToggleButton;
 
 import com.google.android.gms.location.Geofence;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
 import java.util.Objects;
 
 public class ClassDashboardFragment extends BaseFragment implements View.OnClickListener {
@@ -38,34 +33,16 @@ public class ClassDashboardFragment extends BaseFragment implements View.OnClick
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-");
         super.onCreate(savedInstanceState);
         if(getArguments() != null) {
-            if (getArguments().containsKey(Constants.KEY_ITEM_ID)) {
-                Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-argument " + getArguments().getInt(Constants.KEY_ITEM_ID));
-
-                int classLessonID = getArguments().getInt(Constants.KEY_ITEM_ID);
-                classLesson = getClassLessonDetail(classLessonID);
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-ARGUMENT NOT NULL");
+            if (getArguments().containsKey(Constants.KEY_CLASS_LESSON)) {
+                classLesson = (ClassLesson) getArguments().getSerializable(Constants.KEY_CLASS_LESSON);
+                Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-argument classLesson" + classLesson);
             }
 
             if(getArguments().containsKey(Constants.KEY_CLASS_PARTECIPATION)) {
                 classPartecipation = getArguments().getBoolean(Constants.KEY_CLASS_PARTECIPATION);
             }
         }
-    }
-
-    private ClassLesson getClassLessonDetail(int classLessonID) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -getClassLessonDetail-");
-        HashMap<String, String> params = new HashMap<>();
-        params.put(Constants.KEY_ACTION, Constants.GET_CLASS_LESSON_DETAIL);
-        params.put(Constants.KEY_CLASS_ID, String.valueOf(classLessonID));
-        JSONArray classLessonDetailLoader = BaseActivity.getFromDB(params);
-        ClassLesson classLesson = null;
-        try {
-            JSONObject classLessonDetail = classLessonDetailLoader.getJSONObject(0);
-            classLesson = new ClassLesson();
-            classLesson.setClassLesson(classLessonDetail);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return classLesson;
     }
 
     @Override
@@ -105,10 +82,10 @@ public class ClassDashboardFragment extends BaseFragment implements View.OnClick
         String lessonDate = getString(R.string.lessonDate) + "\n" + classLesson.getDateString();
         classLessonDate.setText(lessonDate);
 
-        String lessonTimeStart = getString(R.string.lessonStartAt) + "\n" + classLesson.timeStart;
+        String lessonTimeStart = getString(R.string.lessonStartAt) + "\n" + classLesson.getTimeString(classLesson.timeStart);
         classLessonTimeStart.setText(lessonTimeStart);
 
-        String lessonTimeEnd = getString(R.string.lessonEndAt) + "\n" + classLesson.timeEnd;
+        String lessonTimeEnd = getString(R.string.lessonEndAt) + "\n" + classLesson.getTimeString(classLesson.timeEnd);
         classLessonTimeEnd.setText(lessonTimeEnd);
 
         if(classLesson.lessonSummary.equals("null")) {
@@ -141,7 +118,7 @@ public class ClassDashboardFragment extends BaseFragment implements View.OnClick
         }
 
         if (classLesson != null) {
-            Objects.requireNonNull(getActivity()).setTitle(classLesson.getName());
+            Objects.requireNonNull(getActivity()).setTitle(classLesson.name);
         }
         return rootView;
     }
