@@ -34,10 +34,10 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -onReceive-ERROR-" + errorMessage);
             return;
         }
-        geofenceBroadcastReceiverCallback.onTransitionAction(geofenceTransition);
+        geofenceBroadcastReceiverCallback.onGeofenceTransitionAction(geofenceTransition);
     }
 
     public interface GeofenceBroadcastReceiverCallback{
-        void onTransitionAction(int geofenceReceiverAction);
+        void onGeofenceTransitionAction(int geofenceReceiverAction);
     }
 }

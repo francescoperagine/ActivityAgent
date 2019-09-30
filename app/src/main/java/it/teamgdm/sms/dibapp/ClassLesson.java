@@ -15,6 +15,8 @@ import java.util.Locale;
 
 public class ClassLesson extends Exam implements Serializable {
 
+    int classID;
+    int lessonID;
     int year;
     int semester;
     Date date;
@@ -30,7 +32,7 @@ public class ClassLesson extends Exam implements Serializable {
     @NonNull
     public String toString() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -toString-");
-        return "\nName \t" +name + "\ncode \t" + code + "\nclassDescription \t" +classDescription + "\nyear \t" + year +
+        return "\nClassID \t " + classID + "\nLessonID \t " + lessonID + "\nName \t" +name + "\ncode \t" + code + "\nclassDescription \t" +classDescription + "\nyear \t" + year +
                 "\nsemester \t" + semester + "\ndate \t" +getDateString() + "\ntimeStart \t" + getTimeString(timeStart) + "\ntimeEnd \t" + getTimeString(timeEnd) +
                 "\nlessonSummary \t" + lessonSummary + "\nlessonDescription \t" + lessonDescription;
     }
@@ -40,7 +42,7 @@ public class ClassLesson extends Exam implements Serializable {
         return new SimpleDateFormat(Constants.DATE_FORMAT, Locale.getDefault()).format(date);
     }
 
-    static String getTimeString(Date time) {
+    String getTimeString(Date time) {
         Log.i(Constants.TAG, ClassLesson.class.getSimpleName() + " -getTimeStartString-");
         return new SimpleDateFormat(Constants.TIME_FORMAT, Locale.getDefault()).format(time);
     }

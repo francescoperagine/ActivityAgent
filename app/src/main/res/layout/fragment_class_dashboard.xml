@@ -13,27 +13,27 @@
     tools:ignore="MergeRootFrame">
 
     <Button
-        android:id="@+id/evaluate"
+        android:id="@+id/evaluateButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/textDefaultPadding"
         android:lines="3"
         android:text="@string/evaluateButtonText"
-        app:layout_constraintBottom_toBottomOf="@id/partecipate"
+        app:layout_constraintBottom_toBottomOf="@id/partecipateButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/partecipate"
-        app:layout_constraintTop_toTopOf="@id/partecipate" />
+        app:layout_constraintStart_toEndOf="@+id/partecipateButton"
+        app:layout_constraintTop_toTopOf="@id/partecipateButton" />
 
     <Button
-        android:id="@+id/history"
+        android:id="@+id/questionButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/textDefaultPadding"
-        android:text="@string/historyButtonText"
+        android:text="@string/questionButtonText"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/partecipate" />
+        app:layout_constraintTop_toBottomOf="@id/partecipateButton" />
 
     <TextView
         android:id="@+id/classDescription"
@@ -157,21 +157,21 @@
         android:layout_margin="@dimen/textDefaultPadding"
         android:gravity="center"
         android:padding="@dimen/textDefaultPadding"
-        app:layout_constraintBottom_toTopOf="@+id/partecipate"
+        app:layout_constraintBottom_toTopOf="@+id/partecipateButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/classLessonDescription" />
 
     <ToggleButton
-        android:id="@+id/partecipate"
+        android:id="@+id/partecipateButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/textDefaultPadding"
         android:lines="3"
         android:textOff="@string/partecipateButtonText"
         android:textOn="@string/partecipateUndoButtonText"
-        app:layout_constraintBottom_toTopOf="@+id/history"
-        app:layout_constraintEnd_toStartOf="@id/evaluate"
+        app:layout_constraintBottom_toTopOf="@+id/questionButton"
+        app:layout_constraintEnd_toStartOf="@id/evaluateButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/classLessonInProgress" />
 

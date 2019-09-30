@@ -56,7 +56,6 @@
     <string name="partecipateButtonText">Enter class</string>
     <string name="partecipateUndoButtonText">Leave class</string>
     <string name="evaluateButtonText">Evaluate</string>
-    <string name="historyButtonText">History</string>
     <string name="informationButton">Informations</string>
     <string name="title_activity_profile">Profile</string>
 
@@ -85,6 +84,21 @@
     <string name="noSummarySetText">No summary set.</string>
     <string name="classCodeText">Code</string>
     <string name="noLessonDescriptionSetText">No description has been set for this lesson.</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="questionButtonText">Ask a question</string>
+    <string name="ask_a_question_text">Ask a question</string>
+    <string name="cancel_button_text">Cancel</string>
+    <string name="submit_button_text">Submit</string>
+    <string name="question_sent">Question sent.</string>
+    <string name="question_not_sent">Question not sent.</string>
+    <string name="attendance_set">Attendance is set.</string>
+    <string name="attendance_not_set">Attendance not set.</string>
+    <string name="review_sent">Review sent.</string>
+    <string name="review_not_sent">Review not sent.</string>
+    <string name="review_summary_text">Summary</string>
+    <string name="review_description_text">Review</string>
+    <string name="questionText">Write your question here.</string>
 
 
 </resources>

@@ -19,7 +19,8 @@ class StudentCareer extends ClassList{
             try {
                 JSONObject o = studentCareerData.getJSONObject(i);
                 Log.i(Constants.TAG, StudentCareer.class.getSimpleName() + " -setClassList- OBJ " + o);
-                classLesson.ID = o.optInt(Constants.KEY_CLASS_ID);
+                classLesson.classID = o.optInt(Constants.KEY_CLASS_ID);
+                classLesson.lessonID = o.optInt(Constants.KEY_CLASS_LESSON_ID);
                 classLesson.name = o.optString(Constants.KEY_CLASS_NAME);
                 classLesson.classDescription = o.optString(Constants.KEY_CLASS_DESCRIPTION);
                 classLesson.code = o.optInt(Constants.KEY_CLASS_CODE);

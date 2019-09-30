@@ -24,16 +24,8 @@ public abstract class GeofenceActivity extends BaseActivity implements GeofenceB
         geofenceBroadcastReceiver = new GeofenceBroadcastReceiver(this);
         geofenceAPI = new GeofenceAPI(this);
         intentFilter = new IntentFilter(Constants.GEOFENCE_TRANSITION_ACTION);
-        arguments  = new Bundle();
         registerReceiver(geofenceBroadcastReceiver, intentFilter);
         geofenceHandler();
-    }
-
-    @Override
-    protected void onStart() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -onStart-");
-        super.onStart();
-
     }
 
     @Override
@@ -74,6 +66,4 @@ public abstract class GeofenceActivity extends BaseActivity implements GeofenceB
             }
         }
     }
-
-
 }

@@ -14,6 +14,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -80,5 +81,17 @@ public abstract class BaseActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return response;
+    }
+
+    static boolean isDataSent(HashMap params, int expectedResultCode) {
+        Log.i(Constants.TAG, BaseActivity.class.getSimpleName() + " -isDataSent-");
+        JSONArray response = getFromDB(params);
+        int codeResult = 0;
+        try {
+            codeResult = response.getJSONObject(0).getInt(Constants.KEY_CODE);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return codeResult == expectedResultCode;
     }
 }

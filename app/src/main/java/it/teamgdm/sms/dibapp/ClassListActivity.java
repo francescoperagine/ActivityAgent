@@ -119,8 +119,7 @@ public class ClassListActivity extends BaseActivity {
 
                 if (mTwoPane) {
                     Bundle arguments = new Bundle();
-                    arguments.putInt(Constants.KEY_CLASS_ID, classLesson.ID);
-                    arguments.putSerializable(String.valueOf(classLesson.ID), classLesson);
+                    arguments.putSerializable(Constants.KEY_CLASS_LESSON, classLesson);
                     Log.i(Constants.TAG, getClass().getSimpleName() + " ClassRecyclerViewAdapter-OnClickListener-mTwoPane- arguments");
                     ClassDashboardFragment fragment = new ClassDashboardFragment();
                     fragment.setArguments(arguments);

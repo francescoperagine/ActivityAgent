@@ -2,7 +2,17 @@ package it.teamgdm.sms.dibapp;
 
 public final class Constants {
 
+
+    static final String USER_SEND_REVIEW = "sendReview";
+    static final String KEY_REVIEW_TEXT = "reviewText";
+    static final String KEY_REVIEW_SUMMARY = "reviewSummary";
+    static final String KEY_REVIEW_RATING = "reviewRating";
+    static final String KEY_IS_USER_ATTENDING_LESSON = "isUserAttendingLesson";
+    static final String KEY_ATTENDANCE = "attendance";
+    static final String KEY_QUESTION = "question";
+    static final String USER_QUESTION_ASK = "askAQuestion";
     static final String KEY_CLASS_LESSON = "classLesson";
+    static final String KEY_SET_ATTENDANCE = "setAttendance";
     static final String TAG = "dibApp";
     static final String PREFERENCE_FILE_KEY = "it.teamgdm.dibApp.userSession";
 
@@ -18,7 +28,6 @@ public final class Constants {
 
     static final String USER_IS_LOGGED_IN = "userIsLoggedIn";
 
-    static final String KEY_ITEM_ID = "itemID";
     static final String KEY_USER_ID = "userID";
     static final String KEY_USER_NAME = "name";
     static final String KEY_USER_SURNAME = "surname";
@@ -30,9 +39,14 @@ public final class Constants {
     static final String KEY_USER_ROLE_NAME = "roleName";
     static final String KEY_EMPTY = "";
     static final String KEY_BLANK = " ";
+
+    static final int OK_CODE = 100;
+    static final int NOT_OK_CODE = 101;
     static final int LOGIN_OK_CODE = 201;
     static final int LOGIN_FAILED_CODE = 301;
     static final int USER_CREATED_CODE = 202;
+    static final int QUESTION_SENT_CODE = 401;
+    static final int ATTENDANCE_SET_CODE = 501;
 
     // USER ROLES
 
@@ -47,7 +61,6 @@ public final class Constants {
     static final String GET_ROLE_LIST = "getRoleList";
     static final String GET_DEGREECOURSE_LIST = "getDegreecourseList";
     static final String GET_CURRENT_CLASS_LIST = "getCurrentClassList";
-    static final String KEY_CLASS_PARTECIPATION = "classPartecipation";
     static final String KEY_CLASS_LESSON_DETAIL_ACTION = "classLessonDetail";
 
     // DB STUDENT_CAREER TABLE ATTRIBUTES
@@ -67,6 +80,7 @@ public final class Constants {
     static final String KEY_VOTE = "vote";
     static final String KEY_PRAISE = "praise";
     static final String KEY_PASSED_DATE = "passedDate";
+    static final String KEY_CLASS_LESSON_ID = "lessonID";
 
     // GEOFENCE
 

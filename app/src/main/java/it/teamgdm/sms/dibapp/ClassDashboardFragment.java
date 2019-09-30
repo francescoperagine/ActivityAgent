@@ -15,13 +15,13 @@ import com.google.android.gms.location.Geofence;
 
 import java.util.Objects;
 
-public class ClassDashboardFragment extends BaseFragment implements View.OnClickListener {
+public class ClassDashboardFragment extends BaseFragment {
 
     private ClassLesson classLesson;
     private boolean classPartecipation;
 
     ToggleButton buttonPartecipate;
-    Button buttonEvaluate, buttonHistory;
+    Button buttonEvaluate, buttonQuestion;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -33,14 +33,13 @@ public class ClassDashboardFragment extends BaseFragment implements View.OnClick
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-");
         super.onCreate(savedInstanceState);
         if(getArguments() != null) {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-ARGUMENT NOT NULL");
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-ARGUMENT \n\t" + getArguments());
             if (getArguments().containsKey(Constants.KEY_CLASS_LESSON)) {
                 classLesson = (ClassLesson) getArguments().getSerializable(Constants.KEY_CLASS_LESSON);
                 Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-argument classLesson" + classLesson);
             }
-
-            if(getArguments().containsKey(Constants.KEY_CLASS_PARTECIPATION)) {
-                classPartecipation = getArguments().getBoolean(Constants.KEY_CLASS_PARTECIPATION);
+            if(getArguments().containsKey(Constants.KEY_ATTENDANCE)) {
+                classPartecipation = getArguments().getBoolean(Constants.KEY_ATTENDANCE);
             }
         }
     }
@@ -100,13 +99,13 @@ public class ClassDashboardFragment extends BaseFragment implements View.OnClick
             classLessonDescription.setText(classLesson.lessonDescription);
         }
 
-        buttonPartecipate = rootView.findViewById(R.id.partecipate);
-        buttonEvaluate = rootView.findViewById(R.id.evaluate);
-        buttonHistory = rootView.findViewById(R.id.history);
+        buttonPartecipate = rootView.findViewById(R.id.partecipateButton);
+        buttonEvaluate = rootView.findViewById(R.id.evaluateButton);
+        buttonQuestion = rootView.findViewById(R.id.questionButton);
 
-        buttonPartecipate.setOnClickListener(buttonPartecipateListener);
-        buttonEvaluate.setOnClickListener(buttonEvaluateListener);
-        buttonHistory.setOnClickListener(buttonHistoryListener);
+        buttonPartecipate.setOnClickListener(partecipateButtonListener);
+        buttonEvaluate.setOnClickListener(evaluateButtonListener);
+        buttonQuestion.setOnClickListener(questionButtonListener);
 
         colorLessonInProgress(classLessonInProgress);
 
@@ -132,16 +131,19 @@ public class ClassDashboardFragment extends BaseFragment implements View.OnClick
         }
     }
 
-    private final View.OnClickListener buttonPartecipateListener = v -> {
-
+    private final View.OnClickListener partecipateButtonListener = v -> {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -partecipateButtonListener-");
+        fragmentCallback.setAttendance(classLesson.lessonID, buttonPartecipate.isChecked());
     };
 
-    private final View.OnClickListener buttonEvaluateListener = v -> {
-
+    private final View.OnClickListener evaluateButtonListener = v -> {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -evaluateButtonListener-");
+        fragmentCallback.onItemSelected(R.id.evaluateButton);
     };
 
-    private final View.OnClickListener buttonHistoryListener = v -> {
-
+    private final View.OnClickListener questionButtonListener = v -> {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -questionButtonListener-");
+        fragmentCallback.onItemSelected(R.id.questionButton);
     };
 
     /**
@@ -165,10 +167,8 @@ public class ClassDashboardFragment extends BaseFragment implements View.OnClick
     private void setAttendance() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -setAttendance-");
         if(classPartecipation) {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -setAttendance-checked TRUE");
             buttonPartecipate.setEnabled(true);
         } else {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -setAttendance-checked FALSE");
             buttonPartecipate.setEnabled(false);
         }
     }
@@ -182,16 +182,4 @@ public class ClassDashboardFragment extends BaseFragment implements View.OnClick
         }
     }
 
-    @Override
-    public void onDetach() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -onDetach-");
-        super.onDetach();
-        fragmentCallback = null;
-    }
-
-    @Override
-    public void onClick(View view) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -onClick-");
-        fragmentCallback.onItemSelected(view.getId());
-    }
 }
