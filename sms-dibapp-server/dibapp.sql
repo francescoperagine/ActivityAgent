@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Set 30, 2019 alle 17:29
+-- Creato il: Ott 01, 2019 alle 19:20
 -- Versione del server: 10.4.6-MariaDB
 -- Versione PHP: 7.3.9
 
@@ -184,8 +184,8 @@ CREATE TABLE `class_room_lesson` (
   `calendarID` int(11) NOT NULL,
   `roomID` int(11) NOT NULL,
   `date` date DEFAULT NULL,
-  `timeStart` time NOT NULL,
-  `timeEnd` time NOT NULL,
+  `timeStart` timestamp NULL DEFAULT NULL,
+  `timeEnd` timestamp NULL DEFAULT NULL,
   `summary` varchar(128) DEFAULT NULL,
   `description` text DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
@@ -195,8 +195,8 @@ CREATE TABLE `class_room_lesson` (
 --
 
 INSERT INTO `class_room_lesson` (`ID`, `calendarID`, `roomID`, `date`, `timeStart`, `timeEnd`, `summary`, `description`) VALUES
-(2, 1, 5, '2019-09-23', '09:00:00', '12:00:00', NULL, NULL),
-(3, 53, 3, '2019-09-26', '16:30:00', '18:30:00', NULL, NULL);
+(6, 16, 10, '2019-10-02', '2019-10-01 09:30:00', '2019-10-01 12:30:00', NULL, NULL),
+(5, 35, 5, '2019-10-02', '2019-10-01 06:00:00', '2019-10-01 16:00:00', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -299,7 +299,8 @@ CREATE TABLE `lesson_attendance_rating` (
   `lessonID` int(11) NOT NULL,
   `rating` int(1) DEFAULT NULL,
   `summary` varchar(128) DEFAULT NULL,
-  `review` text DEFAULT NULL
+  `review` text DEFAULT NULL,
+  `time` time NOT NULL DEFAULT current_timestamp()
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -563,7 +564,7 @@ ALTER TABLE `class`
 -- AUTO_INCREMENT per la tabella `class_lesson_question`
 --
 ALTER TABLE `class_lesson_question`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT per la tabella `class_room_calendar`
@@ -575,7 +576,7 @@ ALTER TABLE `class_room_calendar`
 -- AUTO_INCREMENT per la tabella `class_room_lesson`
 --
 ALTER TABLE `class_room_lesson`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT per la tabella `degreecourse`
@@ -593,7 +594,7 @@ ALTER TABLE `degreecourse_class`
 -- AUTO_INCREMENT per la tabella `lesson_attendance_rating`
 --
 ALTER TABLE `lesson_attendance_rating`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
 
 --
 -- AUTO_INCREMENT per la tabella `professor_teaching`

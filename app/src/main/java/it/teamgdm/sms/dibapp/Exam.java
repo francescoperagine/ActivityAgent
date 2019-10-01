@@ -18,11 +18,6 @@ class Exam implements Serializable {
     boolean praise;
     Date passedDate;
 
-    int getID() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -getID-");
-        return ID;
-    }
-
     void setPassedDate(String passedDate) {
         @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date date = null;

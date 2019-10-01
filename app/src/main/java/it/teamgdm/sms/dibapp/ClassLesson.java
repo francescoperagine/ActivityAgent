@@ -33,7 +33,7 @@ public class ClassLesson extends Exam implements Serializable {
     public String toString() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -toString-");
         return "\nClassID \t " + classID + "\nLessonID \t " + lessonID + "\nName \t" +name + "\ncode \t" + code + "\nclassDescription \t" +classDescription + "\nyear \t" + year +
-                "\nsemester \t" + semester + "\ndate \t" +getDateString() + "\ntimeStart \t" + getTimeString(timeStart) + "\ntimeEnd \t" + getTimeString(timeEnd) +
+                "\nsemester \t" + semester + "\ndate \t" +getDateString() + "\ntimeStart \t" + timeStart + "\ntimeEnd \t" +timeEnd +
                 "\nlessonSummary \t" + lessonSummary + "\nlessonDescription \t" + lessonDescription;
     }
 
@@ -43,15 +43,15 @@ public class ClassLesson extends Exam implements Serializable {
     }
 
     String getTimeString(Date time) {
-        Log.i(Constants.TAG, ClassLesson.class.getSimpleName() + " -getTimeStartString-");
+        Log.i(Constants.TAG, ClassLesson.class.getSimpleName() + " -getTimeString-" + time);
         return new SimpleDateFormat(Constants.TIME_FORMAT, Locale.getDefault()).format(time);
     }
 
     Date setTime(String time) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -setTime-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -setTime-" + time);
         Date sdf = null;
         try {
-            sdf = new SimpleDateFormat(Constants.TIME_FORMAT, Locale.getDefault()).parse(time);
+            sdf = new SimpleDateFormat(Constants.DATETIME_FORMAT, Locale.getDefault()).parse(time);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -81,7 +81,10 @@ public class ClassLesson extends Exam implements Serializable {
     private boolean isInProgressOreo() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -isInProgressOreo-");
         Date now = Date.from(Instant.now());
-        return now.after(timeStart) && now.before(timeEnd);
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -isInProgressOreo-");
+        boolean isInProgress = now.after(timeStart) && now.before(timeEnd);
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -isInProgressOreo-" + isInProgress);
+        return isInProgress;
     }
 
     private boolean isInProgressDefault() {

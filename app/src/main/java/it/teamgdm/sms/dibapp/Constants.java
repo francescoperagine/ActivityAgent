@@ -3,11 +3,14 @@ package it.teamgdm.sms.dibapp;
 public final class Constants {
 
 
+    static final String TWO_PANEL = "twoPanel";
+    static final String LESSON_IN_PROGRESS = "lessonInProgress";
+    static final String KEY_GEOFENCE = "geofence";
     static final String USER_SEND_REVIEW = "sendReview";
     static final String KEY_REVIEW_TEXT = "reviewText";
     static final String KEY_REVIEW_SUMMARY = "reviewSummary";
     static final String KEY_REVIEW_RATING = "reviewRating";
-    static final String KEY_IS_USER_ATTENDING_LESSON = "isUserAttendingLesson";
+    static final String IS_USER_ATTENDING_LESSON = "isUserAttendingLesson";
     static final String KEY_ATTENDANCE = "attendance";
     static final String KEY_QUESTION = "question";
     static final String USER_QUESTION_ASK = "askAQuestion";
@@ -23,6 +26,7 @@ public final class Constants {
 
     static final String DATE_FORMAT = "yyyy-MM-dd";
     static final String TIME_FORMAT = "kk:mm:ss";
+    static final String DATETIME_FORMAT = "yyyy-MM-dd kk:mm:ss";
 
     // USER DETAILS
 
@@ -86,7 +90,7 @@ public final class Constants {
 
     static final String GEOFENCE_TRANSITION_ACTION = "geofenceTransitionAction";
 
-    static final int GEOFENCE_TRANSITION_DWELL_TIME = 10*1000; // need to wait for at least some seconds before the trigger
+    static final int GEOFENCE_TRANSITION_DWELL_TIME = 1000; // need to wait for at least some seconds before the trigger
     static final int GEOFENCE_PERMISSION_REQUEST_CODE = 1;
     static final int GEOFENCE_METER_RADIUS_DIB = 100;
     static final int GEOFENCE_METER_RADIUS_PDA = 100;

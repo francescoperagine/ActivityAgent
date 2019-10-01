@@ -4,10 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import org.json.JSONException;
-
 import java.util.HashMap;
-import java.util.Objects;
 
 /**
  * An activity representing a single Exam detail screen. This
@@ -15,20 +12,21 @@ import java.util.Objects;
  * item details are presented side-by-side with a list of items
  * in a {@link ClassListActivity}.
  */
-public class ClassDetailActivity extends GeofenceActivity implements BaseFragment.OnClickedItemListener {
+public class ClassDetailActivity extends BaseActivity implements BaseFragment.OnClickedItemListener {
 
+    Bundle savedInstanceState;
+    boolean lessonInProgress;
     ClassLesson classLesson;
-    boolean lessonAttendance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        arguments  = new Bundle();
     }
 
     protected void onStart() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onStart-");
         super.onStart();
+
 
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity
@@ -44,39 +42,15 @@ public class ClassDetailActivity extends GeofenceActivity implements BaseFragmen
             Log.i(Constants.TAG, getClass().getSimpleName() + " -onStart-");
             // Create the detail fragment and add it to the activity using a fragment transaction.
             if(getIntent().getAction() != null && getIntent().getAction().equals(Constants.KEY_CLASS_LESSON_DETAIL_ACTION)) {
-                intentHandler();
-                startFragment();
+                classLesson = (ClassLesson) getIntent().getSerializableExtra(Constants.KEY_CLASS_LESSON);
+                lessonInProgress = getIntent().getBooleanExtra(Constants.LESSON_IN_PROGRESS, false);
+                StudentDashboardDetailFragment dashboardDetailFragment = StudentDashboardDetailFragment.newInstance(classLesson, false);
+                StudentDashboardButtonFragment dashboardButtonFragment = StudentDashboardButtonFragment.newInstance(classLesson.lessonID, lessonInProgress);
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.dashboardDetailContainer, dashboardDetailFragment)
+                        .add(R.id.dashboardButtonContainer, dashboardButtonFragment).commit();
             }
         }
-    }
-
-    void intentHandler() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -intentHandler-");
-        if(Objects.equals(getIntent().getAction(), Constants.KEY_CLASS_LESSON_DETAIL_ACTION) & getIntent().hasExtra(Constants.KEY_CLASS_LESSON)) {
-            classLesson = (ClassLesson) getIntent().getSerializableExtra(Constants.KEY_CLASS_LESSON);
-            assert classLesson != null;
-            lessonAttendance = userIsAttendingLesson(classLesson.lessonID);
-            arguments.putSerializable(Constants.KEY_CLASS_LESSON, classLesson);
-            arguments.putBoolean(Constants.KEY_ATTENDANCE, lessonAttendance);
-        }
-    }
-
-    @Override
-    public void onGeofenceTransitionAction(int geofenceTransitionAction) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -onGeofenceTransitionAction-"+ geofenceTransitionAction);
-        if(geofenceTransitionAction != GeofenceActivity.geofenceReceiverLastAction) {
-            // Forwards the new geofence's transition code to the fragment
-            arguments.putInt(Constants.GEOFENCE_TRANSITION_ACTION, geofenceTransitionAction);
-            GeofenceActivity.geofenceReceiverLastAction = geofenceTransitionAction;
-            startFragment();
-        }
-    }
-
-    void startFragment() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -startFragment-");
-        ClassDashboardFragment fragment = new ClassDashboardFragment();
-        fragment.setArguments(arguments);
-        getSupportFragmentManager().beginTransaction().replace(R.id.classDetailContainer, fragment).commit();
     }
 
     int getLayoutResource() {
@@ -86,20 +60,15 @@ public class ClassDetailActivity extends GeofenceActivity implements BaseFragmen
 
     public void onItemSelected(int selectedActionResource) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onItemSelected-action " + selectedActionResource);
-
         switch (selectedActionResource) {
             case R.id.evaluateButton:
                 Log.i(Constants.TAG, getClass().getSimpleName() + " -evaluateButton-");
-                EvaluateFragment evaluateFragment = new EvaluateFragment();
-                arguments.putInt(Constants.KEY_CLASS_LESSON_ID, classLesson.lessonID);
-                evaluateFragment.setArguments(arguments);
+                EvaluateFragment evaluateFragment = EvaluateFragment.newInstante(classLesson.lessonID);
                 evaluateFragment.show(getSupportFragmentManager(), "Send a review");
                 break;
             case R.id.questionButton:
                 Log.i(Constants.TAG, getClass().getSimpleName() + " -questionButton-");
-                QuestionFragment questionFragment = new QuestionFragment();
-                arguments.putInt(Constants.KEY_CLASS_LESSON_ID, classLesson.lessonID);
-                questionFragment.setArguments(arguments);
+                QuestionFragment questionFragment = QuestionFragment.newInstante(classLesson.lessonID);
                 questionFragment.show(getSupportFragmentManager(), "Ask a question - lessonID" + classLesson.lessonID);
                 break;
             default:
@@ -127,7 +96,7 @@ public class ClassDetailActivity extends GeofenceActivity implements BaseFragmen
     @Override
     public void setAttendance(int lessonID, boolean attendance) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -updateClassAttendance- set to " + attendance);
-        // Registers the lesson's attendance into the DB
+        // Registers the lesson's classAttendance into the DB
         HashMap<String, String> params = new HashMap<>();
         params.put(Constants.KEY_ACTION, Constants.KEY_SET_ATTENDANCE);
         params.put(Constants.KEY_CLASS_LESSON_ID, String.valueOf(lessonID));
@@ -135,10 +104,10 @@ public class ClassDetailActivity extends GeofenceActivity implements BaseFragmen
         params.put(Constants.KEY_ATTENDANCE, String.valueOf(attendance));
         if(isDataSent(params, Constants.ATTENDANCE_SET_CODE)) {
             Toast.makeText(this, getString(R.string.attendance_set), Toast.LENGTH_SHORT).show();
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -updateClassAttendance-attendance set-");
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -updateClassAttendance-classAttendance set-");
         } else {
             Toast.makeText(this, getString(R.string.attendance_not_set), Toast.LENGTH_SHORT).show();
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -updateClassAttendance-attendance not set-");
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -updateClassAttendance-classAttendance not set-");
         }
     }
 
@@ -160,21 +129,5 @@ public class ClassDetailActivity extends GeofenceActivity implements BaseFragmen
             Log.i(Constants.TAG, getClass().getSimpleName() + " -sendQuestion-question not sent-");
         }
     }
-
-    private boolean userIsAttendingLesson(int lessonID) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -userIsAttendingLesson-");
-        HashMap<String, String> params = new HashMap<>();
-        params.put(Constants.KEY_ACTION, Constants.KEY_IS_USER_ATTENDING_LESSON);
-        params.put(Constants.KEY_CLASS_LESSON_ID, String.valueOf(lessonID));
-        params.put(Constants.KEY_USER_ID, String.valueOf(Session.getUserID()));
-        int response = 0;
-        try {
-            response = getFromDB(params).getJSONObject(0).getInt(Constants.KEY_ATTENDANCE);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return response == 1;
-    }
-
 
 }

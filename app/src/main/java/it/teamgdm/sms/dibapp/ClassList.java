@@ -32,7 +32,7 @@ abstract class ClassList {
     static ClassLesson getClassFromID(int classLessonID) {
         ClassLesson classLesson = null;
         for(int i=0; i<classList.size(); i++) {
-            if(classList.get(i).getID() == classLessonID) {
+            if(classList.get(i).lessonID == classLessonID) {
                 classLesson = classList.get(i);
             }
         }

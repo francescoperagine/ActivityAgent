@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom">
+
+    <TextView
+        android:id="@+id/classLessonInProgress"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/textDefaultPadding"
+        android:gravity="center"
+        android:padding="@dimen/textDefaultPadding"
+        app:layout_constraintBottom_toTopOf="@+id/partecipateButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ToggleButton
+        android:id="@+id/partecipateButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/textDefaultPadding"
+        android:lines="3"
+        android:textOff="@string/partecipateButtonText"
+        android:textOn="@string/partecipateUndoButtonText"
+        app:layout_constraintBottom_toTopOf="@+id/questionButton"
+        app:layout_constraintEnd_toStartOf="@id/evaluateButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/classLessonInProgress" />
+
+    <Button
+        android:id="@+id/evaluateButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/textDefaultPadding"
+        android:lines="3"
+        android:text="@string/evaluateButtonText"
+        app:layout_constraintBottom_toBottomOf="@id/partecipateButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/partecipateButton"
+        app:layout_constraintTop_toTopOf="@id/partecipateButton" />
+
+    <Button
+        android:id="@+id/questionButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/textDefaultPadding"
+        android:text="@string/questionButtonText"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/partecipateButton" />
+</androidx.constraintlayout.widget.ConstraintLayout>

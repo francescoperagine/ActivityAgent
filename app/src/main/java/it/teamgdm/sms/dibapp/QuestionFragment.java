@@ -19,16 +19,21 @@ public class QuestionFragment extends BaseFragment {
     private int classLessonID;
     private TextView questionText;
 
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        assert getArguments() != null;
-        classLessonID = getArguments().getInt(Constants.KEY_CLASS_LESSON_ID);
+    static QuestionFragment newInstante(int classLessonID) {
+        QuestionFragment questionFragment = new QuestionFragment();
+        Bundle arguments = new Bundle();
+        arguments.putInt(Constants.KEY_CLASS_LESSON_ID, classLessonID);
+        questionFragment.setArguments(arguments);
+        return questionFragment;
     }
+
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-");
         super.onCreate(savedInstanceState);
+        if(getArguments() != null && getArguments().containsKey(Constants.KEY_CLASS_LESSON_ID)) {
+            classLessonID = getArguments().getInt(Constants.KEY_CLASS_LESSON_ID);
+        }
     }
 
     @Nullable

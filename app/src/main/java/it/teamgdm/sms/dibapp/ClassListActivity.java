@@ -37,7 +37,6 @@ public class ClassListActivity extends BaseActivity {
     RecyclerView recyclerView;
     TextView textViewEmptyClassList;
 
-
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-");
         super.onCreate(savedInstanceState);
@@ -55,11 +54,6 @@ public class ClassListActivity extends BaseActivity {
         textViewEmptyClassList = findViewById(R.id.class_list_empty);
 
         setupRecyclerView();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
     }
 
     @Override
@@ -90,7 +84,7 @@ public class ClassListActivity extends BaseActivity {
             recyclerView.setVisibility(View.GONE);
             textViewEmptyClassList.setVisibility(View.VISIBLE);
         } else {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -setupRecyclerView-CLASS LIST DATA " + classList);
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -setupRecyclerView-");
             recyclerView.setVisibility(View.VISIBLE);
             recyclerView.setAdapter(new ClassRecyclerViewAdapter(this, classList, mTwoPane));
             textViewEmptyClassList.setVisibility(View.GONE);
@@ -98,7 +92,6 @@ public class ClassListActivity extends BaseActivity {
     }
 
     public class ClassRecyclerViewAdapter extends RecyclerView.Adapter<ClassRecyclerViewAdapter.ViewHolder> {
-
         private final ClassListActivity mParentActivity;
         private final boolean mTwoPane;
         ArrayList<ClassLesson> classList;
@@ -115,20 +108,20 @@ public class ClassListActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 ClassLesson classLesson = ClassList.getClassFromID((Integer) view.getTag());
-                Log.i(Constants.TAG, getClass().getSimpleName() + " ClassRecyclerViewAdapter-OnClickListener-\nClassLesson\n " + classLesson);
+                Log.i(Constants.TAG, getClass().getSimpleName() + " ClassRecyclerViewAdapter-OnClickListener-");
 
                 if (mTwoPane) {
-                    Bundle arguments = new Bundle();
-                    arguments.putSerializable(Constants.KEY_CLASS_LESSON, classLesson);
                     Log.i(Constants.TAG, getClass().getSimpleName() + " ClassRecyclerViewAdapter-OnClickListener-mTwoPane- arguments");
-                    ClassDashboardFragment fragment = new ClassDashboardFragment();
-                    fragment.setArguments(arguments);
-                    mParentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.class_detail_container, fragment).commit();
+                    StudentDashboardDetailFragment detailFragment = StudentDashboardDetailFragment.newInstance(classLesson, true);
+                    mParentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.class_detail_container, detailFragment).commit();
+                    StudentDashboardButtonFragment buttonFragment = StudentDashboardButtonFragment.newInstance(classLesson.lessonID, classLesson.isInProgress());
+                    mParentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.class_button_container, buttonFragment).commit();
                 } else {
                     Context context = view.getContext();
                     Intent classDetailIntent = new Intent(context, ClassDetailActivity.class);
                     classDetailIntent.setAction(Constants.KEY_CLASS_LESSON_DETAIL_ACTION);
                     classDetailIntent.putExtra(Constants.KEY_CLASS_LESSON, classLesson);
+                    classDetailIntent.putExtra(Constants.LESSON_IN_PROGRESS, classLesson.isInProgress());
                     context.startActivity(classDetailIntent);
                 }
             }
@@ -144,10 +137,10 @@ public class ClassListActivity extends BaseActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -onBindViewHolder- Position " + position + " lesson " + classList.get(position));
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -onBindViewHolder-");
             holder.titleView.setText(classList.get(position).name);
             if(classList.get(position).isInProgress()) holder.titleView.setBackgroundColor(Color.GREEN);
-            holder.itemView.setTag(classList.get(position).getID());
+            holder.itemView.setTag(classList.get(position).lessonID);
             holder.itemView.setOnClickListener(mOnClickListener);
         }
 

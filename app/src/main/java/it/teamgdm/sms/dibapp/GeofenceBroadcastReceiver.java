@@ -18,7 +18,7 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -onReceive-" + intent);
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onReceive-" + intent.getAction());
 
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
 

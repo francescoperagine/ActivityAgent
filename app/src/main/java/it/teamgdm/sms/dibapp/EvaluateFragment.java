@@ -21,12 +21,21 @@ public class EvaluateFragment extends BaseFragment {
     private EditText reviewText;
     private RatingBar reviewRating;
 
+    static EvaluateFragment newInstante(int classLessonID) {
+        EvaluateFragment evaluateFragment = new EvaluateFragment();
+        Bundle arguments = new Bundle();
+        arguments.putInt(Constants.KEY_CLASS_LESSON_ID, classLessonID);
+        evaluateFragment.setArguments(arguments);
+        return evaluateFragment;
+    }
+
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-");
         super.onCreate(savedInstanceState);
-        assert getArguments() != null;
-        classLessonID = getArguments().getInt(Constants.KEY_CLASS_LESSON_ID, 0);
+        if(getArguments() != null && getArguments().containsKey(Constants.KEY_CLASS_LESSON_ID)) {
+            classLessonID = getArguments().getInt(Constants.KEY_CLASS_LESSON_ID);
+        }
     }
 
     @Nullable

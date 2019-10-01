@@ -2,6 +2,7 @@ package it.teamgdm.sms.dibapp;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -29,15 +30,43 @@ class GeofenceAPI {
     private PendingIntent geofencePendingIntent;
     private GeofencingClient geofencingClient;
     private String[] permissions;
+    static boolean hasGeofencePermissions;
 
     GeofenceAPI(Context context) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -constructor-");
         this.context = context;
         geofenceList = new ArrayList<>();
         permissions  = setGeofencePermissions();
+        geofencePermissionHandler();
+        hasGeofencePermissions = hasGeofencePermissions();
     }
 
-    void geofenceInit() {
+    private String[] setGeofencePermissions() {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -setGeofencePermissions-");
+        String[] permissions;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            permissions = new String[] {
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
+            };
+        } else {
+            permissions = new String[]{
+                    Manifest.permission.ACCESS_FINE_LOCATION
+            };
+        }
+        return permissions;
+    }
+
+    private void geofencePermissionHandler(){
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -geofencePermissionHandler-");
+        if(hasGeofencePermissions()) {
+            geofenceInit();
+        } else {
+            askGeofencePermissions();
+        }
+    }
+
+    private void geofenceInit() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -geofenceInit-");
         geofencingClient = LocationServices.getGeofencingClient(context);
         setGeofences();
@@ -109,11 +138,8 @@ class GeofenceAPI {
             // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when
             // calling addGeofences() and removeGeofences().
             geofencePendingIntent = PendingIntent.getBroadcast(context.getApplicationContext(), requestID, geofenceBroadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        }
-        if (geofencePendingIntent == null) {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -getGeofencePendingIntent-STILL NULL!!!");
         } else {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -getGeofencePendingIntent-NOT NULL ANYMORE.");
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -getGeofencePendingIntent-NOT NULL");
         }
         return geofencePendingIntent;
     }
@@ -126,23 +152,7 @@ class GeofenceAPI {
         }
     }
 
-    private String[] setGeofencePermissions() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -setGeofencePermissions-");
-        String[] permissions;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-            permissions = new String[] {
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
-            };
-        } else {
-            permissions = new String[]{
-                    Manifest.permission.ACCESS_FINE_LOCATION
-            };
-        }
-        return permissions;
-    }
-
-    boolean hasGeofencePermissions() {
+    private boolean hasGeofencePermissions() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -hasGeofencePermissions-");
         for(String permission : permissions) {
             if(ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_DENIED) {
@@ -153,7 +163,7 @@ class GeofenceAPI {
         return true;
     }
 
-    void askGeofencePermissions() {
+    private void askGeofencePermissions() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -askGeofencePermissions-");
         ActivityCompat.requestPermissions((Activity) context, permissions, Constants.GEOFENCE_PERMISSION_REQUEST_CODE);
     }
