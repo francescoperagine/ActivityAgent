@@ -77,7 +77,7 @@ public class ClassListActivity extends BaseActivity {
             params.put(Constants.KEY_USER_ROLE_NAME, Constants.KEY_ROLE_STUDENT);
             classListData = new StudentCareer();
         }
-        JSONArray classListLoader = getFromDB(params);
+        JSONArray classListLoader = DAO.getFromDB(params);
         classListData.setClassList(classListLoader);
         ArrayList<ClassLesson> classList = classListData.getClassList();
         if(classList.isEmpty()) {
@@ -109,12 +109,12 @@ public class ClassListActivity extends BaseActivity {
             public void onClick(View view) {
                 ClassLesson classLesson = ClassList.getClassFromID((Integer) view.getTag());
                 Log.i(Constants.TAG, getClass().getSimpleName() + " ClassRecyclerViewAdapter-OnClickListener-");
-
+                boolean isUserAttendingLesson = DAO.isUserAttendingLesson(classLesson.lessonID, Session.getUserID());
                 if (mTwoPane) {
                     Log.i(Constants.TAG, getClass().getSimpleName() + " ClassRecyclerViewAdapter-OnClickListener-mTwoPane- arguments");
                     StudentDashboardDetailFragment detailFragment = StudentDashboardDetailFragment.newInstance(classLesson, true);
                     mParentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.class_detail_container, detailFragment).commit();
-                    StudentDashboardButtonFragment buttonFragment = StudentDashboardButtonFragment.newInstance(classLesson.lessonID, classLesson.isInProgress());
+                    StudentDashboardButtonFragment buttonFragment = StudentDashboardButtonFragment.newInstance(classLesson.lessonID, isUserAttendingLesson);
                     mParentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.class_button_container, buttonFragment).commit();
                 } else {
                     Context context = view.getContext();
@@ -122,6 +122,7 @@ public class ClassListActivity extends BaseActivity {
                     classDetailIntent.setAction(Constants.KEY_CLASS_LESSON_DETAIL_ACTION);
                     classDetailIntent.putExtra(Constants.KEY_CLASS_LESSON, classLesson);
                     classDetailIntent.putExtra(Constants.LESSON_IN_PROGRESS, classLesson.isInProgress());
+                    classDetailIntent.putExtra(Constants.IS_USER_ATTENDING_LESSON, isUserAttendingLesson);
                     context.startActivity(classDetailIntent);
                 }
             }
@@ -146,7 +147,7 @@ public class ClassListActivity extends BaseActivity {
 
         @Override
         public int getItemCount() {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -onBindViewHolder-");
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -getItemCount-");
             return classList.size();
         }
 

@@ -116,7 +116,7 @@ public class LoginActivity extends BaseActivity {
         params.put(Constants.KEY_ACTION, Constants.USER_LOGIN);
         params.put(Constants.KEY_USER_EMAIL, email);
         params.put(Constants.KEY_USER_PASSWORD, password);
-        JSONArray response = getFromDB(params);
+        JSONArray response = DAO.getFromDB(params);
 
         try {
             String message = response.getJSONObject(0).getString(Constants.KEY_MESSAGE);

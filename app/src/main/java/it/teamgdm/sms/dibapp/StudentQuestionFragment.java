@@ -1,6 +1,5 @@
 package it.teamgdm.sms.dibapp;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,16 +10,27 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 
 import java.util.Objects;
 
-public class QuestionFragment extends BaseFragment {
+public class StudentQuestionFragment extends DialogFragment {
+
+    private StudentQuestionFragmentInterface studentQuestionFragmentInterfaceCallback;
+
+    void setStudentQuestionFragmentInterfaceCallback(StudentQuestionFragmentInterface studentQuestionFragmentInterfaceCallback) {
+        this.studentQuestionFragmentInterfaceCallback = studentQuestionFragmentInterfaceCallback;
+    }
+
+    interface StudentQuestionFragmentInterface {
+        void sendQuestion(int lessonID, String input);
+    }
 
     private int classLessonID;
     private TextView questionText;
 
-    static QuestionFragment newInstante(int classLessonID) {
-        QuestionFragment questionFragment = new QuestionFragment();
+    static StudentQuestionFragment newInstante(int classLessonID) {
+        StudentQuestionFragment questionFragment = new StudentQuestionFragment();
         Bundle arguments = new Bundle();
         arguments.putInt(Constants.KEY_CLASS_LESSON_ID, classLessonID);
         questionFragment.setArguments(arguments);
@@ -68,7 +78,7 @@ public class QuestionFragment extends BaseFragment {
         String input = questionText.getText().toString();
         Log.i(Constants.TAG, getClass().getSimpleName() + " -submitButtonListener-classLessonID " + classLessonID + " input" + input);
 
-        fragmentCallback.sendQuestion(classLessonID, input);
+        studentQuestionFragmentInterfaceCallback.sendQuestion(classLessonID, input);
         Objects.requireNonNull(getDialog()).dismiss();
     };
 

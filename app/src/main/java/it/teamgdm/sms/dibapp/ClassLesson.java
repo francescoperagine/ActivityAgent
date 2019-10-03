@@ -1,17 +1,13 @@
 package it.teamgdm.sms.dibapp;
 
-import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 
 import java.io.Serializable;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.util.Date;
-import java.util.Locale;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 public class ClassLesson extends Exam implements Serializable {
 
@@ -19,9 +15,9 @@ public class ClassLesson extends Exam implements Serializable {
     int lessonID;
     int year;
     int semester;
-    Date date;
-    Date timeStart;
-    Date timeEnd;
+    LocalDate date;
+    LocalTime timeStart;
+    LocalTime timeEnd;
     String lessonSummary;
     String lessonDescription;
 
@@ -32,63 +28,39 @@ public class ClassLesson extends Exam implements Serializable {
     @NonNull
     public String toString() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -toString-");
-        return "\nClassID \t " + classID + "\nLessonID \t " + lessonID + "\nName \t" +name + "\ncode \t" + code + "\nclassDescription \t" +classDescription + "\nyear \t" + year +
-                "\nsemester \t" + semester + "\ndate \t" +getDateString() + "\ntimeStart \t" + timeStart + "\ntimeEnd \t" +timeEnd +
+        return "\nClassID \t " + classID + "\nLessonID \t " + lessonID + "\nName \t" + name + "\ncode \t" + code + "\nclassDescription \t" + classDescription + "\nyear \t" + year +
+                "\nsemester \t" + semester + "\ndate \t" + getDate(date) + "\ntimeStart \t" + timeStart + "\ntimeEnd \t" + timeEnd +
                 "\nlessonSummary \t" + lessonSummary + "\nlessonDescription \t" + lessonDescription;
     }
 
-    String getDateString() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -getDateString-");
-        return new SimpleDateFormat(Constants.DATE_FORMAT, Locale.getDefault()).format(date);
+    String getDate(LocalDate date) {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -getDate-");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Constants.DATE_FORMAT);
+        return date.format(formatter);
     }
 
-    String getTimeString(Date time) {
-        Log.i(Constants.TAG, ClassLesson.class.getSimpleName() + " -getTimeString-" + time);
-        return new SimpleDateFormat(Constants.TIME_FORMAT, Locale.getDefault()).format(time);
+    LocalDate getDate(String date) {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -getDate-" + date);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Constants.DATE_FORMAT);
+        return LocalDate.parse(date, formatter);
     }
 
-    Date setTime(String time) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -setTime-" + time);
-        Date sdf = null;
-        try {
-            sdf = new SimpleDateFormat(Constants.DATETIME_FORMAT, Locale.getDefault()).parse(time);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return sdf;
+    String getTime(LocalTime time) {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -getTime-");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Constants.TIME_FORMAT);
+        return time.format(formatter);
     }
-    Date setDate(String date) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -setDate-"+date);
-        Date sdf = null;
-        try {
-            sdf = new SimpleDateFormat(Constants.DATE_FORMAT, Locale.getDefault()).parse(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return sdf;
+
+    LocalTime getTime(String time) {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -getTime-");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Constants.TIME_FORMAT);
+        return LocalTime.parse(time, formatter);
     }
 
     boolean isInProgress() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -isInProgress-");
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            return isInProgressOreo();
-        } else {
-            return isInProgressDefault();
-        }
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private boolean isInProgressOreo() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -isInProgressOreo-");
-        Date now = Date.from(Instant.now());
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -isInProgressOreo-");
-        boolean isInProgress = now.after(timeStart) && now.before(timeEnd);
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -isInProgressOreo-" + isInProgress);
-        return isInProgress;
-    }
-
-    private boolean isInProgressDefault() {
-        return false;
+        LocalTime now = LocalTime.now();
+        return LocalDate.now().equals(date) && now.isAfter(timeStart) && now.isBefore(timeEnd);
     }
 
 }

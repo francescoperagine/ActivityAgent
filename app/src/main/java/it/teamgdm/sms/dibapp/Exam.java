@@ -1,12 +1,12 @@
 package it.teamgdm.sms.dibapp;
 
-import android.annotation.SuppressLint;
 import android.util.Log;
 
 import java.io.Serializable;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 class Exam implements Serializable {
     int ID;
@@ -19,7 +19,8 @@ class Exam implements Serializable {
     Date passedDate;
 
     void setPassedDate(String passedDate) {
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -setPassedDate-");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         Date date = null;
         try {
             date = (Date) simpleDateFormat.parse(passedDate);

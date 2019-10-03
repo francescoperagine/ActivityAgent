@@ -1,10 +1,12 @@
 package it.teamgdm.sms.dibapp;
 
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import java.util.HashMap;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 /**
  * An activity representing a single Exam detail screen. This
@@ -12,15 +14,27 @@ import java.util.HashMap;
  * item details are presented side-by-side with a list of items
  * in a {@link ClassListActivity}.
  */
-public class ClassDetailActivity extends BaseActivity implements BaseFragment.OnClickedItemListener {
+public class ClassDetailActivity extends BaseActivity implements
+        StudentDashboardButtonFragment.StudentDashboardButtonFragmentInterface,
+        StudentEvaluateFragment.StudentEvaluateFragmentInterface,
+        StudentQuestionFragment.StudentQuestionFragmentInterface,
+        GeofenceBroadcastReceiver.GeofenceBroadcastReceiverInterface{
 
     Bundle savedInstanceState;
     boolean lessonInProgress;
+    boolean isUserAttendingLesson;
     ClassLesson classLesson;
+    private GeofenceBroadcastReceiver geofenceBroadcastReceiver;
+    private GeofenceAPI geofenceAPI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-");
         super.onCreate(savedInstanceState);
+        geofenceBroadcastReceiver = new GeofenceBroadcastReceiver(this);
+        IntentFilter intentFilter = new IntentFilter(Constants.GEOFENCE_TRANSITION_ACTION);
+        registerReceiver(geofenceBroadcastReceiver, intentFilter);
+        geofenceAPI = new GeofenceAPI(this);
     }
 
     protected void onStart() {
@@ -39,18 +53,48 @@ public class ClassDetailActivity extends BaseActivity implements BaseFragment.On
         //
 
         if (savedInstanceState == null) {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -onStart-");
             // Create the detail fragment and add it to the activity using a fragment transaction.
             if(getIntent().getAction() != null && getIntent().getAction().equals(Constants.KEY_CLASS_LESSON_DETAIL_ACTION)) {
                 classLesson = (ClassLesson) getIntent().getSerializableExtra(Constants.KEY_CLASS_LESSON);
                 lessonInProgress = getIntent().getBooleanExtra(Constants.LESSON_IN_PROGRESS, false);
+                isUserAttendingLesson = getIntent().getBooleanExtra(Constants.IS_USER_ATTENDING_LESSON, false);
                 StudentDashboardDetailFragment dashboardDetailFragment = StudentDashboardDetailFragment.newInstance(classLesson, false);
-                StudentDashboardButtonFragment dashboardButtonFragment = StudentDashboardButtonFragment.newInstance(classLesson.lessonID, lessonInProgress);
+                Fragment fragment;
+                if (! lessonInProgress) {
+                    Log.i(Constants.TAG, getClass().getSimpleName() + " -onStart-Lesson not in progress.");
+                    fragment = StudentLessonButtonNoLessonFragment.newInstance();
+                } else if(GeofenceAPI.hasGeofencePermissions) {
+                    Log.i(Constants.TAG, getClass().getSimpleName() + " -onStart-Has geofence permission.");
+                    fragment = StudentDashboardButtonFragment.newInstance(classLesson.lessonID, isUserAttendingLesson);
+                } else {
+                    Log.i(Constants.TAG, getClass().getSimpleName() + " -onStart-No geofence permission.");
+                    fragment = StudentLessonButtonNoGeofencePermissionFragment.newInstance();
+                }
                 getSupportFragmentManager().beginTransaction()
                         .add(R.id.dashboardDetailContainer, dashboardDetailFragment)
-                        .add(R.id.dashboardButtonContainer, dashboardButtonFragment).commit();
+                        .add(R.id.dashboardButtonContainer, fragment).commit();
             }
         }
+    }
+
+    @Override
+    protected void onResume() {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onResume-");
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onPause-");
+        super.onPause();
+        unregisterReceiver(geofenceBroadcastReceiver);
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onDestroy-");
+        super.onDestroy();
+        geofenceAPI.removeGeofences();
     }
 
     int getLayoutResource() {
@@ -58,17 +102,41 @@ public class ClassDetailActivity extends BaseActivity implements BaseFragment.On
         return R.layout.activity_class_detail;
     }
 
+    @Override
+    public void onAttachFragment(@NonNull Fragment fragment) {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onAttachFragment-");
+        if(fragment instanceof StudentDashboardButtonFragment) {
+            ((StudentDashboardButtonFragment) fragment).setStudentDashboardButtonFragmentInterfaceCallback(this);
+        }
+        if(fragment instanceof StudentEvaluateFragment){
+            ((StudentEvaluateFragment) fragment).setStudentEvaluateFragmentInterfaceCallback(this);
+        }
+        if(fragment instanceof StudentQuestionFragment) {
+            ((StudentQuestionFragment) fragment).setStudentQuestionFragmentInterfaceCallback(this);
+        }
+    }
+
+    @Override
+    public void onGeofenceTransitionAction(int geofenceReceiverAction) {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onGeofenceTransitionAction-"+ geofenceReceiverAction);
+        if(GeofenceAPI.hasGeofencePermissions && lessonInProgress) {
+            StudentDashboardButtonFragment dashboardButtonFragment = StudentDashboardButtonFragment.newInstance(classLesson.lessonID, isUserAttendingLesson);
+            getSupportFragmentManager().beginTransaction().replace(R.id.dashboardButtonContainer, dashboardButtonFragment).commit();
+        }
+    }
+
+    @Override
     public void onItemSelected(int selectedActionResource) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onItemSelected-action " + selectedActionResource);
         switch (selectedActionResource) {
             case R.id.evaluateButton:
                 Log.i(Constants.TAG, getClass().getSimpleName() + " -evaluateButton-");
-                EvaluateFragment evaluateFragment = EvaluateFragment.newInstante(classLesson.lessonID);
+                StudentEvaluateFragment evaluateFragment = StudentEvaluateFragment.newInstante(classLesson.lessonID);
                 evaluateFragment.show(getSupportFragmentManager(), "Send a review");
                 break;
             case R.id.questionButton:
                 Log.i(Constants.TAG, getClass().getSimpleName() + " -questionButton-");
-                QuestionFragment questionFragment = QuestionFragment.newInstante(classLesson.lessonID);
+                StudentQuestionFragment questionFragment = StudentQuestionFragment.newInstante(classLesson.lessonID);
                 questionFragment.show(getSupportFragmentManager(), "Ask a question - lessonID" + classLesson.lessonID);
                 break;
             default:
@@ -78,56 +146,39 @@ public class ClassDetailActivity extends BaseActivity implements BaseFragment.On
 
     @Override
     public void sendQuestion(int lessonID, String input) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -sendQuestion- lessonID " + lessonID);
-        HashMap<String, String> params = new HashMap<>();
-        params.put(Constants.KEY_ACTION, Constants.USER_QUESTION_ASK);
-        params.put(Constants.KEY_CLASS_LESSON_ID, String.valueOf(lessonID));
-        params.put(Constants.KEY_USER_ID, String.valueOf(Session.getUserID()));
-        params.put(Constants.KEY_QUESTION, input);
-        if(isDataSent(params, Constants.QUESTION_SENT_CODE)) {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -sendQuestion-");
+        if(DAO.sendQuestion(lessonID, input)) {
             Toast.makeText(this, getString(R.string.question_sent), Toast.LENGTH_SHORT).show();
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -sendQuestion-question sent-");
+            Log.i(Constants.TAG, DAO.class.getSimpleName() + " -sendQuestion-question sent-");
         } else {
             Toast.makeText(this, getString(R.string.question_not_sent), Toast.LENGTH_SHORT).show();
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -sendQuestion-question not sent-");
+            Log.i(Constants.TAG, DAO.class.getSimpleName() + " -sendQuestion-question not sent-");
         }
     }
 
     @Override
-    public void setAttendance(int lessonID, boolean attendance) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -updateClassAttendance- set to " + attendance);
-        // Registers the lesson's classAttendance into the DB
-        HashMap<String, String> params = new HashMap<>();
-        params.put(Constants.KEY_ACTION, Constants.KEY_SET_ATTENDANCE);
-        params.put(Constants.KEY_CLASS_LESSON_ID, String.valueOf(lessonID));
-        params.put(Constants.KEY_USER_ID, String.valueOf(Session.getUserID()));
-        params.put(Constants.KEY_ATTENDANCE, String.valueOf(attendance));
-        if(isDataSent(params, Constants.ATTENDANCE_SET_CODE)) {
+    public void setAttendance(int lessonID, boolean isUserAttendingLesson) {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -setAttendance-");
+        if(DAO.setAttendance(lessonID, isUserAttendingLesson)) {
             Toast.makeText(this, getString(R.string.attendance_set), Toast.LENGTH_SHORT).show();
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -updateClassAttendance-classAttendance set-");
+            StudentDashboardButtonFragment dashboardButtonFragment = StudentDashboardButtonFragment.newInstance(classLesson.lessonID, isUserAttendingLesson);
+            getSupportFragmentManager().beginTransaction().replace(R.id.dashboardButtonContainer, dashboardButtonFragment).commit();
+            Log.i(Constants.TAG, DAO.class.getSimpleName() + " -updateClassAttendance-classAttendance set to " + isUserAttendingLesson);
         } else {
             Toast.makeText(this, getString(R.string.attendance_not_set), Toast.LENGTH_SHORT).show();
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -updateClassAttendance-classAttendance not set-");
+            Log.i(Constants.TAG, DAO.class.getSimpleName() + " -updateClassAttendance-classAttendance not set-");
         }
     }
 
     @Override
     public void setReview(int lessonID, String summary, String review, int rating) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -sendQuestion- lessonID " + lessonID);
-        HashMap<String, String> params = new HashMap<>();
-        params.put(Constants.KEY_ACTION, Constants.USER_SEND_REVIEW);
-        params.put(Constants.KEY_CLASS_LESSON_ID, String.valueOf(lessonID));
-        params.put(Constants.KEY_USER_ID, String.valueOf(Session.getUserID()));
-        params.put(Constants.KEY_REVIEW_RATING, String.valueOf(rating));
-        params.put(Constants.KEY_REVIEW_SUMMARY, summary);
-        params.put(Constants.KEY_REVIEW_TEXT, review);
-        if(isDataSent(params, Constants.OK_CODE)) {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -setReview-");
+        if(DAO.setReview(lessonID,summary,review,rating))  {
             Toast.makeText(this, getString(R.string.review_sent), Toast.LENGTH_SHORT).show();
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -sendQuestion-question sent-");
+            Log.i(Constants.TAG, DAO.class.getSimpleName() + " -sendQuestion-question sent-");
         } else {
             Toast.makeText(this, getString(R.string.review_not_sent), Toast.LENGTH_SHORT).show();
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -sendQuestion-question not sent-");
+            Log.i(Constants.TAG, DAO.class.getSimpleName() + " -sendQuestion-question not sent-");
         }
     }
-
 }

@@ -10,14 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ExecutionException;
-
 public abstract class BaseActivity extends AppCompatActivity {
 
     Toolbar toolbar;
@@ -63,35 +55,4 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    static JSONArray getFromDB(Map params) {
-        Log.i(Constants.TAG, ClassListActivity.class.getSimpleName() + " -getFromDB-");
-        JSONObject data = new JSONObject();
-        JSONArray response = null;
-        try {
-            for (Object o : params.entrySet()) {
-                Map.Entry entry = (Map.Entry) o;
-                data.put((String) entry.getKey(), entry.getValue());
-            }
-            Log.i(Constants.TAG, ClassListActivity.class.getSimpleName() + " -getFromDB-data "+data);
-            AsyncTaskConnection asyncTaskConnection = new AsyncTaskConnection();
-            asyncTaskConnection.execute(data);
-            response = asyncTaskConnection.get();
-            Log.i(Constants.TAG, ClassListActivity.class.getSimpleName() + " -getFromDB-response "+response);
-        } catch (JSONException | ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
-        return response;
-    }
-
-    static boolean isDataSent(HashMap params, int expectedResultCode) {
-        Log.i(Constants.TAG, BaseActivity.class.getSimpleName() + " -isDataSent-");
-        JSONArray response = getFromDB(params);
-        int codeResult = 0;
-        try {
-            codeResult = response.getJSONObject(0).getInt(Constants.KEY_CODE);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return codeResult == expectedResultCode;
-    }
 }

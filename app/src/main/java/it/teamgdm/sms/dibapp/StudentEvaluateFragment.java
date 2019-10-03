@@ -11,18 +11,29 @@ import android.widget.RatingBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 
 import java.util.Objects;
 
-public class EvaluateFragment extends BaseFragment {
+public class StudentEvaluateFragment extends DialogFragment {
+
+    private StudentEvaluateFragmentInterface studentEvaluateFragmentInterfaceCallback;
+
+    void setStudentEvaluateFragmentInterfaceCallback(StudentEvaluateFragmentInterface studentEvaluateFragmentInterfaceCallback) {
+        this.studentEvaluateFragmentInterfaceCallback = studentEvaluateFragmentInterfaceCallback;
+    }
+
+    interface StudentEvaluateFragmentInterface {
+        void setReview(int lessonID, String summary, String review, int rating);
+    }
 
     private int classLessonID;
     private EditText reviewSummary;
     private EditText reviewText;
     private RatingBar reviewRating;
 
-    static EvaluateFragment newInstante(int classLessonID) {
-        EvaluateFragment evaluateFragment = new EvaluateFragment();
+    static StudentEvaluateFragment newInstante(int classLessonID) {
+        StudentEvaluateFragment evaluateFragment = new StudentEvaluateFragment();
         Bundle arguments = new Bundle();
         arguments.putInt(Constants.KEY_CLASS_LESSON_ID, classLessonID);
         evaluateFragment.setArguments(arguments);
@@ -74,7 +85,7 @@ public class EvaluateFragment extends BaseFragment {
         int rating = reviewRating.getNumStars();
         Log.i(Constants.TAG, getClass().getSimpleName() + " -submitButtonListener-classLessonID " + classLessonID + " summary " + summary + " text " + text + " rating " + rating);
 
-        fragmentCallback.setReview(classLessonID, summary, text, rating);
+        studentEvaluateFragmentInterfaceCallback.setReview(classLessonID, summary, text, rating);
         Objects.requireNonNull(getDialog()).dismiss();
     };
 

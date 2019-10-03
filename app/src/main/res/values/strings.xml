@@ -99,6 +99,7 @@
     <string name="review_summary_text">Summary</string>
     <string name="review_description_text">Review</string>
     <string name="questionText">Write your question here.</string>
+    <string name="no_geofence_permission_text">Geofence permissions are not granted.</string>
 
 
 </resources>

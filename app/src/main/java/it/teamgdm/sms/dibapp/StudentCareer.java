@@ -25,10 +25,10 @@ class StudentCareer extends ClassList{
                 classLesson.classDescription = o.optString(Constants.KEY_CLASS_DESCRIPTION);
                 classLesson.code = o.optInt(Constants.KEY_CLASS_CODE);
                 classLesson.year = o.optInt(Constants.KEY_CLASS_LESSON_YEAR);
-                classLesson.date = classLesson.setDate(o.optString(Constants.KEY_CLASS_LESSON_DATE));
                 classLesson.semester = o.optInt(Constants.KEY_CLASS_LESSON_SEMESTER);
-                classLesson.timeStart = classLesson.setTime(o.optString(Constants.KEY_CLASS_LESSON_TIME_START));
-                classLesson.timeEnd = classLesson.setTime(o.optString(Constants.KEY_CLASS_LESSON_TIME_END));
+                classLesson.date = classLesson.getDate(o.optString(Constants.KEY_CLASS_LESSON_DATE));
+                classLesson.timeStart = classLesson.getTime(o.optString(Constants.KEY_CLASS_LESSON_TIME_START));
+                classLesson.timeEnd = classLesson.getTime(o.optString(Constants.KEY_CLASS_LESSON_TIME_END));
                 classLesson.lessonSummary = o.optString(Constants.KEY_CLASS_LESSON_SUMMARY);
                 classLesson.lessonDescription = o.optString(Constants.KEY_CLASS_LESSON_DESCRIPTION);
         //        classLesson.passed = o.optBoolean(Constants.KEY_PASSED);

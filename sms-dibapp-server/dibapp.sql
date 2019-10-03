@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Ott 01, 2019 alle 19:20
+-- Creato il: Ott 03, 2019 alle 19:54
 -- Versione del server: 10.4.6-MariaDB
 -- Versione PHP: 7.3.9
 
@@ -94,8 +94,15 @@ CREATE TABLE `class_lesson_question` (
   `lessonID` int(11) NOT NULL,
   `studentID` int(11) NOT NULL,
   `question` text NOT NULL,
-  `time` time NOT NULL DEFAULT current_timestamp()
+  `time` time DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dump dei dati per la tabella `class_lesson_question`
+--
+
+INSERT INTO `class_lesson_question` (`ID`, `lessonID`, `studentID`, `question`, `time`) VALUES
+(15, 5, 1, 'question test', '13:01:37');
 
 -- --------------------------------------------------------
 
@@ -184,8 +191,8 @@ CREATE TABLE `class_room_lesson` (
   `calendarID` int(11) NOT NULL,
   `roomID` int(11) NOT NULL,
   `date` date DEFAULT NULL,
-  `timeStart` timestamp NULL DEFAULT NULL,
-  `timeEnd` timestamp NULL DEFAULT NULL,
+  `timeStart` time DEFAULT NULL,
+  `timeEnd` time DEFAULT NULL,
   `summary` varchar(128) DEFAULT NULL,
   `description` text DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
@@ -195,8 +202,8 @@ CREATE TABLE `class_room_lesson` (
 --
 
 INSERT INTO `class_room_lesson` (`ID`, `calendarID`, `roomID`, `date`, `timeStart`, `timeEnd`, `summary`, `description`) VALUES
-(6, 16, 10, '2019-10-02', '2019-10-01 09:30:00', '2019-10-01 12:30:00', NULL, NULL),
-(5, 35, 5, '2019-10-02', '2019-10-01 06:00:00', '2019-10-01 16:00:00', NULL, NULL);
+(6, 16, 10, '2019-10-02', '11:30:00', '14:30:00', NULL, NULL),
+(5, 35, 5, '2019-10-03', '08:00:00', '23:49:00', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -300,8 +307,15 @@ CREATE TABLE `lesson_attendance_rating` (
   `rating` int(1) DEFAULT NULL,
   `summary` varchar(128) DEFAULT NULL,
   `review` text DEFAULT NULL,
-  `time` time NOT NULL DEFAULT current_timestamp()
+  `time` time DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dump dei dati per la tabella `lesson_attendance_rating`
+--
+
+INSERT INTO `lesson_attendance_rating` (`ID`, `studentID`, `lessonID`, `rating`, `summary`, `review`, `time`) VALUES
+(61, 1, 5, 5, 'test', 'test', '13:01:18');
 
 -- --------------------------------------------------------
 
@@ -418,7 +432,35 @@ INSERT INTO `student_career` (`ID`, `studentID`, `classID`, `passed`, `vote`, `p
 (25, 1, 44, 0, 0, NULL, NULL),
 (26, 1, 45, 0, 0, NULL, NULL),
 (27, 1, 46, 0, 0, NULL, NULL),
-(28, 1, 47, 0, 0, NULL, NULL);
+(28, 1, 47, 0, 0, NULL, NULL),
+(29, 41, 8, 0, 0, NULL, NULL),
+(30, 41, 1, 0, 0, NULL, NULL),
+(31, 41, 2, 0, 0, NULL, NULL),
+(32, 41, 9, 0, 0, NULL, NULL),
+(33, 41, 10, 0, 0, NULL, NULL),
+(34, 41, 11, 0, 0, NULL, NULL),
+(35, 41, 15, 0, 0, NULL, NULL),
+(36, 41, 3, 0, 0, NULL, NULL),
+(37, 41, 5, 0, 0, NULL, NULL),
+(38, 41, 4, 0, 0, NULL, NULL),
+(39, 41, 16, 0, 0, NULL, NULL),
+(40, 41, 6, 0, 0, NULL, NULL),
+(41, 41, 17, 0, 0, NULL, NULL),
+(42, 41, 18, 0, 0, NULL, NULL),
+(43, 41, 12, 0, 0, NULL, NULL),
+(44, 41, 7, 0, 0, NULL, NULL),
+(45, 41, 19, 0, 0, NULL, NULL),
+(46, 41, 13, 0, 0, NULL, NULL),
+(47, 41, 14, 0, 0, NULL, NULL),
+(48, 41, 20, 0, 0, NULL, NULL),
+(49, 41, 42, 0, 0, NULL, NULL),
+(50, 41, 55, 0, 0, NULL, NULL),
+(51, 41, 41, 0, 0, NULL, NULL),
+(52, 41, 43, 0, 0, NULL, NULL),
+(53, 41, 44, 0, 0, NULL, NULL),
+(54, 41, 45, 0, 0, NULL, NULL),
+(55, 41, 46, 0, 0, NULL, NULL),
+(56, 41, 47, 0, 0, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -444,7 +486,8 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`ID`, `serialNumber`, `name`, `surname`, `email`, `passwordHash`, `salt`, `registrationDate`, `roleID`) VALUES
 (1, '443020', 'Francesco', 'Peragine', 'francescoperagine@gmail.com', '$2y$10$wG9wq4KArvDcbwwbVlsogu6Z9IIl8uTlxfIKb4hW5th/EIiZD8W8W', 'f627667e46de19e736b1a8239b0928a4eba100e522bbc3d0a9cf2a21f9c891ff', '2019-08-01 10:39:44', 2),
-(19, '123456', 'Paolo', 'Buono', 'buono@uniba.it', '$2y$10$zDnrHIsGSEgiuVzSJk7Z7u/TnIjWxfCg1xgx6v6fg3ZRvrk49JC1i', 'debd8a7b1884f93e0573fa704ffae26231b79fb5c6f97d72e6f5c5986ccd8bce', '2019-08-13 10:39:44', 1);
+(19, '123456', 'Paolo', 'Buono', 'buono@uniba.it', '$2y$10$zDnrHIsGSEgiuVzSJk7Z7u/TnIjWxfCg1xgx6v6fg3ZRvrk49JC1i', 'debd8a7b1884f93e0573fa704ffae26231b79fb5c6f97d72e6f5c5986ccd8bce', '2019-08-13 10:39:44', 1),
+(41, '123444', 'Francesco', 'Laghetti', 'francesco.laghetti@libero.it', '$2y$10$o2bHbye/pBqrjXC4MxKYteNhaCJo/bG1CXp.K12hQIw0HLJaYRv4.', 'cf1b79f0f1cf791138aff07248274504a5d86cc63ec66fb30e080cd7d4ee1792', '2019-10-03 19:53:12', 2);
 
 -- --------------------------------------------------------
 
@@ -465,7 +508,8 @@ CREATE TABLE `user_degreecourse` (
 INSERT INTO `user_degreecourse` (`ID`, `userID`, `degreecourseID`) VALUES
 (1, 1, 2),
 (2, 19, 2),
-(3, 19, 1);
+(3, 19, 1),
+(17, 41, 2);
 
 --
 -- Indici per le tabelle scaricate
@@ -564,7 +608,7 @@ ALTER TABLE `class`
 -- AUTO_INCREMENT per la tabella `class_lesson_question`
 --
 ALTER TABLE `class_lesson_question`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT per la tabella `class_room_calendar`
@@ -594,7 +638,7 @@ ALTER TABLE `degreecourse_class`
 -- AUTO_INCREMENT per la tabella `lesson_attendance_rating`
 --
 ALTER TABLE `lesson_attendance_rating`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT per la tabella `professor_teaching`
@@ -618,19 +662,19 @@ ALTER TABLE `room`
 -- AUTO_INCREMENT per la tabella `student_career`
 --
 ALTER TABLE `student_career`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
 
 --
 -- AUTO_INCREMENT per la tabella `user`
 --
 ALTER TABLE `user`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT per la tabella `user_degreecourse`
 --
 ALTER TABLE `user_degreecourse`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

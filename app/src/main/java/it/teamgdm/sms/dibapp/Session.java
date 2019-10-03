@@ -43,7 +43,7 @@ class Session {
         HashMap<String, String> param = new HashMap<>();
         param.put(Constants.KEY_ACTION, Constants.GET_USER_DETAILS);
         param.put(Constants.KEY_USER_EMAIL, email);
-        JSONArray response = BaseActivity.getFromDB(param);
+        JSONArray response = DAO.getFromDB(param);
         try {
             JSONObject userDetails = response.getJSONObject(0);
             setUserInSharedPreferences(userDetails);

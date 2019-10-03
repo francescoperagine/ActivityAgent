@@ -1,7 +1,6 @@
 package it.teamgdm.sms.dibapp;
 
 import android.app.AlertDialog;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -15,43 +14,45 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.location.Geofence;
 
-import org.json.JSONException;
 
-import java.util.HashMap;
-import java.util.Objects;
+public class StudentDashboardButtonFragment extends Fragment {
 
+    // Student button fragment interface declaration
 
-public class StudentDashboardButtonFragment extends BaseFragment implements GeofenceBroadcastReceiver.GeofenceBroadcastReceiverCallback {
+    private StudentDashboardButtonFragmentInterface studentDashboardButtonFragmentInterfaceCallback;
 
-    private IntentFilter intentFilter;
-    private static int geofenceReceiverLastAction;
-    private int geofenceTransitionAction;
-    private GeofenceAPI geofenceAPI;
+    interface StudentDashboardButtonFragmentInterface {
+        void onItemSelected(int selectedAction);
+        void setAttendance(int lessonID, boolean attendance);
+    }
+
+    void setStudentDashboardButtonFragmentInterfaceCallback(StudentDashboardButtonFragmentInterface studentDashboardButtonFragmentInterfaceCallback) {
+        this.studentDashboardButtonFragmentInterfaceCallback = studentDashboardButtonFragmentInterfaceCallback;
+    }
 
     private int lessonID;
 
-
     private boolean isUserAttendingLesson;
-    private boolean lessonInProgress;
 
     private ToggleButton buttonPartecipate;
     private Button buttonEvaluate;
     private Button buttonQuestion;
-    private GeofenceBroadcastReceiver geofenceBroadcastReceiver;
+
 
     public StudentDashboardButtonFragment() {
         // Required empty public constructor
     }
 
-    static StudentDashboardButtonFragment newInstance(int lessonID, boolean lessonInProgress) {
+    static StudentDashboardButtonFragment newInstance(int lessonID, boolean isUserAttendingLesson) {
         Log.i(Constants.TAG, StudentDashboardButtonFragment.class.getSimpleName() + " -newInstance-");
         StudentDashboardButtonFragment fragment = new StudentDashboardButtonFragment();
         Bundle arguments = new Bundle();
         arguments.putInt(Constants.KEY_CLASS_LESSON_ID, lessonID);
-        arguments.putBoolean(Constants.LESSON_IN_PROGRESS, lessonInProgress);
+        arguments.putBoolean(Constants.IS_USER_ATTENDING_LESSON, isUserAttendingLesson);
         fragment.setArguments(arguments);
         return fragment;
     }
@@ -60,14 +61,11 @@ public class StudentDashboardButtonFragment extends BaseFragment implements Geof
     public void onCreate(Bundle savedInstanceState) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-");
         super.onCreate(savedInstanceState);
-        geofenceAPI = new GeofenceAPI(getActivity());
+
         if (getArguments() != null) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-\n"+getArguments());
             lessonID = getArguments().getInt(Constants.KEY_CLASS_LESSON_ID);
-            lessonInProgress = getArguments().getBoolean(Constants.LESSON_IN_PROGRESS);
-            isUserAttendingLesson = isUserAttendingLesson(lessonID);
-            intentFilter = new IntentFilter(Constants.GEOFENCE_TRANSITION_ACTION);
-            Objects.requireNonNull(getActivity()).registerReceiver(geofenceBroadcastReceiver, intentFilter);
+            isUserAttendingLesson = getArguments().getBoolean(Constants.IS_USER_ATTENDING_LESSON);
         }
     }
 
@@ -87,18 +85,14 @@ public class StudentDashboardButtonFragment extends BaseFragment implements Geof
         buttonEvaluate.setOnClickListener(evaluateButtonListener);
         buttonQuestion.setOnClickListener(questionButtonListener);
 
-        if(lessonInProgress) {
-            classLessonInProgress.setBackgroundColor(Color.GREEN);
-            classLessonInProgress.setText(R.string.classLessonInProgress);
-        } else {
-            classLessonInProgress.setText(R.string.classLessonNotInProgress);
-        }
+        classLessonInProgress.setBackgroundColor(Color.GREEN);
+        classLessonInProgress.setText(R.string.classLessonInProgress);
+
 
         if(GeofenceAPI.hasGeofencePermissions) {
-            buttonRangeChecker();
             buttonAttendanceChecker();
         } else {
-            buttonDisabler();
+            buttonSwitchPanel(false, false, false, false);
         }
 
         return rootView;
@@ -106,84 +100,58 @@ public class StudentDashboardButtonFragment extends BaseFragment implements Geof
 
     private final View.OnClickListener partecipateButtonListener = v -> {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -partecipateButtonListener-");
-        fragmentCallback.setAttendance(lessonID, buttonPartecipate.isChecked());
+        studentDashboardButtonFragmentInterfaceCallback.setAttendance(lessonID, buttonPartecipate.isChecked());
     };
 
     private final View.OnClickListener evaluateButtonListener = v -> {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -evaluateButtonListener-");
-        fragmentCallback.onItemSelected(R.id.evaluateButton);
+        studentDashboardButtonFragmentInterfaceCallback.onItemSelected(R.id.evaluateButton);
     };
 
     private final View.OnClickListener questionButtonListener = v -> {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -questionButtonListener-");
-        fragmentCallback.onItemSelected(R.id.questionButton);
+        studentDashboardButtonFragmentInterfaceCallback.onItemSelected(R.id.questionButton);
     };
 
-    /**
-     * Enables or disables the partecipateButton
-     */
-
-    private void buttonRangeChecker() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -buttonRangeChecker-");
-        if(geofenceTransitionAction == Geofence.GEOFENCE_TRANSITION_EXIT) {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -buttonRangeChecker-" + getResources().getString(R.string.geofence_transition_left));
-            Toast.makeText(getContext(), getResources().getString(R.string.geofence_transition_left), Toast.LENGTH_LONG).show();
-            buttonDisabler();
-        } else if (geofenceTransitionAction == Geofence.GEOFENCE_TRANSITION_DWELL) {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -buttonRangeChecker-" + getResources().getString(R.string.geofence_transition_dwelling));
-            Toast.makeText(getContext(), getResources().getString(R.string.geofence_transition_dwelling), Toast.LENGTH_LONG).show();
-            buttonPartecipate.setEnabled(true);
-            buttonEvaluate.setEnabled(true);
-            buttonQuestion.setEnabled(true);
-        } else { //user is entering the the geofence
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -buttonRangeChecker-" + getResources().getString(R.string.geofence_transition_enter));
-            Toast.makeText(getContext(), getResources().getString(R.string.geofence_transition_enter), Toast.LENGTH_LONG).show();
-            buttonPartecipate.setEnabled(true);
-        }
-    }
-
     private void buttonAttendanceChecker() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -setAttendance-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -buttonAttendanceChecker-");
         if(isUserAttendingLesson) {
-            buttonPartecipate.setChecked(true);
-            buttonEvaluate.setEnabled(true);
-            buttonQuestion.setEnabled(true);
+            buttonSwitchPanel(true, true, true, true);
         } else {
-            buttonPartecipate.setChecked(false);
-            buttonEvaluate.setEnabled(false);
-            buttonQuestion.setEnabled(false);
+            buttonSwitchPanel(false, true, false, false);
         }
     }
 
-    private void buttonDisabler() {
-        buttonPartecipate.setEnabled(false);
-        buttonEvaluate.setEnabled(false);
-        buttonQuestion.setEnabled(false);
-    }
-
-    @Override
-    public void onGeofenceTransitionAction(int geofenceReceiverAction) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -onGeofenceTransitionAction-"+ geofenceTransitionAction);
-        if(geofenceTransitionAction != geofenceReceiverLastAction) {
-            // Forwards the new geofence's transition code to the fragment
-            geofenceReceiverLastAction = geofenceTransitionAction;
-            buttonRangeChecker();
+    private void geofenceRangeChecker(int geofenceTransitionAction) {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -geofenceRangeChecker-");
+        switch (geofenceTransitionAction) {
+            case Geofence.GEOFENCE_TRANSITION_DWELL:
+                Log.i(Constants.TAG, getClass().getSimpleName() + " -geofenceRangeChecker-" + getResources().getString(R.string.geofence_transition_dwelling));
+                Toast.makeText(getContext(), getResources().getString(R.string.geofence_transition_dwelling), Toast.LENGTH_LONG).show();
+                if(isUserAttendingLesson) {
+                    buttonSwitchPanel(true, true, true, true);
+                } else {
+                    buttonSwitchPanel(false, true, false, false);
+                }
+                break;
+            case Geofence.GEOFENCE_TRANSITION_ENTER:
+                Log.i(Constants.TAG, getClass().getSimpleName() + " -geofenceRangeChecker-" + getResources().getString(R.string.geofence_transition_enter));
+                Toast.makeText(getContext(), getResources().getString(R.string.geofence_transition_enter), Toast.LENGTH_LONG).show();
+                buttonSwitchPanel(isUserAttendingLesson, true, false, false);
+                break;
+            default:
+                Toast.makeText(getContext(), getResources().getString(R.string.geofence_transition_left), Toast.LENGTH_LONG).show();
+                buttonSwitchPanel(isUserAttendingLesson, false, false, false);
+                break;
         }
     }
 
-    private boolean isUserAttendingLesson(int lessonID) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -isUserAttendingLesson-");
-        HashMap<String, String> params = new HashMap<>();
-        params.put(Constants.KEY_ACTION, Constants.IS_USER_ATTENDING_LESSON);
-        params.put(Constants.KEY_CLASS_LESSON_ID, String.valueOf(lessonID));
-        params.put(Constants.KEY_USER_ID, String.valueOf(Session.getUserID()));
-        int response = 0;
-        try {
-            response = BaseActivity.getFromDB(params).getJSONObject(0).getInt(Constants.KEY_ATTENDANCE);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return response == 1;
+    private void buttonSwitchPanel(boolean buttonPartecipateIsChecked, boolean buttonPartecipateIsActive, boolean buttonEvaluateIsActive, boolean buttonQuerstionIsActive) {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -buttonSwitchPanel-");
+        buttonPartecipate.setChecked(buttonPartecipateIsChecked);
+        buttonPartecipate.setEnabled(buttonPartecipateIsActive);
+        buttonEvaluate.setEnabled(buttonEvaluateIsActive);
+        buttonQuestion.setEnabled(buttonQuerstionIsActive);
     }
 
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -205,20 +173,5 @@ public class StudentDashboardButtonFragment extends BaseFragment implements Geof
                         .show();
             }
         }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        try {
-            getActivity().unregisterReceiver(geofenceBroadcastReceiver);
-        } catch (NullPointerException | IllegalArgumentException ignored) {}
-
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        geofenceAPI.removeGeofences();
     }
 }

@@ -187,7 +187,7 @@ public class RegisterActivity extends BaseActivity {
         params.put(Constants.KEY_USER_EMAIL, tmpUser.getEmail());
         params.put(Constants.KEY_USER_PASSWORD, tmpUser.getPassword());
 
-        JSONArray response = getFromDB(params);
+        JSONArray response = DAO.getFromDB(params);
 
         try {
             String message = response.getJSONObject(0).getString(Constants.KEY_MESSAGE);

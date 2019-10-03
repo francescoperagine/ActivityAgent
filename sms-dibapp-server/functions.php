@@ -31,10 +31,9 @@ define("GET_STUDENT_CURRENT_CLASS_LIST_QUERY",
 	AND s.studentID = ?
 	GROUP BY className
 	ORDER BY c.year, className");
-	//AND DAYOFWEEK(CURRENT_DATE) = crc.day
 	// AND CURRENT_TIME >= (SUBTIME(crc.timeStart, '2:00:00')) and CURRENT_TIME <= (ADDTIME(crc.timeEnd,'2:00:00'))
 define("GET_PROFESSOR_CURRENT_CLASS_LIST_QUERY", 
-	"SELECT crl.ID as lessonID, c.ID as classID, c.name as className, c.year as classYear, c.semester as classSemester, crl.timeStart as classLessonTimeStart, crl.timeEnd as classLessonTimeEnd
+	"SELECT crl.ID as lessonID, c.ID as classID, c.name as className, c.year as classYear, c.semester as classSemester, crl.date as classLessonDate, crl.timeStart as classLessonTimeStart, crl.timeEnd as classLessonTimeEnd
 	FROM professor_teaching as pt, class as c, class_room_calendar as crc, class_room_lesson as crl
 	WHERE pt.classID = c.ID 
 	AND c.ID = crc.classID
@@ -42,7 +41,6 @@ define("GET_PROFESSOR_CURRENT_CLASS_LIST_QUERY",
 	AND pt.professorID = ?
 	GROUP BY className
 	ORDER BY c.year, className");
-	//AND DAYOFWEEK(CURRENT_DATE) = crc.day
 	// AND CURRENT_TIME >= (SUBTIME(crc.timeStart, '2:00:00')) and CURRENT_TIME <= (ADDTIME(crc.timeEnd,'2:00:00'))
 //define("GET_STUDENT_EXAM_LIST_QUERY", "SELECT c.ID as classID, c.name as className, c.year as year, c.semester as semester, s.passed as passed, s.passedDate as passedDate, s.vote as vote, s.praise as praise FROM student_career as s, class as c WHERE s.classID = c.ID AND studentID = ? ORDER BY year, className");
 define("GET_PROFESSOR_CLASS_LIST_QUERY", "SELECT c.id as classID, c.name as className FROM class as c, professor_teaching as p, user as u WHERE c.ID = p.classID AND p.professorID = u.id AND u.id = ?");

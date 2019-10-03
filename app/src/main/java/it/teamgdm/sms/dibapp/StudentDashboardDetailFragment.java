@@ -7,9 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+
 import java.util.Objects;
 
-public class StudentDashboardDetailFragment extends BaseFragment {
+public class StudentDashboardDetailFragment extends Fragment {
 
     private ClassLesson classLesson;
 
@@ -71,13 +73,13 @@ public class StudentDashboardDetailFragment extends BaseFragment {
             classDescription.setText(classLesson.classDescription);
         }
 
-        String lessonDate = getString(R.string.lessonDate) + "\n" + classLesson.getDateString();
+        String lessonDate = getString(R.string.lessonDate) + "\n" + classLesson.getDate(classLesson.date);
         classLessonDate.setText(lessonDate);
 
-        String lessonTimeStart = getString(R.string.lessonStartAt) + "\n" + classLesson.getTimeString(classLesson.timeStart);
+        String lessonTimeStart = getString(R.string.lessonStartAt) + "\n" + classLesson.getTime(classLesson.timeStart);
         classLessonTimeStart.setText(lessonTimeStart);
 
-        String lessonTimeEnd = getString(R.string.lessonEndAt) + "\n" + classLesson.getTimeString(classLesson.timeEnd);
+        String lessonTimeEnd = getString(R.string.lessonEndAt) + "\n" + classLesson.getTime(classLesson.timeEnd);
         classLessonTimeEnd.setText(lessonTimeEnd);
 
         if(classLesson.lessonSummary.equals("null")) {

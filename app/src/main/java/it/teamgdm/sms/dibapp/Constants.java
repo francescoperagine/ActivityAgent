@@ -25,8 +25,7 @@ public final class Constants {
     static final String KEY_MESSAGE = "message";
 
     static final String DATE_FORMAT = "yyyy-MM-dd";
-    static final String TIME_FORMAT = "kk:mm:ss";
-    static final String DATETIME_FORMAT = "yyyy-MM-dd kk:mm:ss";
+    static final String TIME_FORMAT = "HH:mm:ss";
 
     // USER DETAILS
 
@@ -60,7 +59,7 @@ public final class Constants {
     // DB ACTIONS
 
     static final String USER_LOGIN = "login";
-    static final String USER_REGISTRATION = "registration";
+    static final String USER_REGISTRATION = "userRegistration";
     static final String GET_USER_DETAILS = "getUserDetails";
     static final String GET_ROLE_LIST = "getRoleList";
     static final String GET_DEGREECOURSE_LIST = "getDegreecourseList";
@@ -90,7 +89,7 @@ public final class Constants {
 
     static final String GEOFENCE_TRANSITION_ACTION = "geofenceTransitionAction";
 
-    static final int GEOFENCE_TRANSITION_DWELL_TIME = 1000; // need to wait for at least some seconds before the trigger
+    static final int GEOFENCE_TRANSITION_DWELL_TIME = 2; // need to wait for at least some seconds before the trigger
     static final int GEOFENCE_PERMISSION_REQUEST_CODE = 1;
     static final int GEOFENCE_METER_RADIUS_DIB = 100;
     static final int GEOFENCE_METER_RADIUS_PDA = 100;
