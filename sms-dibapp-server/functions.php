@@ -21,9 +21,9 @@ define("SET_STUDENT_CAREER_QUERY",
       AND user.ID = user_degreecourse.userID
       AND degreecourse_class.degreecourseID = degreecourse.ID
       AND degreecourse.name = :degreecourse");
-// Gets the list of active classes with the current time and date 
+// Gets the list of active classes
 define("GET_STUDENT_CURRENT_CLASS_LIST_QUERY", 
-	"SELECT crl.ID as lessonID, c.ID as classID, c.name as className, c.code as classCode, c.description as classDescription, c.year as classYear, c.semester as classSemester, crl.date as classLessonDate, crl.timeStart as classLessonTimeStart, crl.timeEnd as classLessonTimeEnd, crl.summary as classLessonSummary , crl.description as classLessonDescription 
+	"SELECT crl.ID as lessonID, c.ID as classID, c.name as className, c.code as classCode, c.description as classDescription, c.year as classYear, c.semester as classSemester, crl.timeStart as classLessonTimeStart, crl.timeEnd as classLessonTimeEnd, crl.summary as classLessonSummary , crl.description as classLessonDescription 
 	FROM student_career as s, class as c, class_room_calendar as crc, class_room_lesson as crl
 	WHERE s.classID = c.ID 
 	AND c.ID = crc.classID
@@ -46,7 +46,7 @@ define("GET_PROFESSOR_CURRENT_CLASS_LIST_QUERY",
 define("GET_PROFESSOR_CLASS_LIST_QUERY", "SELECT c.id as classID, c.name as className FROM class as c, professor_teaching as p, user as u WHERE c.ID = p.classID AND p.professorID = u.id AND u.id = ?");
 define("GET_USER_DETAILS_QUERY", "SELECT u.ID as userID, u.name as name, u.surname as surname, u.email as email, u.registrationDate as registrationDate, r.name as roleName FROM user as u, role as r WHERE u.roleID = r.ID AND email = ?");
 define("GET_CLASS_LESSON_DETAIL_QUERY", 
-	"SELECT c.ID as classID, c.name as className, c.description as classDescription, c.code as classCode, c.year as classYear, c.semester as classSemester, crl.date as classLessonDate, crl.timeStart as classLessonTimeStart, crl.timeEnd as classLessonTimeEnd, crl.summary as classLessonSummary , crl.description as classLessonDescription 
+	"SELECT c.ID as classID, c.name as className, c.description as classDescription, c.code as classCode, c.year as classYear, c.semester as classSemester, crl.timeStart as classLessonTimeStart, crl.timeEnd as classLessonTimeEnd, crl.summary as classLessonSummary , crl.description as classLessonDescription 
 	FROM class as c 
 	JOIN class_room_calendar as crc ON c.ID = crc.classID
 	JOIN class_room_lesson as crl ON crc.ID = crl.calendarID

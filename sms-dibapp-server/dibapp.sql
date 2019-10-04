@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Ott 03, 2019 alle 19:54
+-- Creato il: Ott 04, 2019 alle 16:29
 -- Versione del server: 10.4.6-MariaDB
 -- Versione PHP: 7.3.9
 
@@ -190,9 +190,8 @@ CREATE TABLE `class_room_lesson` (
   `ID` int(11) NOT NULL,
   `calendarID` int(11) NOT NULL,
   `roomID` int(11) NOT NULL,
-  `date` date DEFAULT NULL,
-  `timeStart` time DEFAULT NULL,
-  `timeEnd` time DEFAULT NULL,
+  `timeStart` datetime DEFAULT NULL,
+  `timeEnd` datetime DEFAULT NULL,
   `summary` varchar(128) DEFAULT NULL,
   `description` text DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
@@ -201,9 +200,9 @@ CREATE TABLE `class_room_lesson` (
 -- Dump dei dati per la tabella `class_room_lesson`
 --
 
-INSERT INTO `class_room_lesson` (`ID`, `calendarID`, `roomID`, `date`, `timeStart`, `timeEnd`, `summary`, `description`) VALUES
-(6, 16, 10, '2019-10-02', '11:30:00', '14:30:00', NULL, NULL),
-(5, 35, 5, '2019-10-03', '08:00:00', '23:49:00', NULL, NULL);
+INSERT INTO `class_room_lesson` (`ID`, `calendarID`, `roomID`, `timeStart`, `timeEnd`, `summary`, `description`) VALUES
+(6, 16, 10, '2019-10-04 11:30:00', '2019-10-04 14:30:00', NULL, NULL),
+(5, 35, 5, '2019-10-04 08:00:00', '2019-10-04 23:49:00', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -662,7 +661,7 @@ ALTER TABLE `room`
 -- AUTO_INCREMENT per la tabella `student_career`
 --
 ALTER TABLE `student_career`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
 --
 -- AUTO_INCREMENT per la tabella `user`
