@@ -73,13 +73,13 @@ public class StudentDashboardDetailFragment extends Fragment {
             classDescription.setText(classLesson.classDescription);
         }
 
-        String lessonDate = getString(R.string.lessonDate) + "\n" + classLesson.getDate(classLesson.date);
+        String lessonDate = getString(R.string.lessonDate) + "\n" + classLesson.getDate();
         classLessonDate.setText(lessonDate);
 
-        String lessonTimeStart = getString(R.string.lessonStartAt) + "\n" + classLesson.getTime(classLesson.timeStart);
+        String lessonTimeStart = getString(R.string.lessonStartAt) + "\n" + classLesson.getTimeStringFromDate(classLesson.timeStart);
         classLessonTimeStart.setText(lessonTimeStart);
 
-        String lessonTimeEnd = getString(R.string.lessonEndAt) + "\n" + classLesson.getTime(classLesson.timeEnd);
+        String lessonTimeEnd = getString(R.string.lessonEndAt) + "\n" + classLesson.getTimeStringFromDate(classLesson.timeEnd);
         classLessonTimeEnd.setText(lessonTimeEnd);
 
         if(classLesson.lessonSummary.equals("null")) {

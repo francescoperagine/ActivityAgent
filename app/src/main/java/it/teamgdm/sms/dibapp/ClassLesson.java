@@ -5,9 +5,10 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class ClassLesson extends Exam implements Serializable {
 
@@ -15,9 +16,8 @@ public class ClassLesson extends Exam implements Serializable {
     int lessonID;
     int year;
     int semester;
-    LocalDate date;
-    LocalTime timeStart;
-    LocalTime timeEnd;
+    Date timeStart;
+    Date timeEnd;
     String lessonSummary;
     String lessonDescription;
 
@@ -29,38 +29,36 @@ public class ClassLesson extends Exam implements Serializable {
     public String toString() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -toString-");
         return "\nClassID \t " + classID + "\nLessonID \t " + lessonID + "\nName \t" + name + "\ncode \t" + code + "\nclassDescription \t" + classDescription + "\nyear \t" + year +
-                "\nsemester \t" + semester + "\ndate \t" + getDate(date) + "\ntimeStart \t" + timeStart + "\ntimeEnd \t" + timeEnd +
+                "\nsemester \t" + semester + "\ndate \t" + getDate() + "\ntimeStart \t" + timeStart + "\ntimeEnd \t" + timeEnd +
                 "\nlessonSummary \t" + lessonSummary + "\nlessonDescription \t" + lessonDescription;
     }
 
-    String getDate(LocalDate date) {
+    String getDate() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -getDate-");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Constants.DATE_FORMAT);
-        return date.format(formatter);
+        return new SimpleDateFormat(Constants.DATE_FORMAT, Locale.getDefault()).format(timeStart);
     }
 
-    LocalDate getDate(String date) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -getDate-" + date);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Constants.DATE_FORMAT);
-        return LocalDate.parse(date, formatter);
+    String getTimeStringFromDate(Date date) {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -getTimestampStringFromDate-" + date);
+        return new SimpleDateFormat(Constants.TIME_FORMAT, Locale.getDefault()).format(date);
     }
 
-    String getTime(LocalTime time) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -getTime-");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Constants.TIME_FORMAT);
-        return time.format(formatter);
-    }
-
-    LocalTime getTime(String time) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -getTime-");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Constants.TIME_FORMAT);
-        return LocalTime.parse(time, formatter);
+    Date getTimestampDateFromString(String time) {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -getTimeFromDatetimeString-"+ time);
+        SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATETIME_FORMAT, Locale.getDefault());
+        Date d = null;
+        try {
+            d = sdf.parse(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return d;
     }
 
     boolean isInProgress() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -isInProgress-");
-        LocalTime now = LocalTime.now();
-        return LocalDate.now().equals(date) && now.isAfter(timeStart) && now.isBefore(timeEnd);
+        Date now = new Date();
+        return now.after(timeStart) && now.before(timeEnd);
     }
 
 }

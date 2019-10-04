@@ -26,6 +26,7 @@ public final class Constants {
 
     static final String DATE_FORMAT = "yyyy-MM-dd";
     static final String TIME_FORMAT = "HH:mm:ss";
+    static final String DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     // USER DETAILS
 

@@ -26,9 +26,8 @@ class StudentCareer extends ClassList{
                 classLesson.code = o.optInt(Constants.KEY_CLASS_CODE);
                 classLesson.year = o.optInt(Constants.KEY_CLASS_LESSON_YEAR);
                 classLesson.semester = o.optInt(Constants.KEY_CLASS_LESSON_SEMESTER);
-                classLesson.date = classLesson.getDate(o.optString(Constants.KEY_CLASS_LESSON_DATE));
-                classLesson.timeStart = classLesson.getTime(o.optString(Constants.KEY_CLASS_LESSON_TIME_START));
-                classLesson.timeEnd = classLesson.getTime(o.optString(Constants.KEY_CLASS_LESSON_TIME_END));
+                classLesson.timeStart = classLesson.getTimestampDateFromString(o.optString(Constants.KEY_CLASS_LESSON_TIME_START));
+                classLesson.timeEnd = classLesson.getTimestampDateFromString(o.optString(Constants.KEY_CLASS_LESSON_TIME_END));
                 classLesson.lessonSummary = o.optString(Constants.KEY_CLASS_LESSON_SUMMARY);
                 classLesson.lessonDescription = o.optString(Constants.KEY_CLASS_LESSON_DESCRIPTION);
         //        classLesson.passed = o.optBoolean(Constants.KEY_PASSED);
