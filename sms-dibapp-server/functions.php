@@ -33,7 +33,7 @@ define("GET_STUDENT_CURRENT_CLASS_LIST_QUERY",
 	ORDER BY c.year, className");
 	// AND CURRENT_TIME >= (SUBTIME(crc.timeStart, '2:00:00')) and CURRENT_TIME <= (ADDTIME(crc.timeEnd,'2:00:00'))
 define("GET_PROFESSOR_CURRENT_CLASS_LIST_QUERY", 
-	"SELECT crl.ID as lessonID, c.ID as classID, c.name as className, c.year as classYear, c.semester as classSemester, crl.date as classLessonDate, crl.timeStart as classLessonTimeStart, crl.timeEnd as classLessonTimeEnd
+	"SELECT crl.ID as lessonID, c.ID as classID, c.name as className, c.year as classYear, c.semester as classSemester, crl.timeStart as classLessonTimeStart, crl.timeEnd as classLessonTimeEnd
 	FROM professor_teaching as pt, class as c, class_room_calendar as crc, class_room_lesson as crl
 	WHERE pt.classID = c.ID 
 	AND c.ID = crc.classID

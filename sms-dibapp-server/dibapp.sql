@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.0.1
+-- version 4.8.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Ott 04, 2019 alle 16:29
--- Versione del server: 10.4.6-MariaDB
--- Versione PHP: 7.3.9
+-- Creato il: Ott 04, 2019 alle 20:49
+-- Versione del server: 10.1.31-MariaDB
+-- Versione PHP: 7.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -31,10 +31,10 @@ SET time_zone = "+00:00";
 CREATE TABLE `class` (
   `ID` int(11) NOT NULL,
   `name` varchar(256) DEFAULT NULL,
-  `description` text DEFAULT NULL,
+  `description` text,
   `code` varchar(10) DEFAULT NULL,
   `year` int(1) NOT NULL,
-  `semester` int(1) DEFAULT 0
+  `semester` int(1) DEFAULT '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 --
@@ -124,7 +124,7 @@ CREATE TABLE `class_room_calendar` (
 --
 
 INSERT INTO `class_room_calendar` (`ID`, `classID`, `roomID`, `day`, `timeStart`, `timeEnd`) VALUES
-(1, 5, 5, 1, '09:00:00', '12:00:00'),
+(1, 20, 5, 1, '09:00:00', '12:00:00'),
 (2, 5, 5, 2, '11:30:00', '14:30:00'),
 (3, 5, 5, 3, '09:00:00', '11:00:00'),
 (4, 1, 5, 1, '11:30:00', '14:30:00'),
@@ -193,7 +193,7 @@ CREATE TABLE `class_room_lesson` (
   `timeStart` datetime DEFAULT NULL,
   `timeEnd` datetime DEFAULT NULL,
   `summary` varchar(128) DEFAULT NULL,
-  `description` text DEFAULT NULL
+  `description` text
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 --
@@ -201,7 +201,7 @@ CREATE TABLE `class_room_lesson` (
 --
 
 INSERT INTO `class_room_lesson` (`ID`, `calendarID`, `roomID`, `timeStart`, `timeEnd`, `summary`, `description`) VALUES
-(6, 16, 10, '2019-10-04 11:30:00', '2019-10-04 14:30:00', NULL, NULL),
+(6, 1, 10, '2019-10-04 11:30:00', '2019-10-04 14:30:00', NULL, NULL),
 (5, 35, 5, '2019-10-04 08:00:00', '2019-10-04 23:49:00', NULL, NULL);
 
 -- --------------------------------------------------------
@@ -213,7 +213,7 @@ INSERT INTO `class_room_lesson` (`ID`, `calendarID`, `roomID`, `timeStart`, `tim
 CREATE TABLE `degreecourse` (
   `ID` int(11) NOT NULL,
   `name` varchar(256) NOT NULL,
-  `description` text DEFAULT NULL,
+  `description` text,
   `ministerialDecree` varchar(128) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
@@ -305,7 +305,7 @@ CREATE TABLE `lesson_attendance_rating` (
   `lessonID` int(11) NOT NULL,
   `rating` int(1) DEFAULT NULL,
   `summary` varchar(128) DEFAULT NULL,
-  `review` text DEFAULT NULL,
+  `review` text,
   `time` time DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
@@ -395,7 +395,7 @@ CREATE TABLE `student_career` (
   `ID` int(11) NOT NULL,
   `studentID` int(11) NOT NULL,
   `classID` int(11) NOT NULL,
-  `passed` tinyint(1) NOT NULL DEFAULT 0,
+  `passed` tinyint(1) NOT NULL DEFAULT '0',
   `vote` int(2) NOT NULL,
   `praise` tinyint(1) DEFAULT NULL,
   `passedDate` date DEFAULT NULL
@@ -475,7 +475,7 @@ CREATE TABLE `user` (
   `email` varchar(128) NOT NULL,
   `passwordHash` varchar(256) NOT NULL,
   `salt` varchar(256) NOT NULL,
-  `registrationDate` datetime DEFAULT current_timestamp(),
+  `registrationDate` datetime DEFAULT CURRENT_TIMESTAMP,
   `roleID` int(11) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
