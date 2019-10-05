@@ -140,8 +140,12 @@ public class ClassListActivity extends BaseActivity {
         public void onBindViewHolder(final ViewHolder holder, int position) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -onBindViewHolder-");
             holder.titleView.setText(classList.get(position).name);
-            if(classList.get(position).isInProgress()) holder.titleView.setBackgroundColor(Color.GREEN);
-            holder.itemView.setTag(classList.get(position).lessonID);
+            if(!loginIntent.hasExtra(Constants.KEY_ROLE_PROFESSOR)) {
+                if (classList.get(position).isInProgress())
+                    holder.titleView.setBackgroundColor(Color.GREEN);
+            }
+                holder.itemView.setTag(classList.get(position).lessonID);
+
             holder.itemView.setOnClickListener(mOnClickListener);
         }
 

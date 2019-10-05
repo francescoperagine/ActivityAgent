@@ -20,7 +20,7 @@ public class SplashActivity extends AppCompatActivity {
          * and closes this Splash-Screen after 1 second.*/
         new Handler().postDelayed(() -> {
             /* Creates an Intent that will start the MainActivity. */
-            Intent mainIntent = new Intent(SplashActivity.this,MainActivity.class);
+            Intent mainIntent = new Intent(SplashActivity.this,LoginActivity.class);
             SplashActivity.this.startActivity(mainIntent);
             SplashActivity.this.finish();
         }, SPLASH_DISPLAY_LENGTH);
