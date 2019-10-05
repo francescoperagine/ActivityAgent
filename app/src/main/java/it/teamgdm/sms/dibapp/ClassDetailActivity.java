@@ -8,6 +8,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.location.Geofence;
+
 /**
  * An activity representing a single Exam detail screen. This
  * activity is only used on narrow width devices. On tablet-size devices,
@@ -15,7 +17,7 @@ import androidx.fragment.app.Fragment;
  * in a {@link ClassListActivity}.
  */
 public class ClassDetailActivity extends BaseActivity implements
-        StudentDashboardButtonFragment.StudentDashboardButtonFragmentInterface,
+        StudentDashboardBottomFragment.StudentDashboardButtonFragmentInterface,
         StudentEvaluateFragment.StudentEvaluateFragmentInterface,
         StudentQuestionFragment.StudentQuestionFragmentInterface,
         GeofenceBroadcastReceiver.GeofenceBroadcastReceiverInterface{
@@ -26,6 +28,7 @@ public class ClassDetailActivity extends BaseActivity implements
     ClassLesson classLesson;
     private GeofenceBroadcastReceiver geofenceBroadcastReceiver;
     private GeofenceAPI geofenceAPI;
+    IntentFilter intentFilter = new IntentFilter(Constants.GEOFENCE_TRANSITION_ACTION);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +43,6 @@ public class ClassDetailActivity extends BaseActivity implements
     protected void onStart() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onStart-");
         super.onStart();
-
 
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity
@@ -59,42 +61,49 @@ public class ClassDetailActivity extends BaseActivity implements
                 lessonInProgress = getIntent().getBooleanExtra(Constants.LESSON_IN_PROGRESS, false);
                 isUserAttendingLesson = getIntent().getBooleanExtra(Constants.IS_USER_ATTENDING_LESSON, false);
                 StudentDashboardDetailFragment dashboardDetailFragment = StudentDashboardDetailFragment.newInstance(classLesson, false);
-                Fragment fragment;
+                Fragment bottomFragment;
                 if (! lessonInProgress) {
                     Log.i(Constants.TAG, getClass().getSimpleName() + " -onStart-Lesson not in progress.");
-                    fragment = StudentLessonButtonNoLessonFragment.newInstance();
+                    bottomFragment = StudentLessonBottomNoLessonFragment.newInstance();
                 } else if(GeofenceAPI.hasGeofencePermissions) {
                     Log.i(Constants.TAG, getClass().getSimpleName() + " -onStart-Has geofence permission.");
-                    fragment = StudentDashboardButtonFragment.newInstance(classLesson.lessonID, isUserAttendingLesson);
+                    bottomFragment = getBottomFragment(0);
                 } else {
                     Log.i(Constants.TAG, getClass().getSimpleName() + " -onStart-No geofence permission.");
-                    fragment = StudentLessonButtonNoGeofencePermissionFragment.newInstance();
+                    bottomFragment = StudentLessonBottomNoGeofencePermissionFragment.newInstance();
                 }
                 getSupportFragmentManager().beginTransaction()
                         .add(R.id.dashboardDetailContainer, dashboardDetailFragment)
-                        .add(R.id.dashboardButtonContainer, fragment).commit();
+                        .add(R.id.dashboardButtonContainer, bottomFragment).commit();
             }
         }
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onResume-");
         super.onResume();
+        if(GeofenceAPI.hasGeofencePermissions) {
+            registerReceiver(geofenceBroadcastReceiver, intentFilter);
+        }
     }
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onPause-");
         super.onPause();
-        unregisterReceiver(geofenceBroadcastReceiver);
+        if(GeofenceAPI.hasGeofencePermissions) {
+            unregisterReceiver(geofenceBroadcastReceiver);
+        }
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onDestroy-");
         super.onDestroy();
-        geofenceAPI.removeGeofences();
+        if(GeofenceAPI.hasGeofencePermissions) {
+            geofenceAPI.removeGeofences();
+        }
     }
 
     int getLayoutResource() {
@@ -105,8 +114,8 @@ public class ClassDetailActivity extends BaseActivity implements
     @Override
     public void onAttachFragment(@NonNull Fragment fragment) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onAttachFragment-");
-        if(fragment instanceof StudentDashboardButtonFragment) {
-            ((StudentDashboardButtonFragment) fragment).setStudentDashboardButtonFragmentInterfaceCallback(this);
+        if(fragment instanceof StudentDashboardBottomFragment) {
+            ((StudentDashboardBottomFragment) fragment).setStudentDashboardButtonFragmentInterfaceCallback(this);
         }
         if(fragment instanceof StudentEvaluateFragment){
             ((StudentEvaluateFragment) fragment).setStudentEvaluateFragmentInterfaceCallback(this);
@@ -118,11 +127,34 @@ public class ClassDetailActivity extends BaseActivity implements
 
     @Override
     public void onGeofenceTransitionAction(int geofenceReceiverAction) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -onGeofenceTransitionAction-"+ geofenceReceiverAction);
-        if(GeofenceAPI.hasGeofencePermissions && lessonInProgress) {
-            StudentDashboardButtonFragment dashboardButtonFragment = StudentDashboardButtonFragment.newInstance(classLesson.lessonID, isUserAttendingLesson);
-            getSupportFragmentManager().beginTransaction().replace(R.id.dashboardButtonContainer, dashboardButtonFragment).commit();
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onGeofenceTransitionAction-"+ geofenceReceiverAction + " lesson in progress " + lessonInProgress);
+        if(lessonInProgress) {
+            Fragment bottomFragment = getBottomFragment(geofenceReceiverAction);
+            getSupportFragmentManager().beginTransaction().replace(R.id.dashboardButtonContainer, bottomFragment).commit();
         }
+    }
+
+    Fragment getBottomFragment(int geofenceTransitionAction) {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -getBottomFragment-"+ geofenceTransitionAction);
+        Fragment bottomFragment;
+        switch (geofenceTransitionAction) {
+            case Geofence.GEOFENCE_TRANSITION_DWELL:
+                Log.i(Constants.TAG, getClass().getSimpleName() + " " + getResources().getString(R.string.geofence_transition_dwelling));
+                Toast.makeText(this, getResources().getString(R.string.geofence_transition_dwelling), Toast.LENGTH_LONG).show();
+                bottomFragment = StudentDashboardBottomFragment.newInstance(classLesson.lessonID, isUserAttendingLesson);
+                break;
+            case Geofence.GEOFENCE_TRANSITION_ENTER:
+                Log.i(Constants.TAG, getClass().getSimpleName() + " " + getResources().getString(R.string.geofence_transition_enter));
+                Toast.makeText(this, getResources().getString(R.string.geofence_transition_enter), Toast.LENGTH_LONG).show();
+                bottomFragment = StudentDashboardBottomNotInGeofenceFragment.newInstance(isUserAttendingLesson);
+                break;
+            default:
+                Log.i(Constants.TAG, getClass().getSimpleName() + " " + getResources().getString(R.string.geofence_transition_left));
+                Toast.makeText(this, getResources().getString(R.string.geofence_transition_left), Toast.LENGTH_LONG).show();
+                bottomFragment = StudentDashboardBottomNotInGeofenceFragment.newInstance(isUserAttendingLesson);
+                break;
+        }
+        return bottomFragment;
     }
 
     @Override
@@ -161,7 +193,7 @@ public class ClassDetailActivity extends BaseActivity implements
         Log.i(Constants.TAG, getClass().getSimpleName() + " -setAttendance-");
         if(DAO.setAttendance(lessonID, isUserAttendingLesson)) {
             Toast.makeText(this, getString(R.string.attendance_set), Toast.LENGTH_SHORT).show();
-            StudentDashboardButtonFragment dashboardButtonFragment = StudentDashboardButtonFragment.newInstance(classLesson.lessonID, isUserAttendingLesson);
+            StudentDashboardBottomFragment dashboardButtonFragment = StudentDashboardBottomFragment.newInstance(classLesson.lessonID, isUserAttendingLesson);
             getSupportFragmentManager().beginTransaction().replace(R.id.dashboardButtonContainer, dashboardButtonFragment).commit();
             Log.i(Constants.TAG, DAO.class.getSimpleName() + " -updateClassAttendance-classAttendance set to " + isUserAttendingLesson);
         } else {

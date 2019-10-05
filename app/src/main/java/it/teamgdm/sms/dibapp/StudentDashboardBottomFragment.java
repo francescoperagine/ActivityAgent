@@ -10,16 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.location.Geofence;
 
-
-public class StudentDashboardButtonFragment extends Fragment {
+public class StudentDashboardBottomFragment extends Fragment {
 
     // Student button fragment interface declaration
 
@@ -35,7 +32,6 @@ public class StudentDashboardButtonFragment extends Fragment {
     }
 
     private int lessonID;
-
     private boolean isUserAttendingLesson;
 
     private ToggleButton buttonPartecipate;
@@ -43,13 +39,13 @@ public class StudentDashboardButtonFragment extends Fragment {
     private Button buttonQuestion;
 
 
-    public StudentDashboardButtonFragment() {
+    public StudentDashboardBottomFragment() {
         // Required empty public constructor
     }
 
-    static StudentDashboardButtonFragment newInstance(int lessonID, boolean isUserAttendingLesson) {
-        Log.i(Constants.TAG, StudentDashboardButtonFragment.class.getSimpleName() + " -newInstance-");
-        StudentDashboardButtonFragment fragment = new StudentDashboardButtonFragment();
+    static StudentDashboardBottomFragment newInstance(int lessonID, boolean isUserAttendingLesson) {
+        Log.i(Constants.TAG, StudentDashboardBottomFragment.class.getSimpleName() + " -newInstance-");
+        StudentDashboardBottomFragment fragment = new StudentDashboardBottomFragment();
         Bundle arguments = new Bundle();
         arguments.putInt(Constants.KEY_CLASS_LESSON_ID, lessonID);
         arguments.putBoolean(Constants.IS_USER_ATTENDING_LESSON, isUserAttendingLesson);
@@ -73,7 +69,7 @@ public class StudentDashboardButtonFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreateView-");
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.student_lesson_button_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.student_lesson_bottom_fragment, container, false);
 
         TextView classLessonInProgress = rootView.findViewById(R.id.classLessonInProgress);
 
@@ -119,30 +115,6 @@ public class StudentDashboardButtonFragment extends Fragment {
             buttonSwitchPanel(true, true, true, true);
         } else {
             buttonSwitchPanel(false, true, false, false);
-        }
-    }
-
-    private void geofenceRangeChecker(int geofenceTransitionAction) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -geofenceRangeChecker-");
-        switch (geofenceTransitionAction) {
-            case Geofence.GEOFENCE_TRANSITION_DWELL:
-                Log.i(Constants.TAG, getClass().getSimpleName() + " -geofenceRangeChecker-" + getResources().getString(R.string.geofence_transition_dwelling));
-                Toast.makeText(getContext(), getResources().getString(R.string.geofence_transition_dwelling), Toast.LENGTH_LONG).show();
-                if(isUserAttendingLesson) {
-                    buttonSwitchPanel(true, true, true, true);
-                } else {
-                    buttonSwitchPanel(false, true, false, false);
-                }
-                break;
-            case Geofence.GEOFENCE_TRANSITION_ENTER:
-                Log.i(Constants.TAG, getClass().getSimpleName() + " -geofenceRangeChecker-" + getResources().getString(R.string.geofence_transition_enter));
-                Toast.makeText(getContext(), getResources().getString(R.string.geofence_transition_enter), Toast.LENGTH_LONG).show();
-                buttonSwitchPanel(isUserAttendingLesson, true, false, false);
-                break;
-            default:
-                Toast.makeText(getContext(), getResources().getString(R.string.geofence_transition_left), Toast.LENGTH_LONG).show();
-                buttonSwitchPanel(isUserAttendingLesson, false, false, false);
-                break;
         }
     }
 

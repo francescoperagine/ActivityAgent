@@ -114,7 +114,7 @@ public class ClassListActivity extends BaseActivity {
                     Log.i(Constants.TAG, getClass().getSimpleName() + " ClassRecyclerViewAdapter-OnClickListener-mTwoPane- arguments");
                     StudentDashboardDetailFragment detailFragment = StudentDashboardDetailFragment.newInstance(classLesson, true);
                     mParentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.class_detail_container, detailFragment).commit();
-                    StudentDashboardButtonFragment buttonFragment = StudentDashboardButtonFragment.newInstance(classLesson.lessonID, isUserAttendingLesson);
+                    StudentDashboardBottomFragment buttonFragment = StudentDashboardBottomFragment.newInstance(classLesson.lessonID, isUserAttendingLesson);
                     mParentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.class_button_container, buttonFragment).commit();
                 } else {
                     Context context = view.getContext();

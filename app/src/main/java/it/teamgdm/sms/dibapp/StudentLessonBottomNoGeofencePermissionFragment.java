@@ -16,26 +16,24 @@ import android.widget.TextView;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class StudentLessonButtonNoGeofencePermissionFragment extends Fragment {
+public class StudentLessonBottomNoGeofencePermissionFragment extends Fragment {
 
-    public StudentLessonButtonNoGeofencePermissionFragment() {
+    public StudentLessonBottomNoGeofencePermissionFragment() {
         // Required empty public constructor
     }
 
-    static StudentLessonButtonNoGeofencePermissionFragment newInstance() {
-        Log.i(Constants.TAG, StudentLessonButtonNoGeofencePermissionFragment.class.getSimpleName() + " -newInstance-");
-        return new StudentLessonButtonNoGeofencePermissionFragment();
+    static StudentLessonBottomNoGeofencePermissionFragment newInstance() {
+        Log.i(Constants.TAG, StudentLessonBottomNoGeofencePermissionFragment.class.getSimpleName() + " -newInstance-");
+        return new StudentLessonBottomNoGeofencePermissionFragment();
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreateView-");
         // Inflate the layout for this fragment
-
-        View rootView = inflater.inflate(R.layout.student_lesson_button_no_geofence_permission_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.student_lesson_bottom_no_geofence_permission_fragment, container, false);
         TextView noGeofencePermission = rootView.findViewById(R.id.noGeofencePermission);
-        noGeofencePermission.setBackgroundColor(Color.RED);
+        noGeofencePermission.setTextColor(Color.RED);
         return rootView;
     }
 

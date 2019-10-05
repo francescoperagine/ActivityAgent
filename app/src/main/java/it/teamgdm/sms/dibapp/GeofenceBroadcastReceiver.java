@@ -23,11 +23,11 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
 
         // Gets the transition event
-        int geofenceTransition = geofencingEvent.getGeofenceTransition();
+        int geofenceTransitionAction = geofencingEvent.getGeofenceTransition();
 
         // Forwards the transition event only if there's a variation
-        if(geofenceTransition == geofenceLastTriggeredAction) return;
-        geofenceLastTriggeredAction = geofenceTransition;
+        if(geofenceTransitionAction == geofenceLastTriggeredAction) return;
+        geofenceLastTriggeredAction = geofenceTransitionAction;
 
         if (geofencingEvent.hasError()) {
             String errorMessage = GeofenceErrorMessages.getErrorString(context, geofencingEvent.getErrorCode());
@@ -35,7 +35,7 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
             return;
         }
 
-        geofenceBroadcastReceiverInterfaceCallback.onGeofenceTransitionAction(geofenceTransition);
+        geofenceBroadcastReceiverInterfaceCallback.onGeofenceTransitionAction(geofenceTransitionAction);
     }
 
     public interface GeofenceBroadcastReceiverInterface {
