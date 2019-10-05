@@ -35,7 +35,6 @@ public class ClassDetailActivity extends BaseActivity implements
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-");
         super.onCreate(savedInstanceState);
         geofenceBroadcastReceiver = new GeofenceBroadcastReceiver(this);
-        IntentFilter intentFilter = new IntentFilter(Constants.GEOFENCE_TRANSITION_ACTION);
         registerReceiver(geofenceBroadcastReceiver, intentFilter);
         geofenceAPI = new GeofenceAPI(this);
     }
@@ -140,17 +139,17 @@ public class ClassDetailActivity extends BaseActivity implements
         switch (geofenceTransitionAction) {
             case Geofence.GEOFENCE_TRANSITION_DWELL:
                 Log.i(Constants.TAG, getClass().getSimpleName() + " " + getResources().getString(R.string.geofence_transition_dwelling));
-                Toast.makeText(this, getResources().getString(R.string.geofence_transition_dwelling), Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getResources().getString(R.string.geofence_transition_dwelling), Toast.LENGTH_SHORT).show();
                 bottomFragment = StudentDashboardBottomFragment.newInstance(classLesson.lessonID, isUserAttendingLesson);
                 break;
             case Geofence.GEOFENCE_TRANSITION_ENTER:
                 Log.i(Constants.TAG, getClass().getSimpleName() + " " + getResources().getString(R.string.geofence_transition_enter));
-                Toast.makeText(this, getResources().getString(R.string.geofence_transition_enter), Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getResources().getString(R.string.geofence_transition_enter), Toast.LENGTH_SHORT).show();
                 bottomFragment = StudentDashboardBottomNotInGeofenceFragment.newInstance(isUserAttendingLesson);
                 break;
             default:
                 Log.i(Constants.TAG, getClass().getSimpleName() + " " + getResources().getString(R.string.geofence_transition_left));
-                Toast.makeText(this, getResources().getString(R.string.geofence_transition_left), Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getResources().getString(R.string.geofence_transition_left), Toast.LENGTH_SHORT).show();
                 bottomFragment = StudentDashboardBottomNotInGeofenceFragment.newInstance(isUserAttendingLesson);
                 break;
         }

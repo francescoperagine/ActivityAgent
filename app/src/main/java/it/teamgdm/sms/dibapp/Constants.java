@@ -5,7 +5,6 @@ public final class Constants {
 
     static final String TWO_PANEL = "twoPanel";
     static final String LESSON_IN_PROGRESS = "lessonInProgress";
-    static final String KEY_GEOFENCE = "geofence";
     static final String USER_SEND_REVIEW = "sendReview";
     static final String KEY_REVIEW_TEXT = "reviewText";
     static final String KEY_REVIEW_SUMMARY = "reviewSummary";
@@ -90,7 +89,7 @@ public final class Constants {
 
     static final String GEOFENCE_TRANSITION_ACTION = "geofenceTransitionAction";
 
-    static final int GEOFENCE_TRANSITION_DWELL_TIME = 2; // need to wait for at least some seconds before the trigger
+    static final int GEOFENCE_TRANSITION_DWELL_TIME = 1; // need to wait for at least some seconds before the trigger
     static final int GEOFENCE_PERMISSION_REQUEST_CODE = 1;
     static final int GEOFENCE_METER_RADIUS_DIB = 100;
     static final int GEOFENCE_METER_RADIUS_PDA = 100;

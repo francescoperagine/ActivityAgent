@@ -9,7 +9,7 @@ import com.google.android.gms.location.GeofencingEvent;
 
 public class GeofenceBroadcastReceiver extends BroadcastReceiver {
 
-    static int geofenceLastTriggeredAction = 0;
+    static int geofenceLastTriggeredAction;
     private GeofenceBroadcastReceiverInterface geofenceBroadcastReceiverInterfaceCallback;
 
     GeofenceBroadcastReceiver(GeofenceBroadcastReceiverInterface callback) {
@@ -24,6 +24,7 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
 
         // Gets the transition event
         int geofenceTransitionAction = geofencingEvent.getGeofenceTransition();
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onReceive-geofenceTransitionAction " + geofenceTransitionAction);
 
         // Forwards the transition event only if there's a variation
         if(geofenceTransitionAction == geofenceLastTriggeredAction) return;
@@ -34,7 +35,6 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -onReceive-ERROR-" + errorMessage);
             return;
         }
-
         geofenceBroadcastReceiverInterfaceCallback.onGeofenceTransitionAction(geofenceTransitionAction);
     }
 

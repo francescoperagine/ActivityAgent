@@ -2,7 +2,6 @@ package it.teamgdm.sms.dibapp;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -59,10 +58,10 @@ class GeofenceAPI {
 
     private void geofencePermissionHandler(){
         Log.i(Constants.TAG, getClass().getSimpleName() + " -geofencePermissionHandler-");
-        if(hasGeofencePermissions()) {
-            geofenceInit();
-        } else {
+        if(!hasGeofencePermissions()) {
             askGeofencePermissions();
+        } else {
+            geofenceInit();
         }
     }
 
@@ -83,13 +82,12 @@ class GeofenceAPI {
 
     private Geofence getGeofence(String geofenceName, double latitude, double longitude, int circularMeterRadius, String requestID) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -getGeofence-");
-        Geofence.Builder builder = new Geofence.Builder();
-        builder.setRequestId(geofenceName);
-        builder.setCircularRegion(latitude, longitude, circularMeterRadius);
-        builder.setExpirationDuration(Geofence.NEVER_EXPIRE);
-        builder.setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_DWELL | Geofence.GEOFENCE_TRANSITION_EXIT);
-        builder.setLoiteringDelay(Constants.GEOFENCE_TRANSITION_DWELL_TIME);
-        builder.setRequestId(requestID);
+        Geofence.Builder builder = new Geofence.Builder()
+            .setRequestId(geofenceName)
+            .setCircularRegion(latitude, longitude, circularMeterRadius)
+            .setExpirationDuration(Geofence.NEVER_EXPIRE).setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_DWELL | Geofence.GEOFENCE_TRANSITION_EXIT)
+            .setLoiteringDelay(Constants.GEOFENCE_TRANSITION_DWELL_TIME)
+            .setRequestId(requestID);
         return builder.build();
     }
 
@@ -122,9 +120,9 @@ class GeofenceAPI {
 
     private GeofencingRequest getGeofencingRequest() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -getGeofencingRequest-");
-        GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
-        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER | GeofencingRequest.INITIAL_TRIGGER_DWELL | GeofencingRequest.INITIAL_TRIGGER_EXIT);
-        builder.addGeofences(geofenceList);
+        GeofencingRequest.Builder builder = new GeofencingRequest.Builder()
+            .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER | GeofencingRequest.INITIAL_TRIGGER_DWELL | GeofencingRequest.INITIAL_TRIGGER_EXIT)
+            .addGeofences(geofenceList);
         return builder.build();
     }
 
@@ -137,7 +135,7 @@ class GeofenceAPI {
             Intent geofenceBroadcastIntent = new Intent(Constants.GEOFENCE_TRANSITION_ACTION);
             // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when
             // calling addGeofences() and removeGeofences().
-            geofencePendingIntent = PendingIntent.getBroadcast(context.getApplicationContext(), requestID, geofenceBroadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            geofencePendingIntent = PendingIntent.getBroadcast(context, requestID, geofenceBroadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         } else {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -getGeofencePendingIntent-NOT NULL");
         }
@@ -156,6 +154,7 @@ class GeofenceAPI {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -hasGeofencePermissions-");
         for(String permission : permissions) {
             if(ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_DENIED) {
+                Session.geofencePermissionGranted = false;
                 return false;
             }
         }

@@ -28,6 +28,8 @@ public class StudentQuestionFragment extends DialogFragment {
 
     private int classLessonID;
     private TextView questionText;
+    Button cancelButton;
+    Button submitButton;
 
     static StudentQuestionFragment newInstante(int classLessonID) {
         StudentQuestionFragment questionFragment = new StudentQuestionFragment();
@@ -54,19 +56,19 @@ public class StudentQuestionFragment extends DialogFragment {
         return inflater.inflate(R.layout.question_fragment, container, false);
     }
 
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onViewCreated-");
         super.onViewCreated(view, savedInstanceState);
 
-        questionText = view.findViewById(R.id.questionButton);
-
-        Button cancelButton = view.findViewById(R.id.cancelQuestion);
-        Button submitButton = view.findViewById(R.id.submitQuestion);
+        cancelButton = view.findViewById(R.id.cancelQuestion);
+        submitButton = view.findViewById(R.id.submitQuestion);
 
         cancelButton.setOnClickListener(cancelButtonListener);
         submitButton.setOnClickListener(submitButtonListener);
+
+        questionText = view.findViewById(R.id.questionButton);
+        questionText.addTextChangedListener(new EmptyTextButtonDisabler(submitButton, questionText));
     }
 
     private final View.OnClickListener cancelButtonListener = v -> {
@@ -81,5 +83,6 @@ public class StudentQuestionFragment extends DialogFragment {
         studentQuestionFragmentInterfaceCallback.sendQuestion(classLessonID, input);
         Objects.requireNonNull(getDialog()).dismiss();
     };
+
 
 }
