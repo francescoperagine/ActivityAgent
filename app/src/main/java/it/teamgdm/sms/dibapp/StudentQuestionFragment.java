@@ -28,8 +28,6 @@ public class StudentQuestionFragment extends DialogFragment {
 
     private int classLessonID;
     private TextView questionText;
-    Button cancelButton;
-    Button submitButton;
 
     static StudentQuestionFragment newInstante(int classLessonID) {
         StudentQuestionFragment questionFragment = new StudentQuestionFragment();
@@ -61,8 +59,8 @@ public class StudentQuestionFragment extends DialogFragment {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onViewCreated-");
         super.onViewCreated(view, savedInstanceState);
 
-        cancelButton = view.findViewById(R.id.cancelQuestion);
-        submitButton = view.findViewById(R.id.submitQuestion);
+        Button cancelButton = view.findViewById(R.id.cancelQuestion);
+        Button submitButton = view.findViewById(R.id.submitQuestion);
 
         cancelButton.setOnClickListener(cancelButtonListener);
         submitButton.setOnClickListener(submitButtonListener);
