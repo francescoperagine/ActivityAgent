@@ -70,6 +70,27 @@ public class StudentEvaluateFragment extends DialogFragment {
         Button cancelButton = view.findViewById(R.id.cancelReview);
         Button submitButton = view.findViewById(R.id.submitReview);
 
+        //SEND button starts disabled
+        submitButton.setEnabled(false);
+
+        //listener on rating bar changes
+        reviewRating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener(){
+
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating,
+                                        boolean fromUser) {
+
+                if(rating == 0){
+                    submitButton.setEnabled(false);
+                }
+                else{
+                    submitButton.setEnabled(true);
+                }
+
+            }
+
+        });
+
         cancelButton.setOnClickListener(cancelButtonListener);
         submitButton.setOnClickListener(submitButtonListener);
     }
