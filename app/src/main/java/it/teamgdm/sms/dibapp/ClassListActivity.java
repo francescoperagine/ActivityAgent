@@ -112,9 +112,9 @@ public class ClassListActivity extends BaseActivity {
                 boolean isUserAttendingLesson = DAO.isUserAttendingLesson(classLesson.lessonID, Session.getUserID());
                 if (mTwoPane) {
                     Log.i(Constants.TAG, getClass().getSimpleName() + " ClassRecyclerViewAdapter-OnClickListener-mTwoPane- arguments");
-                    StudentDashboardDetailFragment detailFragment = StudentDashboardDetailFragment.newInstance(classLesson, true);
+                    StudentLessonDetailFragment detailFragment = StudentLessonDetailFragment.newInstance(classLesson, true);
                     mParentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.class_detail_container, detailFragment).commit();
-                    StudentDashboardBottomFragment buttonFragment = StudentDashboardBottomFragment.newInstance(classLesson.lessonID, isUserAttendingLesson);
+                    StudentLessonBottomFragment buttonFragment = StudentLessonBottomFragment.newInstance(classLesson.lessonID, isUserAttendingLesson);
                     mParentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.class_button_container, buttonFragment).commit();
                 } else {
                     Context context = view.getContext();

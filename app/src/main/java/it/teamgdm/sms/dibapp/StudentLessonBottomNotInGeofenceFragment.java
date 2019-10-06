@@ -18,19 +18,19 @@ import android.widget.ToggleButton;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class StudentDashboardBottomNotInGeofenceFragment extends Fragment {
+public class StudentLessonBottomNotInGeofenceFragment extends Fragment {
 
     private boolean isUserAttendingLesson;
 
     private ToggleButton buttonPartecipate;
 
-    public StudentDashboardBottomNotInGeofenceFragment() {
+    public StudentLessonBottomNotInGeofenceFragment() {
         // Required empty public constructor
     }
 
-    static StudentDashboardBottomNotInGeofenceFragment newInstance(boolean isUserAttendingLesson) {
-        Log.i(Constants.TAG, StudentDashboardBottomFragment.class.getSimpleName() + " -newInstance-");
-        StudentDashboardBottomNotInGeofenceFragment fragment = new StudentDashboardBottomNotInGeofenceFragment();
+    static StudentLessonBottomNotInGeofenceFragment newInstance(boolean isUserAttendingLesson) {
+        Log.i(Constants.TAG, StudentLessonBottomFragment.class.getSimpleName() + " -newInstance-");
+        StudentLessonBottomNotInGeofenceFragment fragment = new StudentLessonBottomNotInGeofenceFragment();
         Bundle arguments = new Bundle();
         arguments.putBoolean(Constants.IS_USER_ATTENDING_LESSON, isUserAttendingLesson);
         fragment.setArguments(arguments);

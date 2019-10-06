@@ -16,7 +16,6 @@ import java.util.HashMap;
 
 public class LoginActivity extends BaseActivity {
 
-
     private EditText editTextEmail, editTextPassword;
     private Button buttonSignIn;
     private Button buttonRegister;
@@ -61,18 +60,17 @@ public class LoginActivity extends BaseActivity {
 
     public void loginInit() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -loginInit-");
-        Intent mainActivityIntent = new Intent(this, MainActivity.class);
         if(validateInputs() & login()) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -loginInit-RESULT_OK");
+            Intent mainActivityIntent = new Intent(this, MainActivity.class);
             mainActivityIntent.putExtra(Constants.USER_LOGIN, Constants.LOGIN_OK_CODE);
             mainActivityIntent.putExtra(Constants.KEY_USER_EMAIL, email);
+            startActivity(mainActivityIntent);
+            finish();
         } else {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -loginInit-RESULT_CANCELED");
-            mainActivityIntent.putExtra(Constants.USER_LOGIN, Constants.LOGIN_FAILED_CODE);
-            finish();
         }
-        startActivity(mainActivityIntent);
-        finish();
+
     }
 
     private final OnClickListener buttonRegisterListener = new OnClickListener() {

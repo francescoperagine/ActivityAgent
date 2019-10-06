@@ -11,17 +11,17 @@ import androidx.fragment.app.Fragment;
 
 import java.util.Objects;
 
-public class StudentDashboardDetailFragment extends Fragment {
+public class StudentLessonDetailFragment extends Fragment {
 
     private ClassLesson classLesson;
 
-    public StudentDashboardDetailFragment() {
+    public StudentLessonDetailFragment() {
         // Required empty public constructor
     }
 
-    static StudentDashboardDetailFragment newInstance(ClassLesson classLesson, boolean twoPanel) {
-        Log.i(Constants.TAG, StudentDashboardDetailFragment.class.getSimpleName() + " -newInstance-");
-        StudentDashboardDetailFragment fragment = new StudentDashboardDetailFragment();
+    static StudentLessonDetailFragment newInstance(ClassLesson classLesson, boolean twoPanel) {
+        Log.i(Constants.TAG, StudentLessonDetailFragment.class.getSimpleName() + " -newInstance-");
+        StudentLessonDetailFragment fragment = new StudentLessonDetailFragment();
         Bundle arguments = new Bundle();
         arguments.putSerializable(Constants.KEY_CLASS_LESSON, classLesson);
         arguments.putBoolean(Constants.TWO_PANEL, twoPanel);
@@ -34,7 +34,7 @@ public class StudentDashboardDetailFragment extends Fragment {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-");
         super.onCreate(savedInstanceState);
         if(getArguments() != null) {
-            Log.i(Constants.TAG, StudentDashboardDetailFragment.class.getSimpleName() + " -onCreate-arguments \n" + getArguments());
+            Log.i(Constants.TAG, StudentLessonDetailFragment.class.getSimpleName() + " -onCreate-arguments \n" + getArguments());
             classLesson = (ClassLesson) getArguments().getSerializable(Constants.KEY_CLASS_LESSON);
         }
 
@@ -57,6 +57,7 @@ public class StudentDashboardDetailFragment extends Fragment {
         TextView classLessonDescription = rootView.findViewById(R.id.classLessonDescription);
 
         className.setText(classLesson.name);
+        if(getActivity().getClass().equals(ClassDetailActivity.class)) className.setVisibility(View.GONE);
 
         String year = getString(R.string.classYearText) + ": " + classLesson.year;
         classYear.setText(year);

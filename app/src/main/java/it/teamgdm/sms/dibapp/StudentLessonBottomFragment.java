@@ -16,7 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 
-public class StudentDashboardBottomFragment extends Fragment {
+public class StudentLessonBottomFragment extends Fragment {
 
     // Student button fragment interface declaration
 
@@ -39,13 +39,13 @@ public class StudentDashboardBottomFragment extends Fragment {
     private Button buttonQuestion;
 
 
-    public StudentDashboardBottomFragment() {
+    public StudentLessonBottomFragment() {
         // Required empty public constructor
     }
 
-    static StudentDashboardBottomFragment newInstance(int lessonID, boolean isUserAttendingLesson) {
-        Log.i(Constants.TAG, StudentDashboardBottomFragment.class.getSimpleName() + " -newInstance-");
-        StudentDashboardBottomFragment fragment = new StudentDashboardBottomFragment();
+    static StudentLessonBottomFragment newInstance(int lessonID, boolean isUserAttendingLesson) {
+        Log.i(Constants.TAG, StudentLessonBottomFragment.class.getSimpleName() + " -newInstance-");
+        StudentLessonBottomFragment fragment = new StudentLessonBottomFragment();
         Bundle arguments = new Bundle();
         arguments.putInt(Constants.KEY_CLASS_LESSON_ID, lessonID);
         arguments.putBoolean(Constants.IS_USER_ATTENDING_LESSON, isUserAttendingLesson);
