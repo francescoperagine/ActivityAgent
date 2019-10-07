@@ -9,11 +9,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-
-import java.util.HashMap;
-
 public class LoginActivity extends BaseActivity {
 
     private EditText editTextEmail, editTextPassword;
@@ -110,26 +105,15 @@ public class LoginActivity extends BaseActivity {
 
     private boolean login() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -login-");
-        HashMap<String, String> params = new HashMap<>();
-        params.put(Constants.KEY_ACTION, Constants.USER_LOGIN);
-        params.put(Constants.KEY_USER_EMAIL, email);
-        params.put(Constants.KEY_USER_PASSWORD, password);
-        JSONArray response = DAO.getFromDB(params);
-
-        try {
-            String message = response.getJSONObject(0).getString(Constants.KEY_MESSAGE);
-            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-            int codeResult = response.getJSONObject(0).getInt(Constants.KEY_CODE);
-            if (codeResult == Constants.LOGIN_OK_CODE) {
-                Log.i(Constants.TAG, getClass().getSimpleName() + " -setAccess-Constants.LOGIN_OK_CODE-");
-                return true;
-            } else {
-                Log.i(Constants.TAG, getClass().getSimpleName() + " -setAccess-LOGIN_CODE_NOT_OK-");
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if(DAO.loginUser(email, password)) {
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -setAccess-Constants.LOGIN_OK_CODE-");
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.user_login_ok), Toast.LENGTH_SHORT).show();
+            return true;
+        } else {
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -setAccess-LOGIN_CODE_NOT_OK-");
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.user_login_not_ok), Toast.LENGTH_SHORT).show();
+            return false;
         }
-        return false;
     }
 
     public void onBackPressed(){

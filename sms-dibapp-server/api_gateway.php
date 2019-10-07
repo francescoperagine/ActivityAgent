@@ -31,10 +31,10 @@ if(isset($input[ACTION])){
 			$response = getUserDetails($input[KEY_USER_EMAIL]);
 			break;
 		case ACTION_ASK_A_QUESTION:
-			$response = askAQuestion($input[KEY_CLASS_LESSON_ID], $input[KEY_USER_ID], $input[KEY_QUESTION]);
+			$response = askAQuestion($input[KEY_CLASS_LESSON_ID], $input[KEY_USER_ID], $input[KEY_QUESTION], $input[KEY_TIME]);
 			break;
 		case ACTION_SET_ATTENDANCE:
-			$response = setAttendance($input[KEY_CLASS_LESSON_ID], $input[KEY_USER_ID], $input[KEY_CLASS_LESSON_ATTENDANCE]);
+			$response = setAttendance($input[KEY_CLASS_LESSON_ID], $input[KEY_USER_ID], $input[KEY_CLASS_LESSON_ATTENDANCE], $input[KEY_TIME]);
 			break;
 		case ACTION_SET_REVIEW: 
 			$response = setReview($input);
