@@ -3,6 +3,8 @@ package it.teamgdm.sms.dibapp;
 public final class Constants {
 
 
+    static final String LESSON_NEW_QUESTION = "lessonNewQuestion";
+    static final String KEY_TIME = "time";
     static final String TWO_PANEL = "twoPanel";
     static final String LESSON_IN_PROGRESS = "lessonInProgress";
     static final String USER_SEND_REVIEW = "sendReview";

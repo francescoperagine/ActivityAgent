@@ -32,7 +32,6 @@ define("GET_STUDENT_CURRENT_CLASS_LIST_QUERY",
 	AND s.studentID = ?
 	GROUP BY className
 	ORDER BY c.year, className");
-	// AND CURRENT_TIME >= (SUBTIME(crc.timeStart, '2:00:00')) and CURRENT_TIME <= (ADDTIME(crc.timeEnd,'2:00:00'))
 define("GET_PROFESSOR_CURRENT_CLASS_LIST_QUERY", 
 	"SELECT crl.ID as lessonID, c.ID as classID, c.name as className, c.year as classYear, c.semester as classSemester, crl.timeStart as classLessonTimeStart, crl.timeEnd as classLessonTimeEnd
 	FROM professor_teaching as pt, class as c, class_room_calendar as crc, class_room_lesson as crl
@@ -42,7 +41,6 @@ define("GET_PROFESSOR_CURRENT_CLASS_LIST_QUERY",
 	AND pt.professorID = ?
 	GROUP BY className
 	ORDER BY c.year, className");
-	// AND CURRENT_TIME >= (SUBTIME(crc.timeStart, '2:00:00')) and CURRENT_TIME <= (ADDTIME(crc.timeEnd,'2:00:00'))
 //define("GET_STUDENT_EXAM_LIST_QUERY", "SELECT c.ID as classID, c.name as className, c.year as year, c.semester as semester, s.passed as passed, s.passedDate as passedDate, s.vote as vote, s.praise as praise FROM student_career as s, class as c WHERE s.classID = c.ID AND studentID = ? ORDER BY year, className");
 define("GET_PROFESSOR_CLASS_LIST_QUERY", "SELECT c.id as classID, c.name as className FROM class as c, professor_teaching as p, user as u WHERE c.ID = p.classID AND p.professorID = u.id AND u.id = ?");
 define("GET_USER_DETAILS_QUERY", "SELECT u.ID as userID, u.name as name, u.surname as surname, u.email as email, u.registrationDate as registrationDate, r.name as roleName FROM user as u, role as r WHERE u.roleID = r.ID AND email = ?");
@@ -52,11 +50,11 @@ define("GET_CLASS_LESSON_DETAIL_QUERY",
 	JOIN class_room_calendar as crc ON c.ID = crc.classID
 	JOIN class_room_lesson as crl ON crc.ID = crl.calendarID
 	WHERE c.ID = ?");
-define("ASK_A_QUESTION_QUERY", "INSERT INTO class_lesson_question (lessonID, studentID, question) VALUES (:lessonID, :studentID, :question)");
-define("SET_ATTENDANCE_QUERY", "INSERT INTO lesson_attendance_rating (studentID, lessonID) VALUES (:userID, :lessonID)");
-define("UNSET_ATTENDANCE_QUERY", "DELETE FROM lesson_attendance_rating WHERE studentID = :userID AND lessonID = :lessonID");
-define("IS_USER_ATTENDING_LESSON_QUERY", "SELECT COUNT(*) as attendance FROM lesson_attendance_rating WHERE studentID = :userID AND lessonID = :lessonID");
-define("SET_CLASS_LESSON_REVIEW_QUERY", "UPDATE lesson_attendance_rating SET summary = :summary, review = :review, rating = :rating WHERE studentID = :userID AND lessonID = :lessonID");
+define("ASK_A_QUESTION_QUERY", "INSERT INTO class_lesson_question (lessonID, studentID, question, time) VALUES (:lessonID, :studentID, :question, :time)");
+define("SET_ATTENDANCE_QUERY", "INSERT INTO class_lesson_attendance_rating (studentID, lessonID, time) VALUES (:userID, :lessonID, :time)");
+define("UNSET_ATTENDANCE_QUERY", "DELETE FROM class_lesson_attendance_rating WHERE studentID = :userID AND lessonID = :lessonID");
+define("IS_USER_ATTENDING_LESSON_QUERY", "SELECT COUNT(*) as class_attendance FROM class_lesson_attendance_rating WHERE studentID = :userID AND lessonID = :lessonID");
+define("SET_CLASS_LESSON_REVIEW_QUERY", "UPDATE class_lesson_attendance_rating SET summary = :summary, review = :review, rating = :rating WHERE studentID = :userID AND lessonID = :lessonID");
 	  
 class Response {
 	
@@ -85,7 +83,7 @@ function login(array $input) {
 			credentialAreNotNull($input['email'], $input['password']);
 			userExists($input[KEY_USER_EMAIL]);
 			verifyPassword($input[KEY_USER_EMAIL], $input['password']);	
-			$response = new Response(LOGIN_OK_TEXT, LOGIN_OK_CODE);
+			$response = new Response(QUERY_OK_TEXT, QUERY_OK_CODE);
 		} catch( Exception $e) {
 			$response = new Response($e->getMessage(), intval($e->getCode())); 
 		}
@@ -118,7 +116,7 @@ function verifyPassword(string $email, string $password) {
 }
 
 function registration(array $input) {
-	if(isset($input[KEY_USER_NAME]) && isset($input[KEY_USER_SURNAME]) && isset($input[KEY_USER_SERIAL_NUMBER]) && isset($input[degreecourse]) && isset($input[KEY_USER_ROLE_NAME]) && isset($input[KEY_USER_EMAIL]) && isset($input[KEY_USER_PASSWORD])){
+	if(isset($input[KEY_USER_NAME]) && isset($input[KEY_USER_SURNAME]) && isset($input[KEY_USER_SERIAL_NUMBER]) && isset($input[degreecourse]) && isset($input[KEY_USER_ROLE_NAME]) && isset($input[KEY_USER_EMAIL]) && isset($input[KEY_USER_PASSWORD]) && isset($input[KEY_USER_REGISTRATION_DATE])){
 	//Register the user if doesn't exists
 		try {
 			userExists($input[KEY_USER_EMAIL]);
@@ -164,6 +162,7 @@ function registerNewUser(array $input) {
 	$stmt1->bindValue(':email', $input[KEY_USER_EMAIL]);
 	$stmt1->bindValue(':passwordHash', $passwordHash);
 	$stmt1->bindValue(':salt', $salt);
+	$stmt1->bindValue(':registrationDate', $input[KEY_USER_REGISTRATION_DATE]);
 	
 	$stmt2 = $connection->prepare(REGISTER_NEW_USER_DEGREECOURSE_QUERY);
 	$stmt2->bindValue(':email', $input[KEY_USER_EMAIL]);
@@ -182,10 +181,10 @@ function registerNewUser(array $input) {
 			$connection->beginTransaction();
 			if($stmt1->execute() && $stmt2->execute() && $stmt3->execute() && $stmt4->execute()){
 				$connection->commit();
-				$response = new Response(USER_CREATED_TEXT,USER_CREATED_CODE);
+				$response = new Response(QUERY_OK_TEXT,QUERY_OK_CODE);
 			} else {
 				$connection->rollBack();
-				$response = new Response(USER_NOT_CREATED_TEXT,USER_NOT_CREATED_CODE);
+				$response = new Response(QUERY_NOT_OK_TEXT,QUERY_NOT_OK_CODE);
 			} 
 			break;
 		case USER_ROLE_BACKOFFICE_OPERATOR:
@@ -193,10 +192,10 @@ function registerNewUser(array $input) {
 			$connection->beginTransaction();
 			if( $stmt1->execute() && $stmt2->execute() && $stmt3->execute()){
 				$connection->commit();
-				$response = new Response(USER_CREATED_TEXT,USER_CREATED_CODE);
+				$response = new Response(QUERY_OK_TEXT,QUERY_OK_CODE);
 			} else {
 				$connection->rollBack();
-				$response = new Response(USER_NOT_CREATED_TEXT,USER_NOT_CREATED_CODE);
+				$response = new Response(QUERY_NOT_OK_TEXT,QUERY_NOT_OK_CODE);
 			}
 				
 		default: break;
@@ -212,16 +211,17 @@ function getUserDetails(string $email) {
 	return $response;
 }
 
-function askAQuestion(int $lessonID, int $userID, string $question) {
+function askAQuestion(int $lessonID, int $userID, string $question, string $time) {
 	global $connection;
 	$stmt = $connection->prepare(ASK_A_QUESTION_QUERY);
 	$stmt->bindValue(':lessonID', $lessonID);
 	$stmt->bindValue(':studentID', $userID);
 	$stmt->bindValue(':question', $question);
+	$stmt->bindValue(':time', $time);
 	$connection->beginTransaction();
 	if($stmt->execute()){
 		$connection->commit();
-		$response = new Response(QUESTION_SENT_TEXT, QUESTION_SENT_CODE);
+		$response = new Response(QUERY_OK_TEXT, QUERY_OK_CODE);
 	} else {
 		$connection->rollBack();
 		$response = new Response(QUESTION_NOT_SENT_TEXT, QUESTION_NOT_SENT_CODE);
@@ -229,11 +229,12 @@ function askAQuestion(int $lessonID, int $userID, string $question) {
 	return $response;
 }
 
-function setAttendance(int $lessonID, int $userID, string $attendance) {
+function setAttendance(int $lessonID, int $userID, string $attendance, string $time = null) {
 	$userAttendance = ($attendance === 'true');
 	global $connection;	
 	if($userAttendance == true) {
 		$stmt = $connection->prepare(SET_ATTENDANCE_QUERY);
+		$stmt->bindValue(':time', $time);
 	} else {
 		$stmt = $connection->prepare(UNSET_ATTENDANCE_QUERY);
 	}
@@ -263,11 +264,11 @@ function isUserAttendingLesson(int $lessonID, int $userID) {
 function setReview($input) {
 	global $connection;	
 	$stmt = $connection->prepare(SET_CLASS_LESSON_REVIEW_QUERY);
-	$stmt->bindValue(':lessonID', $input['lessonID']);
-	$stmt->bindValue(':userID', $input['userID']);
-	$stmt->bindValue(':summary', $input['reviewSummary']);
-	$stmt->bindValue(':review', $input['reviewText']);
-	$stmt->bindValue(':rating', $input['reviewRating']);
+	$stmt->bindValue(':lessonID', $input[KEY_CLASS_LESSON_ID]);
+	$stmt->bindValue(':userID', $input[KEY_USER_ID]);
+	$stmt->bindValue(':summary', $input[KEY_CLASS_LESSON_REVIEW_SUMMARY]);
+	$stmt->bindValue(':review', $input[KEY_CLASS_LESSON_REVIEW_TEXT]);
+	$stmt->bindValue(':rating', $input[KEY_CLASS_LESSON_REVIEW_RATING]);
 	$connection->beginTransaction();
 	if($stmt->execute()){
 		$connection->commit();

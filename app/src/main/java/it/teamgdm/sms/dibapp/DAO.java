@@ -6,7 +6,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -66,6 +69,7 @@ class DAO {
         params.put(Constants.KEY_CLASS_LESSON_ID, String.valueOf(lessonID));
         params.put(Constants.KEY_USER_ID, String.valueOf(Session.getUserID()));
         params.put(Constants.KEY_QUESTION, input);
+        params.put(Constants.KEY_TIME, new SimpleDateFormat(Constants.DATETIME_FORMAT, Locale.getDefault()).format(new Date()));
         return isDataSent(params, Constants.QUESTION_SENT_CODE);
     }
 
@@ -76,6 +80,7 @@ class DAO {
         params.put(Constants.KEY_ACTION, Constants.KEY_SET_ATTENDANCE);
         params.put(Constants.KEY_CLASS_LESSON_ID, String.valueOf(lessonID));
         params.put(Constants.KEY_USER_ID, String.valueOf(Session.getUserID()));
+        params.put(Constants.KEY_TIME, new SimpleDateFormat(Constants.DATETIME_FORMAT, Locale.getDefault()).format(new Date()));
         params.put(Constants.KEY_ATTENDANCE, String.valueOf(isUserAttendingLesson));
         return isDataSent(params, Constants.ATTENDANCE_SET_CODE);
     }
@@ -90,6 +95,44 @@ class DAO {
         params.put(Constants.KEY_REVIEW_SUMMARY, summary);
         params.put(Constants.KEY_REVIEW_TEXT, review);
         return isDataSent(params, Constants.OK_CODE);
+    }
+
+    static boolean loginUser(String email, String password) {
+        Log.i(Constants.TAG, DAO.class.getSimpleName() + " -loginUser- " + email);
+        HashMap<String, String> params = new HashMap<>();
+        params.put(Constants.KEY_ACTION, Constants.USER_LOGIN);
+        params.put(Constants.KEY_USER_EMAIL, email);
+        params.put(Constants.KEY_USER_PASSWORD, password);
+        return isDataSent(params, Constants.OK_CODE);
+    }
+
+    static boolean registerUser(User tmpUser) {
+        Log.i(Constants.TAG, DAO.class.getSimpleName() + " -registerUser- " + tmpUser);
+        HashMap<String, String> params = new HashMap<>();
+        params.put(Constants.KEY_ACTION, Constants.USER_REGISTRATION);
+        params.put(Constants.KEY_USER_NAME, tmpUser.getName());
+        params.put(Constants.KEY_USER_SURNAME, tmpUser.getSurname());
+        params.put(Constants.KEY_USER_SERIAL_NUMBER, tmpUser.getSsn());
+        params.put(Constants.KEY_DEGREECOURSE, tmpUser.getDegreeCourse());
+        params.put(Constants.KEY_USER_ROLE_NAME, tmpUser.getRoleName());
+        params.put(Constants.KEY_USER_EMAIL, tmpUser.getEmail());
+        params.put(Constants.KEY_USER_PASSWORD, tmpUser.getPassword());
+        params.put(Constants.KEY_USER_REGISTRATION_DATE, tmpUser.getRegistrationDate());
+        return isDataSent(params, Constants.OK_CODE);
+    }
+
+    static JSONArray getInputList(String inputList) {
+        Log.i(Constants.TAG, DAO.class.getSimpleName() + " -getInputList- " + inputList);
+        HashMap<String, String> params = new HashMap<>();
+        params.put(Constants.KEY_ACTION, inputList);
+        return getFromDB(params);
+    }
+
+    static JSONArray getUserDetail(String email) {
+        HashMap<String, String> param = new HashMap<>();
+        param.put(Constants.KEY_ACTION, Constants.GET_USER_DETAILS);
+        param.put(Constants.KEY_USER_EMAIL, email);
+        return getFromDB(param);
     }
 
     static boolean checkEvaluatedLessonResponse(JSONArray response){

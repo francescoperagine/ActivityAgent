@@ -7,19 +7,53 @@ import android.util.Log;
 
 import com.google.android.gms.location.GeofencingEvent;
 
-public class GeofenceBroadcastReceiver extends BroadcastReceiver {
+public class DibappBroadcastReceiver extends BroadcastReceiver {
+
+    /** Geofence broadcast interface for callback **/
 
     static int geofenceLastTriggeredAction;
+
+    public interface GeofenceBroadcastReceiverInterface {
+        void onGeofenceTransitionAction(int geofenceReceiverAction);
+    }
+
     private GeofenceBroadcastReceiverInterface geofenceBroadcastReceiverInterfaceCallback;
 
-    GeofenceBroadcastReceiver(GeofenceBroadcastReceiverInterface callback) {
+    DibappBroadcastReceiver(GeofenceBroadcastReceiverInterface callback) {
         this.geofenceBroadcastReceiverInterfaceCallback = callback;
+    }
+
+    /** Lesson broadcast interface for callback **/
+
+    public interface LessonBroadcastReceiverInterface {
+        void onNewQuestionSent();
+    }
+
+    private LessonBroadcastReceiverInterface lessonBroadcastReceiverInterfaceCallback;
+
+    DibappBroadcastReceiver(LessonBroadcastReceiverInterface callback) {
+        this.lessonBroadcastReceiverInterfaceCallback = callback;
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onReceive-");
+        if(intent.getAction()!=null) {
+            switch (intent.getAction()) {
+                case Constants.GEOFENCE_TRANSITION_ACTION:
+                    geofenceIntentReceiver(context, intent);
+                    break;
+                case Constants.LESSON_NEW_QUESTION:
+                    lessonBroadcastReceiverInterfaceCallback.onNewQuestionSent();
+                    break;
+                default: break;
+        }
 
+}
+
+    }
+
+    private void geofenceIntentReceiver(Context context, Intent intent) {
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
 
         // Gets the transition event
@@ -38,7 +72,7 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
         geofenceBroadcastReceiverInterfaceCallback.onGeofenceTransitionAction(geofenceTransitionAction);
     }
 
-    public interface GeofenceBroadcastReceiverInterface {
-        void onGeofenceTransitionAction(int geofenceReceiverAction);
-    }
+
+
+
 }

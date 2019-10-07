@@ -20,13 +20,13 @@ public class ClassDetailActivity extends BaseActivity implements
         StudentLessonBottomFragment.StudentDashboardButtonFragmentInterface,
         StudentEvaluateFragment.StudentEvaluateFragmentInterface,
         StudentQuestionFragment.StudentQuestionFragmentInterface,
-        GeofenceBroadcastReceiver.GeofenceBroadcastReceiverInterface{
+        DibappBroadcastReceiver.GeofenceBroadcastReceiverInterface{
 
     Bundle savedInstanceState;
     boolean lessonInProgress;
     boolean isUserAttendingLesson;
     ClassLesson classLesson;
-    private GeofenceBroadcastReceiver geofenceBroadcastReceiver;
+    private DibappBroadcastReceiver dibappBroadcastReceiver;
     private GeofenceAPI geofenceAPI;
     IntentFilter intentFilter = new IntentFilter(Constants.GEOFENCE_TRANSITION_ACTION);
 
@@ -34,8 +34,8 @@ public class ClassDetailActivity extends BaseActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-");
         super.onCreate(savedInstanceState);
-        geofenceBroadcastReceiver = new GeofenceBroadcastReceiver(this);
-        registerReceiver(geofenceBroadcastReceiver, intentFilter);
+        dibappBroadcastReceiver = new DibappBroadcastReceiver(this);
+        registerReceiver(dibappBroadcastReceiver, intentFilter);
         geofenceAPI = new GeofenceAPI(this);
     }
 
@@ -83,7 +83,7 @@ public class ClassDetailActivity extends BaseActivity implements
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onResume-");
         super.onResume();
         if(GeofenceAPI.hasGeofencePermissions) {
-            registerReceiver(geofenceBroadcastReceiver, intentFilter);
+            registerReceiver(dibappBroadcastReceiver, intentFilter);
         }
     }
 
@@ -92,7 +92,7 @@ public class ClassDetailActivity extends BaseActivity implements
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onPause-");
         super.onPause();
         if(GeofenceAPI.hasGeofencePermissions) {
-            unregisterReceiver(geofenceBroadcastReceiver);
+            unregisterReceiver(dibappBroadcastReceiver);
         }
     }
 
@@ -180,10 +180,10 @@ public class ClassDetailActivity extends BaseActivity implements
         Log.i(Constants.TAG, getClass().getSimpleName() + " -sendQuestion-");
         if(DAO.sendQuestion(lessonID, input)) {
             Toast.makeText(this, getString(R.string.question_sent), Toast.LENGTH_SHORT).show();
-            Log.i(Constants.TAG, DAO.class.getSimpleName() + " -sendQuestion-question sent-");
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -sendQuestion-question sent-");
         } else {
-            Toast.makeText(this, getString(R.string.question_not_sent), Toast.LENGTH_SHORT).show();
-            Log.i(Constants.TAG, DAO.class.getSimpleName() + " -sendQuestion-question not sent-");
+            Toast.makeText(this, getResources().getString(R.string.question_not_sent), Toast.LENGTH_SHORT).show();
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -sendQuestion-question not sent-");
         }
     }
 
@@ -194,10 +194,10 @@ public class ClassDetailActivity extends BaseActivity implements
             Toast.makeText(this, getString(R.string.attendance_set), Toast.LENGTH_SHORT).show();
             StudentLessonBottomFragment dashboardButtonFragment = StudentLessonBottomFragment.newInstance(classLesson.lessonID, isUserAttendingLesson);
             getSupportFragmentManager().beginTransaction().replace(R.id.dashboardButtonContainer, dashboardButtonFragment).commit();
-            Log.i(Constants.TAG, DAO.class.getSimpleName() + " -updateClassAttendance-classAttendance set to " + isUserAttendingLesson);
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -updateClassAttendance-classAttendance set to " + isUserAttendingLesson);
         } else {
             Toast.makeText(this, getString(R.string.attendance_not_set), Toast.LENGTH_SHORT).show();
-            Log.i(Constants.TAG, DAO.class.getSimpleName() + " -updateClassAttendance-classAttendance not set-");
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -updateClassAttendance-classAttendance not set-");
         }
     }
 
@@ -206,10 +206,10 @@ public class ClassDetailActivity extends BaseActivity implements
         Log.i(Constants.TAG, getClass().getSimpleName() + " -setReview-");
         if(DAO.setReview(lessonID,summary,review,rating))  {
             Toast.makeText(this, getString(R.string.review_sent), Toast.LENGTH_SHORT).show();
-            Log.i(Constants.TAG, DAO.class.getSimpleName() + " -sendQuestion-question sent-");
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -setReview-question sent-");
         } else {
             Toast.makeText(this, getString(R.string.review_not_sent), Toast.LENGTH_SHORT).show();
-            Log.i(Constants.TAG, DAO.class.getSimpleName() + " -sendQuestion-question not sent-");
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -setReview-question not sent-");
         }
     }
 }
