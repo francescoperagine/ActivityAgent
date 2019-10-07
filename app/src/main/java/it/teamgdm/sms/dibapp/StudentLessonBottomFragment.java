@@ -10,10 +10,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+
+import org.json.JSONArray;
+
+import java.util.HashMap;
 
 
 public class StudentLessonBottomFragment extends Fragment {
@@ -101,7 +106,17 @@ public class StudentLessonBottomFragment extends Fragment {
 
     private final View.OnClickListener evaluateButtonListener = v -> {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -evaluateButtonListener-");
-        studentDashboardButtonFragmentInterfaceCallback.onItemSelected(R.id.evaluateButton);
+        HashMap<String, String> params = new HashMap<>();
+        params.put(Constants.KEY_ACTION, Constants.CHECK_EXISTING_EVALUATE);
+        params.put(Constants.KEY_USER_ID, String.valueOf(Session.getUserID()));
+        params.put(Constants.KEY_CLASS_LESSON_ID, String.valueOf(lessonID));
+        JSONArray response = DAO.getFromDB(params);
+        if(!DAO.checkEvaluatedLessonResponse(response)){
+            studentDashboardButtonFragmentInterfaceCallback.onItemSelected(R.id.evaluateButton);
+        }
+        else{
+            Toast.makeText(getActivity(),getString(R.string.lesson_evaluated_string),Toast.LENGTH_SHORT).show();
+        }
     };
 
     private final View.OnClickListener questionButtonListener = v -> {

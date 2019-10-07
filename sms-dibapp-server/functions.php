@@ -3,6 +3,7 @@
 include 'db_connect.php';
 include 'config.php';
 
+define("CHECK_IF_LESSON_ALREADY_EVALUATED", "SELECT count(*) as count FROM lesson_attendance_rating WHERE studentID = :studentID AND lessonID = :lessonID AND rating IS NOT NULL");
 define("USER_EXISTS_QUERY", "SELECT count(*) as count FROM user WHERE email = ?");
 define("VERIFY_PASSWORD_QUERY", "SELECT passwordHash, salt FROM user WHERE email = ?");
 define("GET_ROLE_LIST_QUERY", "SELECT name FROM role ORDER BY name");
@@ -66,6 +67,16 @@ class Response {
 		$this->message = $message;
 		$this->code = $code;
 	}
+}
+
+function checkEvaluatedLesson(array $input) {
+	global $connection;
+	$stmt = $connection->prepare(CHECK_IF_LESSON_ALREADY_EVALUATED);
+	$stmt->bindValue(':studentID', $input[KEY_USER_ID]);
+	$stmt->bindValue(':lessonID', $input[KEY_CLASS_LESSON_ID]);
+	$stmt->execute();
+	$response = $stmt->fetchAll(PDO::FETCH_OBJ);
+	return $response;
 }
 
 function login(array $input) {

@@ -91,4 +91,29 @@ class DAO {
         params.put(Constants.KEY_REVIEW_TEXT, review);
         return isDataSent(params, Constants.OK_CODE);
     }
+
+    static boolean checkEvaluatedLessonResponse(JSONArray response){
+
+        boolean result = false;
+
+        Log.i(Constants.TAG, String.valueOf(Session.getUserID()));
+
+        Log.i(Constants.TAG, response.toString());
+
+        try {
+            JSONObject o = response.getJSONObject(0);
+            Log.i(Constants.TAG, o.toString());
+            if(o.optInt("count") == 0){
+                result = false;
+            }
+            else{
+                result = true;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+
+    }
 }

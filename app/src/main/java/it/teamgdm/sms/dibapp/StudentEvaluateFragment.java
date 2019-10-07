@@ -103,7 +103,8 @@ public class StudentEvaluateFragment extends DialogFragment {
     private final View.OnClickListener submitButtonListener = v -> {
         String summary = reviewSummary.getText().toString();
         String text = reviewText.getText().toString();
-        int rating = reviewRating.getNumStars();
+        //int not float because rating 1 to 5 with width 1
+        int rating = (int) reviewRating.getRating();
         Log.i(Constants.TAG, getClass().getSimpleName() + " -submitButtonListener-classLessonID " + classLessonID + " summary " + summary + " text " + text + " rating " + rating);
 
         studentEvaluateFragmentInterfaceCallback.setReview(classLessonID, summary, text, rating);

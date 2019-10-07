@@ -35,6 +35,8 @@
     <string name="roleSelectionErrorText">Select your role</string>
     <string name="dashboard_menu_user_profile">Profile</string>
     <string name="title_activity_settings">Settings</string>
+    <string name="lesson_evaluated_string">Lesson already evaluated</string>
+
 
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>

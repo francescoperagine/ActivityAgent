@@ -15,6 +15,7 @@ define("KEY_QUESTION", "question");
 define("KEY_CLASS_LESSON_ID", "lessonID");
 define("KEY_CLASS_LESSON_ATTENDANCE", "attendance");
 define("ACTION_IS_USER_ATTENDING_LESSON", "isUserAttendingLesson");
+define("ACTION_CHECK_LESSON_EVALUATED", "checkEvaluatedLesson");
 
 define("ACTION_REGISTRATION", "userRegistration");
 define("ACTION_GET_USER_DETAILS", "getUserDetails");
