@@ -87,7 +87,7 @@
     <string name="classCodeText">Code</string>
     <string name="noLessonDescriptionSetText">No description has been set for this lesson.</string>
 
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="questionButtonText">Ask a question</string>
     <string name="ask_a_question_text">Ask a question</string>
     <string name="cancel_button_text">Cancel</string>
