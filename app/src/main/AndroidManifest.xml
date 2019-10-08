@@ -1,40 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="it.teamgdm.sms.dibapp"
     tools:ignore="GoogleAppIndexingWarning">
 
-
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" tools:ignore="ManifestOrder" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
-
     <application
+        android:allowBackup="true"
+        android:fullBackupContent="true"
         android:hardwareAccelerated="false"
         android:icon="@mipmap/dib_logo_foreground"
         android:label="@string/app_name"
         android:largeHeap="true"
-        android:usesCleartextTraffic="true"
-        android:theme="@style/AppTheme.NoActionBar"
         android:roundIcon="@mipmap/dib_logo_round"
         android:supportsRtl="true"
-        android:allowBackup="true"
-        android:fullBackupContent="true"
+        android:theme="@style/AppTheme.NoActionBar"
+        android:usesCleartextTraffic="true"
         tools:targetApi="n">
-
-        <activity
-            android:name=".SplashActivity">
+        <activity android:name=".ProfessorClassDetailActivity"></activity>
+        <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity" />
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".LoginActivity"/>
+        <activity android:name=".LoginActivity" />
         <activity
             android:name=".ClassListActivity"
             android:label="@string/title_exam_list" />
@@ -50,6 +42,7 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" />
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -57,5 +50,13 @@
             android:name="com.google.android.geo.dibapp"
             android:value="AIzaSyDFaIq_Xvymvwd1HfwALGlA565CfNH_vds" />
     </application>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+
+    <uses-permission
+        android:name="android.permission.ACCESS_WIFI_STATE"
+        tools:ignore="ManifestOrder" />
 
 </manifest>
