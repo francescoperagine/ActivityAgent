@@ -11,10 +11,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-
-import java.util.HashMap;
+import java.util.Date;
 
 public class RegisterActivity extends BaseActivity {
 
@@ -101,6 +98,7 @@ public class RegisterActivity extends BaseActivity {
         tmpUser.setEmail(editTextEmail.getText().toString().toLowerCase().trim());
         tmpUser.setPassword(editTextPassword.getText().toString().trim());
         tmpUser.setConfirmPassword(editTextConfirmPassword.getText().toString().trim());
+        tmpUser.setRegistrationDate(new Date());
 
         if(validateInputs(tmpUser) && register(tmpUser)) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -registrationInit-registrationComplete-"+tmpUser);
@@ -177,35 +175,12 @@ public class RegisterActivity extends BaseActivity {
 
     private boolean register(User tmpUser) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -register-");
-        HashMap<String, String> params = new HashMap<>();
-        params.put(Constants.KEY_ACTION, Constants.USER_REGISTRATION);
-        params.put(Constants.KEY_USER_NAME, tmpUser.getName());
-        params.put(Constants.KEY_USER_SURNAME, tmpUser.getSurname());
-        params.put(Constants.KEY_USER_SERIAL_NUMBER, tmpUser.getSsn());
-        params.put(Constants.KEY_DEGREECOURSE, tmpUser.getDegreeCourse());
-        params.put(Constants.KEY_USER_ROLE_NAME, tmpUser.getRoleName());
-        params.put(Constants.KEY_USER_EMAIL, tmpUser.getEmail());
-        params.put(Constants.KEY_USER_PASSWORD, tmpUser.getPassword());
-
-        JSONArray response = getFromDB(params);
-
-        try {
-            String message = response.getJSONObject(0).getString(Constants.KEY_MESSAGE);
-            int codeResult = (int) response.getJSONObject(0).get(Constants.KEY_CODE);
-
-            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-            if (codeResult == Constants.USER_CREATED_CODE) {
-                Log.i(Constants.TAG, getClass().getSimpleName() + " -register-"+message);
-                return true;
-            } else {
-                Log.i(Constants.TAG, getClass().getSimpleName() + " -register-REGISTRATION_NOT_OK");
-                return false;
-            }
-        } catch (JSONException e) {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -register-Exception-");
-            System.out.println("\n\t" + "\n\t" + e.getMessage());
-            e.printStackTrace();
+        if(DAO.registerUser(tmpUser)) {
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.user_registration_ok), Toast.LENGTH_SHORT).show();
+            return true;
+        } else {
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.user_registration_not_ok), Toast.LENGTH_SHORT).show();
+            return false;
         }
-        return false;
     }
 }

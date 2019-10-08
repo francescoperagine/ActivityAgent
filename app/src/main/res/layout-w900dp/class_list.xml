@@ -27,11 +27,24 @@
         app:layoutManager="LinearLayoutManager"
         tools:context="it.teamgdm.sms.dibapp.ClassListActivity"
         tools:listitem="@layout/class_list_content" />
+
     <FrameLayout
         android:id="@+id/class_detail_container"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="3" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:layout_weight="3">
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/class_button_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom">
+
+    </FrameLayout>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

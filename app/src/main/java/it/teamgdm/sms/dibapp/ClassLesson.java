@@ -4,19 +4,20 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
-import java.sql.Date;
-import java.sql.Time;
+public class ClassLesson extends Exam implements Serializable {
 
-public class ClassLesson extends Exam {
-
+    int classID;
+    int lessonID;
     int year;
     int semester;
-    Date date;
-    Time timeStart;
-    Time timeEnd;
+    Date timeStart;
+    Date timeEnd;
     String lessonSummary;
     String lessonDescription;
 
@@ -24,53 +25,40 @@ public class ClassLesson extends Exam {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -ClassLesson-");
     }
 
-    void setClassLesson(JSONObject classLesson) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -setClassLesson-");
-        try {
-            ID = classLesson.getInt(Constants.KEY_CLASS_ID);
-            name = classLesson.getString(Constants.KEY_CLASS_NAME);
-            code = classLesson.getInt(Constants.KEY_CLASS_CODE);
-            classDescription = classLesson.getString(Constants.KEY_CLASS_DESCRIPTION);
-            year = classLesson.getInt(Constants.KEY_CLASS_LESSON_YEAR);
-            semester = classLesson.getInt(Constants.KEY_CLASS_LESSON_SEMESTER);
-            date = Date.valueOf((classLesson.getString(Constants.KEY_CLASS_LESSON_DATE)));
-            timeStart = Time.valueOf(classLesson.getString(Constants.KEY_CLASS_LESSON_TIME_START));
-            timeEnd =  Time.valueOf(classLesson.getString(Constants.KEY_CLASS_LESSON_TIME_END));
-            lessonSummary = classLesson.getString(Constants.KEY_CLASS_LESSON_SUMMARY);
-            lessonDescription = classLesson.getString(Constants.KEY_CLASS_LESSON_DESCRIPTION);
-        } catch (JSONException ignored) {
-        }
-    }
     @NonNull
     public String toString() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -toString-");
-        return "\nName \t" +name + "\ncode \t" + code + "\nclassDescription \t" +classDescription + "\nyear \t" + year +
-                "\nsemester \t" + semester + "\ndate \t" +date + "\ntimeStart \t" + timeStart + "\ntimeEnd \t" + timeEnd +
+        return "\nClassID \t " + classID + "\nLessonID \t " + lessonID + "\nName \t" + name + "\ncode \t" + code + "\nclassDescription \t" + classDescription + "\nyear \t" + year +
+                "\nsemester \t" + semester + "\ndate \t" + getDate() + "\ntimeStart \t" + timeStart + "\ntimeEnd \t" + timeEnd +
                 "\nlessonSummary \t" + lessonSummary + "\nlessonDescription \t" + lessonDescription;
     }
 
-    void setYear(int year) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -setYear-");
-        this.year = year;
+    String getDate() {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -getDate-");
+        return new SimpleDateFormat(Constants.DATE_FORMAT, Locale.getDefault()).format(timeStart);
     }
 
-    void setSemester(int semester) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -setSemester-");
-        this.semester = semester;
+    String getTimeStringFromDate(Date date) {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -getTimestampStringFromDate-" + date);
+        return new SimpleDateFormat(Constants.TIME_FORMAT, Locale.getDefault()).format(date);
     }
 
-    String getDateString() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -getDateString-");
-        return String.valueOf(date);
+    Date getTimestampDateFromString(String time) {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -getTimeFromDatetimeString-"+ time);
+        SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATETIME_FORMAT, Locale.getDefault());
+        Date d = null;
+        try {
+            d = sdf.parse(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return d;
     }
 
-    String getTimeStartString() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -getTimeStartString-");
-        return String.valueOf(timeStart);
+    boolean isInProgress() {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -isInProgress-");
+        Date now = new Date();
+        return now.after(timeStart) && now.before(timeEnd);
     }
 
-    String getTimeEndString() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -getTimeEndString-");
-        return String.valueOf(timeEnd);
-    }
 }

@@ -13,8 +13,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-
 class Session {
 
     static boolean geofencePermissionGranted;
@@ -40,10 +38,8 @@ class Session {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -setAccess-");
         sharedPreferencesEditor.putBoolean(Constants.USER_IS_LOGGED_IN, true);
         sharedPreferencesEditor.putString(Constants.KEY_USER_EMAIL, email);
-        HashMap<String, String> param = new HashMap<>();
-        param.put(Constants.KEY_ACTION, Constants.GET_USER_DETAILS);
-        param.put(Constants.KEY_USER_EMAIL, email);
-        JSONArray response = BaseActivity.getFromDB(param);
+
+        JSONArray response = DAO.getUserDetail(email);
         try {
             JSONObject userDetails = response.getJSONObject(0);
             setUserInSharedPreferences(userDetails);
@@ -54,7 +50,7 @@ class Session {
     }
 
     private void setUserInSharedPreferences(@NonNull JSONObject userDetails) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -setUserInSharedPreferences-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -setUserInSharedPreferences-" + userDetails);
         try {
             sharedPreferencesEditor.putInt(Constants.KEY_USER_ID, userDetails.getInt(Constants.KEY_USER_ID));
             sharedPreferencesEditor.putString(Constants.KEY_USER_NAME, userDetails.getString(Constants.KEY_USER_NAME));

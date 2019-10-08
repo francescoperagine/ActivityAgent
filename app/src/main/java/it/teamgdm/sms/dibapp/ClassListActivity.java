@@ -2,6 +2,7 @@ package it.teamgdm.sms.dibapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,7 +37,6 @@ public class ClassListActivity extends BaseActivity {
     RecyclerView recyclerView;
     TextView textViewEmptyClassList;
 
-
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-");
         super.onCreate(savedInstanceState);
@@ -54,11 +54,6 @@ public class ClassListActivity extends BaseActivity {
         textViewEmptyClassList = findViewById(R.id.class_list_empty);
 
         setupRecyclerView();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
     }
 
     @Override
@@ -82,13 +77,14 @@ public class ClassListActivity extends BaseActivity {
             params.put(Constants.KEY_USER_ROLE_NAME, Constants.KEY_ROLE_STUDENT);
             classListData = new StudentCareer();
         }
-        JSONArray classListLoader = getFromDB(params);
+        JSONArray classListLoader = DAO.getFromDB(params);
         classListData.setClassList(classListLoader);
         ArrayList<ClassLesson> classList = classListData.getClassList();
         if(classList.isEmpty()) {
             recyclerView.setVisibility(View.GONE);
             textViewEmptyClassList.setVisibility(View.VISIBLE);
         } else {
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -setupRecyclerView-");
             recyclerView.setVisibility(View.VISIBLE);
             recyclerView.setAdapter(new ClassRecyclerViewAdapter(this, classList, mTwoPane));
             textViewEmptyClassList.setVisibility(View.GONE);
@@ -96,7 +92,6 @@ public class ClassListActivity extends BaseActivity {
     }
 
     public class ClassRecyclerViewAdapter extends RecyclerView.Adapter<ClassRecyclerViewAdapter.ViewHolder> {
-
         private final ClassListActivity mParentActivity;
         private final boolean mTwoPane;
         ArrayList<ClassLesson> classList;
@@ -112,22 +107,22 @@ public class ClassListActivity extends BaseActivity {
 
             @Override
             public void onClick(View view) {
-                Exam exam = ClassList.getClassFromID((Integer) view.getTag());
-                Log.i(Constants.TAG, getClass().getSimpleName() + " ClassRecyclerViewAdapter-OnClickListener- Exam " + exam);
-
+                ClassLesson classLesson = ClassList.getClassFromID((Integer) view.getTag());
+                Log.i(Constants.TAG, getClass().getSimpleName() + " ClassRecyclerViewAdapter-OnClickListener-");
+                boolean isUserAttendingLesson = DAO.isUserAttendingLesson(classLesson.lessonID, Session.getUserID());
                 if (mTwoPane) {
-                    Bundle arguments = new Bundle();
-                    arguments.putInt(Constants.KEY_ITEM_ID, exam.getID());
-                    Log.i(Constants.TAG, getClass().getSimpleName() + " ClassRecyclerViewAdapter-OnClickListener-mTwoPane- arguments " + Constants.KEY_ITEM_ID + " " + exam.getID());
-                    ClassDashboardFragment fragment = new ClassDashboardFragment();
-                    fragment.setArguments(arguments);
-                    mParentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.class_detail_container, fragment).commit();
+                    Log.i(Constants.TAG, getClass().getSimpleName() + " ClassRecyclerViewAdapter-OnClickListener-mTwoPane- arguments");
+                    StudentLessonDetailFragment detailFragment = StudentLessonDetailFragment.newInstance(classLesson, true);
+                    mParentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.class_detail_container, detailFragment).commit();
+                    StudentLessonBottomFragment buttonFragment = StudentLessonBottomFragment.newInstance(classLesson.lessonID, isUserAttendingLesson);
+                    mParentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.class_button_container, buttonFragment).commit();
                 } else {
                     Context context = view.getContext();
                     Intent classDetailIntent = new Intent(context, ClassDetailActivity.class);
-                    classDetailIntent.setAction(Constants.CLASS_LIST_ACTION);
-                    classDetailIntent.putExtra(Constants.KEY_ITEM_ID, exam.getID());
-                    Log.i(Constants.TAG, getClass().getSimpleName() + " ClassRecyclerViewAdapter-OnClickListener- putExtra " + Constants.KEY_ITEM_ID + " " + exam.getID());
+                    classDetailIntent.setAction(Constants.KEY_CLASS_LESSON_DETAIL_ACTION);
+                    classDetailIntent.putExtra(Constants.KEY_CLASS_LESSON, classLesson);
+                    classDetailIntent.putExtra(Constants.LESSON_IN_PROGRESS, classLesson.isInProgress());
+                    classDetailIntent.putExtra(Constants.IS_USER_ATTENDING_LESSON, isUserAttendingLesson);
                     context.startActivity(classDetailIntent);
                 }
             }
@@ -143,15 +138,20 @@ public class ClassListActivity extends BaseActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -onBindViewHolder- Position " + position);
-            holder.titleView.setText(classList.get(position).getName());
-            holder.itemView.setTag(classList.get(position).getID());
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -onBindViewHolder-");
+            holder.titleView.setText(classList.get(position).name);
+            if(!loginIntent.hasExtra(Constants.KEY_ROLE_PROFESSOR)) {
+                if (classList.get(position).isInProgress())
+                    holder.titleView.setBackgroundColor(Color.GREEN);
+            }
+                holder.itemView.setTag(classList.get(position).lessonID);
+
             holder.itemView.setOnClickListener(mOnClickListener);
         }
 
         @Override
         public int getItemCount() {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -onBindViewHolder-");
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -getItemCount-");
             return classList.size();
         }
 

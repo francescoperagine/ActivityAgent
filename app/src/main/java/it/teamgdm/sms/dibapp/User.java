@@ -4,6 +4,10 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 class User {
 
     private int ID;
@@ -15,7 +19,7 @@ class User {
     private String email;
     private int degreeCourseId;
     private String degreeCourseName;
-    private String registrationDate;
+    private Date registrationDate;
     private String password;
     private String confirmPassword;
 
@@ -132,5 +136,15 @@ class User {
     public String toString() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -toString-");
         return name + Constants.KEY_BLANK + surname + Constants.KEY_BLANK + ssn + Constants.KEY_BLANK + roleName + Constants.KEY_BLANK + email + Constants.KEY_BLANK + password;
+    }
+
+    void setRegistrationDate(Date date) {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -setRegistrationDate-"+ date);
+        registrationDate = date;
+    }
+
+    String getRegistrationDate() {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -getRegistrationDate-");
+        return new SimpleDateFormat(Constants.DATETIME_FORMAT, Locale.getDefault()).format(registrationDate);
     }
 }

@@ -8,7 +8,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Retrieves the spinner data from the DB and returns the ArrayAdapter with setInputList()
@@ -28,9 +27,7 @@ class SpinnerListAdapter {
 
     ArrayAdapter<SpinnerElement> setInputList(String spinnerArgument) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -setInputList- "+spinnerArgument);
-        HashMap<String, String> params = new HashMap<>();
-        params.put(Constants.KEY_ACTION, spinnerArgument);
-        JSONArray spinnerListData = BaseActivity.getFromDB(params);
+        JSONArray spinnerListData = DAO.getInputList(spinnerArgument);
         ArrayList<SpinnerElement> spinnerElementList = setSpinnerList(spinnerListData, context.getResources().getString(spinnerSelectItemText));
         ArrayAdapter<SpinnerElement> spinnerAdapter = new ArrayAdapter<>(context, rowItemLayout, spinnerElementList);
         spinnerAdapter.setDropDownViewResource(R.layout.spinner_row_item);

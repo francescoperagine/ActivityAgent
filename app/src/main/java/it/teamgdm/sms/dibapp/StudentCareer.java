@@ -18,14 +18,22 @@ class StudentCareer extends ClassList{
             ClassLesson classLesson = new ClassLesson();
             try {
                 JSONObject o = studentCareerData.getJSONObject(i);
-                classLesson.setID(o.optInt(Constants.KEY_CLASS_ID));
-                classLesson.setName(o.optString(Constants.KEY_CLASS_NAME));
-                classLesson.setYear(o.optInt(Constants.KEY_CLASS_LESSON_YEAR));
-                classLesson.setSemester(o.optInt(Constants.KEY_CLASS_LESSON_SEMESTER));
-                classLesson.setPassed(o.optBoolean(Constants.KEY_PASSED));
-                classLesson.setVote(o.optInt(Constants.KEY_VOTE));
-                classLesson.setPraise(o.optBoolean(Constants.KEY_PRAISE));
-                classLesson.setPassedDate(o.optString(Constants.KEY_PASSED_DATE));
+                Log.i(Constants.TAG, StudentCareer.class.getSimpleName() + " -setClassList- OBJ " + o);
+                classLesson.classID = o.optInt(Constants.KEY_CLASS_ID);
+                classLesson.lessonID = o.optInt(Constants.KEY_CLASS_LESSON_ID);
+                classLesson.name = o.optString(Constants.KEY_CLASS_NAME);
+                classLesson.classDescription = o.optString(Constants.KEY_CLASS_DESCRIPTION);
+                classLesson.code = o.optInt(Constants.KEY_CLASS_CODE);
+                classLesson.year = o.optInt(Constants.KEY_CLASS_LESSON_YEAR);
+                classLesson.semester = o.optInt(Constants.KEY_CLASS_LESSON_SEMESTER);
+                classLesson.timeStart = classLesson.getTimestampDateFromString(o.optString(Constants.KEY_CLASS_LESSON_TIME_START));
+                classLesson.timeEnd = classLesson.getTimestampDateFromString(o.optString(Constants.KEY_CLASS_LESSON_TIME_END));
+                classLesson.lessonSummary = o.optString(Constants.KEY_CLASS_LESSON_SUMMARY);
+                classLesson.lessonDescription = o.optString(Constants.KEY_CLASS_LESSON_DESCRIPTION);
+        //        classLesson.passed = o.optBoolean(Constants.KEY_PASSED);
+        //       classLesson.vote = o.optInt(Constants.KEY_VOTE);
+        //        classLesson.praise = o.optBoolean(Constants.KEY_PRAISE);
+        //        classLesson.setPassedDate(o.optString(Constants.KEY_PASSED_DATE));
             } catch (JSONException e) {
                 Log.i(Constants.TAG, StudentCareer.class.getSimpleName() + " -setClassList- IS NULL");
             }

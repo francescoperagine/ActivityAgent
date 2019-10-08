@@ -29,15 +29,43 @@ class GeofenceAPI {
     private PendingIntent geofencePendingIntent;
     private GeofencingClient geofencingClient;
     private String[] permissions;
+    static boolean hasGeofencePermissions;
 
     GeofenceAPI(Context context) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -constructor-");
         this.context = context;
         geofenceList = new ArrayList<>();
         permissions  = setGeofencePermissions();
+        geofencePermissionHandler();
+        hasGeofencePermissions = hasGeofencePermissions();
     }
 
-    void geofenceInit() {
+    private String[] setGeofencePermissions() {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -setGeofencePermissions-");
+        String[] permissions;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            permissions = new String[] {
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
+            };
+        } else {
+            permissions = new String[]{
+                    Manifest.permission.ACCESS_FINE_LOCATION
+            };
+        }
+        return permissions;
+    }
+
+    private void geofencePermissionHandler(){
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -geofencePermissionHandler-");
+        if(!hasGeofencePermissions()) {
+            askGeofencePermissions();
+        } else {
+            geofenceInit();
+        }
+    }
+
+    private void geofenceInit() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -geofenceInit-");
         geofencingClient = LocationServices.getGeofencingClient(context);
         setGeofences();
@@ -54,13 +82,12 @@ class GeofenceAPI {
 
     private Geofence getGeofence(String geofenceName, double latitude, double longitude, int circularMeterRadius, String requestID) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -getGeofence-");
-        Geofence.Builder builder = new Geofence.Builder();
-        builder.setRequestId(geofenceName);
-        builder.setCircularRegion(latitude, longitude, circularMeterRadius);
-        builder.setExpirationDuration(Geofence.NEVER_EXPIRE);
-        builder.setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_DWELL | Geofence.GEOFENCE_TRANSITION_EXIT);
-        builder.setLoiteringDelay(Constants.GEOFENCE_TRANSITION_DWELL_TIME);
-        builder.setRequestId(requestID);
+        Geofence.Builder builder = new Geofence.Builder()
+            .setRequestId(geofenceName)
+            .setCircularRegion(latitude, longitude, circularMeterRadius)
+            .setExpirationDuration(Geofence.NEVER_EXPIRE).setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_DWELL | Geofence.GEOFENCE_TRANSITION_EXIT)
+            .setLoiteringDelay(Constants.GEOFENCE_TRANSITION_DWELL_TIME)
+            .setRequestId(requestID);
         return builder.build();
     }
 
@@ -93,9 +120,9 @@ class GeofenceAPI {
 
     private GeofencingRequest getGeofencingRequest() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -getGeofencingRequest-");
-        GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
-        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER | GeofencingRequest.INITIAL_TRIGGER_DWELL | GeofencingRequest.INITIAL_TRIGGER_EXIT);
-        builder.addGeofences(geofenceList);
+        GeofencingRequest.Builder builder = new GeofencingRequest.Builder()
+            .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER | GeofencingRequest.INITIAL_TRIGGER_DWELL | GeofencingRequest.INITIAL_TRIGGER_EXIT)
+            .addGeofences(geofenceList);
         return builder.build();
     }
 
@@ -105,15 +132,13 @@ class GeofenceAPI {
         // Reuse the PendingIntent if we already have it.
         if (geofencePendingIntent == null) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -getGeofencePendingIntent-NULL");
-            Intent geofenceBroadcastIntent = new Intent(Constants.GEOFENCE_TRANSITION_ACTION);
+            Intent geofenceBroadcastIntent = new Intent(context, DibappBroadcastReceiver.class);
+            geofenceBroadcastIntent.setAction(Constants.GEOFENCE_TRANSITION_ACTION);
             // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when
             // calling addGeofences() and removeGeofences().
-            geofencePendingIntent = PendingIntent.getBroadcast(context.getApplicationContext(), requestID, geofenceBroadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        }
-        if (geofencePendingIntent == null) {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -getGeofencePendingIntent-STILL NULL!!!");
+            geofencePendingIntent = PendingIntent.getBroadcast(context, requestID, geofenceBroadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         } else {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -getGeofencePendingIntent-NOT NULL ANYMORE.");
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -getGeofencePendingIntent-NOT NULL");
         }
         return geofencePendingIntent;
     }
@@ -126,26 +151,11 @@ class GeofenceAPI {
         }
     }
 
-    private String[] setGeofencePermissions() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -setGeofencePermissions-");
-        String[] permissions;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-            permissions = new String[] {
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
-            };
-        } else {
-            permissions = new String[]{
-                    Manifest.permission.ACCESS_FINE_LOCATION
-            };
-        }
-        return permissions;
-    }
-
-    boolean hasGeofencePermissions() {
+    private boolean hasGeofencePermissions() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -hasGeofencePermissions-");
         for(String permission : permissions) {
             if(ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_DENIED) {
+                Session.geofencePermissionGranted = false;
                 return false;
             }
         }
@@ -153,7 +163,7 @@ class GeofenceAPI {
         return true;
     }
 
-    void askGeofencePermissions() {
+    private void askGeofencePermissions() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -askGeofencePermissions-");
         ActivityCompat.requestPermissions((Activity) context, permissions, Constants.GEOFENCE_PERMISSION_REQUEST_CODE);
     }
