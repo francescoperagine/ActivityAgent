@@ -132,8 +132,8 @@ class GeofenceAPI {
         // Reuse the PendingIntent if we already have it.
         if (geofencePendingIntent == null) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -getGeofencePendingIntent-NULL");
-            Intent geofenceBroadcastIntent = new Intent(context, DibappBroadcastReceiver.class);
-            geofenceBroadcastIntent.setAction(Constants.GEOFENCE_TRANSITION_ACTION);
+            Intent geofenceBroadcastIntent = new Intent(Constants.GEOFENCE_TRANSITION_ACTION);
+         //   geofenceBroadcastIntent.setAction(Constants.GEOFENCE_TRANSITION_ACTION);
             // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when
             // calling addGeofences() and removeGeofences().
             geofencePendingIntent = PendingIntent.getBroadcast(context, requestID, geofenceBroadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
