@@ -54,7 +54,7 @@ public class StudentEvaluateFragment extends DialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreateView-");
         super.onCreateView(inflater, container, savedInstanceState);
-        return inflater.inflate(R.layout.evaluate_fragment, container, false);
+        return inflater.inflate(R.layout.student_evaluate_fragment, container, false);
     }
 
 

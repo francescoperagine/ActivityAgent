@@ -28,20 +28,21 @@
         <activity android:name=".RegisterActivity" />
         <activity android:name=".LoginActivity" />
         <activity
-            android:name=".ClassListActivity"
+            android:name=".StudentLessonListActivity"
             android:label="@string/title_exam_list" />
         <activity
-            android:name=".ClassDetailActivity"
+            android:name=".StudentLessonDetailActivity"
             android:label="@string/title_exam_detail"
-            android:parentActivityName=".ClassListActivity">
+            android:parentActivityName=".StudentLessonListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="it.teamgdm.sms.dibapp.ClassListActivity" />
+                android:value="it.teamgdm.sms.dibapp.StudentLessonListActivity" />
         </activity>
         <activity android:name=".ProfileActivity" />
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" />
+        <activity android:name=".ProfessorClassListActivity" />
 
         <meta-data
             android:name="com.google.android.gms.version"

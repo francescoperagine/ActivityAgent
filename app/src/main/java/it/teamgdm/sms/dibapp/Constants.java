@@ -65,10 +65,9 @@ public final class Constants {
     static final String GET_USER_DETAILS = "getUserDetails";
     static final String GET_ROLE_LIST = "getRoleList";
     static final String GET_DEGREECOURSE_LIST = "getDegreecourseList";
-    static final String GET_CURRENT_CLASS_LIST = "getCurrentClassList";
-    static final String KEY_CLASS_LESSON_DETAIL_ACTION = "classLessonDetail";
-    static final String KEY_CLASS_LESSON_DETAIL_ACTION_PROFESSOR = "classLessonDetailProfessor";
+    static final String GET_CLASS_LIST = "getClassList";
     static final String CHECK_EXISTING_EVALUATE = "checkEvaluatedLesson";
+    static final String GET_PROFESSOR_CLASS_LIST = "getProfessorClassList";
 
     // DB STUDENT_CAREER TABLE ATTRIBUTES
 

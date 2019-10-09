@@ -14,9 +14,9 @@ import com.google.android.gms.location.Geofence;
  * An activity representing a single Exam detail screen. This
  * activity is only used on narrow width devices. On tablet-size devices,
  * item details are presented side-by-side with a list of items
- * in a {@link ClassListActivity}.
+ * in a {@link StudentLessonListActivity}.
  */
-public class ClassDetailActivity extends BaseActivity implements
+public class StudentLessonDetailActivity extends BaseActivity implements
         StudentLessonBottomFragment.StudentDashboardButtonFragmentInterface,
         StudentEvaluateFragment.StudentEvaluateFragmentInterface,
         StudentQuestionFragment.StudentQuestionFragmentInterface,
@@ -55,26 +55,24 @@ public class ClassDetailActivity extends BaseActivity implements
 
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity using a fragment transaction.
-            if(getIntent().getAction() != null && getIntent().getAction().equals(Constants.KEY_CLASS_LESSON_DETAIL_ACTION)) {
-                classLesson = (ClassLesson) getIntent().getSerializableExtra(Constants.KEY_CLASS_LESSON);
-                lessonInProgress = getIntent().getBooleanExtra(Constants.LESSON_IN_PROGRESS, false);
-                isUserAttendingLesson = getIntent().getBooleanExtra(Constants.IS_USER_ATTENDING_LESSON, false);
-                StudentLessonDetailFragment dashboardDetailFragment = StudentLessonDetailFragment.newInstance(classLesson, false);
-                Fragment bottomFragment;
-                if (! lessonInProgress) {
-                    Log.i(Constants.TAG, getClass().getSimpleName() + " -onStart-Lesson not in progress.");
-                    bottomFragment = StudentLessonBottomNoLessonFragment.newInstance();
-                } else if(GeofenceAPI.hasGeofencePermissions) {
-                    Log.i(Constants.TAG, getClass().getSimpleName() + " -onStart-Has geofence permission.");
-                    bottomFragment = getBottomFragment(0);
-                } else {
-                    Log.i(Constants.TAG, getClass().getSimpleName() + " -onStart-No geofence permission.");
-                    bottomFragment = StudentLessonBottomNoGeofencePermissionFragment.newInstance();
-                }
-                getSupportFragmentManager().beginTransaction()
-                        .add(R.id.dashboardDetailContainer, dashboardDetailFragment)
-                        .add(R.id.dashboardButtonContainer, bottomFragment).commit();
+            classLesson = (ClassLesson) getIntent().getSerializableExtra(Constants.KEY_CLASS_LESSON);
+            lessonInProgress = getIntent().getBooleanExtra(Constants.LESSON_IN_PROGRESS, false);
+            isUserAttendingLesson = getIntent().getBooleanExtra(Constants.IS_USER_ATTENDING_LESSON, false);
+            StudentLessonDetailFragment dashboardDetailFragment = StudentLessonDetailFragment.newInstance(classLesson, false);
+            Fragment bottomFragment;
+            if (! lessonInProgress) {
+                Log.i(Constants.TAG, getClass().getSimpleName() + " -onStart-Lesson not in progress.");
+                bottomFragment = StudentLessonBottomNoLessonFragment.newInstance();
+            } else if(GeofenceAPI.hasGeofencePermissions) {
+                Log.i(Constants.TAG, getClass().getSimpleName() + " -onStart-Has geofence permission.");
+                bottomFragment = getBottomFragment(0);
+            } else {
+                Log.i(Constants.TAG, getClass().getSimpleName() + " -onStart-No geofence permission.");
+                bottomFragment = StudentLessonBottomNoGeofencePermissionFragment.newInstance();
             }
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.dashboardDetailContainer, dashboardDetailFragment)
+                    .add(R.id.dashboardButtonContainer, bottomFragment).commit();
         }
     }
 

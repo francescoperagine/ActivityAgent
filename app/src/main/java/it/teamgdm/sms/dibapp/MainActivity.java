@@ -38,13 +38,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadDashboard() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -loadDashboard-");
-        Intent classListActivityIntent = new Intent(this, ClassListActivity.class);
-
+        Intent listActivityIntent = null;
         if(session.userIsProfessor()) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -loadDashboard-userIsProfessor");
-            classListActivityIntent.putExtra(Constants.KEY_ROLE_PROFESSOR, true);
+            listActivityIntent = new Intent(this, ProfessorClassListActivity.class);
+        } else {
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -loadDashboard-userIsStudent");
+            listActivityIntent = new Intent(this, StudentLessonListActivity.class);
         }
-        startActivity(classListActivityIntent);
+        startActivity(listActivityIntent);
         finish();
     }
 }

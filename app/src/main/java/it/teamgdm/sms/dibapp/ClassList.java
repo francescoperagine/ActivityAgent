@@ -12,12 +12,12 @@ abstract class ClassList {
     static ArrayList<ClassLesson> classList;
 
     ClassList() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -ClassList-Constructor-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -constructor-");
         classList = new ArrayList<>();
     }
 
     ArrayList<ClassLesson> getClassList() {
-        Log.i(Constants.TAG, StudentCareer.class.getSimpleName() + " -getClassList-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -getClassList-");
         return classList;
     }
 
@@ -30,6 +30,7 @@ abstract class ClassList {
     }
 
     static ClassLesson getClassFromID(int classLessonID) {
+        Log.i(Constants.TAG, ClassList.class.getSimpleName() + " -getClassFromID-");
         ClassLesson classLesson = null;
         for(int i=0; i<classList.size(); i++) {
             if(classList.get(i).lessonID == classLessonID) {

@@ -16,17 +16,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.json.JSONArray;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * An activity representing a list of Exams. This activity
  * has different presentations for handset and tablet-size devices. On
  * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link ClassDetailActivity} representing
+ * lead to a {@link StudentLessonDetailActivity} representing
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class ClassListActivity extends BaseActivity {
+public class ProfessorClassListActivity extends BaseActivity {
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -64,20 +63,8 @@ public class ClassListActivity extends BaseActivity {
 
     private void setupRecyclerView() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -setupRecyclerView-");
-        ClassList classListData;
-        HashMap<String, String> params = new HashMap<>();
-        params.put(Constants.KEY_ACTION, Constants.GET_CURRENT_CLASS_LIST);
-        params.put(Constants.KEY_USER_ID, String.valueOf(Session.getUserID()));
-        if(loginIntent.hasExtra(Constants.KEY_ROLE_PROFESSOR)) {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -setupRecyclerView-professorTeaching");
-            params.put(Constants.KEY_USER_ROLE_NAME, Constants.KEY_ROLE_PROFESSOR);
-            classListData = new ProfessorTeaching();
-        } else {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -setupRecyclerView-studentCareer");
-            params.put(Constants.KEY_USER_ROLE_NAME, Constants.KEY_ROLE_STUDENT);
-            classListData = new StudentCareer();
-        }
-        JSONArray classListLoader = DAO.getFromDB(params);
+        ClassList classListData = new ProfessorTeaching();
+        JSONArray classListLoader = DAO.getClassList(Session.getUserID(), Constants.KEY_ROLE_PROFESSOR);
         classListData.setClassList(classListLoader);
         ArrayList<ClassLesson> classList = classListData.getClassList();
         if(classList.isEmpty()) {
@@ -92,11 +79,11 @@ public class ClassListActivity extends BaseActivity {
     }
 
     public class ClassRecyclerViewAdapter extends RecyclerView.Adapter<ClassRecyclerViewAdapter.ViewHolder> {
-        private final ClassListActivity mParentActivity;
+        private final ProfessorClassListActivity mParentActivity;
         private final boolean mTwoPane;
         ArrayList<ClassLesson> classList;
 
-        ClassRecyclerViewAdapter(ClassListActivity parent, ArrayList<ClassLesson> classList, boolean twoPane) {
+        ClassRecyclerViewAdapter(ProfessorClassListActivity parent, ArrayList<ClassLesson> classList, boolean twoPane) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -ClassRecyclerViewAdapter-");
             this.classList = classList;
             mParentActivity = parent;
@@ -107,39 +94,17 @@ public class ClassListActivity extends BaseActivity {
 
             @Override
             public void onClick(View view) {
-                ClassLesson classLesson = ClassList.getClassFromID((Integer) view.getTag());
+                int classID = (Integer) view.getTag();
                 Log.i(Constants.TAG, getClass().getSimpleName() + " ClassRecyclerViewAdapter-OnClickListener-");
-                boolean isUserAttendingLesson = DAO.isUserAttendingLesson(classLesson.lessonID, Session.getUserID());
                 if (mTwoPane) {
-
-                    if(!loginIntent.hasExtra(Constants.KEY_ROLE_PROFESSOR)) {
-
-                        Log.i(Constants.TAG, getClass().getSimpleName() + " ClassRecyclerViewAdapter-OnClickListener-mTwoPane- arguments");
-                        StudentLessonDetailFragment detailFragment = StudentLessonDetailFragment.newInstance(classLesson, true);
-                        mParentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.class_detail_container, detailFragment).commit();
-                        StudentLessonBottomFragment buttonFragment = StudentLessonBottomFragment.newInstance(classLesson.lessonID, isUserAttendingLesson);
-                        mParentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.class_button_container, buttonFragment).commit();
-                    }
+                    Log.i(Constants.TAG, getClass().getSimpleName() + " ClassRecyclerViewAdapter-OnClickListener-mTwoPane- arguments");
+                    ProfessorClassDetailFragment detailFragment = ProfessorClassDetailFragment.newInstance(classID, true);
+                    mParentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.class_detail_container, detailFragment).commit();
                 } else {
                     Context context = view.getContext();
-
-                    if(!loginIntent.hasExtra(Constants.KEY_ROLE_PROFESSOR)) {
-
-
-                        Intent classDetailIntent = new Intent(context, ClassDetailActivity.class);
-                        classDetailIntent.setAction(Constants.KEY_CLASS_LESSON_DETAIL_ACTION);
-                        classDetailIntent.putExtra(Constants.KEY_CLASS_LESSON, classLesson);
-                        classDetailIntent.putExtra(Constants.LESSON_IN_PROGRESS, classLesson.isInProgress());
-                        classDetailIntent.putExtra(Constants.IS_USER_ATTENDING_LESSON, isUserAttendingLesson);
-                        context.startActivity(classDetailIntent);
-                    } else{
-                        Intent profClassDetailIntent = new Intent (context, ProfessorClassDetailActivity.class);
-                        profClassDetailIntent.setAction(Constants.KEY_CLASS_LESSON_DETAIL_ACTION_PROFESSOR);
-                        profClassDetailIntent.putExtra(Constants.KEY_CLASS_ID, classLesson.ID);
-                        profClassDetailIntent.putExtra(Constants.KEY_CLASS_NAME, classLesson.name);
-                        context.startActivity(profClassDetailIntent);
-
-                    }
+                    Intent profClassDetailIntent = new Intent (context, ProfessorClassDetailActivity.class);
+                    profClassDetailIntent.putExtra(Constants.KEY_CLASS_ID, classID);
+                    context.startActivity(profClassDetailIntent);
                 }
             }
         };
@@ -156,12 +121,7 @@ public class ClassListActivity extends BaseActivity {
         public void onBindViewHolder(final ViewHolder holder, int position) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -onBindViewHolder-");
             holder.titleView.setText(classList.get(position).name);
-            if(!loginIntent.hasExtra(Constants.KEY_ROLE_PROFESSOR)) {
-                if (classList.get(position).isInProgress())
-                    holder.titleView.setBackgroundColor(Color.GREEN);
-            }
-                holder.itemView.setTag(classList.get(position).lessonID);
-
+            holder.itemView.setTag(classList.get(position).lessonID);
             holder.itemView.setOnClickListener(mOnClickListener);
         }
 
@@ -178,6 +138,7 @@ public class ClassListActivity extends BaseActivity {
                 super(view);
                 Log.i(Constants.TAG, getClass().getSimpleName() + " -ViewHolder-");
                 titleView = view.findViewById(R.id.content);
+
             }
         }
     }

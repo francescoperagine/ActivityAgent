@@ -16,7 +16,7 @@ import java.util.concurrent.ExecutionException;
 class DAO {
 
     static JSONArray getFromDB(Map params) {
-        Log.i(Constants.TAG, ClassListActivity.class.getSimpleName() + " -getFromDB-");
+        Log.i(Constants.TAG, DAO.class.getSimpleName() + " -getFromDB-");
         JSONObject data = new JSONObject();
         JSONArray response = null;
         try {
@@ -24,11 +24,11 @@ class DAO {
                 Map.Entry entry = (Map.Entry) o;
                 data.put((String) entry.getKey(), entry.getValue());
             }
-            Log.i(Constants.TAG, ClassListActivity.class.getSimpleName() + " -getFromDB-data "+data);
+            Log.i(Constants.TAG, DAO.class.getSimpleName() + " -getFromDB-data "+data);
             AsyncTaskConnection asyncTaskConnection = new AsyncTaskConnection();
             asyncTaskConnection.execute(data);
             response = asyncTaskConnection.get();
-            Log.i(Constants.TAG, ClassListActivity.class.getSimpleName() + " -getFromDB-response "+response);
+            Log.i(Constants.TAG, DAO.class.getSimpleName() + " -getFromDB-response "+response);
         } catch (JSONException | ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -36,7 +36,7 @@ class DAO {
     }
 
     private static boolean isDataSent(HashMap params, int expectedResultCode) {
-        Log.i(Constants.TAG, BaseActivity.class.getSimpleName() + " -isDataSent-");
+        Log.i(Constants.TAG, DAO.class.getSimpleName() + " -isDataSent-");
         JSONArray response = getFromDB(params);
         int codeResult = 0;
         try {
@@ -45,6 +45,15 @@ class DAO {
             e.printStackTrace();
         }
         return codeResult == expectedResultCode;
+    }
+
+    static JSONArray getClassList(int userID, String roleName) {
+        Log.i(Constants.TAG, DAO.class.getSimpleName() + " -getClassList-");
+        HashMap<String, String> params = new HashMap<>();
+        params.put(Constants.KEY_ACTION, Constants.GET_CLASS_LIST);
+        params.put(Constants.KEY_USER_ID, String.valueOf(userID));
+        params.put(Constants.KEY_USER_ROLE_NAME, roleName);
+        return getFromDB(params);
     }
 
     static boolean isUserAttendingLesson(int lessonID, int userID) {
@@ -129,6 +138,7 @@ class DAO {
     }
 
     static JSONArray getUserDetail(String email) {
+        Log.i(Constants.TAG, DAO.class.getSimpleName() + " -getUserDetail- email" + email);
         HashMap<String, String> param = new HashMap<>();
         param.put(Constants.KEY_ACTION, Constants.GET_USER_DETAILS);
         param.put(Constants.KEY_USER_EMAIL, email);
@@ -136,27 +146,15 @@ class DAO {
     }
 
     static boolean checkEvaluatedLessonResponse(JSONArray response){
-
+        Log.i(Constants.TAG, DAO.class.getSimpleName() + " -checkEvaluatedLessonResponse- " + response);
         boolean result = false;
-
-        Log.i(Constants.TAG, String.valueOf(Session.getUserID()));
-
-        Log.i(Constants.TAG, response.toString());
-
         try {
             JSONObject o = response.getJSONObject(0);
             Log.i(Constants.TAG, o.toString());
-            if(o.optInt("count") == 0){
-                result = false;
-            }
-            else{
-                result = true;
-            }
+            result = o.optInt("count") != 0;
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         return result;
-
     }
 }

@@ -16,6 +16,7 @@ public class ClassLesson extends Exam implements Serializable {
     int lessonID;
     int year;
     int semester;
+    float rating;
     Date timeStart;
     Date timeEnd;
     String lessonSummary;

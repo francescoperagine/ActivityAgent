@@ -57,7 +57,7 @@ public class StudentLessonDetailFragment extends Fragment {
         TextView classLessonDescription = rootView.findViewById(R.id.classLessonDescription);
 
         className.setText(classLesson.name);
-        if(getActivity().getClass().equals(ClassDetailActivity.class)) className.setVisibility(View.GONE);
+        if(getActivity().getClass().equals(StudentLessonDetailActivity.class)) className.setVisibility(View.GONE);
 
         String year = getString(R.string.classYearText) + ": " + classLesson.year;
         classYear.setText(year);

@@ -10,7 +10,7 @@
     android:divider="?android:attr/dividerHorizontal"
     android:orientation="horizontal"
     android:showDividers="middle"
-    tools:context=".ClassListActivity">
+    tools:context=".StudentLessonListActivity">
 
     <!--
     This layout is a two-pane layout for the Exams
@@ -25,7 +25,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         app:layoutManager="LinearLayoutManager"
-        tools:context="it.teamgdm.sms.dibapp.ClassListActivity"
+        tools:context="it.teamgdm.sms.dibapp.StudentLessonListActivity"
         tools:listitem="@layout/class_list_content" />
 
     <FrameLayout
