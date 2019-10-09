@@ -111,19 +111,35 @@ public class ClassListActivity extends BaseActivity {
                 Log.i(Constants.TAG, getClass().getSimpleName() + " ClassRecyclerViewAdapter-OnClickListener-");
                 boolean isUserAttendingLesson = DAO.isUserAttendingLesson(classLesson.lessonID, Session.getUserID());
                 if (mTwoPane) {
-                    Log.i(Constants.TAG, getClass().getSimpleName() + " ClassRecyclerViewAdapter-OnClickListener-mTwoPane- arguments");
-                    StudentLessonDetailFragment detailFragment = StudentLessonDetailFragment.newInstance(classLesson, true);
-                    mParentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.class_detail_container, detailFragment).commit();
-                    StudentLessonBottomFragment buttonFragment = StudentLessonBottomFragment.newInstance(classLesson.lessonID, isUserAttendingLesson);
-                    mParentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.class_button_container, buttonFragment).commit();
+
+                    if(!loginIntent.hasExtra(Constants.KEY_ROLE_PROFESSOR)) {
+
+                        Log.i(Constants.TAG, getClass().getSimpleName() + " ClassRecyclerViewAdapter-OnClickListener-mTwoPane- arguments");
+                        StudentLessonDetailFragment detailFragment = StudentLessonDetailFragment.newInstance(classLesson, true);
+                        mParentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.class_detail_container, detailFragment).commit();
+                        StudentLessonBottomFragment buttonFragment = StudentLessonBottomFragment.newInstance(classLesson.lessonID, isUserAttendingLesson);
+                        mParentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.class_button_container, buttonFragment).commit();
+                    }
                 } else {
                     Context context = view.getContext();
-                    Intent classDetailIntent = new Intent(context, ClassDetailActivity.class);
-                    classDetailIntent.setAction(Constants.KEY_CLASS_LESSON_DETAIL_ACTION);
-                    classDetailIntent.putExtra(Constants.KEY_CLASS_LESSON, classLesson);
-                    classDetailIntent.putExtra(Constants.LESSON_IN_PROGRESS, classLesson.isInProgress());
-                    classDetailIntent.putExtra(Constants.IS_USER_ATTENDING_LESSON, isUserAttendingLesson);
-                    context.startActivity(classDetailIntent);
+
+                    if(!loginIntent.hasExtra(Constants.KEY_ROLE_PROFESSOR)) {
+
+
+                        Intent classDetailIntent = new Intent(context, ClassDetailActivity.class);
+                        classDetailIntent.setAction(Constants.KEY_CLASS_LESSON_DETAIL_ACTION);
+                        classDetailIntent.putExtra(Constants.KEY_CLASS_LESSON, classLesson);
+                        classDetailIntent.putExtra(Constants.LESSON_IN_PROGRESS, classLesson.isInProgress());
+                        classDetailIntent.putExtra(Constants.IS_USER_ATTENDING_LESSON, isUserAttendingLesson);
+                        context.startActivity(classDetailIntent);
+                    } else{
+                        Intent profClassDetailIntent = new Intent (context, ProfessorClassDetailActivity.class);
+                        profClassDetailIntent.setAction(Constants.KEY_CLASS_LESSON_DETAIL_ACTION_PROFESSOR);
+                        profClassDetailIntent.putExtra(Constants.KEY_CLASS_ID, classLesson.ID);
+                        profClassDetailIntent.putExtra(Constants.KEY_CLASS_NAME, classLesson.name);
+                        context.startActivity(profClassDetailIntent);
+
+                    }
                 }
             }
         };
