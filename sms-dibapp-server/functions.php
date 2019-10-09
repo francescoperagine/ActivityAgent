@@ -3,7 +3,6 @@
 include 'db_connect.php';
 include 'config.php';
 
-define("CHECK_IF_LESSON_ALREADY_EVALUATED", "SELECT count(*) as count FROM lesson_attendance_rating WHERE studentID = :studentID AND lessonID = :lessonID AND rating IS NOT NULL");
 define("USER_EXISTS_QUERY", "SELECT count(*) as count FROM user WHERE email = ?");
 define("VERIFY_PASSWORD_QUERY", "SELECT passwordHash, salt FROM user WHERE email = ?");
 define("GET_ROLE_LIST_QUERY", "SELECT name FROM role ORDER BY name");
@@ -23,7 +22,7 @@ define("SET_STUDENT_CAREER_QUERY",
       AND degreecourse_class.degreecourseID = degreecourse.ID
       AND degreecourse.name = :degreecourse");
 // Gets the list of active classes
-define("GET_STUDENT_CURRENT_CLASS_LIST_QUERY", 
+define("GET_STUDENT_CLASS_LIST_QUERY", 
 	"SELECT crl.ID as lessonID, c.ID as classID, c.name as className, c.code as classCode, c.description as classDescription, c.year as classYear, c.semester as classSemester, crl.timeStart as classLessonTimeStart, crl.timeEnd as classLessonTimeEnd, crl.summary as classLessonSummary , crl.description as classLessonDescription 
 	FROM student_career as s, class as c, class_room_calendar as crc, class_room_lesson as crl
 	WHERE s.classID = c.ID 
@@ -32,7 +31,13 @@ define("GET_STUDENT_CURRENT_CLASS_LIST_QUERY",
 	AND s.studentID = ?
 	GROUP BY className
 	ORDER BY c.year, className");
-define("GET_PROFESSOR_CURRENT_CLASS_LIST_QUERY", 
+define("GET_PROFESSOR_CLASS_LIST_QUERY", 
+	"SELECT c.ID as classID, c.name as className, c.code as classCode, c.description as classDescription, c.year as classYear, c.semester as classSemester
+	FROM professor_teaching as pt, class as c
+	WHERE pt.classID = c.ID 
+	AND pt.professorID = ?
+    ORDER BY className");
+/*define("GET_PROFESSOR_CURRENT_CLASS_LIST_QUERY", 
 	"SELECT crl.ID as lessonID, c.ID as classID, c.name as className, c.year as classYear, c.semester as classSemester, crl.timeStart as classLessonTimeStart, crl.timeEnd as classLessonTimeEnd
 	FROM professor_teaching as pt, class as c, class_room_calendar as crc, class_room_lesson as crl
 	WHERE pt.classID = c.ID 
@@ -41,8 +46,9 @@ define("GET_PROFESSOR_CURRENT_CLASS_LIST_QUERY",
 	AND pt.professorID = ?
 	GROUP BY className
 	ORDER BY c.year, className");
+	*/
 //define("GET_STUDENT_EXAM_LIST_QUERY", "SELECT c.ID as classID, c.name as className, c.year as year, c.semester as semester, s.passed as passed, s.passedDate as passedDate, s.vote as vote, s.praise as praise FROM student_career as s, class as c WHERE s.classID = c.ID AND studentID = ? ORDER BY year, className");
-define("GET_PROFESSOR_CLASS_LIST_QUERY", "SELECT c.id as classID, c.name as className FROM class as c, professor_teaching as p, user as u WHERE c.ID = p.classID AND p.professorID = u.id AND u.id = ?");
+//define("GET_PROFESSOR_CLASS_LIST_QUERY", "SELECT c.id as classID, c.name as className FROM class as c, professor_teaching as p, user as u WHERE c.ID = p.classID AND p.professorID = u.id AND u.id = ?");
 define("GET_USER_DETAILS_QUERY", "SELECT u.ID as userID, u.name as name, u.surname as surname, u.email as email, u.registrationDate as registrationDate, r.name as roleName FROM user as u, role as r WHERE u.roleID = r.ID AND email = ?");
 define("GET_CLASS_LESSON_DETAIL_QUERY", 
 	"SELECT c.ID as classID, c.name as className, c.description as classDescription, c.code as classCode, c.year as classYear, c.semester as classSemester, crl.timeStart as classLessonTimeStart, crl.timeEnd as classLessonTimeEnd, crl.summary as classLessonSummary , crl.description as classLessonDescription 
@@ -53,7 +59,7 @@ define("GET_CLASS_LESSON_DETAIL_QUERY",
 define("ASK_A_QUESTION_QUERY", "INSERT INTO class_lesson_question (lessonID, studentID, question, time) VALUES (:lessonID, :studentID, :question, :time)");
 define("SET_ATTENDANCE_QUERY", "INSERT INTO class_lesson_attendance_rating (studentID, lessonID, time) VALUES (:userID, :lessonID, :time)");
 define("UNSET_ATTENDANCE_QUERY", "DELETE FROM class_lesson_attendance_rating WHERE studentID = :userID AND lessonID = :lessonID");
-define("IS_USER_ATTENDING_LESSON_QUERY", "SELECT COUNT(*) as class_attendance FROM class_lesson_attendance_rating WHERE studentID = :userID AND lessonID = :lessonID");
+define("IS_USER_ATTENDING_LESSON_QUERY", "SELECT COUNT(*) as attendance FROM class_lesson_attendance_rating WHERE studentID = :userID AND lessonID = :lessonID");
 define("SET_CLASS_LESSON_REVIEW_QUERY", "UPDATE class_lesson_attendance_rating SET summary = :summary, review = :review, rating = :rating WHERE studentID = :userID AND lessonID = :lessonID");
 	  
 class Response {
@@ -65,16 +71,6 @@ class Response {
 		$this->message = $message;
 		$this->code = $code;
 	}
-}
-
-function checkEvaluatedLesson(array $input) {
-	global $connection;
-	$stmt = $connection->prepare(CHECK_IF_LESSON_ALREADY_EVALUATED);
-	$stmt->bindValue(':studentID', $input[KEY_USER_ID]);
-	$stmt->bindValue(':lessonID', $input[KEY_CLASS_LESSON_ID]);
-	$stmt->execute();
-	$response = $stmt->fetchAll(PDO::FETCH_OBJ);
-	return $response;
 }
 
 function login(array $input) {
@@ -280,12 +276,12 @@ function setReview($input) {
 	return $result;
 }
 
-function getCurrentClassList(int $userID, string $userRole) {
+function getClassList(int $userID, string $userRole) {
 	global $connection;
 	if($userRole == USER_ROLE_PROFESSOR) {
-		$stmt = $connection->prepare(GET_PROFESSOR_CURRENT_CLASS_LIST_QUERY);
+		$stmt = $connection->prepare(GET_PROFESSOR_CLASS_LIST_QUERY);
 	} else {
-		$stmt = $connection->prepare(GET_STUDENT_CURRENT_CLASS_LIST_QUERY);	
+		$stmt = $connection->prepare(GET_STUDENT_CLASS_LIST_QUERY);	
 	}
 	$stmt->execute([$userID]);
 	$response = $stmt->fetchAll(PDO::FETCH_OBJ);

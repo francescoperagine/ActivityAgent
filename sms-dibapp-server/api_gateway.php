@@ -21,8 +21,8 @@ if(isset($input[ACTION])){
 		case ACTION_REGISTRATION:
 			$response = registration($input);
 			break;
-		case ACTION_GET_CURRENT_CLASS_LIST: 
-			$response = getCurrentClassList($input[KEY_USER_ID], $input[KEY_USER_ROLE_NAME]);
+		case ACTION_GET_CLASS_LIST: 
+			$response = getClassList($input[KEY_USER_ID], $input[KEY_USER_ROLE_NAME]);
 			break;
 		case ACTION_GET_CLASS_LESSON_DETAIL:
 			$response = getClassLessonDetail($input[KEY_CLASS_ID]);
@@ -41,9 +41,6 @@ if(isset($input[ACTION])){
 			break;
 		case ACTION_IS_USER_ATTENDING_LESSON:
 			$response = isUserAttendingLesson($input[KEY_CLASS_LESSON_ID], $input[KEY_USER_ID]);
-			break;
-		case ACTION_CHECK_LESSON_EVALUATED:
-			$response = checkEvaluatedLesson($input);
 			break;
 		default: 
 			$response = new Response(ACTION_NOT_DEFINED_TEXT, ACTION_NOT_DEFINED_CODE); 
