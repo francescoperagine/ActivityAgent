@@ -36,6 +36,11 @@
     <string name="dashboard_menu_user_profile">Profile</string>
     <string name="title_activity_settings">Settings</string>
     <string name="lesson_evaluated_string">Lesson already evaluated</string>
+    <string name="lesson_progress">Lesson in progress</string>
+    <string name="lesson_not_progress">Lesson ended</string>
+    <string name="from">From: </string>
+    <string name="to"> to: </string>
+    <string name="attendance">Students registered: </string>
 
 
     <!-- Preference Titles -->
