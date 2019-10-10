@@ -2,7 +2,6 @@ package it.teamgdm.sms.dibapp;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,6 +30,7 @@ public class ProfessorClassListActivity extends BaseActivity {
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
      */
+
     private boolean mTwoPane;
     Intent loginIntent;
     RecyclerView recyclerView;
@@ -55,18 +55,20 @@ public class ProfessorClassListActivity extends BaseActivity {
         setupRecyclerView();
     }
 
+
+
     @Override
     protected int getLayoutResource() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -getLayoutResource-");
-        return R.layout.activity_class_list;
+        return R.layout.student_class_list_activity;
     }
 
     private void setupRecyclerView() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -setupRecyclerView-");
-        ClassList classListData = new ProfessorTeaching();
-        JSONArray classListLoader = DAO.getClassList(Session.getUserID(), Constants.KEY_ROLE_PROFESSOR);
-        classListData.setClassList(classListLoader);
-        ArrayList<ClassLesson> classList = classListData.getClassList();
+        LessonList lessonListData = new ProfessorTeaching();
+        JSONArray classListLoader = DAO.getClassList(Session.getUserID());
+        lessonListData.setLessonList(classListLoader);
+        ArrayList<Lesson> classList = lessonListData.getLessonList();
         if(classList.isEmpty()) {
             recyclerView.setVisibility(View.GONE);
             textViewEmptyClassList.setVisibility(View.VISIBLE);
@@ -81,9 +83,9 @@ public class ProfessorClassListActivity extends BaseActivity {
     public class ClassRecyclerViewAdapter extends RecyclerView.Adapter<ClassRecyclerViewAdapter.ViewHolder> {
         private final ProfessorClassListActivity mParentActivity;
         private final boolean mTwoPane;
-        ArrayList<ClassLesson> classList;
+        ArrayList<Lesson> classList;
 
-        ClassRecyclerViewAdapter(ProfessorClassListActivity parent, ArrayList<ClassLesson> classList, boolean twoPane) {
+        ClassRecyclerViewAdapter(ProfessorClassListActivity parent, ArrayList<Lesson> classList, boolean twoPane) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -ClassRecyclerViewAdapter-");
             this.classList = classList;
             mParentActivity = parent;

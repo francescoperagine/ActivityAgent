@@ -6,28 +6,28 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-class ProfessorTeaching extends ClassList{
+class ProfessorTeaching extends LessonList {
 
     ProfessorTeaching() {
     }
 
     @Override
-    void setClassList(JSONArray professorTeachingData) {
-        Log.i(Constants.TAG, ProfessorTeaching.class.getSimpleName() + " -setClassList- "+professorTeachingData);
+    void setLessonList(JSONArray professorTeachingData) {
+        Log.i(Constants.TAG, ProfessorTeaching.class.getSimpleName() + " -setLessonList- "+professorTeachingData);
         for (int i=0; i< professorTeachingData.length(); i++) {
-            ClassLesson classLesson = new ClassLesson();
+            Lesson lesson = new Lesson();
             try {
                 JSONObject o = professorTeachingData.getJSONObject(i);
-                classLesson.ID = o.optInt(Constants.KEY_CLASS_ID);
-                classLesson.name = o.optString(Constants.KEY_CLASS_NAME);
-                classLesson.classDescription = o.optString(Constants.KEY_CLASS_DESCRIPTION);
-                classLesson.code = o.optInt(Constants.KEY_CLASS_CODE);
-                classLesson.year = o.optInt(Constants.KEY_CLASS_LESSON_YEAR);
-                classLesson.semester = o.optInt(Constants.KEY_CLASS_LESSON_SEMESTER);
+                lesson.ID = o.optInt(Constants.KEY_CLASS_ID);
+                lesson.name = o.optString(Constants.KEY_CLASS_NAME);
+                lesson.classDescription = o.optString(Constants.KEY_CLASS_DESCRIPTION);
+                lesson.code = o.optInt(Constants.KEY_CLASS_CODE);
+                lesson.year = o.optInt(Constants.KEY_CLASS_LESSON_YEAR);
+                lesson.semester = o.optInt(Constants.KEY_CLASS_LESSON_SEMESTER);
             } catch (JSONException e) {
-                Log.i(Constants.TAG, ProfessorTeaching.class.getSimpleName() + " -setClassList- IS NULL");
+                Log.i(Constants.TAG, ProfessorTeaching.class.getSimpleName() + " -setLessonList- IS NULL");
             }
-            classList.add(classLesson);
+            lessonList.add(lesson);
         }
     }
 }

@@ -35,7 +35,7 @@ class DAO {
         return response;
     }
 
-    private static boolean isDataSent(HashMap params, int expectedResultCode) {
+    private static boolean isDataSent(HashMap params) {
         Log.i(Constants.TAG, DAO.class.getSimpleName() + " -isDataSent-");
         JSONArray response = getFromDB(params);
         int codeResult = 0;
@@ -44,13 +44,21 @@ class DAO {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return codeResult == expectedResultCode;
+        return codeResult == Constants.OK_CODE;
     }
 
-    static JSONArray getClassList(int userID, String roleName) {
-        Log.i(Constants.TAG, DAO.class.getSimpleName() + " -getClassList-");
+    static JSONArray getClassList(int userID) {
+        Log.i(Constants.TAG, DAO.class.getSimpleName() + " -getLessonList-");
         HashMap<String, String> params = new HashMap<>();
         params.put(Constants.KEY_ACTION, Constants.GET_CLASS_LIST);
+        params.put(Constants.KEY_USER_ID, String.valueOf(userID));
+        return getFromDB(params);
+    }
+
+    static JSONArray getLessonList(int userID, String roleName) {
+        Log.i(Constants.TAG, DAO.class.getSimpleName() + " -getLessonList-");
+        HashMap<String, String> params = new HashMap<>();
+        params.put(Constants.KEY_ACTION, Constants.GET_LESSON_LIST);
         params.put(Constants.KEY_USER_ID, String.valueOf(userID));
         params.put(Constants.KEY_USER_ROLE_NAME, roleName);
         return getFromDB(params);
@@ -79,7 +87,7 @@ class DAO {
         params.put(Constants.KEY_USER_ID, String.valueOf(Session.getUserID()));
         params.put(Constants.KEY_QUESTION, input);
         params.put(Constants.KEY_TIME, new SimpleDateFormat(Constants.DATETIME_FORMAT, Locale.getDefault()).format(new Date()));
-        return isDataSent(params, Constants.QUESTION_SENT_CODE);
+        return isDataSent(params);
     }
 
     static boolean setAttendance(int lessonID, boolean isUserAttendingLesson) {
@@ -91,7 +99,7 @@ class DAO {
         params.put(Constants.KEY_USER_ID, String.valueOf(Session.getUserID()));
         params.put(Constants.KEY_TIME, new SimpleDateFormat(Constants.DATETIME_FORMAT, Locale.getDefault()).format(new Date()));
         params.put(Constants.KEY_ATTENDANCE, String.valueOf(isUserAttendingLesson));
-        return isDataSent(params, Constants.ATTENDANCE_SET_CODE);
+        return isDataSent(params);
     }
 
     static boolean setReview(int lessonID, String summary, String review, int rating) {
@@ -103,7 +111,7 @@ class DAO {
         params.put(Constants.KEY_REVIEW_RATING, String.valueOf(rating));
         params.put(Constants.KEY_REVIEW_SUMMARY, summary);
         params.put(Constants.KEY_REVIEW_TEXT, review);
-        return isDataSent(params, Constants.OK_CODE);
+        return isDataSent(params);
     }
 
     static boolean loginUser(String email, String password) {
@@ -112,7 +120,7 @@ class DAO {
         params.put(Constants.KEY_ACTION, Constants.USER_LOGIN);
         params.put(Constants.KEY_USER_EMAIL, email);
         params.put(Constants.KEY_USER_PASSWORD, password);
-        return isDataSent(params, Constants.OK_CODE);
+        return isDataSent(params);
     }
 
     static boolean registerUser(User tmpUser) {
@@ -127,7 +135,7 @@ class DAO {
         params.put(Constants.KEY_USER_EMAIL, tmpUser.getEmail());
         params.put(Constants.KEY_USER_PASSWORD, tmpUser.getPassword());
         params.put(Constants.KEY_USER_REGISTRATION_DATE, tmpUser.getRegistrationDate());
-        return isDataSent(params, Constants.OK_CODE);
+        return isDataSent(params);
     }
 
     static JSONArray getInputList(String inputList) {

@@ -11,29 +11,29 @@ public class DibappBroadcastReceiver extends BroadcastReceiver {
 
     /** Geofence broadcast interface for callback **/
 
-    static int geofenceLastTriggeredAction;
-
-    public interface GeofenceBroadcastReceiverInterface {
+    interface GeofenceReceiverInterface {
         void onGeofenceTransitionAction(int geofenceReceiverAction);
     }
 
-    private GeofenceBroadcastReceiverInterface geofenceBroadcastReceiverInterfaceCallback;
+    private GeofenceReceiverInterface geofenceReceiverInterfaceCallback;
 
-    DibappBroadcastReceiver(GeofenceBroadcastReceiverInterface callback) {
-        this.geofenceBroadcastReceiverInterfaceCallback = callback;
+    DibappBroadcastReceiver(GeofenceReceiverInterface callback) {
+        this.geofenceReceiverInterfaceCallback = callback;
     }
 
     /** Lesson broadcast interface for callback **/
-
-    public interface LessonBroadcastReceiverInterface {
+/*
+    interface LessonBroadcastReceiverInterface {
         void onNewQuestionSent();
     }
 
     private LessonBroadcastReceiverInterface lessonBroadcastReceiverInterfaceCallback;
 
-    DibappBroadcastReceiver(LessonBroadcastReceiverInterface callback) {
+    void setLessonBroadcastReceiverInterfaceCallback(LessonBroadcastReceiverInterface callback) {
         this.lessonBroadcastReceiverInterfaceCallback = callback;
     }
+*/
+    static int geofenceLastTriggeredAction;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -44,13 +44,11 @@ public class DibappBroadcastReceiver extends BroadcastReceiver {
                     geofenceIntentReceiver(context, intent);
                     break;
                 case Constants.LESSON_NEW_QUESTION:
-                    lessonBroadcastReceiverInterfaceCallback.onNewQuestionSent();
+                //    lessonBroadcastReceiverInterfaceCallback.onNewQuestionSent();
                     break;
                 default: break;
+            }
         }
-
-}
-
     }
 
     private void geofenceIntentReceiver(Context context, Intent intent) {
@@ -69,7 +67,7 @@ public class DibappBroadcastReceiver extends BroadcastReceiver {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -onReceive-ERROR-" + errorMessage);
             return;
         }
-        geofenceBroadcastReceiverInterfaceCallback.onGeofenceTransitionAction(geofenceTransitionAction);
+        geofenceReceiverInterfaceCallback.onGeofenceTransitionAction(geofenceTransitionAction);
     }
 
 

@@ -21,8 +21,22 @@ define("SET_STUDENT_CAREER_QUERY",
       AND user.ID = user_degreecourse.userID
       AND degreecourse_class.degreecourseID = degreecourse.ID
       AND degreecourse.name = :degreecourse");
-// Gets the list of active classes
-define("GET_STUDENT_CLASS_LIST_QUERY", 
+define("GET_PROFESSOR_CLASS_LIST_QUERY", 
+	"SELECT c.ID as classID, c.name as className, c.code as classCode, c.description as classDescription, c.year as classYear, c.semester as classSemester
+	FROM professor_teaching as pt, class as c
+	WHERE pt.classID = c.ID 
+	AND pt.professorID = ?
+    ORDER BY className");
+define("GET_PROFESSOR_LESSON_LIST_QUERY", 
+	"SELECT crl.ID as lessonID, c.ID as classID, c.name as className, c.code as classCode, c.description as classDescription, c.year as classYear, c.semester as classSemester, crl.timeStart as classLessonTimeStart, crl.timeEnd as classLessonTimeEnd, crl.summary as classLessonSummary , crl.description as classLessonDescription 
+	FROM professor_teaching as pt, class as c, class_room_calendar as crc, class_room_lesson as crl
+	WHERE pt.classID = c.ID 
+	AND c.ID = crc.classID
+	AND crc.ID = crl.calendarID
+	AND pt.professorID = ?
+	ORDER BY c.year, className");
+// Gets the list of active lessons
+define("GET_STUDENT_LESSON_LIST_QUERY", 
 	"SELECT crl.ID as lessonID, c.ID as classID, c.name as className, c.code as classCode, c.description as classDescription, c.year as classYear, c.semester as classSemester, crl.timeStart as classLessonTimeStart, crl.timeEnd as classLessonTimeEnd, crl.summary as classLessonSummary , crl.description as classLessonDescription 
 	FROM student_career as s, class as c, class_room_calendar as crc, class_room_lesson as crl
 	WHERE s.classID = c.ID 
@@ -31,12 +45,12 @@ define("GET_STUDENT_CLASS_LIST_QUERY",
 	AND s.studentID = ?
 	GROUP BY className
 	ORDER BY c.year, className");
-define("GET_PROFESSOR_CLASS_LIST_QUERY", 
-	"SELECT c.ID as classID, c.name as className, c.code as classCode, c.description as classDescription, c.year as classYear, c.semester as classSemester
-	FROM professor_teaching as pt, class as c
-	WHERE pt.classID = c.ID 
-	AND pt.professorID = ?
-    ORDER BY className");
+define("GET_LESSON_DETAIL_QUERY", 
+	"SELECT c.ID as classID, c.name as className, c.description as classDescription, c.code as classCode, c.year as classYear, c.semester as classSemester, crl.timeStart as classLessonTimeStart, crl.timeEnd as classLessonTimeEnd, crl.summary as classLessonSummary , crl.description as classLessonDescription 
+	FROM class as c 
+	JOIN class_room_calendar as crc ON c.ID = crc.classID
+	JOIN class_room_lesson as crl ON crc.ID = crl.calendarID
+	WHERE c.ID = ?");
 /*define("GET_PROFESSOR_CURRENT_CLASS_LIST_QUERY", 
 	"SELECT crl.ID as lessonID, c.ID as classID, c.name as className, c.year as classYear, c.semester as classSemester, crl.timeStart as classLessonTimeStart, crl.timeEnd as classLessonTimeEnd
 	FROM professor_teaching as pt, class as c, class_room_calendar as crc, class_room_lesson as crl
@@ -50,12 +64,7 @@ define("GET_PROFESSOR_CLASS_LIST_QUERY",
 //define("GET_STUDENT_EXAM_LIST_QUERY", "SELECT c.ID as classID, c.name as className, c.year as year, c.semester as semester, s.passed as passed, s.passedDate as passedDate, s.vote as vote, s.praise as praise FROM student_career as s, class as c WHERE s.classID = c.ID AND studentID = ? ORDER BY year, className");
 //define("GET_PROFESSOR_CLASS_LIST_QUERY", "SELECT c.id as classID, c.name as className FROM class as c, professor_teaching as p, user as u WHERE c.ID = p.classID AND p.professorID = u.id AND u.id = ?");
 define("GET_USER_DETAILS_QUERY", "SELECT u.ID as userID, u.name as name, u.surname as surname, u.email as email, u.registrationDate as registrationDate, r.name as roleName FROM user as u, role as r WHERE u.roleID = r.ID AND email = ?");
-define("GET_CLASS_LESSON_DETAIL_QUERY", 
-	"SELECT c.ID as classID, c.name as className, c.description as classDescription, c.code as classCode, c.year as classYear, c.semester as classSemester, crl.timeStart as classLessonTimeStart, crl.timeEnd as classLessonTimeEnd, crl.summary as classLessonSummary , crl.description as classLessonDescription 
-	FROM class as c 
-	JOIN class_room_calendar as crc ON c.ID = crc.classID
-	JOIN class_room_lesson as crl ON crc.ID = crl.calendarID
-	WHERE c.ID = ?");
+
 define("ASK_A_QUESTION_QUERY", "INSERT INTO class_lesson_question (lessonID, studentID, question, time) VALUES (:lessonID, :studentID, :question, :time)");
 define("SET_ATTENDANCE_QUERY", "INSERT INTO class_lesson_attendance_rating (studentID, lessonID, time) VALUES (:userID, :lessonID, :time)");
 define("UNSET_ATTENDANCE_QUERY", "DELETE FROM class_lesson_attendance_rating WHERE studentID = :userID AND lessonID = :lessonID");
@@ -180,7 +189,7 @@ function registerNewUser(array $input) {
 				$response = new Response(QUERY_OK_TEXT,QUERY_OK_CODE);
 			} else {
 				$connection->rollBack();
-				$response = new Response(QUERY_NOT_OK_TEXT,QUERY_NOT_OK_CODE);
+				$response = new Response(QUERY_NOT_OK_TEXT, QUERY_NOT_OK_CODE);
 			} 
 			break;
 		case USER_ROLE_BACKOFFICE_OPERATOR:
@@ -188,10 +197,10 @@ function registerNewUser(array $input) {
 			$connection->beginTransaction();
 			if( $stmt1->execute() && $stmt2->execute() && $stmt3->execute()){
 				$connection->commit();
-				$response = new Response(QUERY_OK_TEXT,QUERY_OK_CODE);
+				$response = new Response(QUERY_OK_TEXT, QUERY_OK_CODE);
 			} else {
 				$connection->rollBack();
-				$response = new Response(QUERY_NOT_OK_TEXT,QUERY_NOT_OK_CODE);
+				$response = new Response(QUERY_NOT_OK_TEXT, QUERY_NOT_OK_CODE);
 			}
 				
 		default: break;
@@ -220,7 +229,7 @@ function askAQuestion(int $lessonID, int $userID, string $question, string $time
 		$response = new Response(QUERY_OK_TEXT, QUERY_OK_CODE);
 	} else {
 		$connection->rollBack();
-		$response = new Response(QUESTION_NOT_SENT_TEXT, QUESTION_NOT_SENT_CODE);
+		$response = new Response(QUERY_NOT_OK_TEXT, QUERY_NOT_OK_CODE);
 	}
 	return $response;
 }
@@ -239,10 +248,10 @@ function setAttendance(int $lessonID, int $userID, string $attendance, string $t
 	$connection->beginTransaction();
 	if($stmt->execute()){
 		$connection->commit();
-		$result = new Response(ATTENDANCE_SET_TEXT, ATTENDANCE_SET_CODE);
+		$result = new Response(QUERY_OK_TEXT, QUERY_OK_CODE);
 	} else {
 		$connection->rollBack();
-		$result = new Response(ATTENDANCE_NOT_SET_TEXT, ATTENDANCE_NOT_SET_CODE);
+		$result = new Response(QUERY_NOT_OK_TEXT, QUERY_NOT_OK_CODE);
 	}
 	return $result;
 }
@@ -276,22 +285,30 @@ function setReview($input) {
 	return $result;
 }
 
-function getClassList(int $userID, string $userRole) {
+function getClassList(int $professorID) {
+	global $connection;
+	$stmt = $connection->prepare(GET_PROFESSOR_CLASS_LIST_QUERY);
+	$stmt->execute([$professorID]);
+	$response = $stmt->fetchAll(PDO::FETCH_OBJ);
+	return $response;
+}
+
+function getLessonList(int $userID, string $userRole) {
 	global $connection;
 	if($userRole == USER_ROLE_PROFESSOR) {
-		$stmt = $connection->prepare(GET_PROFESSOR_CLASS_LIST_QUERY);
+		$stmt = $connection->prepare(GET_PROFESSOR_LESSON_LIST_QUERY);
 	} else {
-		$stmt = $connection->prepare(GET_STUDENT_CLASS_LIST_QUERY);	
+		$stmt = $connection->prepare(GET_STUDENT_LESSON_LIST_QUERY);	
 	}
 	$stmt->execute([$userID]);
 	$response = $stmt->fetchAll(PDO::FETCH_OBJ);
 	return $response;
 }
 
-function getClassLessonDetail(int $classID) {
+function getLessonDetail(int $lessonID) {
 	global $connection;
-	$stmt = $connection->prepare(GET_CLASS_LESSON_DETAIL_QUERY);
-	$stmt->execute([$classID]);
+	$stmt = $connection->prepare(GET_LESSON_DETAIL_QUERY);
+	$stmt->execute([$lessonID]);
 	$response = $stmt->fetch(PDO::FETCH_OBJ);
 	return $response;
 }

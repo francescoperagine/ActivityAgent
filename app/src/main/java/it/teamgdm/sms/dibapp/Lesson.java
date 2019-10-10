@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class ClassLesson extends Exam implements Serializable {
+public class Lesson extends Exam implements Serializable {
 
     int classID;
     int lessonID;
@@ -22,8 +22,8 @@ public class ClassLesson extends Exam implements Serializable {
     String lessonSummary;
     String lessonDescription;
 
-    ClassLesson() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -ClassLesson-");
+    Lesson() {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -Lesson-");
     }
 
     @NonNull

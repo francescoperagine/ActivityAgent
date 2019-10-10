@@ -58,15 +58,15 @@ public class StudentLessonListActivity extends BaseActivity {
     @Override
     protected int getLayoutResource() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -getLayoutResource-");
-        return R.layout.activity_class_list;
+        return R.layout.student_class_list_activity;
     }
 
     private void setupRecyclerView() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -setupRecyclerView-");
-        ClassList classListData = new StudentCareer();
-        JSONArray classListLoader = DAO.getClassList(Session.getUserID(), Constants.KEY_ROLE_STUDENT);
-        classListData.setClassList(classListLoader);
-        ArrayList<ClassLesson> classList = classListData.getClassList();
+        LessonList lessonListData = new StudentCareer();
+        JSONArray lessonListLoader = DAO.getLessonList(Session.getUserID(), Constants.KEY_ROLE_STUDENT);
+        lessonListData.setLessonList(lessonListLoader);
+        ArrayList<Lesson> classList = lessonListData.getLessonList();
         if(classList.isEmpty()) {
             recyclerView.setVisibility(View.GONE);
             textViewEmptyClassList.setVisibility(View.VISIBLE);
@@ -81,9 +81,9 @@ public class StudentLessonListActivity extends BaseActivity {
     public class ClassRecyclerViewAdapter extends RecyclerView.Adapter<ClassRecyclerViewAdapter.ViewHolder> {
         private final StudentLessonListActivity mParentActivity;
         private final boolean mTwoPane;
-        ArrayList<ClassLesson> classList;
+        ArrayList<Lesson> classList;
 
-        ClassRecyclerViewAdapter(StudentLessonListActivity parent, ArrayList<ClassLesson> classList, boolean twoPane) {
+        ClassRecyclerViewAdapter(StudentLessonListActivity parent, ArrayList<Lesson> classList, boolean twoPane) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -ClassRecyclerViewAdapter-");
             this.classList = classList;
             mParentActivity = parent;
@@ -94,20 +94,20 @@ public class StudentLessonListActivity extends BaseActivity {
 
             @Override
             public void onClick(View view) {
-                ClassLesson classLesson = ClassList.getClassFromID((Integer) view.getTag());
+                Lesson lesson = LessonList.getLessonFromID((Integer) view.getTag());
                 Log.i(Constants.TAG, getClass().getSimpleName() + " ClassRecyclerViewAdapter-OnClickListener-");
-                boolean isUserAttendingLesson = DAO.isUserAttendingLesson(classLesson.lessonID, Session.getUserID());
+                boolean isUserAttendingLesson = DAO.isUserAttendingLesson(lesson.lessonID, Session.getUserID());
                 if (mTwoPane) {
                     Log.i(Constants.TAG, getClass().getSimpleName() + " ClassRecyclerViewAdapter-OnClickListener-mTwoPane- arguments");
-                    StudentLessonDetailFragment detailFragment = StudentLessonDetailFragment.newInstance(classLesson, true);
+                    StudentLessonDetailFragment detailFragment = StudentLessonDetailFragment.newInstance(lesson, true);
                     mParentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.class_detail_container, detailFragment).commit();
-                    StudentLessonBottomFragment buttonFragment = StudentLessonBottomFragment.newInstance(classLesson.lessonID, isUserAttendingLesson);
+                    StudentLessonBottomFragment buttonFragment = StudentLessonBottomFragment.newInstance(lesson.lessonID, isUserAttendingLesson);
                     mParentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.class_button_container, buttonFragment).commit();
                 } else {
                     Context context = view.getContext();
                     Intent studentClassDetailIntent = new Intent(context, StudentLessonDetailActivity.class);
-                    studentClassDetailIntent.putExtra(Constants.KEY_CLASS_LESSON, classLesson);
-                    studentClassDetailIntent.putExtra(Constants.LESSON_IN_PROGRESS, classLesson.isInProgress());
+                    studentClassDetailIntent.putExtra(Constants.KEY_CLASS_LESSON, lesson);
+                    studentClassDetailIntent.putExtra(Constants.LESSON_IN_PROGRESS, lesson.isInProgress());
                     studentClassDetailIntent.putExtra(Constants.IS_USER_ATTENDING_LESSON, isUserAttendingLesson);
                     context.startActivity(studentClassDetailIntent);
                 }

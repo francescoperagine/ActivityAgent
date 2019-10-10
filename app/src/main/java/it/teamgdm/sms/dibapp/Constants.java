@@ -3,6 +3,8 @@ package it.teamgdm.sms.dibapp;
 public final class Constants {
 
 
+    static final String KEY_GEOFENCE_LOCATION_UPDATE = "requestLocationUpdate";
+    static final String HAS_GEOFENCE_PERMISSION = "hasGeofencePermission";
     static final String LESSON_NEW_QUESTION = "lessonNewQuestion";
     static final String KEY_TIME = "time";
     static final String TWO_PANEL = "twoPanel";
@@ -15,7 +17,7 @@ public final class Constants {
     static final String KEY_ATTENDANCE = "attendance";
     static final String KEY_QUESTION = "question";
     static final String USER_QUESTION_ASK = "askAQuestion";
-    static final String KEY_CLASS_LESSON = "classLesson";
+    static final String KEY_CLASS_LESSON = "lesson";
     static final String KEY_SET_ATTENDANCE = "setAttendance";
     static final String TAG = "dibApp";
     static final String PREFERENCE_FILE_KEY = "it.teamgdm.dibApp.userSession";
@@ -46,12 +48,6 @@ public final class Constants {
     static final String KEY_BLANK = " ";
 
     static final int OK_CODE = 100;
-    static final int NOT_OK_CODE = 101;
-    static final int LOGIN_OK_CODE = 201;
-    static final int LOGIN_FAILED_CODE = 301;
-    static final int USER_CREATED_CODE = 202;
-    static final int QUESTION_SENT_CODE = 401;
-    static final int ATTENDANCE_SET_CODE = 501;
 
     // USER ROLES
 
@@ -66,8 +62,9 @@ public final class Constants {
     static final String GET_ROLE_LIST = "getRoleList";
     static final String GET_DEGREECOURSE_LIST = "getDegreecourseList";
     static final String GET_CLASS_LIST = "getClassList";
+    static final String GET_LESSON_LIST = "getLessonList";
+
     static final String CHECK_EXISTING_EVALUATE = "checkEvaluatedLesson";
-    static final String GET_PROFESSOR_CLASS_LIST = "getProfessorClassList";
 
     // DB STUDENT_CAREER TABLE ATTRIBUTES
 

@@ -6,6 +6,12 @@
     android:layout_height="match_parent"
     tools:context=".ProfessorClassDetailActivity">
 
+    <include
+        android:id="@+id/include"
+        layout="@layout/toolbar"
+        android:gravity="clip_vertical"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/professorClassName"
         android:layout_width="411dp"
@@ -18,11 +24,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include" />
-
-    <include
-        android:id="@+id/include"
-        layout="@layout/toolbar"
-        android:gravity="clip_vertical"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
