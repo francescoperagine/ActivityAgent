@@ -30,6 +30,8 @@ define("ACTION_GET_CLASS_LESSON_DETAIL", "getClassLessonDetail");
 define("ACTION_ASK_A_QUESTION", "askAQuestion");
 define("ACTION_SET_ATTENDANCE", "setAttendance");
 define("ACTION_SET_REVIEW", "sendReview");
+define("ACTION_CHECK_LESSON_EVALUATED", "checkEvaluatedLesson");
+
 
 define("ACTION_NOT_DEFINED_TEXT", "Action not defined");
 define("ACTION_NOT_DEFINED_CODE", 101);

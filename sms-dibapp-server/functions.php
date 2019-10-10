@@ -61,6 +61,7 @@ define("SET_ATTENDANCE_QUERY", "INSERT INTO class_lesson_attendance_rating (stud
 define("UNSET_ATTENDANCE_QUERY", "DELETE FROM class_lesson_attendance_rating WHERE studentID = :userID AND lessonID = :lessonID");
 define("IS_USER_ATTENDING_LESSON_QUERY", "SELECT COUNT(*) as attendance FROM class_lesson_attendance_rating WHERE studentID = :userID AND lessonID = :lessonID");
 define("SET_CLASS_LESSON_REVIEW_QUERY", "UPDATE class_lesson_attendance_rating SET summary = :summary, review = :review, rating = :rating WHERE studentID = :userID AND lessonID = :lessonID");
+define("CHECK_IF_LESSON_ALREADY_EVALUATED", "SELECT count(*) as count FROM class_lesson_attendance_rating WHERE studentID = :studentID AND lessonID = :lessonID AND rating IS NOT NULL");
 	  
 class Response {
 	
@@ -293,6 +294,16 @@ function getClassLessonDetail(int $classID) {
 	$stmt = $connection->prepare(GET_CLASS_LESSON_DETAIL_QUERY);
 	$stmt->execute([$classID]);
 	$response = $stmt->fetch(PDO::FETCH_OBJ);
+	return $response;
+}
+
+function checkEvaluatedLesson(array $input) {
+	global $connection;
+	$stmt = $connection->prepare(CHECK_IF_LESSON_ALREADY_EVALUATED);
+	$stmt->bindValue(':studentID', $input[KEY_USER_ID]);
+	$stmt->bindValue(':lessonID', $input[KEY_CLASS_LESSON_ID]);
+	$stmt->execute();
+	$response = $stmt->fetchAll(PDO::FETCH_OBJ);
 	return $response;
 }
 
