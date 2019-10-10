@@ -97,8 +97,8 @@ public class ProfessorClassDetailActivity extends BaseActivity {
                 Log.i(Constants.TAG, getClass().getSimpleName() + " ClassRecyclerViewAdapter-OnClickListener-");
                 if (mTwoPane) {
                     Log.i(Constants.TAG, getClass().getSimpleName() + " ClassRecyclerViewAdapter-OnClickListener-mTwoPane- arguments");
-                    ProfessorClassDetailFragment detailFragment = ProfessorClassDetailFragment.newInstance(classID, true);
-                    mParentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.class_detail_container, detailFragment).commit();
+               //     ProfessorClassDetailFragment detailFragment = ProfessorClassDetailFragment.newInstance(classID, true);
+               //     mParentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.class_detail_container, detailFragment).commit();
                 } else {
                     Context context = view.getContext();
                     Intent profClassDetailIntent = new Intent (context, ProfessorClassDetailActivity.class);

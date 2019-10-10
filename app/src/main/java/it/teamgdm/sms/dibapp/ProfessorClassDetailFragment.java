@@ -19,16 +19,16 @@ import androidx.fragment.app.Fragment;
 
 class ProfessorClassDetailFragment extends Fragment {
 
-    private ClassLesson classLesson;
+    private Lesson lesson;
 
     public ProfessorClassDetailFragment() {
     }
 
-    static ProfessorClassDetailFragment newInstance(ClassLesson classLesson, boolean twoPanel) {
+    static ProfessorClassDetailFragment newInstance(Lesson lesson, boolean twoPanel) {
         Log.i(Constants.TAG, StudentLessonDetailFragment.class.getSimpleName() + " -newInstance-");
         ProfessorClassDetailFragment fragment = new ProfessorClassDetailFragment();
         Bundle arguments = new Bundle();
-        arguments.putSerializable(Constants.KEY_CLASS_LESSON, classLesson);
+        arguments.putSerializable(Constants.KEY_CLASS_LESSON, lesson);
         arguments.putBoolean(Constants.TWO_PANEL, twoPanel);
         fragment.setArguments(arguments);
         return fragment;
@@ -40,7 +40,7 @@ class ProfessorClassDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if(getArguments() != null) {
             Log.i(Constants.TAG, StudentLessonDetailFragment.class.getSimpleName() + " -onCreate-arguments \n" + getArguments());
-            classLesson = (ClassLesson) getArguments().getSerializable(Constants.KEY_CLASS_LESSON);
+            lesson = (Lesson) getArguments().getSerializable(Constants.KEY_CLASS_LESSON);
         }
 
     }
@@ -57,10 +57,10 @@ class ProfessorClassDetailFragment extends Fragment {
         Button questionButton = rootView.findViewById(R.id.questionButton);
 
         //setting lesson rating bar
-        ratingBarProf.setRating(classLesson.rating);
+        ratingBarProf.setRating(lesson.rating);
 
         //checking if lesson is in progress
-        if (classLesson.isInProgress()){
+        if (lesson.isInProgress()){
             lessonInProgress.setText(getString(R.string.lesson_progress));
             lessonInProgress.setBackgroundColor(Color.parseColor("#8BC34A"));
 
@@ -70,11 +70,11 @@ class ProfessorClassDetailFragment extends Fragment {
 
         //showing lesson start and end
         String time;
-        time = getString(R.string.from) + classLesson.getDate() + getString(R.string.to) + new SimpleDateFormat(Constants.DATE_FORMAT, Locale.getDefault()).format(classLesson.timeEnd);
+        time = getString(R.string.from) + lesson.getDate() + getString(R.string.to) + new SimpleDateFormat(Constants.DATE_FORMAT, Locale.getDefault()).format(lesson.timeEnd);
         lessonTime.setText(time);
 
         //showing class attendance
-        String studNum = getString(R.string.attendance) + classLesson.attendance;
+        String studNum = getString(R.string.attendance) + lesson.attendance;
         attendance.setText(studNum);
 
 
