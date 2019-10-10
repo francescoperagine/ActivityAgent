@@ -40,6 +40,17 @@ public class StudentEvaluateFragment extends DialogFragment {
         return evaluateFragment;
     }
 
+    static StudentEvaluateFragment newInstante(int classLessonID, String summary, String description, float rating) {
+        StudentEvaluateFragment evaluateFragment = new StudentEvaluateFragment();
+        Bundle arguments = new Bundle();
+        arguments.putInt(Constants.KEY_CLASS_LESSON_ID, classLessonID);
+        arguments.putString(Constants.KEY_CLASS_LESSON_REVIEW_SUMMARY, summary);
+        arguments.putString(Constants.KEY_CLASS_LESSON_REVIEW_DESCRIPTION, description);
+        arguments.putFloat(Constants.KEY_CLASS_LESSON_REVIEW_RATING, rating);
+        evaluateFragment.setArguments(arguments);
+        return evaluateFragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-");
@@ -72,6 +83,21 @@ public class StudentEvaluateFragment extends DialogFragment {
 
         //SEND button starts disabled
         submitButton.setEnabled(false);
+
+        //setting old review text and rating if there were an old one
+        if(getArguments() != null && getArguments().containsKey(Constants.KEY_CLASS_LESSON_REVIEW_RATING)) {
+            reviewRating.setRating(getArguments().getFloat(Constants.KEY_CLASS_LESSON_REVIEW_RATING));
+            submitButton.setEnabled(true);
+            submitButton.setText(R.string.edit);
+            String tmpSummary = getArguments().getString(Constants.KEY_CLASS_LESSON_REVIEW_SUMMARY);
+            if(tmpSummary != null){
+                reviewSummary.setText(tmpSummary);
+            }
+            String tmpDescription = getArguments().getString(Constants.KEY_CLASS_LESSON_REVIEW_DESCRIPTION);
+            if(tmpDescription != null){
+                reviewText.setText(tmpDescription);
+            }
+        }
 
         //listener on rating bar changes
         reviewRating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener(){

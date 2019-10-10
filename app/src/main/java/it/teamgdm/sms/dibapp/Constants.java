@@ -64,6 +64,8 @@ public final class Constants {
     static final String GET_CLASS_LIST = "getClassList";
     static final String GET_LESSON_LIST = "getLessonList";
 
+    static final String GET_LESSON_QUESTIONS = "getLessonQuestions";
+    static final String GET_LESSON_REVIEWS = "getLessonReviews";
     static final String CHECK_EXISTING_EVALUATE = "checkEvaluatedLesson";
 
     // DB STUDENT_CAREER TABLE ATTRIBUTES
@@ -84,6 +86,11 @@ public final class Constants {
     static final String KEY_PRAISE = "praise";
     static final String KEY_PASSED_DATE = "passedDate";
     static final String KEY_CLASS_LESSON_ID = "lessonID";
+
+
+    static final String KEY_CLASS_LESSON_REVIEW_SUMMARY = "classLessonReviewSummary";
+    static final String KEY_CLASS_LESSON_REVIEW_DESCRIPTION = "classLessonReviewDescription";
+    static final String KEY_CLASS_LESSON_REVIEW_RATING = "classLessonReviewRating";
 
     // GEOFENCE
 

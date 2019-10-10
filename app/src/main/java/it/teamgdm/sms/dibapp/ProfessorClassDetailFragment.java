@@ -1,5 +1,6 @@
 package it.teamgdm.sms.dibapp;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -77,6 +78,35 @@ class ProfessorClassDetailFragment extends Fragment {
         String studNum = getString(R.string.attendance) + lesson.attendance;
         attendance.setText(studNum);
 
+        questionButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+
+                // Perform action on click
+                Intent questionsListIntent = new Intent(getActivity(), ProfessorListQuestionActivity.class);
+
+                // currentContext.startActivity(activityChangeIntent);
+
+                questionsListIntent.putExtra("LESSON", lesson.lessonID);
+                startActivity(questionsListIntent);
+                //ProfessorClassDetailActivity.this.startActivity(activityChangeIntent);
+            }
+        });
+
+        reviewButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+
+                // Perform action on click
+                Intent reviewsListIntent = new Intent(getActivity(), ProfessorListReviewActivity.class);
+
+                // currentContext.startActivity(activityChangeIntent);
+
+                reviewsListIntent.putExtra("LESSON", lesson.lessonID);
+                startActivity(reviewsListIntent);
+                //ProfessorClassDetailActivity.this.startActivity(activityChangeIntent);
+            }
+        });
 
         return rootView;
     }

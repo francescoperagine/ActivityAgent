@@ -10,6 +10,12 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.location.Geofence;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+
 /**
  * An activity representing a single Exam detail screen. This
  * activity is only used on narrow width devices. On tablet-size devices,
@@ -182,7 +188,27 @@ public class StudentLessonDetailActivity extends BaseActivity implements
         switch (selectedActionResource) {
             case R.id.evaluateButton:
                 Log.i(Constants.TAG, getClass().getSimpleName() + " -evaluateButton-");
-                StudentEvaluateFragment evaluateFragment = StudentEvaluateFragment.newInstante(lesson.lessonID);
+
+                HashMap<String, String> params = new HashMap<>();
+                params.put(Constants.KEY_ACTION, Constants.CHECK_EXISTING_EVALUATE);
+                params.put(Constants.KEY_USER_ID, String.valueOf(Session.getUserID()));
+                params.put(Constants.KEY_CLASS_LESSON_ID, String.valueOf(lesson.lessonID));
+                JSONArray response = DAO.getFromDB(params);
+
+                StudentEvaluateFragment evaluateFragment = null;
+
+                if(!DAO.checkEvaluatedLessonResponse(response)){
+                    evaluateFragment = StudentEvaluateFragment.newInstante(lesson.lessonID);
+                }
+                else{
+                    JSONObject objResponse = null;
+                    try {
+                        objResponse = response.getJSONObject(0);
+                        evaluateFragment = StudentEvaluateFragment.newInstante(lesson.lessonID, objResponse.optString("summary"), objResponse.optString("review"), (float) objResponse.optDouble("rating"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
                 evaluateFragment.show(getSupportFragmentManager(), "Send a review");
                 break;
             case R.id.questionButton:

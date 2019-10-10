@@ -97,17 +97,8 @@ public class StudentLessonBottomFragment extends Fragment {
 
     private final View.OnClickListener evaluateButtonListener = v -> {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -evaluateButtonListener-");
-        HashMap<String, String> params = new HashMap<>();
-        params.put(Constants.KEY_ACTION, Constants.CHECK_EXISTING_EVALUATE);
-        params.put(Constants.KEY_USER_ID, String.valueOf(Session.getUserID()));
-        params.put(Constants.KEY_CLASS_LESSON_ID, String.valueOf(lessonID));
-        JSONArray response = DAO.getFromDB(params);
-        if(!DAO.checkEvaluatedLessonResponse(response)){
-            studentDashboardButtonFragmentInterfaceCallback.onItemSelected(R.id.evaluateButton);
-        }
-        else{
-            Toast.makeText(getActivity(),getString(R.string.lesson_evaluated_string),Toast.LENGTH_SHORT).show();
-        }
+        studentDashboardButtonFragmentInterfaceCallback.onItemSelected(R.id.evaluateButton);
+
     };
 
     private final View.OnClickListener questionButtonListener = v -> {

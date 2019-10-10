@@ -9,6 +9,7 @@
     <string name="forgotPasswordLinkHint">Retrieve credentials</string>
     <string name="action_register">Register</string>
     <string name="text_or">or</string>
+    <string name="edit">edit</string>
     <string name="ssnPromptHint">Serial Number</string>
     <string name="namePromptHint">Name</string>
     <string name="confirmPasswordPromptHint">Confirm password</string>
