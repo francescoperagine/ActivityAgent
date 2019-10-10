@@ -97,4 +97,9 @@
     <string name="geofence_transition_invalid_type">Codice di transizione non valido</string>
     <string name="geofence_transition_left">Non sei nel geofence.</string>
     <string name="geofence_too_many_pending_intents">Ci sono troppe transizioni del geofence</string>
+    <string name="attendance">"Studenti registrati: "</string>
+    <string name="from">"Dal: "</string>
+    <string name="lesson_progress">Lezione in corso</string>
+    <string name="lesson_not_progress">Lezione finita</string>
+    <string name="to">" al: "</string>
 </resources>
