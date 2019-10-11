@@ -2,7 +2,6 @@ package it.teamgdm.sms.dibapp;
 
 public final class Constants {
 
-
     static final String KEY_GEOFENCE_LOCATION_UPDATE = "requestLocationUpdate";
     static final String HAS_GEOFENCE_PERMISSION = "hasGeofencePermission";
     static final String LESSON_NEW_QUESTION = "lessonNewQuestion";
@@ -14,7 +13,7 @@ public final class Constants {
     static final String KEY_REVIEW_SUMMARY = "reviewSummary";
     static final String KEY_REVIEW_RATING = "reviewRating";
     static final String IS_USER_ATTENDING_LESSON = "isUserAttendingLesson";
-    static final String KEY_ATTENDANCE = "attendance";
+    static final String KEY_USER_ATTENDANCE = "attendance";
     static final String KEY_QUESTION = "question";
     static final String USER_QUESTION_ASK = "askAQuestion";
     static final String KEY_CLASS_LESSON = "lesson";
@@ -62,8 +61,8 @@ public final class Constants {
     static final String GET_ROLE_LIST = "getRoleList";
     static final String GET_DEGREECOURSE_LIST = "getDegreecourseList";
     static final String GET_CLASS_LIST = "getClassList";
-    static final String GET_LESSON_LIST = "getLessonList";
-
+    static final String GET_PROFESSOR_LESSON_LIST = "getProfessorLessonList";
+    static final String GET_STUDENT_LESSON_LIST = "getStudentLessonList";
     static final String GET_LESSON_QUESTIONS = "getLessonQuestions";
     static final String GET_LESSON_REVIEWS = "getLessonReviews";
     static final String CHECK_EXISTING_EVALUATE = "checkEvaluatedLesson";
@@ -74,23 +73,25 @@ public final class Constants {
     static final String KEY_CLASS_NAME = "className";
     static final String KEY_CLASS_CODE = "classCode";
     static final String KEY_CLASS_DESCRIPTION = "classDescription";
-    static final String KEY_CLASS_LESSON_YEAR = "classYear";
-    static final String KEY_CLASS_LESSON_SEMESTER = "classSemester";
+    static final String KEY_LESSON_YEAR = "classYear";
+    static final String KEY_LESSON_SEMESTER = "classSemester";
     static final String KEY_CLASS_LESSON_DATE = "classLessonDate";
-    static final String KEY_CLASS_LESSON_TIME_START = "classLessonTimeStart";
-    static final String KEY_CLASS_LESSON_TIME_END ="classLessonTimeEnd";
-    static final String KEY_CLASS_LESSON_SUMMARY = "classLessonSummary";
-    static final String KEY_CLASS_LESSON_DESCRIPTION = "classLessonDescription";
+    static final String KEY_LESSON_TIME_START = "classLessonTimeStart";
+    static final String KEY_LESSON_TIME_END ="classLessonTimeEnd";
+    static final String KEY_LESSON_SUMMARY = "classLessonSummary";
+    static final String KEY_LESSON_DESCRIPTION = "classLessonDescription";
     static final String KEY_PASSED = "passed";
     static final String KEY_VOTE = "vote";
     static final String KEY_PRAISE = "praise";
     static final String KEY_PASSED_DATE = "passedDate";
-    static final String KEY_CLASS_LESSON_ID = "lessonID";
+    static final String KEY_LESSON_ID = "lessonID";
+    static final String KEY_LESSON_CALENDAR_ID = "calendarID";
+    static final String KEY_LESSON_ATTENDANCE = "attendance";
 
 
     static final String KEY_CLASS_LESSON_REVIEW_SUMMARY = "classLessonReviewSummary";
     static final String KEY_CLASS_LESSON_REVIEW_DESCRIPTION = "classLessonReviewDescription";
-    static final String KEY_CLASS_LESSON_REVIEW_RATING = "classLessonReviewRating";
+    static final String KEY_LESSON_REVIEW_RATING = "classLessonReviewRating";
 
     // GEOFENCE
 

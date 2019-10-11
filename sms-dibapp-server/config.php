@@ -9,13 +9,13 @@ define("ACTION_GET_USER_DETAILS", "getUserDetails");
 define("ACTION_GET_DEGREECOURSE_LIST", "getDegreecourseList");
 define("ACTION_GET_ROLE_LIST", "getRoleList");
 define("ACTION_GET_CLASS_LIST", "getClassList");
-define("ACTION_GET_LESSON_LIST", "getLessonList");
-define("ACTION_GET_LESSON_DETAIL", "getLessonDetail");
+define("ACTION_GET_STUDENT_LESSON_LIST", "getStudentLessonList");
+define("ACTION_GET_PROFESSOR_LESSON_LIST", "getProfessorLessonList");
 define("ACTION_ASK_A_QUESTION", "askAQuestion");
 define("ACTION_SET_ATTENDANCE", "setAttendance");
 define("ACTION_IS_USER_ATTENDING_LESSON", "isUserAttendingLesson");
 define("ACTION_SET_REVIEW", "sendReview");
-
+define("ACTION_CHECK_LESSON_EVALUATED", "checkEvaluatedLesson");
 define("ACTION_NOT_DEFINED_TEXT", "Action not defined");
 define("ACTION_NOT_DEFINED_CODE", 101);
 

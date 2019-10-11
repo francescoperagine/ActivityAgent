@@ -12,16 +12,16 @@ import java.util.Locale;
 
 public class Lesson extends Exam implements Serializable {
 
-    int classID;
+
     int lessonID;
-    int year;
-    int semester;
+    int calendarID;
     float rating;
     int attendance;
     Date timeStart;
     Date timeEnd;
     String lessonSummary;
     String lessonDescription;
+    String room;
 
     Lesson() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -Lesson-");
@@ -45,7 +45,7 @@ public class Lesson extends Exam implements Serializable {
         return new SimpleDateFormat(Constants.TIME_FORMAT, Locale.getDefault()).format(date);
     }
 
-    Date getTimestampDateFromString(String time) {
+    Date getTimestampFromString(String time) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -getTimeFromDatetimeString-"+ time);
         SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATETIME_FORMAT, Locale.getDefault());
         Date d = null;

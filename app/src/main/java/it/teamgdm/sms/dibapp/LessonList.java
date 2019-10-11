@@ -21,6 +21,7 @@ abstract class LessonList {
         return lessonList;
     }
 
+    abstract void setClassList(JSONArray classListData);
     abstract void setLessonList(JSONArray classListData);
 
     @NonNull

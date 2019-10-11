@@ -48,18 +48,23 @@ class DAO {
     }
 
     static JSONArray getClassList(int userID) {
-        Log.i(Constants.TAG, DAO.class.getSimpleName() + " -getLessonList-");
+        Log.i(Constants.TAG, DAO.class.getSimpleName() + " -getClassList-");
         HashMap<String, String> params = new HashMap<>();
         params.put(Constants.KEY_ACTION, Constants.GET_CLASS_LIST);
         params.put(Constants.KEY_USER_ID, String.valueOf(userID));
         return getFromDB(params);
     }
 
-    static JSONArray getLessonList(int userID, String roleName) {
-        Log.i(Constants.TAG, DAO.class.getSimpleName() + " -getLessonList-");
+    static JSONArray getLessonList(int ID, String roleName) {
+        Log.i(Constants.TAG, DAO.class.getSimpleName() + " -getLessonList-" + roleName);
         HashMap<String, String> params = new HashMap<>();
-        params.put(Constants.KEY_ACTION, Constants.GET_LESSON_LIST);
-        params.put(Constants.KEY_USER_ID, String.valueOf(userID));
+        if(roleName.equals(Constants.KEY_ROLE_PROFESSOR)) {
+            params.put(Constants.KEY_ACTION, Constants.GET_PROFESSOR_LESSON_LIST);
+            params.put(Constants.KEY_CLASS_ID, String.valueOf(ID));
+        } else {
+            params.put(Constants.KEY_ACTION, Constants.GET_STUDENT_LESSON_LIST);
+            params.put(Constants.KEY_USER_ID, String.valueOf(ID));
+        }
         params.put(Constants.KEY_USER_ROLE_NAME, roleName);
         return getFromDB(params);
     }
@@ -68,11 +73,11 @@ class DAO {
         Log.i(Constants.TAG, DAO.class.getSimpleName() + " -isUserAttendingLesson-");
         HashMap<String, String> params = new HashMap<>();
         params.put(Constants.KEY_ACTION, Constants.IS_USER_ATTENDING_LESSON);
-        params.put(Constants.KEY_CLASS_LESSON_ID, String.valueOf(lessonID));
+        params.put(Constants.KEY_LESSON_ID, String.valueOf(lessonID));
         params.put(Constants.KEY_USER_ID, String.valueOf(userID));
         int response = 0;
         try {
-            response = getFromDB(params).getJSONObject(0).getInt(Constants.KEY_ATTENDANCE);
+            response = getFromDB(params).getJSONObject(0).getInt(Constants.KEY_USER_ATTENDANCE);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -83,7 +88,7 @@ class DAO {
         Log.i(Constants.TAG, DAO.class.getSimpleName() + " -sendQuestion- lessonID " + lessonID);
         HashMap<String, String> params = new HashMap<>();
         params.put(Constants.KEY_ACTION, Constants.USER_QUESTION_ASK);
-        params.put(Constants.KEY_CLASS_LESSON_ID, String.valueOf(lessonID));
+        params.put(Constants.KEY_LESSON_ID, String.valueOf(lessonID));
         params.put(Constants.KEY_USER_ID, String.valueOf(Session.getUserID()));
         params.put(Constants.KEY_QUESTION, input);
         params.put(Constants.KEY_TIME, new SimpleDateFormat(Constants.DATETIME_FORMAT, Locale.getDefault()).format(new Date()));
@@ -91,22 +96,22 @@ class DAO {
     }
 
     static boolean setAttendance(int lessonID, boolean isUserAttendingLesson) {
-        Log.i(Constants.TAG, DAO.class.getSimpleName() + " -updateClassAttendance- set to " + isUserAttendingLesson);
+        Log.i(Constants.TAG, DAO.class.getSimpleName() + " -setAttendance- set to " + isUserAttendingLesson);
         // Registers the lesson's classAttendance into the DB
         HashMap<String, String> params = new HashMap<>();
         params.put(Constants.KEY_ACTION, Constants.KEY_SET_ATTENDANCE);
-        params.put(Constants.KEY_CLASS_LESSON_ID, String.valueOf(lessonID));
+        params.put(Constants.KEY_LESSON_ID, String.valueOf(lessonID));
         params.put(Constants.KEY_USER_ID, String.valueOf(Session.getUserID()));
         params.put(Constants.KEY_TIME, new SimpleDateFormat(Constants.DATETIME_FORMAT, Locale.getDefault()).format(new Date()));
-        params.put(Constants.KEY_ATTENDANCE, String.valueOf(isUserAttendingLesson));
+        params.put(Constants.KEY_USER_ATTENDANCE, String.valueOf(isUserAttendingLesson));
         return isDataSent(params);
     }
 
     static boolean setReview(int lessonID, String summary, String review, int rating) {
-        Log.i(Constants.TAG, DAO.class.getSimpleName() + " -sendQuestion- lessonID " + lessonID);
+        Log.i(Constants.TAG, DAO.class.getSimpleName() + " -setReview- lessonID " + lessonID);
         HashMap<String, String> params = new HashMap<>();
         params.put(Constants.KEY_ACTION, Constants.USER_SEND_REVIEW);
-        params.put(Constants.KEY_CLASS_LESSON_ID, String.valueOf(lessonID));
+        params.put(Constants.KEY_LESSON_ID, String.valueOf(lessonID));
         params.put(Constants.KEY_USER_ID, String.valueOf(Session.getUserID()));
         params.put(Constants.KEY_REVIEW_RATING, String.valueOf(rating));
         params.put(Constants.KEY_REVIEW_SUMMARY, summary);
@@ -164,5 +169,21 @@ class DAO {
             e.printStackTrace();
         }
         return result;
+    }
+
+    static JSONArray getLessonQuestion(int lessonID) {
+        Log.i(Constants.TAG, DAO.class.getSimpleName() + " -getLessonQuestion- lessonID" + lessonID);
+        HashMap<String, String> params = new HashMap<>();
+        params.put(Constants.KEY_ACTION, Constants.GET_LESSON_QUESTIONS);
+        params.put(Constants.KEY_LESSON_ID, String.valueOf(lessonID));
+        return getFromDB(params);
+    }
+
+    static JSONArray getLessonReview(int lessonID) {
+        Log.i(Constants.TAG, DAO.class.getSimpleName() + " -getLessonReview- lessonID" + lessonID);
+        HashMap<String, String> params = new HashMap<>();
+        params.put(Constants.KEY_ACTION, Constants.GET_LESSON_REVIEWS);
+        params.put(Constants.KEY_LESSON_ID, String.valueOf(lessonID));
+        return getFromDB(params);
     }
 }

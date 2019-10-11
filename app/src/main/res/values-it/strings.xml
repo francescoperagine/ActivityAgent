@@ -99,8 +99,8 @@
     <string name="geofence_too_many_pending_intents">Ci sono troppe transizioni del geofence</string>
     <string name="attendance">"Studenti registrati: "</string>
     <string name="from">"Dal: "</string>
-    <string name="lesson_progress">Lezione in corso</string>
-    <string name="lesson_not_progress">Lezione finita</string>
+    <string name="lesson_in_progress">Lezione in corso</string>
+    <string name="lesson_not_in_progress">Lezione finita</string>
     <string name="to">" al: "</string>
     <string name="edit">modifica</string>
 </resources>

@@ -8,14 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.fragment.app.Fragment;
-
-import org.json.JSONArray;
-
-import java.util.HashMap;
 
 
 public class StudentLessonBottomFragment extends Fragment {
@@ -48,7 +43,7 @@ public class StudentLessonBottomFragment extends Fragment {
         Log.i(Constants.TAG, StudentLessonBottomFragment.class.getSimpleName() + " -newInstance-");
         StudentLessonBottomFragment fragment = new StudentLessonBottomFragment();
         Bundle arguments = new Bundle();
-        arguments.putInt(Constants.KEY_CLASS_LESSON_ID, lessonID);
+        arguments.putInt(Constants.KEY_LESSON_ID, lessonID);
         arguments.putBoolean(Constants.IS_USER_ATTENDING_LESSON, isUserAttendingLesson);
         fragment.setArguments(arguments);
         return fragment;
@@ -61,7 +56,7 @@ public class StudentLessonBottomFragment extends Fragment {
 
         if (getArguments() != null) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-\n"+getArguments());
-            lessonID = getArguments().getInt(Constants.KEY_CLASS_LESSON_ID);
+            lessonID = getArguments().getInt(Constants.KEY_LESSON_ID);
             isUserAttendingLesson = getArguments().getBoolean(Constants.IS_USER_ATTENDING_LESSON);
         }
     }

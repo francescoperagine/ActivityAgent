@@ -58,7 +58,7 @@ public class StudentLessonListActivity extends BaseActivity {
     @Override
     protected int getLayoutResource() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -getLayoutResource-");
-        return R.layout.student_class_list_activity;
+        return R.layout.item_list_activity;
     }
 
     private void setupRecyclerView() {
@@ -118,7 +118,7 @@ public class StudentLessonListActivity extends BaseActivity {
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreateViewHolder-");
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.class_list_content, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.student_lesson_list_content, parent, false);
             return new ViewHolder(view);
         }
 
@@ -145,7 +145,7 @@ public class StudentLessonListActivity extends BaseActivity {
             ViewHolder(View view) {
                 super(view);
                 Log.i(Constants.TAG, getClass().getSimpleName() + " -ViewHolder-");
-                titleView = view.findViewById(R.id.content);
+                titleView = view.findViewById(R.id.studentContent);
             }
         }
     }

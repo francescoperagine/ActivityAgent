@@ -28,13 +28,19 @@ define("GET_PROFESSOR_CLASS_LIST_QUERY",
 	AND pt.professorID = ?
     ORDER BY className");
 define("GET_PROFESSOR_LESSON_LIST_QUERY", 
-	"SELECT crl.ID as lessonID, c.ID as classID, c.name as className, c.code as classCode, c.description as classDescription, c.year as classYear, c.semester as classSemester, crl.timeStart as classLessonTimeStart, crl.timeEnd as classLessonTimeEnd, crl.summary as classLessonSummary , crl.description as classLessonDescription 
-	FROM professor_teaching as pt, class as c, class_room_calendar as crc, class_room_lesson as crl
-	WHERE pt.classID = c.ID 
-	AND c.ID = crc.classID
-	AND crc.ID = crl.calendarID
-	AND pt.professorID = ?
-	ORDER BY c.year, className");
+	"SELECT l.id as lessonID, l.calendarID as calendarID, l.timeStart as classLessonTimeStart, l.timeEnd as classLessonTimeEnd, l.summary as lessonSummary, l.description as lessonDescription, r.name as roomName, AVG(a.rating) as lessonRating,
+(SELECT COUNT(*) FROM class_lesson_attendance_rating as a, class_room_lesson as l, class_room_calendar as c where a.lessonID = l.ID and l.calendarID = c.ID and c.classID = :classID) as attendance
+		FROM 
+		class_room_lesson as l,
+		class_room_calendar as c,
+		class_lesson_attendance_rating as a,
+		room as r
+		WHERE 
+		l.calendarID = c.ID AND
+		l.ID = a.lessonID AND
+		l.roomID = r.ID AND
+		c.classID = :classID
+		ORDER BY l.timeStart DESC");
 // Gets the list of active lessons
 define("GET_STUDENT_LESSON_LIST_QUERY", 
 	"SELECT crl.ID as lessonID, c.ID as classID, c.name as className, c.code as classCode, c.description as classDescription, c.year as classYear, c.semester as classSemester, crl.timeStart as classLessonTimeStart, crl.timeEnd as classLessonTimeEnd, crl.summary as classLessonSummary , crl.description as classLessonDescription 
@@ -42,27 +48,9 @@ define("GET_STUDENT_LESSON_LIST_QUERY",
 	WHERE s.classID = c.ID 
 	AND c.ID = crc.classID
 	AND crc.ID = crl.calendarID
-	AND s.studentID = ?
+	AND s.studentID = :studentID
 	GROUP BY className
 	ORDER BY c.year, className");
-define("GET_LESSON_DETAIL_QUERY", 
-	"SELECT c.ID as classID, c.name as className, c.description as classDescription, c.code as classCode, c.year as classYear, c.semester as classSemester, crl.timeStart as classLessonTimeStart, crl.timeEnd as classLessonTimeEnd, crl.summary as classLessonSummary , crl.description as classLessonDescription 
-	FROM class as c 
-	JOIN class_room_calendar as crc ON c.ID = crc.classID
-	JOIN class_room_lesson as crl ON crc.ID = crl.calendarID
-	WHERE c.ID = ?");
-/*define("GET_PROFESSOR_CURRENT_CLASS_LIST_QUERY", 
-	"SELECT crl.ID as lessonID, c.ID as classID, c.name as className, c.year as classYear, c.semester as classSemester, crl.timeStart as classLessonTimeStart, crl.timeEnd as classLessonTimeEnd
-	FROM professor_teaching as pt, class as c, class_room_calendar as crc, class_room_lesson as crl
-	WHERE pt.classID = c.ID 
-	AND c.ID = crc.classID
-	AND crc.ID = crl.calendarID
-	AND pt.professorID = ?
-	GROUP BY className
-	ORDER BY c.year, className");
-	*/
-//define("GET_STUDENT_EXAM_LIST_QUERY", "SELECT c.ID as classID, c.name as className, c.year as year, c.semester as semester, s.passed as passed, s.passedDate as passedDate, s.vote as vote, s.praise as praise FROM student_career as s, class as c WHERE s.classID = c.ID AND studentID = ? ORDER BY year, className");
-//define("GET_PROFESSOR_CLASS_LIST_QUERY", "SELECT c.id as classID, c.name as className FROM class as c, professor_teaching as p, user as u WHERE c.ID = p.classID AND p.professorID = u.id AND u.id = ?");
 define("GET_USER_DETAILS_QUERY", "SELECT u.ID as userID, u.name as name, u.surname as surname, u.email as email, u.registrationDate as registrationDate, r.name as roleName FROM user as u, role as r WHERE u.roleID = r.ID AND email = ?");
 
 define("ASK_A_QUESTION_QUERY", "INSERT INTO class_lesson_question (lessonID, studentID, question, time) VALUES (:lessonID, :studentID, :question, :time)");
@@ -294,23 +282,21 @@ function getClassList(int $professorID) {
 	return $response;
 }
 
-function getLessonList(int $userID, string $userRole) {
+function getProfessorLessonList($classID) {
 	global $connection;
-	if($userRole == USER_ROLE_PROFESSOR) {
-		$stmt = $connection->prepare(GET_PROFESSOR_LESSON_LIST_QUERY);
-	} else {
-		$stmt = $connection->prepare(GET_STUDENT_LESSON_LIST_QUERY);	
-	}
-	$stmt->execute([$userID]);
+	$stmt = $connection->prepare(GET_PROFESSOR_LESSON_LIST_QUERY);
+	$stmt->bindValue(':classID', $classID);
+	$stmt->execute();
 	$response = $stmt->fetchAll(PDO::FETCH_OBJ);
 	return $response;
 }
 
-function getLessonDetail(int $lessonID) {
+function getStudentLessonList(int $userID) {
 	global $connection;
-	$stmt = $connection->prepare(GET_LESSON_DETAIL_QUERY);
-	$stmt->execute([$lessonID]);
-	$response = $stmt->fetch(PDO::FETCH_OBJ);
+	$stmt = $connection->prepare(GET_STUDENT_LESSON_LIST_QUERY);
+	$stmt->bindValue(':studentID', $userID);
+	$stmt->execute();
+	$response = $stmt->fetchAll(PDO::FETCH_OBJ);
 	return $response;
 }
 

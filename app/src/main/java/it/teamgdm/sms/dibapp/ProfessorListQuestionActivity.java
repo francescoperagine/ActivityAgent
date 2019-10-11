@@ -1,22 +1,14 @@
 package it.teamgdm.sms.dibapp;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class ProfessorListQuestionActivity extends BaseActivity {
 
@@ -28,17 +20,12 @@ public class ProfessorListQuestionActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         //create object of listview
-        ListView listView=(ListView)findViewById(R.id.listview);
+        ListView listView= findViewById(R.id.listview);
 
-        Intent intent = getIntent();
-        int lessonID = intent.getExtras().getInt("LESSON");
+        int lessonID = getIntent().getIntExtra(Constants.KEY_LESSON_ID, 0);
 
         //query
-
-        HashMap<String, String> params = new HashMap<>();
-        params.put(Constants.KEY_ACTION, Constants.GET_LESSON_QUESTIONS);
-        params.put(Constants.KEY_CLASS_LESSON_ID, String.valueOf(lessonID));
-        JSONArray response = DAO.getFromDB(params);
+        JSONArray response = DAO.getLessonQuestion(lessonID);
 
         Log.i(Constants.TAG, "QUESTION RESPONSE = " + response.toString() + response.length());
 

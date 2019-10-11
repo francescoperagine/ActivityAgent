@@ -108,7 +108,6 @@ public class StudentLessonDetailActivity extends BaseActivity implements
             unregisterReceiver(dibappBroadcastReceiver);
             stopLocationUpdates();
         }
-
     }
 
     @Override
@@ -133,7 +132,7 @@ public class StudentLessonDetailActivity extends BaseActivity implements
 */
     int getLayoutResource() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -getLayoutResource-");
-        return R.layout.student_class_detail_activity;
+        return R.layout.student_lesson_detail_activity;
     }
 
     @Override
@@ -192,7 +191,7 @@ public class StudentLessonDetailActivity extends BaseActivity implements
                 HashMap<String, String> params = new HashMap<>();
                 params.put(Constants.KEY_ACTION, Constants.CHECK_EXISTING_EVALUATE);
                 params.put(Constants.KEY_USER_ID, String.valueOf(Session.getUserID()));
-                params.put(Constants.KEY_CLASS_LESSON_ID, String.valueOf(lesson.lessonID));
+                params.put(Constants.KEY_LESSON_ID, String.valueOf(lesson.lessonID));
                 JSONArray response = DAO.getFromDB(params);
 
                 StudentEvaluateFragment evaluateFragment = null;

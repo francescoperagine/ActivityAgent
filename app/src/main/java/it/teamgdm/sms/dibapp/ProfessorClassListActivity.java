@@ -32,14 +32,12 @@ public class ProfessorClassListActivity extends BaseActivity {
      */
 
     private boolean mTwoPane;
-    Intent loginIntent;
     RecyclerView recyclerView;
     TextView textViewEmptyClassList;
 
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-");
         super.onCreate(savedInstanceState);
-        loginIntent = getIntent();
 
         if (findViewById(R.id.class_detail_container) != null) {
             // The detail container view will be present only in the
@@ -55,12 +53,10 @@ public class ProfessorClassListActivity extends BaseActivity {
         setupRecyclerView();
     }
 
-
-
     @Override
     protected int getLayoutResource() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -getLayoutResource-");
-        return R.layout.student_class_list_activity;
+        return R.layout.item_list_activity;
     }
 
     private void setupRecyclerView() {
@@ -115,7 +111,7 @@ public class ProfessorClassListActivity extends BaseActivity {
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreateViewHolder-");
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.class_list_content, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.professor_class_list_content, parent, false);
             return new ViewHolder(view);
         }
 
@@ -123,7 +119,7 @@ public class ProfessorClassListActivity extends BaseActivity {
         public void onBindViewHolder(final ViewHolder holder, int position) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -onBindViewHolder-");
             holder.titleView.setText(classList.get(position).name);
-            holder.itemView.setTag(classList.get(position).lessonID);
+            holder.itemView.setTag(classList.get(position).classID);
             holder.itemView.setOnClickListener(mOnClickListener);
         }
 
@@ -139,7 +135,7 @@ public class ProfessorClassListActivity extends BaseActivity {
             ViewHolder(View view) {
                 super(view);
                 Log.i(Constants.TAG, getClass().getSimpleName() + " -ViewHolder-");
-                titleView = view.findViewById(R.id.content);
+                titleView = view.findViewById(R.id.professorContent);
 
             }
         }

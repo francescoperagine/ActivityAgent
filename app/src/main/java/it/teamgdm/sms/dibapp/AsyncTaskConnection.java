@@ -55,7 +55,7 @@ class AsyncTaskConnection extends AsyncTask<JSONObject, Void, JSONArray> {
         bufferedReader = setBufferedReader(dataArray[0], urlConnection);
         try {
             while ((text = bufferedReader.readLine()) != null) {
-                Log.i(Constants.TAG, getClass().getSimpleName() + " -doInBackground-while" + text);
+                Log.i(Constants.TAG, "\n" + text);
                 Object json = new JSONTokener(text).nextValue();
                 if(json instanceof JSONObject) {
                     // convert to JSONArray

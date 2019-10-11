@@ -32,7 +32,7 @@ public class StudentQuestionFragment extends DialogFragment {
     static StudentQuestionFragment newInstante(int classLessonID) {
         StudentQuestionFragment questionFragment = new StudentQuestionFragment();
         Bundle arguments = new Bundle();
-        arguments.putInt(Constants.KEY_CLASS_LESSON_ID, classLessonID);
+        arguments.putInt(Constants.KEY_LESSON_ID, classLessonID);
         questionFragment.setArguments(arguments);
         return questionFragment;
     }
@@ -41,8 +41,8 @@ public class StudentQuestionFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-");
         super.onCreate(savedInstanceState);
-        if(getArguments() != null && getArguments().containsKey(Constants.KEY_CLASS_LESSON_ID)) {
-            classLessonID = getArguments().getInt(Constants.KEY_CLASS_LESSON_ID);
+        if(getArguments() != null && getArguments().containsKey(Constants.KEY_LESSON_ID)) {
+            classLessonID = getArguments().getInt(Constants.KEY_LESSON_ID);
         }
     }
 

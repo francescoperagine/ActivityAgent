@@ -35,7 +35,7 @@ public class StudentEvaluateFragment extends DialogFragment {
     static StudentEvaluateFragment newInstante(int classLessonID) {
         StudentEvaluateFragment evaluateFragment = new StudentEvaluateFragment();
         Bundle arguments = new Bundle();
-        arguments.putInt(Constants.KEY_CLASS_LESSON_ID, classLessonID);
+        arguments.putInt(Constants.KEY_LESSON_ID, classLessonID);
         evaluateFragment.setArguments(arguments);
         return evaluateFragment;
     }
@@ -43,10 +43,10 @@ public class StudentEvaluateFragment extends DialogFragment {
     static StudentEvaluateFragment newInstante(int classLessonID, String summary, String description, float rating) {
         StudentEvaluateFragment evaluateFragment = new StudentEvaluateFragment();
         Bundle arguments = new Bundle();
-        arguments.putInt(Constants.KEY_CLASS_LESSON_ID, classLessonID);
+        arguments.putInt(Constants.KEY_LESSON_ID, classLessonID);
         arguments.putString(Constants.KEY_CLASS_LESSON_REVIEW_SUMMARY, summary);
         arguments.putString(Constants.KEY_CLASS_LESSON_REVIEW_DESCRIPTION, description);
-        arguments.putFloat(Constants.KEY_CLASS_LESSON_REVIEW_RATING, rating);
+        arguments.putFloat(Constants.KEY_LESSON_REVIEW_RATING, rating);
         evaluateFragment.setArguments(arguments);
         return evaluateFragment;
     }
@@ -55,8 +55,8 @@ public class StudentEvaluateFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-");
         super.onCreate(savedInstanceState);
-        if(getArguments() != null && getArguments().containsKey(Constants.KEY_CLASS_LESSON_ID)) {
-            classLessonID = getArguments().getInt(Constants.KEY_CLASS_LESSON_ID);
+        if(getArguments() != null && getArguments().containsKey(Constants.KEY_LESSON_ID)) {
+            classLessonID = getArguments().getInt(Constants.KEY_LESSON_ID);
         }
     }
 
@@ -85,8 +85,8 @@ public class StudentEvaluateFragment extends DialogFragment {
         submitButton.setEnabled(false);
 
         //setting old review text and rating if there were an old one
-        if(getArguments() != null && getArguments().containsKey(Constants.KEY_CLASS_LESSON_REVIEW_RATING)) {
-            reviewRating.setRating(getArguments().getFloat(Constants.KEY_CLASS_LESSON_REVIEW_RATING));
+        if(getArguments() != null && getArguments().containsKey(Constants.KEY_LESSON_REVIEW_RATING)) {
+            reviewRating.setRating(getArguments().getFloat(Constants.KEY_LESSON_REVIEW_RATING));
             submitButton.setEnabled(true);
             submitButton.setText(R.string.edit);
             String tmpSummary = getArguments().getString(Constants.KEY_CLASS_LESSON_REVIEW_SUMMARY);

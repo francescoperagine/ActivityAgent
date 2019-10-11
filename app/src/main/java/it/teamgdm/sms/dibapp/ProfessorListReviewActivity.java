@@ -1,12 +1,8 @@
 package it.teamgdm.sms.dibapp;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,17 +24,12 @@ public class ProfessorListReviewActivity extends BaseActivity {
 
         //initializing objects
         reviewList = new ArrayList<>();
-        listView = (ListView) findViewById(R.id.listView);
+        listView = findViewById(R.id.listView);
 
-        Intent intent = getIntent();
-        int lessonID = intent.getExtras().getInt("LESSON");
+        int lessonID = getIntent().getIntExtra(Constants.KEY_LESSON_ID, 0);
 
         //query
-
-        HashMap<String, String> params = new HashMap<>();
-        params.put(Constants.KEY_ACTION, Constants.GET_LESSON_REVIEWS);
-        params.put(Constants.KEY_CLASS_LESSON_ID, String.valueOf(lessonID));
-        JSONArray response = DAO.getFromDB(params);
+        JSONArray response = DAO.getLessonReview(lessonID);
 
         Log.i(Constants.TAG, "REVIEWS RESPONSE = " + response.toString() + response.length());
 
