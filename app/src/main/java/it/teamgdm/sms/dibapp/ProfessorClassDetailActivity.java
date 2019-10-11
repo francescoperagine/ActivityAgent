@@ -76,7 +76,7 @@ public class ProfessorClassDetailActivity extends BaseActivity {
         }
     }
 
-    public class ClassRecyclerViewAdapter extends RecyclerView.Adapter<ProfessorClassDetailActivity.ClassRecyclerViewAdapter.ViewHolder> {
+    public class ClassRecyclerViewAdapter extends RecyclerView.Adapter<ClassRecyclerViewAdapter.ViewHolder> {
         private final ProfessorClassDetailActivity mParentActivity;
         private final boolean mTwoPane;
         ArrayList<Lesson> lessonList;
@@ -110,59 +110,28 @@ public class ProfessorClassDetailActivity extends BaseActivity {
 */
         @NonNull
         @Override
-        public ProfessorClassDetailActivity.ClassRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public ClassRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreateViewHolder-");
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.professor_lesson_list_content, parent, false);
-            return new ProfessorClassDetailActivity.ClassRecyclerViewAdapter.ViewHolder(view);
+            return new ClassRecyclerViewAdapter.ViewHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(final ProfessorClassDetailActivity.ClassRecyclerViewAdapter.ViewHolder holder, int position) {
+        public void onBindViewHolder(final ClassRecyclerViewAdapter.ViewHolder holder, int position) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -onBindViewHolder-");
-            final boolean isExpanded = position==mExpandedPosition;
-            holder.lessonName.setText(lessonList.get(position).name);
-            holder.lessonName.setVisibility(View.VISIBLE);
-            holder.lessonDetail.setVisibility(isExpanded?View.VISIBLE:View.GONE);
-            holder.itemView.setActivated(isExpanded);
-            holder.itemView.setOnClickListener(v -> {
-                mExpandedPosition = isExpanded ? -1:position;
-                TransitionManager.beginDelayedTransition(recyclerView);
-                notifyDataSetChanged();
+
+            Lesson lesson = lessonList.get(position);
+            holder.bind(lesson);
+            holder.lessonTitle.setOnClickListener(v -> {
+                // Get the current state of the item
+                boolean expanded = lesson.isExpanded();
+                // Change the state
+                lesson.setExpanded(!expanded);
+                // Notify the adapter that item has changed
+            //    TransitionManager.beginDelayedTransition(recyclerView);
+                notifyItemChanged(position);
             });
-
-
             holder.itemView.setTag(lessonList.get(position).lessonID);
-
-            //checking if lesson is in progress
-            if(lessonList.get(position).isInProgress()) {
-                holder.lessonInProgress.setText(R.string.lesson_in_progress);
-                holder.lessonInProgress.setBackgroundColor(Color.GREEN);
-            } else {
-                holder.lessonInProgress.setText(R.string.lesson_not_in_progress);
-                holder.lessonInProgress.setEnabled(false);
-            }
-
-            String lessonCalendarTime = getString(R.string.from) + lessonList.get(position).getDate() + " - " + lessonList.get(position).timeStart + " - " + getString(R.string.to) + " " +  lessonList.get(position).timeEnd;
-            holder.lessonTime.setText(lessonCalendarTime);
-
-            String attendance = getString(R.string.attendance) + lessonList.get(position).attendance;
-            holder.lessonAttendance.setText(attendance);
-
-            holder.ratingBarProf.setRating(lessonList.get(position).rating);
-
-            holder.questionButtonProf.setOnClickListener(v -> {
-                // Perform action on click
-                Intent questionsListIntent = new Intent(getApplicationContext(), ProfessorListQuestionActivity.class);
-                questionsListIntent.putExtra(Constants.KEY_LESSON_ID, lessonList.get(position).lessonID);
-                startActivity(questionsListIntent);
-            });
-
-            holder.reviewButtonProf.setOnClickListener(v -> {
-                // Perform action on click
-                Intent reviewsListIntent = new Intent(getApplicationContext(), ProfessorListReviewActivity.class);
-                reviewsListIntent.putExtra(Constants.KEY_LESSON_ID, lessonList.get(position).lessonID);
-                startActivity(reviewsListIntent);
-            });
         }
 
         @Override
@@ -172,8 +141,8 @@ public class ProfessorClassDetailActivity extends BaseActivity {
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
-            final TextView lessonName;
-            final ViewGroup lessonDetail;
+            final TextView lessonTitle;
+            final View lessonDetail;
             final TextView lessonInProgress;
             final TextView lessonTime;
             final TextView lessonAttendance;
@@ -184,18 +153,57 @@ public class ProfessorClassDetailActivity extends BaseActivity {
             ViewHolder(View view) {
                 super(view);
                 Log.i(Constants.TAG, getClass().getSimpleName() + " -ViewHolder-");
-                lessonName = view.findViewById(R.id.lessonName);
-
+                lessonTitle = view.findViewById(R.id.className);
+                lessonInProgress = view.findViewById(R.id.lessonInProgress);
                 lessonDetail = view.findViewById(R.id.lessonDetail);
                 ratingBarProf = view.findViewById(R.id.ratingBarProf);
-                lessonInProgress = view.findViewById(R.id.lessonInProgress);
                 lessonTime = view.findViewById(R.id.lessonTime);
                 lessonAttendance = view.findViewById(R.id.attendance);
 
                 questionButtonProf = view.findViewById(R.id.questionButton);
                 reviewButtonProf = view.findViewById(R.id.reviewButton);
-
             }
+
+            void bind(Lesson lesson) {
+                Log.i(Constants.TAG, getClass().getSimpleName() + " -bind- lesson" + lesson);
+                boolean expanded = lesson.isExpanded();
+                lessonDetail.setVisibility(expanded ? View.VISIBLE : View.GONE);
+
+                String title = "ID " + lesson.lessonID + " - " + getString(R.string.lesson_of) + " " + lesson.getDate();
+                lessonTitle.setText(title);
+                //checking if lesson is in progress
+                if(lesson.isInProgress()) {
+                    lessonInProgress.setText(R.string.lesson_in_progress);
+                    lessonInProgress.setBackgroundColor(Color.GREEN);
+                } else {
+                    lessonInProgress.setText(R.string.lesson_not_in_progress);
+                    lessonInProgress.setEnabled(false);
+                }
+
+                String attendance = getString(R.string.attendance) + lesson.attendance;
+                ratingBarProf.setRating(lesson.rating);
+
+                String lessonCalendarTime = getString(R.string.from) + lesson.getDate() + " - " + lesson.getTimeStringFromDate(lesson.timeStart) + " - " + getString(R.string.to) + " " +  lesson.getTimeStringFromDate(lesson.timeEnd);;
+                lessonTime.setText(lessonCalendarTime);
+
+                lessonAttendance.setText(attendance);
+
+                questionButtonProf.setOnClickListener(v -> {
+                    // Perform action on click
+                    Intent questionsListIntent = new Intent(getApplicationContext(), ProfessorListQuestionActivity.class);
+                    questionsListIntent.putExtra(Constants.KEY_LESSON_ID, lesson.lessonID);
+                    startActivity(questionsListIntent);
+                });
+
+                reviewButtonProf.setOnClickListener(v -> {
+                    // Perform action on click
+                    Intent reviewsListIntent = new Intent(getApplicationContext(), ProfessorListReviewActivity.class);
+                    reviewsListIntent.putExtra(Constants.KEY_LESSON_ID, lesson.lessonID);
+                    startActivity(reviewsListIntent);
+                });
+            }
+
+
         }
     }
 }

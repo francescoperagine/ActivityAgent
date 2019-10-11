@@ -7,15 +7,12 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/lessonName"
+        android:id="@+id/className"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginTop="20dp"
         android:padding="@dimen/text_margin"
-        android:textAppearance="?attr/textAppearanceListItem"
-        android:visibility="visible"
-        tools:visibility="visible" />
+        android:textAppearance="?attr/textAppearanceListItem" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/lessonDetail"
@@ -38,6 +35,7 @@
             android:progressTint="#8BC34A"
             android:rating="2"
             android:secondaryProgressTint="#65B80C"
+            android:stepSize="0.1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/attendance" />
@@ -49,7 +47,7 @@
             android:layout_marginStart="48dp"
             android:layout_marginTop="64dp"
             android:padding="@dimen/textDefaultPadding"
-            android:text="Button"
+            android:text="@string/question_button_test"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ratingBarProf" />
 
@@ -60,7 +58,7 @@
             android:layout_marginTop="64dp"
             android:layout_marginEnd="48dp"
             android:padding="@dimen/textDefaultPadding"
-            android:text="Button"
+            android:text="@string/review_button_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ratingBarProf" />
 
@@ -94,7 +92,18 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/lessonTime" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="@dimen/textDefaultPadding"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="?android:attr/listDivider" />
 
 
 </LinearLayout>

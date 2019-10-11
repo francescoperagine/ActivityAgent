@@ -6,14 +6,14 @@ import java.io.Serializable;
 
 class Exam implements Serializable {
     int classID;
-    String name;
-    int code;
+    String className;
+    int classCode;
     String classDescription;
-    int year;
-    int semester;
+    int classYear;
+    int classsemester;
 
     @NonNull
     public String toString() {
-        return name;
+        return className;
     }
 }

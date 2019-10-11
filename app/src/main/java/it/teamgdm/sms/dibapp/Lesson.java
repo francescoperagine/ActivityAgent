@@ -23,6 +23,16 @@ public class Lesson extends Exam implements Serializable {
     String lessonDescription;
     String room;
 
+    public boolean isExpanded() {
+        return expanded;
+    }
+
+    public void setExpanded(boolean expanded) {
+        this.expanded = expanded;
+    }
+
+    private boolean expanded;
+
     Lesson() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -Lesson-");
     }
@@ -30,8 +40,8 @@ public class Lesson extends Exam implements Serializable {
     @NonNull
     public String toString() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -toString-");
-        return "\nClassID \t " + classID + "\nLessonID \t " + lessonID + "\nName \t" + name + "\ncode \t" + code + "\nclassDescription \t" + classDescription + "\nyear \t" + year +
-                "\nsemester \t" + semester + "\ndate \t" + getDate() + "\ntimeStart \t" + timeStart + "\ntimeEnd \t" + timeEnd +
+        return "\nClassID \t " + classID + "\nLessonID \t " + lessonID + "\nName \t" + className + "\nclassCode \t" + classCode + "\nclassDescription \t" + classDescription + "\nclassYear \t" + classYear +
+                "\nclasssemester \t" + classsemester + "\ndate \t" + getDate() + "\ntimeStart \t" + timeStart + "\ntimeEnd \t" + timeEnd +
                 "\nlessonSummary \t" + lessonSummary + "\nlessonDescription \t" + lessonDescription;
     }
 

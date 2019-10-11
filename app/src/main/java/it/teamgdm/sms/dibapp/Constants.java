@@ -92,6 +92,7 @@ public final class Constants {
     static final String KEY_CLASS_LESSON_REVIEW_SUMMARY = "classLessonReviewSummary";
     static final String KEY_CLASS_LESSON_REVIEW_DESCRIPTION = "classLessonReviewDescription";
     static final String KEY_LESSON_REVIEW_RATING = "classLessonReviewRating";
+    static final String KEY_LESSON_REVIEW_ATTENDANCE = "classLessonReviewAttendance";
 
     // GEOFENCE
 

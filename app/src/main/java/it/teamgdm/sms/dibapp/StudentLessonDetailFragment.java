@@ -56,16 +56,16 @@ public class StudentLessonDetailFragment extends Fragment {
         TextView classLessonSummary = rootView.findViewById(R.id.classLessonSummary);
         TextView classLessonDescription = rootView.findViewById(R.id.classLessonDescription);
 
-        className.setText(lesson.name);
+        className.setText(lesson.className);
         if(getActivity().getClass().equals(StudentLessonDetailActivity.class)) className.setVisibility(View.GONE);
 
-        String year = getString(R.string.classYearText) + ": " + lesson.year;
+        String year = getString(R.string.classYearText) + ": " + lesson.classYear;
         classYear.setText(year);
 
-        String semester = getString(R.string.classSemesterText) + ": " + lesson.semester;
+        String semester = getString(R.string.classSemesterText) + ": " + lesson.classsemester;
         classSemester.setText(semester);
 
-        String code = getString(R.string.classCodeText) + ": " + lesson.code;
+        String code = getString(R.string.classCodeText) + ": " + lesson.classCode;
         classCode.setText(code);
 
         if(lesson.classDescription.equals("null")) {
@@ -96,7 +96,7 @@ public class StudentLessonDetailFragment extends Fragment {
         }
 
         if (lesson != null) {
-            Objects.requireNonNull(getActivity()).setTitle(lesson.name);
+            Objects.requireNonNull(getActivity()).setTitle(lesson.className);
         }
         return rootView;
     }

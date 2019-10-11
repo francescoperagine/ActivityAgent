@@ -26,11 +26,11 @@ class StudentCareer extends LessonList {
                 Log.i(Constants.TAG, StudentCareer.class.getSimpleName() + " -setLessonList- OBJ " + o);
                 lesson.classID = o.optInt(Constants.KEY_CLASS_ID);
                 lesson.lessonID = o.optInt(Constants.KEY_LESSON_ID);
-                lesson.name = o.optString(Constants.KEY_CLASS_NAME);
+                lesson.className = o.optString(Constants.KEY_CLASS_NAME);
                 lesson.classDescription = o.optString(Constants.KEY_CLASS_DESCRIPTION);
-                lesson.code = o.optInt(Constants.KEY_CLASS_CODE);
-                lesson.year = o.optInt(Constants.KEY_LESSON_YEAR);
-                lesson.semester = o.optInt(Constants.KEY_LESSON_SEMESTER);
+                lesson.classCode = o.optInt(Constants.KEY_CLASS_CODE);
+                lesson.classYear = o.optInt(Constants.KEY_LESSON_YEAR);
+                lesson.classsemester = o.optInt(Constants.KEY_LESSON_SEMESTER);
                 lesson.timeStart = lesson.getTimestampFromString(o.optString(Constants.KEY_LESSON_TIME_START));
                 lesson.timeEnd = lesson.getTimestampFromString(o.optString(Constants.KEY_LESSON_TIME_END));
                 lesson.lessonSummary = o.optString(Constants.KEY_LESSON_SUMMARY);

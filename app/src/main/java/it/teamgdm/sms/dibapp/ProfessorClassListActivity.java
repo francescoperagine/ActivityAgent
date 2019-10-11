@@ -63,7 +63,7 @@ public class ProfessorClassListActivity extends BaseActivity {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -setupRecyclerView-");
         LessonList lessonListData = new ProfessorTeaching();
         JSONArray classListLoader = DAO.getClassList(Session.getUserID());
-        lessonListData.setLessonList(classListLoader);
+        lessonListData.setClassList(classListLoader);
         ArrayList<Lesson> classList = lessonListData.getLessonList();
         if(classList.isEmpty()) {
             recyclerView.setVisibility(View.GONE);
@@ -118,7 +118,7 @@ public class ProfessorClassListActivity extends BaseActivity {
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -onBindViewHolder-");
-            holder.titleView.setText(classList.get(position).name);
+            holder.titleView.setText(classList.get(position).className);
             holder.itemView.setTag(classList.get(position).classID);
             holder.itemView.setOnClickListener(mOnClickListener);
         }

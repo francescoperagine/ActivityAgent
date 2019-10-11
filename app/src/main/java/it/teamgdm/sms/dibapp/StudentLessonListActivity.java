@@ -125,7 +125,7 @@ public class StudentLessonListActivity extends BaseActivity {
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -onBindViewHolder-");
-            holder.titleView.setText(classList.get(position).name);
+            holder.titleView.setText(classList.get(position).className);
             if (classList.get(position).isInProgress()) {
                 holder.titleView.setBackgroundColor(Color.GREEN);
             }
