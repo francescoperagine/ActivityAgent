@@ -6,11 +6,14 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONArray;
@@ -53,6 +56,40 @@ public class StudentLessonListActivity extends BaseActivity {
         textViewEmptyClassList = findViewById(R.id.class_list_empty);
 
         setupRecyclerView();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreateOptionsMenu-");
+        getMenuInflater().inflate(R.menu.stats_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onOptionsItemSelected-");
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.profileButton:
+                Intent profileIntent = new Intent(this, ProfileActivity.class);
+                startActivity(profileIntent);
+                return true;
+            case R.id.settingsButton:
+                Intent settingIntent = new Intent(this, SettingsActivity.class);
+                startActivity(settingIntent);
+                return true;
+            case R.id.logoutButton:
+                FragmentManager fragmentManager = this.getSupportFragmentManager();
+                LogoutDialogFragment logoutDialogFragment = new LogoutDialogFragment(this);
+                logoutDialogFragment.show(fragmentManager, "logout_fragment");
+                return true;
+            case R.id.statsButton:
+                Intent statsIntent = new Intent(this, StatsActivity.class);
+                startActivity(statsIntent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
