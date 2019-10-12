@@ -15,8 +15,6 @@ import org.json.JSONObject;
 
 class Session {
 
-    static boolean geofencePermissionGranted;
-
     private static Context applicationContext;
     private static SharedPreferences.Editor sharedPreferencesEditor;
     private static SharedPreferences sharedPreferences;

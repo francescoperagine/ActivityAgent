@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         if(session.userIsLoggedIn() && ! Session.getUserEmail().equals(Constants.KEY_EMPTY)) {
             session.setAccess(this, Session.getUserEmail());
             loadDashboard();
-        } else if(getIntent().hasExtra(Constants.USER_LOGIN) & getIntent().getIntExtra(Constants.USER_LOGIN,0) == Constants.LOGIN_OK_CODE){
+        } else if(getIntent().hasExtra(Constants.USER_LOGIN) & getIntent().getIntExtra(Constants.USER_LOGIN,0) == Constants.OK_CODE){
             String email = getIntent().getStringExtra(Constants.KEY_USER_EMAIL);
             session.setAccess(this, email);
             loadDashboard();
@@ -38,13 +38,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadDashboard() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -loadDashboard-");
-        Intent classListActivityIntent = new Intent(this, ClassListActivity.class);
-
+        Intent listActivityIntent;
         if(session.userIsProfessor()) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -loadDashboard-userIsProfessor");
-            classListActivityIntent.putExtra(Constants.KEY_ROLE_PROFESSOR, true);
+            listActivityIntent = new Intent(this, ProfessorClassListActivity.class);
+        } else {
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -loadDashboard-userIsStudent");
+            listActivityIntent = new Intent(this, StudentLessonListActivity.class);
         }
-        startActivity(classListActivityIntent);
+        startActivity(listActivityIntent);
         finish();
     }
 }

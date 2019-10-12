@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
         android:orientation="vertical"
-        tools:context=".ClassDetailActivity" />
+        tools:context=".StudentLessonDetailActivity" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/dashboardButtonContainer"

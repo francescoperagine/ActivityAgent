@@ -56,9 +56,9 @@ public class LoginActivity extends BaseActivity {
     public void loginInit() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -loginInit-");
         if(validateInputs() & login()) {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -loginInit-RESULT_OK");
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -loginInit-Login ok");
             Intent mainActivityIntent = new Intent(this, MainActivity.class);
-            mainActivityIntent.putExtra(Constants.USER_LOGIN, Constants.LOGIN_OK_CODE);
+            mainActivityIntent.putExtra(Constants.USER_LOGIN, Constants.OK_CODE);
             mainActivityIntent.putExtra(Constants.KEY_USER_EMAIL, email);
             startActivity(mainActivityIntent);
             finish();
@@ -106,11 +106,11 @@ public class LoginActivity extends BaseActivity {
     private boolean login() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -login-");
         if(DAO.loginUser(email, password)) {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -setAccess-Constants.LOGIN_OK_CODE-");
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -setAccess-Constants.OK-");
             Toast.makeText(getApplicationContext(), getResources().getString(R.string.user_login_ok), Toast.LENGTH_SHORT).show();
             return true;
         } else {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -setAccess-LOGIN_CODE_NOT_OK-");
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -setAccess-NOT_OK-");
             Toast.makeText(getApplicationContext(), getResources().getString(R.string.user_login_not_ok), Toast.LENGTH_SHORT).show();
             return false;
         }

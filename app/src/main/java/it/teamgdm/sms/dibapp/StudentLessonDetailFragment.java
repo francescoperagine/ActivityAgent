@@ -13,17 +13,17 @@ import java.util.Objects;
 
 public class StudentLessonDetailFragment extends Fragment {
 
-    private ClassLesson classLesson;
+    private Lesson lesson;
 
     public StudentLessonDetailFragment() {
         // Required empty public constructor
     }
 
-    static StudentLessonDetailFragment newInstance(ClassLesson classLesson, boolean twoPanel) {
+    static StudentLessonDetailFragment newInstance(Lesson lesson, boolean twoPanel) {
         Log.i(Constants.TAG, StudentLessonDetailFragment.class.getSimpleName() + " -newInstance-");
         StudentLessonDetailFragment fragment = new StudentLessonDetailFragment();
         Bundle arguments = new Bundle();
-        arguments.putSerializable(Constants.KEY_CLASS_LESSON, classLesson);
+        arguments.putSerializable(Constants.KEY_CLASS_LESSON, lesson);
         arguments.putBoolean(Constants.TWO_PANEL, twoPanel);
         fragment.setArguments(arguments);
         return fragment;
@@ -35,7 +35,7 @@ public class StudentLessonDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if(getArguments() != null) {
             Log.i(Constants.TAG, StudentLessonDetailFragment.class.getSimpleName() + " -onCreate-arguments \n" + getArguments());
-            classLesson = (ClassLesson) getArguments().getSerializable(Constants.KEY_CLASS_LESSON);
+            lesson = (Lesson) getArguments().getSerializable(Constants.KEY_CLASS_LESSON);
         }
 
     }
@@ -56,47 +56,47 @@ public class StudentLessonDetailFragment extends Fragment {
         TextView classLessonSummary = rootView.findViewById(R.id.classLessonSummary);
         TextView classLessonDescription = rootView.findViewById(R.id.classLessonDescription);
 
-        className.setText(classLesson.name);
-        if(getActivity().getClass().equals(ClassDetailActivity.class)) className.setVisibility(View.GONE);
+        className.setText(lesson.className);
+        if(getActivity().getClass().equals(StudentLessonDetailActivity.class)) className.setVisibility(View.GONE);
 
-        String year = getString(R.string.classYearText) + ": " + classLesson.year;
+        String year = getString(R.string.classYearText) + ": " + lesson.classYear;
         classYear.setText(year);
 
-        String semester = getString(R.string.classSemesterText) + ": " + classLesson.semester;
+        String semester = getString(R.string.classSemesterText) + ": " + lesson.classsemester;
         classSemester.setText(semester);
 
-        String code = getString(R.string.classCodeText) + ": " + classLesson.code;
+        String code = getString(R.string.classCodeText) + ": " + lesson.classCode;
         classCode.setText(code);
 
-        if(classLesson.classDescription.equals("null")) {
+        if(lesson.classDescription.equals("null")) {
             classDescription.setText(getString(R.string.noClassDescriptionSetText));
         } else {
-            classDescription.setText(classLesson.classDescription);
+            classDescription.setText(lesson.classDescription);
         }
 
-        String lessonDate = getString(R.string.lessonDate) + "\n" + classLesson.getDate();
+        String lessonDate = getString(R.string.lessonDate) + "\n" + lesson.getDate();
         classLessonDate.setText(lessonDate);
 
-        String lessonTimeStart = getString(R.string.lessonStartAt) + "\n" + classLesson.getTimeStringFromDate(classLesson.timeStart);
+        String lessonTimeStart = getString(R.string.lessonStartAt) + "\n" + lesson.getTimeStringFromDate(lesson.timeStart);
         classLessonTimeStart.setText(lessonTimeStart);
 
-        String lessonTimeEnd = getString(R.string.lessonEndAt) + "\n" + classLesson.getTimeStringFromDate(classLesson.timeEnd);
+        String lessonTimeEnd = getString(R.string.lessonEndAt) + "\n" + lesson.getTimeStringFromDate(lesson.timeEnd);
         classLessonTimeEnd.setText(lessonTimeEnd);
 
-        if(classLesson.lessonSummary.equals("null")) {
+        if(lesson.lessonSummary.equals("null")) {
             classLessonSummary.setText(getString(R.string.noSummarySetText));
         } else {
-            classLessonSummary.setText(classLesson.lessonSummary);
+            classLessonSummary.setText(lesson.lessonSummary);
         }
 
-        if(classLesson.lessonDescription.equals("null")) {
+        if(lesson.lessonDescription.equals("null")) {
             classLessonDescription.setText(getString(R.string.noLessonDescriptionSetText));
         } else {
-            classLessonDescription.setText(classLesson.lessonDescription);
+            classLessonDescription.setText(lesson.lessonDescription);
         }
 
-        if (classLesson != null) {
-            Objects.requireNonNull(getActivity()).setTitle(classLesson.name);
+        if (lesson != null) {
+            Objects.requireNonNull(getActivity()).setTitle(lesson.className);
         }
         return rootView;
     }

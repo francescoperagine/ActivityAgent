@@ -1,7 +1,5 @@
 package it.teamgdm.sms.dibapp;
 
-import android.app.AlertDialog;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,15 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-
-import org.json.JSONArray;
-
-import java.util.HashMap;
 
 
 public class StudentLessonBottomFragment extends Fragment {
@@ -43,7 +35,6 @@ public class StudentLessonBottomFragment extends Fragment {
     private Button buttonEvaluate;
     private Button buttonQuestion;
 
-
     public StudentLessonBottomFragment() {
         // Required empty public constructor
     }
@@ -52,7 +43,7 @@ public class StudentLessonBottomFragment extends Fragment {
         Log.i(Constants.TAG, StudentLessonBottomFragment.class.getSimpleName() + " -newInstance-");
         StudentLessonBottomFragment fragment = new StudentLessonBottomFragment();
         Bundle arguments = new Bundle();
-        arguments.putInt(Constants.KEY_CLASS_LESSON_ID, lessonID);
+        arguments.putInt(Constants.KEY_LESSON_ID, lessonID);
         arguments.putBoolean(Constants.IS_USER_ATTENDING_LESSON, isUserAttendingLesson);
         fragment.setArguments(arguments);
         return fragment;
@@ -65,7 +56,7 @@ public class StudentLessonBottomFragment extends Fragment {
 
         if (getArguments() != null) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-\n"+getArguments());
-            lessonID = getArguments().getInt(Constants.KEY_CLASS_LESSON_ID);
+            lessonID = getArguments().getInt(Constants.KEY_LESSON_ID);
             isUserAttendingLesson = getArguments().getBoolean(Constants.IS_USER_ATTENDING_LESSON);
         }
     }
@@ -73,7 +64,7 @@ public class StudentLessonBottomFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreateView-");
-        // Inflate the layout for this fragment
+
         View rootView = inflater.inflate(R.layout.student_lesson_bottom_fragment, container, false);
 
         TextView classLessonInProgress = rootView.findViewById(R.id.classLessonInProgress);
@@ -89,12 +80,7 @@ public class StudentLessonBottomFragment extends Fragment {
         classLessonInProgress.setBackgroundColor(Color.GREEN);
         classLessonInProgress.setText(R.string.classLessonInProgress);
 
-
-        if(GeofenceAPI.hasGeofencePermissions) {
-            buttonAttendanceChecker();
-        } else {
-            buttonSwitchPanel(false, false, false, false);
-        }
+        buttonAttendanceChecker();
 
         return rootView;
     }
@@ -106,17 +92,8 @@ public class StudentLessonBottomFragment extends Fragment {
 
     private final View.OnClickListener evaluateButtonListener = v -> {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -evaluateButtonListener-");
-        HashMap<String, String> params = new HashMap<>();
-        params.put(Constants.KEY_ACTION, Constants.CHECK_EXISTING_EVALUATE);
-        params.put(Constants.KEY_USER_ID, String.valueOf(Session.getUserID()));
-        params.put(Constants.KEY_CLASS_LESSON_ID, String.valueOf(lessonID));
-        JSONArray response = DAO.getFromDB(params);
-        if(!DAO.checkEvaluatedLessonResponse(response)){
-            studentDashboardButtonFragmentInterfaceCallback.onItemSelected(R.id.evaluateButton);
-        }
-        else{
-            Toast.makeText(getActivity(),getString(R.string.lesson_evaluated_string),Toast.LENGTH_SHORT).show();
-        }
+        studentDashboardButtonFragmentInterfaceCallback.onItemSelected(R.id.evaluateButton);
+
     };
 
     private final View.OnClickListener questionButtonListener = v -> {
@@ -141,24 +118,4 @@ public class StudentLessonBottomFragment extends Fragment {
         buttonQuestion.setEnabled(buttonQuerstionIsActive);
     }
 
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -onRequestPermissionsResult-");
-        // If request is cancelled, the result arrays are empty.
-        if(requestCode == Constants.GEOFENCE_PERMISSION_REQUEST_CODE) {
-            if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Log.i(Constants.TAG, getClass().getSimpleName() + " -onRequestPermissionsResult-PERMISSION GRANTED");
-                // permission was granted, yay!
-                Session.geofencePermissionGranted = true;
-            } else {
-                Log.i(Constants.TAG, getClass().getSimpleName() + " -onRequestPermissionsResult-PERMISSION DENIED");
-                Session.geofencePermissionGranted = false;
-                // permission denied, boo!
-                new AlertDialog.Builder(getActivity())
-                        .setTitle(R.string.geofence_insufficient_permissions_title)
-                        .setMessage(R.string.geofence_insufficient_permissions_message)
-                        .create()
-                        .show();
-            }
-        }
-    }
 }

@@ -21,14 +21,17 @@ if(isset($input[ACTION])){
 		case ACTION_REGISTRATION:
 			$response = registration($input);
 			break;
-		case ACTION_GET_CURRENT_CLASS_LIST: 
-			$response = getCurrentClassList($input[KEY_USER_ID], $input[KEY_USER_ROLE_NAME]);
-			break;
-		case ACTION_GET_CLASS_LESSON_DETAIL:
-			$response = getClassLessonDetail($input[KEY_CLASS_ID]);
-			break;
 		case ACTION_GET_USER_DETAILS: 
 			$response = getUserDetails($input[KEY_USER_EMAIL]);
+			break;
+		case ACTION_GET_CLASS_LIST: 
+			$response = getClassList($input[KEY_USER_ID]);
+			break;
+		case ACTION_GET_STUDENT_LESSON_LIST: 
+			$response = getStudentLessonList($input[KEY_USER_ID]);
+			break;
+		case ACTION_GET_PROFESSOR_LESSON_LIST: 
+			$response = getProfessorLessonList($input[KEY_CLASS_ID]);
 			break;
 		case ACTION_ASK_A_QUESTION:
 			$response = askAQuestion($input[KEY_CLASS_LESSON_ID], $input[KEY_USER_ID], $input[KEY_QUESTION], $input[KEY_TIME]);
