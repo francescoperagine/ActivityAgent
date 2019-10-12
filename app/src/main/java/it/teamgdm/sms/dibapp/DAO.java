@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.ConcurrentNavigableMap;
 import java.util.concurrent.ExecutionException;
 
 class DAO {
@@ -185,5 +186,19 @@ class DAO {
         params.put(Constants.KEY_ACTION, Constants.GET_LESSON_REVIEWS);
         params.put(Constants.KEY_LESSON_ID, String.valueOf(lessonID));
         return getFromDB(params);
+    }
+
+    static String getClassName(int classID) {
+        Log.i(Constants.TAG, DAO.class.getSimpleName() + " -getClassName- classID " + classID);
+        HashMap<String, String> params = new HashMap<>();
+        params.put(Constants.KEY_ACTION, Constants.GET_CLASS_NAME);
+        params.put(Constants.KEY_CLASS_ID, String.valueOf(classID));
+        String className = null;
+        try {
+            className = getFromDB(params).getJSONObject(0).getString(Constants.KEY_CLASS_NAME);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return className;
     }
 }

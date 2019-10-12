@@ -3,7 +3,6 @@ package it.teamgdm.sms.dibapp;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,8 +21,6 @@ import org.json.JSONArray;
 
 import java.util.ArrayList;
 
-import static it.teamgdm.sms.dibapp.Constants.KEY_CLASS_ID;
-
 public class ProfessorClassDetailActivity extends BaseActivity {
 
     private boolean mTwoPane;
@@ -32,14 +29,16 @@ public class ProfessorClassDetailActivity extends BaseActivity {
     RecyclerView recyclerView;
     TextView textViewEmptyClassList;
     int classID = 0;
+    String className;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-");
         super.onCreate(savedInstanceState);
         Intent fromClassListIntent = getIntent();
-        if(fromClassListIntent.hasExtra(KEY_CLASS_ID)) {
-            classID = fromClassListIntent.getIntExtra(KEY_CLASS_ID, 0);
+        if(fromClassListIntent.hasExtra(Constants.KEY_CLASS_ID)) {
+            classID = fromClassListIntent.getIntExtra(Constants.KEY_CLASS_ID, 0);
+            className = DAO.getClassName(classID);
             Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-classID " + classID);
         }
 
@@ -50,10 +49,9 @@ public class ProfessorClassDetailActivity extends BaseActivity {
             // activity should be in two-pane mode.
             mTwoPane = true;
         }
-
         recyclerView = findViewById(R.id.class_list);
         textViewEmptyClassList = findViewById(R.id.class_list_empty);
-
+        getSupportActionBar().setTitle(className);
         setupRecyclerView(classID);
     }
 
@@ -90,7 +88,8 @@ public class ProfessorClassDetailActivity extends BaseActivity {
                 return true;
             case R.id.statsButton:
                 Intent statsIntent = new Intent(this, StatsActivity.class);
-                statsIntent.putExtra(KEY_CLASS_ID, classID);
+                statsIntent.putExtra(Constants.KEY_CLASS_ID, classID);
+                statsIntent.putExtra(Constants.KEY_CLASS_NAME, className);
                 startActivity(statsIntent);
                 return true;
             default:
@@ -109,9 +108,9 @@ public class ProfessorClassDetailActivity extends BaseActivity {
             recyclerView.setVisibility(View.GONE);
             textViewEmptyClassList.setVisibility(View.VISIBLE);
         } else {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -setupRecyclerView-");
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -setupRecyclerView- classname " + lessonList);
             recyclerView.setVisibility(View.VISIBLE);
-            recyclerView.setAdapter(new ProfessorClassDetailActivity.ClassRecyclerViewAdapter(this, lessonList, mTwoPane));
+            recyclerView.setAdapter(new ClassRecyclerViewAdapter(this, lessonList, mTwoPane));
             textViewEmptyClassList.setVisibility(View.GONE);
         }
     }
@@ -120,7 +119,6 @@ public class ProfessorClassDetailActivity extends BaseActivity {
         private final ProfessorClassDetailActivity mParentActivity;
         private final boolean mTwoPane;
         ArrayList<Lesson> lessonList;
-        private int mExpandedPosition =-1;
 
         ClassRecyclerViewAdapter(ProfessorClassDetailActivity parent, ArrayList<Lesson> lessonList, boolean twoPane) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -ClassRecyclerViewAdapter-");
@@ -187,6 +185,7 @@ public class ProfessorClassDetailActivity extends BaseActivity {
             final TextView lessonTime;
             final TextView lessonAttendance;
             final RatingBar ratingBarProf;
+            final TextView ratingValueProf;
             final Button questionButtonProf;
             final Button reviewButtonProf;
 
@@ -197,6 +196,7 @@ public class ProfessorClassDetailActivity extends BaseActivity {
                 lessonInProgress = view.findViewById(R.id.lessonInProgress);
                 lessonDetail = view.findViewById(R.id.lessonDetail);
                 ratingBarProf = view.findViewById(R.id.ratingBarProf);
+                ratingValueProf = view.findViewById(R.id.ratingValueProf);
                 lessonTime = view.findViewById(R.id.lessonTime);
                 lessonAttendance = view.findViewById(R.id.attendance);
 
@@ -219,13 +219,21 @@ public class ProfessorClassDetailActivity extends BaseActivity {
                     lessonInProgress.setText(R.string.lesson_not_in_progress);
                     lessonInProgress.setEnabled(false);
                 }
-
-                String attendance = getString(R.string.attendance) + lesson.attendance;
                 ratingBarProf.setRating(lesson.rating);
+                ratingBarProf.setIsIndicator(true);
+
+                if(lesson.rating > 0) {
+                    String rating = Float.toString(lesson.rating);
+                    ratingValueProf.setText(rating);
+                } else {
+                    ratingValueProf.setText("0.0");
+                }
+
 
                 String lessonCalendarTime = getString(R.string.from) + lesson.getDate() + " - " + lesson.getTimeStringFromDate(lesson.timeStart) + " - " + getString(R.string.to) + " " +  lesson.getTimeStringFromDate(lesson.timeEnd);;
                 lessonTime.setText(lessonCalendarTime);
 
+                String attendance = getString(R.string.attendance) + lesson.attendance;
                 lessonAttendance.setText(attendance);
 
                 questionButtonProf.setOnClickListener(v -> {

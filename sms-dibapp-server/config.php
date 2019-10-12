@@ -21,6 +21,7 @@ define("ACTION_GET_LESSON_REVIEW", "getLessonReviews");
 define("ACTION_GET_AVERAGE_RATING", "getAverageRating");
 define("ACTION_GET_TOTAL_MEMBERS", "getTotalMembers");
 define("ACTION_GET_ATTENDANCE_CHART", "getAttedanceChart");
+define("ACTION_GET_CLASS_NAME", "getClassName");
 define("ACTION_NOT_DEFINED_TEXT", "Action not defined");
 define("ACTION_NOT_DEFINED_CODE", 101);
 

@@ -29,14 +29,13 @@ define("GET_PROFESSOR_CLASS_LIST_QUERY",
     ORDER BY className");
 define("GET_PROFESSOR_LESSON_LIST_QUERY", 
 	"SELECT l.ID as lessonID, l.timeStart as classLessonTimeStart, l.timeEnd as classLessonTimeEnd, l.summary as lessonSummary, l.description as lessonDescription, r.name as roomName, tmpAttendance.rating as classLessonReviewRating, tmpAttendance.attendance as classLessonReviewAttendance
-FROM 
+	FROM 
     class_room_lesson as l 
     JOIN  class_room_calendar as c ON c.ID = l.calendarID
     JOIN room as r on l.roomID = r.ID
     LEFT JOIN (SELECT a.lessonID as lessonID, AVG(rating) as rating, COUNT(*) as attendance FROM class_lesson_attendance_rating as a, class_room_lesson as l where a.lessonID = l.ID GROUP BY a.lessonID) as tmpAttendance on tmpAttendance.lessonID = l.ID 
-where c.classID = :classID
-    
-ORDER BY l.timeStart DESC");
+	WHERE c.classID = :classID
+	ORDER BY l.timeStart DESC");
 // Gets the list of active lessons
 define("GET_STUDENT_LESSON_LIST_QUERY", 
 	"SELECT crl.ID as lessonID, c.ID as classID, c.name as className, c.code as classCode, c.description as classDescription, c.year as classYear, c.semester as classSemester, crl.timeStart as classLessonTimeStart, crl.timeEnd as classLessonTimeEnd, crl.summary as classLessonSummary , crl.description as classLessonDescription 
@@ -60,6 +59,7 @@ define("GET_LESSON_REVIEW", "SELECT rating, summary, review FROM class_lesson_at
 define("GET_AVERAGE_RATING", "SELECT AVG(cla.rating) AS avgrating FROM class_room_calendar AS crc JOIN class_room_lesson AS crl JOIN class_lesson_attendance_rating AS cla WHERE crc.ID = crl.calendarID AND crl.ID = cla.lessonID AND crc.classID = ?");
 define("GET_TOTAL_MEMBERS", "SELECT COUNT(*) as count FROM student_career WHERE classID = ?");
 define("GET_ATTENDANCE_CHART", "SELECT COUNT(cla.ID) AS attendance, DATE_FORMAT(crl.timeStart, '%d/%m/%Y') AS date FROM class_room_calendar AS crc JOIN class_room_lesson AS crl JOIN class_lesson_attendance_rating AS cla WHERE crc.ID = crl.calendarID AND crl.ID = cla.lessonID AND crc.classID = ? GROUP BY crl.ID ORDER BY crl.timeStart");
+define("GET_CLASS_NAME_QUERY", "SELECT name as className FROM class WHERE ID = ?");	  
 	  
 class Response {
 	
@@ -280,6 +280,13 @@ function getClassList(int $professorID) {
 	$stmt = $connection->prepare(GET_PROFESSOR_CLASS_LIST_QUERY);
 	$stmt->execute([$professorID]);
 	$response = $stmt->fetchAll(PDO::FETCH_OBJ);
+	return $response;
+}
+function getClassName(int $classID) {
+	global $connection;
+	$stmt = $connection->prepare(GET_CLASS_NAME_QUERY);
+	$stmt->execute([$classID]);
+	$response = $stmt->fetch(PDO::FETCH_OBJ);
 	return $response;
 }
 

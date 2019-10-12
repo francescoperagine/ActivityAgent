@@ -69,6 +69,7 @@ public final class Constants {
     static final String GET_TOTAL_MEMBERS = "getTotalMembers";
     static final String GET_ATTENDANCE_CHART = "getAttedanceChart";
     static final String CHECK_EXISTING_EVALUATE = "checkEvaluatedLesson";
+    static final String GET_CLASS_NAME = "getClassName";
 
     // DB STUDENT_CAREER TABLE ATTRIBUTES
 

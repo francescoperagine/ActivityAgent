@@ -29,11 +29,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:clickable="false"
-            android:contextClickable="false"
+            android:isIndicator="true"
             android:numStars="5"
             android:progressTint="#8BC34A"
-            android:rating="2"
             android:secondaryProgressTint="#65B80C"
             android:stepSize="0.1"
             app:layout_constraintEnd_toEndOf="parent"
@@ -92,6 +90,15 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/lessonTime" />
+
+        <TextView
+            android:id="@+id/ratingValueProf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/ratingBarProf"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ratingBarProf"
+            app:layout_constraintTop_toTopOf="@+id/ratingBarProf" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

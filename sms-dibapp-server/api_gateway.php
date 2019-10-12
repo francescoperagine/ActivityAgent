@@ -54,6 +54,9 @@ if(isset($input[ACTION])){
 		case ACTION_GET_LESSON_REVIEW:
 			$response = getLessonReviews($input);
 			break;
+		case ACTION_GET_CLASS_NAME:
+			$response = getClassName($input[KEY_CLASS_ID]);
+			break;
 		case ACTION_GET_AVERAGE_RATING:
 			$response = getAverageRating($input);
 			break;		

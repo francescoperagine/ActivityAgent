@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -32,19 +33,23 @@ public class StatsActivity extends BaseActivity {
 
     BarChart barChart;
     RatingBar rateBar;
-    TextView totalNumText;
+    TextView totalNumText, rateValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         rateBar = findViewById(R.id.averageRate);
+        rateValue = findViewById(R.id.ratingValueProfStats);
         totalNumText = findViewById(R.id.totalNumber);
-        barChart = (BarChart) findViewById(R.id.barGraph);
+        barChart = findViewById(R.id.barGraph);
 
         //QUERY
 
-        int classID = getIntent().getExtras().getInt(KEY_CLASS_ID);
+        int classID = getIntent().getIntExtra(Constants.KEY_CLASS_ID, 0);
+        String className = getIntent().getStringExtra(Constants.KEY_CLASS_NAME);
+
+        getSupportActionBar().setTitle(className);
 
         HashMap<String, String> paramsAverage = new HashMap<>();
         paramsAverage.put(Constants.KEY_ACTION, Constants.GET_AVERAGE_RATING);
@@ -54,6 +59,12 @@ public class StatsActivity extends BaseActivity {
         try {
             float rate = (float) responseAverage.getJSONObject(0).optDouble("avgrating");
             rateBar.setRating(rate);
+            if((int) rate > 0) {
+                String rating = Float.toString(rate);
+                rateValue.setText(rating);
+            } else {
+                rateValue.setText("0.0");
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
