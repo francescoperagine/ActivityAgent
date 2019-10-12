@@ -16,6 +16,11 @@ define("ACTION_SET_ATTENDANCE", "setAttendance");
 define("ACTION_IS_USER_ATTENDING_LESSON", "isUserAttendingLesson");
 define("ACTION_SET_REVIEW", "sendReview");
 define("ACTION_CHECK_LESSON_EVALUATED", "checkEvaluatedLesson");
+define("ACTION_GET_LESSON_QUESTION", "getLessonQuestions");
+define("ACTION_GET_LESSON_REVIEW", "getLessonReviews");
+define("ACTION_GET_AVERAGE_RATING", "getAverageRating");
+define("ACTION_GET_TOTAL_MEMBERS", "getTotalMembers");
+define("ACTION_GET_ATTENDANCE_CHART", "getAttedanceChart");
 define("ACTION_NOT_DEFINED_TEXT", "Action not defined");
 define("ACTION_NOT_DEFINED_CODE", 101);
 

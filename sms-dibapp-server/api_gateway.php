@@ -48,6 +48,21 @@ if(isset($input[ACTION])){
 		case ACTION_CHECK_LESSON_EVALUATED:
 			$response = checkEvaluatedLesson($input);
 			break;
+		case ACTION_GET_LESSON_QUESTION:
+			$response = getLessonQuestions($input);
+			break;
+		case ACTION_GET_LESSON_REVIEW:
+			$response = getLessonReviews($input);
+			break;
+		case ACTION_GET_AVERAGE_RATING:
+			$response = getAverageRating($input);
+			break;		
+		case ACTION_GET_TOTAL_MEMBERS:
+			$response = getTotalMembers($input);
+			break;		
+		case ACTION_GET_ATTENDANCE_CHART:
+			$response = getAttedanceChart($input);
+			break;
 		default: 
 			$response = new Response(ACTION_NOT_DEFINED_TEXT, ACTION_NOT_DEFINED_CODE); 
 			break;

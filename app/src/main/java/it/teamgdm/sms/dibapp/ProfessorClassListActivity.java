@@ -57,40 +57,6 @@ public class ProfessorClassListActivity extends BaseActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreateOptionsMenu-");
-        getMenuInflater().inflate(R.menu.stats_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -onOptionsItemSelected-");
-        int id = item.getItemId();
-        switch (id) {
-            case R.id.profileButton:
-                Intent profileIntent = new Intent(this, ProfileActivity.class);
-                startActivity(profileIntent);
-                return true;
-            case R.id.settingsButton:
-                Intent settingIntent = new Intent(this, SettingsActivity.class);
-                startActivity(settingIntent);
-                return true;
-            case R.id.logoutButton:
-                FragmentManager fragmentManager = this.getSupportFragmentManager();
-                LogoutDialogFragment logoutDialogFragment = new LogoutDialogFragment(this);
-                logoutDialogFragment.show(fragmentManager, "logout_fragment");
-                return true;
-            case R.id.statsButton:
-                Intent statsIntent = new Intent(this, StatsActivity.class);
-                startActivity(statsIntent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
     protected int getLayoutResource() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -getLayoutResource-");
         return R.layout.item_list_activity;
