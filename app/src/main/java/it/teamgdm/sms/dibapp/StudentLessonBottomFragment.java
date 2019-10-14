@@ -78,7 +78,7 @@ public class StudentLessonBottomFragment extends Fragment {
         buttonQuestion.setOnClickListener(questionButtonListener);
 
         classLessonInProgress.setBackgroundColor(Color.GREEN);
-        classLessonInProgress.setText(R.string.classLessonInProgress);
+        classLessonInProgress.setText(R.string.lessonInProgress);
 
         buttonAttendanceChecker();
 

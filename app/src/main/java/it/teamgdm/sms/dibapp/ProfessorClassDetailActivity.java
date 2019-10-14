@@ -3,6 +3,7 @@ package it.teamgdm.sms.dibapp;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,7 +15,6 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONArray;
@@ -73,19 +73,6 @@ public class ProfessorClassDetailActivity extends BaseActivity {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onOptionsItemSelected-");
         int id = item.getItemId();
         switch (id) {
-            case R.id.profileButton:
-                Intent profileIntent = new Intent(this, ProfileActivity.class);
-                startActivity(profileIntent);
-                return true;
-            case R.id.settingsButton:
-                Intent settingIntent = new Intent(this, SettingsActivity.class);
-                startActivity(settingIntent);
-                return true;
-            case R.id.logoutButton:
-                FragmentManager fragmentManager = this.getSupportFragmentManager();
-                LogoutDialogFragment logoutDialogFragment = new LogoutDialogFragment(this);
-                logoutDialogFragment.show(fragmentManager, "logout_fragment");
-                return true;
             case R.id.statsButton:
                 Intent statsIntent = new Intent(this, StatsActivity.class);
                 statsIntent.putExtra(Constants.KEY_CLASS_ID, classID);
@@ -166,7 +153,7 @@ public class ProfessorClassDetailActivity extends BaseActivity {
                 // Change the state
                 lesson.setExpanded(!expanded);
                 // Notify the adapter that item has changed
-            //    TransitionManager.beginDelayedTransition(recyclerView);
+                TransitionManager.beginDelayedTransition(recyclerView);
                 notifyItemChanged(position);
             });
             holder.itemView.setTag(lessonList.get(position).lessonID);
@@ -197,7 +184,7 @@ public class ProfessorClassDetailActivity extends BaseActivity {
                 lessonDetail = view.findViewById(R.id.lessonDetail);
                 ratingBarProf = view.findViewById(R.id.ratingBarProf);
                 ratingValueProf = view.findViewById(R.id.ratingValueProf);
-                lessonTime = view.findViewById(R.id.lessonTime);
+                lessonTime = view.findViewById(R.id.professorLessonTime);
                 lessonAttendance = view.findViewById(R.id.attendance);
 
                 questionButtonProf = view.findViewById(R.id.questionButton);
@@ -206,11 +193,16 @@ public class ProfessorClassDetailActivity extends BaseActivity {
 
             void bind(Lesson lesson) {
                 Log.i(Constants.TAG, getClass().getSimpleName() + " -bind- lesson" + lesson);
+
+                String title = getString(R.string.lesson_of) + " " + lesson.getDate();
+                lessonTitle.setText(title);
+
+                String lessonCalendarTime = getString(R.string.from) + " " + lesson.getTimeStringFromDate(lesson.timeStart) + " " + getString(R.string.to) + " " +  lesson.getTimeStringFromDate(lesson.timeEnd);
+                lessonTime.setText(lessonCalendarTime);
+
                 boolean expanded = lesson.isExpanded();
                 lessonDetail.setVisibility(expanded ? View.VISIBLE : View.GONE);
 
-                String title = "ID " + lesson.lessonID + " - " + getString(R.string.lesson_of) + " " + lesson.getDate();
-                lessonTitle.setText(title);
                 //checking if lesson is in progress
                 if(lesson.isInProgress()) {
                     lessonInProgress.setText(R.string.lesson_in_progress);
@@ -229,10 +221,6 @@ public class ProfessorClassDetailActivity extends BaseActivity {
                     ratingValueProf.setText("0.0");
                 }
 
-
-                String lessonCalendarTime = getString(R.string.from) + lesson.getDate() + " - " + lesson.getTimeStringFromDate(lesson.timeStart) + " - " + getString(R.string.to) + " " +  lesson.getTimeStringFromDate(lesson.timeEnd);;
-                lessonTime.setText(lessonCalendarTime);
-
                 String attendance = getString(R.string.attendance) + lesson.attendance;
                 lessonAttendance.setText(attendance);
 
@@ -240,6 +228,7 @@ public class ProfessorClassDetailActivity extends BaseActivity {
                     // Perform action on click
                     Intent questionsListIntent = new Intent(getApplicationContext(), ProfessorListQuestionActivity.class);
                     questionsListIntent.putExtra(Constants.KEY_LESSON_ID, lesson.lessonID);
+                    questionsListIntent.putExtra(Constants.KEY_LESSON_DATE, lesson.getDate());
                     startActivity(questionsListIntent);
                 });
 
@@ -247,6 +236,7 @@ public class ProfessorClassDetailActivity extends BaseActivity {
                     // Perform action on click
                     Intent reviewsListIntent = new Intent(getApplicationContext(), ProfessorListReviewActivity.class);
                     reviewsListIntent.putExtra(Constants.KEY_LESSON_ID, lesson.lessonID);
+                    reviewsListIntent.putExtra(Constants.KEY_LESSON_DATE, lesson.getDate());
                     startActivity(reviewsListIntent);
                 });
             }

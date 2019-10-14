@@ -11,32 +11,52 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:padding="@dimen/text_margin"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:paddingTop="@dimen/textDefaultPadding"
+        android:paddingBottom="@dimen/textDefaultPadding"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/professorLessonTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/lessonDetail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="top"
+        android:layout_margin="@dimen/textDefaultPadding"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:context=".ProfessorClassDetailActivity"
         tools:ignore="MergeRootFrame">
 
+        <TextView
+            android:id="@+id/lessonInProgress"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/textDefaultPadding"
+            android:clickable="false"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <RatingBar
             android:id="@+id/ratingBarProf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
             android:isIndicator="true"
             android:numStars="5"
-            android:progressTint="#8BC34A"
+            android:progressTint="@android:color/holo_orange_light"
             android:secondaryProgressTint="#65B80C"
             android:stepSize="0.1"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/attendance" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/questionButton"
@@ -61,35 +81,14 @@
             app:layout_constraintTop_toBottomOf="@+id/ratingBarProf" />
 
         <TextView
-            android:id="@+id/lessonInProgress"
+            android:id="@+id/attendance"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:clickable="false"
-            android:gravity="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/lessonTime"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/textDefaultPadding"
             android:gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/lessonInProgress" />
-
-        <TextView
-            android:id="@+id/attendance"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:gravity="center"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lessonTime" />
 
         <TextView
             android:id="@+id/ratingValueProf"

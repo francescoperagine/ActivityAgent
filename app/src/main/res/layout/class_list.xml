@@ -22,5 +22,5 @@
         android:id="@+id/class_list_empty"
         android:gravity="center"
         android:visibility="gone"
-        android:text="@string/class_list_empty_text"/>
+        android:text="@string/class_no_lesson_scheduled_text"/>
 </LinearLayout>

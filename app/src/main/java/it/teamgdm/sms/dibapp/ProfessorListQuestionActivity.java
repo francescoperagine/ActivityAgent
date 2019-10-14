@@ -23,6 +23,9 @@ public class ProfessorListQuestionActivity extends BaseActivity {
         ListView listView= findViewById(R.id.listview);
 
         int lessonID = getIntent().getIntExtra(Constants.KEY_LESSON_ID, 0);
+        String date = getIntent().getStringExtra(Constants.KEY_LESSON_DATE);
+
+        getSupportActionBar().setTitle(getResources().getString(R.string.question_title) + " - " + date);
 
         //query
         JSONArray response = DAO.getLessonQuestion(lessonID);

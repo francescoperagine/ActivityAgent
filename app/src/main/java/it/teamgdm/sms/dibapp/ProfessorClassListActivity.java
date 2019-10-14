@@ -5,14 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONArray;
@@ -52,7 +49,8 @@ public class ProfessorClassListActivity extends BaseActivity {
 
         recyclerView = findViewById(R.id.class_list);
         textViewEmptyClassList = findViewById(R.id.class_list_empty);
-
+        disableBackButton();
+        getSupportActionBar().setTitle(getTitle() + " - " + Constants.KEY_CLASS_LIST);
         setupRecyclerView();
     }
 

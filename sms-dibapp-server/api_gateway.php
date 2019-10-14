@@ -28,7 +28,7 @@ if(isset($input[ACTION])){
 			$response = getClassList($input[KEY_USER_ID]);
 			break;
 		case ACTION_GET_STUDENT_LESSON_LIST: 
-			$response = getStudentLessonList($input[KEY_USER_ID]);
+			$response = getStudentLessonList($input[KEY_USER_ID], $input[KEY_LESSON_DATE]);
 			break;
 		case ACTION_GET_PROFESSOR_LESSON_LIST: 
 			$response = getProfessorLessonList($input[KEY_CLASS_ID]);

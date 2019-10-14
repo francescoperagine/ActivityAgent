@@ -80,10 +80,10 @@
     <string name="unknown_geofence_transition">Geofence - unknown transition.</string>
     <string name="geofence_permissions_ask">Allow access to your location.</string>
     <string name="geofence_is_up">Geofence up</string>
-    <string name="class_list_empty_text">No classes scheduled for today.</string>
+    <string name="lesson_list_empty_text">No lessons scheduled for today.</string>
     <string name="noClassDescriptionSetText">No description set for this class.</string>
-    <string name="classLessonInProgress">Lesson in progress...</string>
-    <string name="classLessonNotInProgress">No lesson at this time.</string>
+    <string name="lessonInProgress">Lesson in progress…</string>
+    <string name="lessonNotInProgress">No lesson at this time.</string>
     <string name="classYearText">Year</string>
     <string name="classSemesterText">Semester</string>
     <string name="lessonStartAt">Start</string>
@@ -106,7 +106,7 @@
     <string name="review_not_sent">Review not sent.</string>
     <string name="review_summary_text">Summary</string>
     <string name="review_description_text">Review</string>
-    <string name="questionText">Write your question here.</string>
+    <string name="question_write_yours_here_text">Write your question here.</string>
     <string name="no_geofence_permission_text">Geofence permissions are not granted.</string>
     <string name="user_registration_ok">The user has been registered.</string>
     <string name="user_registration_not_ok">The user has not been registered.</string>
@@ -118,6 +118,10 @@
     <string name="average_text_string">Average rating</string>
     <string name="total_member_text_string">Number of participants</string>
     <string name="distribution_text_string">Attendance Distribution</string>
+    <string name="question_title">Questions</string>
+    <string name="review_title">Reviews</string>
+    <string name="class_no_lesson_scheduled_text">No lessons scheduled for this class.</string>
+    <string name="lesson_today_schedule">Lessons of </string>
 
 
 </resources>

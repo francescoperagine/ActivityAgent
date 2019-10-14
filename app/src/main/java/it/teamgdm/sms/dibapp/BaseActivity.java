@@ -13,14 +13,26 @@ import androidx.fragment.app.FragmentManager;
 public abstract class BaseActivity extends AppCompatActivity {
 
     Toolbar toolbar;
+    private boolean backButtonEnabled;
 
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-");
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResource());
         toolbar = findViewById(R.id.toolbar);
-
         setSupportActionBar(toolbar);
+        backButtonEnabled = true;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(backButtonEnabled) {
+            if(getSupportActionBar() != null) {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                getSupportActionBar().setDisplayShowHomeEnabled(true);
+            }
+        }
     }
 
     abstract int getLayoutResource();
@@ -55,4 +67,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        this.onBackPressed();
+        return true;
+    }
+
+    protected void disableBackButton() {
+        backButtonEnabled = false;
+    };
 }

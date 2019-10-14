@@ -25,6 +25,8 @@ public class RegisterActivity extends BaseActivity {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-");
         super.onCreate(savedInstanceState);
 
+        disableBackButton();
+
         editTextName = findViewById(R.id.name);
         editTextSurname = findViewById(R.id.surname);
         editTextSerialNumber = findViewById(R.id.ssn);

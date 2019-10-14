@@ -44,7 +44,7 @@ define("GET_STUDENT_LESSON_LIST_QUERY",
 	AND c.ID = crc.classID
 	AND crc.ID = crl.calendarID
 	AND s.studentID = :studentID
-	GROUP BY className
+	AND crl.timeStart LIKE :date
 	ORDER BY c.year, className");
 define("GET_USER_DETAILS_QUERY", "SELECT u.ID as userID, u.name as name, u.surname as surname, u.email as email, u.registrationDate as registrationDate, r.name as roleName FROM user as u, role as r WHERE u.roleID = r.ID AND email = ?");
 
@@ -299,10 +299,11 @@ function getProfessorLessonList($classID) {
 	return $response;
 }
 
-function getStudentLessonList(int $userID) {
+function getStudentLessonList(int $userID, string $date) {
 	global $connection;
 	$stmt = $connection->prepare(GET_STUDENT_LESSON_LIST_QUERY);
 	$stmt->bindValue(':studentID', $userID);
+	$stmt->bindValue(':date', $date);
 	$stmt->execute();
 	$response = $stmt->fetchAll(PDO::FETCH_OBJ);
 	return $response;

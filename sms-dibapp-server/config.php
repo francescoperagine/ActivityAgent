@@ -49,6 +49,7 @@ define("KEY_CLASS_LESSON_ATTENDANCE", "attendance");
 define("KEY_CLASS_LESSON_REVIEW_SUMMARY", "reviewSummary");
 define("KEY_CLASS_LESSON_REVIEW_TEXT", "reviewText");
 define("KEY_CLASS_LESSON_REVIEW_RATING", "reviewRating");
+define("KEY_LESSON_DATE", "lessonDate");
 
 // Response
 

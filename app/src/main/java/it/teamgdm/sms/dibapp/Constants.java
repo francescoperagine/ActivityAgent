@@ -2,6 +2,7 @@ package it.teamgdm.sms.dibapp;
 
 public final class Constants {
 
+    static final Object KEY_CLASS_LIST = "Courses";
     static final String KEY_GEOFENCE_LOCATION_UPDATE = "requestLocationUpdate";
     static final String HAS_GEOFENCE_PERMISSION = "hasGeofencePermission";
     static final String LESSON_NEW_QUESTION = "lessonNewQuestion";
@@ -79,7 +80,7 @@ public final class Constants {
     static final String KEY_CLASS_DESCRIPTION = "classDescription";
     static final String KEY_LESSON_YEAR = "classYear";
     static final String KEY_LESSON_SEMESTER = "classSemester";
-    static final String KEY_CLASS_LESSON_DATE = "classLessonDate";
+    static final String KEY_LESSON_DATE = "lessonDate";
     static final String KEY_LESSON_TIME_START = "classLessonTimeStart";
     static final String KEY_LESSON_TIME_END ="classLessonTimeEnd";
     static final String KEY_LESSON_SUMMARY = "classLessonSummary";
