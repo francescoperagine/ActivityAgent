@@ -33,6 +33,8 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:isIndicator="true"
+            android:progressTint="@color/ratingColorPrimary"
+            android:secondaryProgressTint="@color/ratingColorPrimary"
             app:layout_constraintBottom_toTopOf="@id/totalText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -41,6 +41,8 @@
         android:layout_margin="@dimen/text_margin"
         android:isIndicator="false"
         android:numStars="5"
+        android:progressTint="@color/ratingColorPrimary"
+        android:secondaryProgressTint="@color/ratingColorPrimary"
         android:stepSize="1"
         app:layout_constraintBottom_toTopOf="@id/reviewSummary"
         app:layout_constraintEnd_toEndOf="parent"
