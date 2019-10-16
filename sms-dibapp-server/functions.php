@@ -29,14 +29,13 @@ define("GET_PROFESSOR_CLASS_LIST_QUERY",
     ORDER BY className");
 define("GET_PROFESSOR_LESSON_LIST_QUERY", 
 	"SELECT l.ID as lessonID, l.timeStart as classLessonTimeStart, l.timeEnd as classLessonTimeEnd, l.summary as lessonSummary, l.description as lessonDescription, r.name as roomName, tmpAttendance.rating as classLessonReviewRating, tmpAttendance.attendance as classLessonReviewAttendance
-FROM 
+	FROM 
     class_room_lesson as l 
     JOIN  class_room_calendar as c ON c.ID = l.calendarID
     JOIN room as r on l.roomID = r.ID
     LEFT JOIN (SELECT a.lessonID as lessonID, AVG(rating) as rating, COUNT(*) as attendance FROM class_lesson_attendance_rating as a, class_room_lesson as l where a.lessonID = l.ID GROUP BY a.lessonID) as tmpAttendance on tmpAttendance.lessonID = l.ID 
-where c.classID = :classID
-    
-ORDER BY l.timeStart DESC");
+	WHERE c.classID = :classID
+	ORDER BY l.timeStart DESC");
 // Gets the list of active lessons
 define("GET_STUDENT_LESSON_LIST_QUERY", 
 	"SELECT crl.ID as lessonID, c.ID as classID, c.name as className, c.code as classCode, c.description as classDescription, c.year as classYear, c.semester as classSemester, crl.timeStart as classLessonTimeStart, crl.timeEnd as classLessonTimeEnd, crl.summary as classLessonSummary , crl.description as classLessonDescription 
@@ -45,7 +44,7 @@ define("GET_STUDENT_LESSON_LIST_QUERY",
 	AND c.ID = crc.classID
 	AND crc.ID = crl.calendarID
 	AND s.studentID = :studentID
-	GROUP BY className
+	AND crl.timeStart LIKE :date
 	ORDER BY c.year, className");
 define("GET_USER_DETAILS_QUERY", "SELECT u.ID as userID, u.name as name, u.surname as surname, u.email as email, u.registrationDate as registrationDate, r.name as roleName FROM user as u, role as r WHERE u.roleID = r.ID AND email = ?");
 
@@ -54,7 +53,13 @@ define("SET_ATTENDANCE_QUERY", "INSERT INTO class_lesson_attendance_rating (stud
 define("UNSET_ATTENDANCE_QUERY", "DELETE FROM class_lesson_attendance_rating WHERE studentID = :userID AND lessonID = :lessonID");
 define("IS_USER_ATTENDING_LESSON_QUERY", "SELECT COUNT(*) as attendance FROM class_lesson_attendance_rating WHERE studentID = :userID AND lessonID = :lessonID");
 define("SET_CLASS_LESSON_REVIEW_QUERY", "UPDATE class_lesson_attendance_rating SET summary = :summary, review = :review, rating = :rating WHERE studentID = :userID AND lessonID = :lessonID");
-define("CHECK_IF_LESSON_ALREADY_EVALUATED", "SELECT count(*) as count FROM class_lesson_attendance_rating WHERE studentID = :studentID AND lessonID = :lessonID AND rating IS NOT NULL");
+define("CHECK_IF_LESSON_ALREADY_EVALUATED", "SELECT count(*) as count, summary, review, rating FROM class_lesson_attendance_rating WHERE studentID = :studentID AND lessonID = :lessonID AND rating IS NOT NULL");
+define("GET_LESSON_QUESTION", "SELECT question FROM class_lesson_question WHERE lessonID = ?");
+define("GET_LESSON_REVIEW", "SELECT rating, summary, review FROM class_lesson_attendance_rating WHERE lessonID = ? and rating IS NOT NULL");
+define("GET_AVERAGE_RATING", "SELECT AVG(cla.rating) AS avgrating FROM class_room_calendar AS crc JOIN class_room_lesson AS crl JOIN class_lesson_attendance_rating AS cla WHERE crc.ID = crl.calendarID AND crl.ID = cla.lessonID AND crc.classID = ?");
+define("GET_TOTAL_MEMBERS", "SELECT COUNT(*) as count FROM student_career WHERE classID = ?");
+define("GET_ATTENDANCE_CHART", "SELECT COUNT(cla.ID) AS attendance, DATE_FORMAT(crl.timeStart, '%d/%m/%Y') AS date FROM class_room_calendar AS crc JOIN class_room_lesson AS crl JOIN class_lesson_attendance_rating AS cla WHERE crc.ID = crl.calendarID AND crl.ID = cla.lessonID AND crc.classID = ? GROUP BY crl.ID ORDER BY crl.timeStart");
+define("GET_CLASS_NAME_QUERY", "SELECT name as className FROM class WHERE ID = ?");	  
 	  
 class Response {
 	
@@ -277,6 +282,13 @@ function getClassList(int $professorID) {
 	$response = $stmt->fetchAll(PDO::FETCH_OBJ);
 	return $response;
 }
+function getClassName(int $classID) {
+	global $connection;
+	$stmt = $connection->prepare(GET_CLASS_NAME_QUERY);
+	$stmt->execute([$classID]);
+	$response = $stmt->fetch(PDO::FETCH_OBJ);
+	return $response;
+}
 
 function getProfessorLessonList($classID) {
 	global $connection;
@@ -287,10 +299,11 @@ function getProfessorLessonList($classID) {
 	return $response;
 }
 
-function getStudentLessonList(int $userID) {
+function getStudentLessonList(int $userID, string $date) {
 	global $connection;
 	$stmt = $connection->prepare(GET_STUDENT_LESSON_LIST_QUERY);
 	$stmt->bindValue(':studentID', $userID);
+	$stmt->bindValue(':date', $date);
 	$stmt->execute();
 	$response = $stmt->fetchAll(PDO::FETCH_OBJ);
 	return $response;
@@ -302,6 +315,46 @@ function checkEvaluatedLesson(array $input) {
 	$stmt->bindValue(':studentID', $input[KEY_USER_ID]);
 	$stmt->bindValue(':lessonID', $input[KEY_CLASS_LESSON_ID]);
 	$stmt->execute();
+	$response = $stmt->fetchAll(PDO::FETCH_OBJ);
+	return $response;
+}
+
+function getLessonQuestions(array $input) {
+	global $connection;
+	$stmt = $connection->prepare(GET_LESSON_QUESTION);
+	$stmt->execute([$input[KEY_CLASS_LESSON_ID]]);
+	$response = $stmt->fetchAll(PDO::FETCH_OBJ);
+	return $response;
+}
+
+function getLessonReviews(array $input) {
+	global $connection;
+	$stmt = $connection->prepare(GET_LESSON_REVIEW);
+	$stmt->execute([$input[KEY_CLASS_LESSON_ID]]);
+	$response = $stmt->fetchAll(PDO::FETCH_OBJ);
+	return $response;
+}
+
+function getAverageRating(array $input){
+	global $connection;
+	$stmt = $connection->prepare(GET_AVERAGE_RATING);
+	$stmt->execute([$input[KEY_CLASS_ID]]);
+	$response = $stmt->fetchAll(PDO::FETCH_OBJ);
+	return $response;
+}
+
+function getTotalMembers(array $input){
+	global $connection;
+	$stmt = $connection->prepare(GET_TOTAL_MEMBERS);
+	$stmt->execute([$input[KEY_CLASS_ID]]);
+	$response = $stmt->fetchAll(PDO::FETCH_OBJ);
+	return $response;
+}
+
+function getAttedanceChart(array $input){
+	global $connection;
+	$stmt = $connection->prepare(GET_ATTENDANCE_CHART);
+	$stmt->execute([$input[KEY_CLASS_ID]]);
 	$response = $stmt->fetchAll(PDO::FETCH_OBJ);
 	return $response;
 }

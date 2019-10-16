@@ -11,12 +11,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.ConcurrentNavigableMap;
 import java.util.concurrent.ExecutionException;
 
 class DAO {
 
     static JSONArray getFromDB(Map params) {
-        Log.i(Constants.TAG, DAO.class.getSimpleName() + " -getFromDB-");
+        Log.i(Constants.TAG, DAO.class.getSimpleName() + " -getFromDB-" + params);
         JSONObject data = new JSONObject();
         JSONArray response = null;
         try {
@@ -56,7 +57,7 @@ class DAO {
     }
 
     static JSONArray getLessonList(int ID, String roleName) {
-        Log.i(Constants.TAG, DAO.class.getSimpleName() + " -getLessonList-" + roleName);
+        Log.i(Constants.TAG, DAO.class.getSimpleName() + " -getLessonList-");
         HashMap<String, String> params = new HashMap<>();
         if(roleName.equals(Constants.KEY_ROLE_PROFESSOR)) {
             params.put(Constants.KEY_ACTION, Constants.GET_PROFESSOR_LESSON_LIST);
@@ -64,6 +65,9 @@ class DAO {
         } else {
             params.put(Constants.KEY_ACTION, Constants.GET_STUDENT_LESSON_LIST);
             params.put(Constants.KEY_USER_ID, String.valueOf(ID));
+
+            String date = new SimpleDateFormat(Constants.DATE_FORMAT, Locale.getDefault()).format(new Date()) + "%";
+            params.put(Constants.KEY_LESSON_DATE, date);
         }
         params.put(Constants.KEY_USER_ROLE_NAME, roleName);
         return getFromDB(params);
@@ -185,5 +189,19 @@ class DAO {
         params.put(Constants.KEY_ACTION, Constants.GET_LESSON_REVIEWS);
         params.put(Constants.KEY_LESSON_ID, String.valueOf(lessonID));
         return getFromDB(params);
+    }
+
+    static String getClassName(int classID) {
+        Log.i(Constants.TAG, DAO.class.getSimpleName() + " -getClassName- classID " + classID);
+        HashMap<String, String> params = new HashMap<>();
+        params.put(Constants.KEY_ACTION, Constants.GET_CLASS_NAME);
+        params.put(Constants.KEY_CLASS_ID, String.valueOf(classID));
+        String className = null;
+        try {
+            className = getFromDB(params).getJSONObject(0).getString(Constants.KEY_CLASS_NAME);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return className;
     }
 }

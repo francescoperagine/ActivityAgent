@@ -2,13 +2,28 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
     <TextView
-        android:id="@+id/studentContent"
+        android:id="@+id/studentLessonTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:padding="@dimen/text_margin"
+        android:paddingTop="@dimen/textDefaultPadding"
+        android:paddingBottom="@dimen/textDefaultPadding"
         android:textAppearance="?attr/textAppearanceListItem" />
+    <TextView
+        android:id="@+id/studentLessonTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="@dimen/textDefaultPadding"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="?android:attr/listDivider" />
 </LinearLayout>

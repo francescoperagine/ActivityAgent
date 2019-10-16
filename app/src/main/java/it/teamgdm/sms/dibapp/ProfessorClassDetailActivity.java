@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -26,15 +28,17 @@ public class ProfessorClassDetailActivity extends BaseActivity {
     Bundle savedInstanceState;
     RecyclerView recyclerView;
     TextView textViewEmptyClassList;
+    int classID = 0;
+    String className;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-");
         super.onCreate(savedInstanceState);
         Intent fromClassListIntent = getIntent();
-        int classID = 0;
         if(fromClassListIntent.hasExtra(Constants.KEY_CLASS_ID)) {
             classID = fromClassListIntent.getIntExtra(Constants.KEY_CLASS_ID, 0);
+            className = DAO.getClassName(classID);
             Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-classID " + classID);
         }
 
@@ -45,10 +49,9 @@ public class ProfessorClassDetailActivity extends BaseActivity {
             // activity should be in two-pane mode.
             mTwoPane = true;
         }
-
         recyclerView = findViewById(R.id.class_list);
         textViewEmptyClassList = findViewById(R.id.class_list_empty);
-
+        getSupportActionBar().setTitle(className);
         setupRecyclerView(classID);
     }
 
@@ -56,6 +59,29 @@ public class ProfessorClassDetailActivity extends BaseActivity {
     protected int getLayoutResource() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -getLayoutResource-");
         return R.layout.item_list_activity;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreateOptionsMenu-");
+        getMenuInflater().inflate(R.menu.stats_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onOptionsItemSelected-");
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.statsButton:
+                Intent statsIntent = new Intent(this, StatsActivity.class);
+                statsIntent.putExtra(Constants.KEY_CLASS_ID, classID);
+                statsIntent.putExtra(Constants.KEY_CLASS_NAME, className);
+                startActivity(statsIntent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void setupRecyclerView(int classID) {
@@ -69,9 +95,9 @@ public class ProfessorClassDetailActivity extends BaseActivity {
             recyclerView.setVisibility(View.GONE);
             textViewEmptyClassList.setVisibility(View.VISIBLE);
         } else {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -setupRecyclerView-");
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -setupRecyclerView- classname " + lessonList);
             recyclerView.setVisibility(View.VISIBLE);
-            recyclerView.setAdapter(new ProfessorClassDetailActivity.ClassRecyclerViewAdapter(this, lessonList, mTwoPane));
+            recyclerView.setAdapter(new ClassRecyclerViewAdapter(this, lessonList, mTwoPane));
             textViewEmptyClassList.setVisibility(View.GONE);
         }
     }
@@ -80,7 +106,6 @@ public class ProfessorClassDetailActivity extends BaseActivity {
         private final ProfessorClassDetailActivity mParentActivity;
         private final boolean mTwoPane;
         ArrayList<Lesson> lessonList;
-        private int mExpandedPosition =-1;
 
         ClassRecyclerViewAdapter(ProfessorClassDetailActivity parent, ArrayList<Lesson> lessonList, boolean twoPane) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -ClassRecyclerViewAdapter-");
@@ -128,7 +153,7 @@ public class ProfessorClassDetailActivity extends BaseActivity {
                 // Change the state
                 lesson.setExpanded(!expanded);
                 // Notify the adapter that item has changed
-            //    TransitionManager.beginDelayedTransition(recyclerView);
+                TransitionManager.beginDelayedTransition(recyclerView);
                 notifyItemChanged(position);
             });
             holder.itemView.setTag(lessonList.get(position).lessonID);
@@ -147,6 +172,7 @@ public class ProfessorClassDetailActivity extends BaseActivity {
             final TextView lessonTime;
             final TextView lessonAttendance;
             final RatingBar ratingBarProf;
+            final TextView ratingValueProf;
             final Button questionButtonProf;
             final Button reviewButtonProf;
 
@@ -157,7 +183,8 @@ public class ProfessorClassDetailActivity extends BaseActivity {
                 lessonInProgress = view.findViewById(R.id.lessonInProgress);
                 lessonDetail = view.findViewById(R.id.lessonDetail);
                 ratingBarProf = view.findViewById(R.id.ratingBarProf);
-                lessonTime = view.findViewById(R.id.lessonTime);
+                ratingValueProf = view.findViewById(R.id.ratingValueProf);
+                lessonTime = view.findViewById(R.id.professorLessonTime);
                 lessonAttendance = view.findViewById(R.id.attendance);
 
                 questionButtonProf = view.findViewById(R.id.questionButton);
@@ -166,11 +193,16 @@ public class ProfessorClassDetailActivity extends BaseActivity {
 
             void bind(Lesson lesson) {
                 Log.i(Constants.TAG, getClass().getSimpleName() + " -bind- lesson" + lesson);
+
+                String title = getString(R.string.lesson_of) + " " + lesson.getDate();
+                lessonTitle.setText(title);
+
+                String lessonCalendarTime = getString(R.string.from) + " " + lesson.getTimeStringFromDate(lesson.timeStart) + " " + getString(R.string.to) + " " +  lesson.getTimeStringFromDate(lesson.timeEnd);
+                lessonTime.setText(lessonCalendarTime);
+
                 boolean expanded = lesson.isExpanded();
                 lessonDetail.setVisibility(expanded ? View.VISIBLE : View.GONE);
 
-                String title = "ID " + lesson.lessonID + " - " + getString(R.string.lesson_of) + " " + lesson.getDate();
-                lessonTitle.setText(title);
                 //checking if lesson is in progress
                 if(lesson.isInProgress()) {
                     lessonInProgress.setText(R.string.lesson_in_progress);
@@ -179,19 +211,24 @@ public class ProfessorClassDetailActivity extends BaseActivity {
                     lessonInProgress.setText(R.string.lesson_not_in_progress);
                     lessonInProgress.setEnabled(false);
                 }
+                ratingBarProf.setRating(lesson.rating);
+                ratingBarProf.setIsIndicator(true);
+
+                if(lesson.rating > 0) {
+                    String rating = Float.toString(lesson.rating);
+                    ratingValueProf.setText(rating);
+                } else {
+                    ratingValueProf.setText("0.0");
+                }
 
                 String attendance = getString(R.string.attendance) + lesson.attendance;
-                ratingBarProf.setRating(lesson.rating);
-
-                String lessonCalendarTime = getString(R.string.from) + lesson.getDate() + " - " + lesson.getTimeStringFromDate(lesson.timeStart) + " - " + getString(R.string.to) + " " +  lesson.getTimeStringFromDate(lesson.timeEnd);;
-                lessonTime.setText(lessonCalendarTime);
-
                 lessonAttendance.setText(attendance);
 
                 questionButtonProf.setOnClickListener(v -> {
                     // Perform action on click
                     Intent questionsListIntent = new Intent(getApplicationContext(), ProfessorListQuestionActivity.class);
                     questionsListIntent.putExtra(Constants.KEY_LESSON_ID, lesson.lessonID);
+                    questionsListIntent.putExtra(Constants.KEY_LESSON_DATE, lesson.getDate());
                     startActivity(questionsListIntent);
                 });
 
@@ -199,6 +236,7 @@ public class ProfessorClassDetailActivity extends BaseActivity {
                     // Perform action on click
                     Intent reviewsListIntent = new Intent(getApplicationContext(), ProfessorListReviewActivity.class);
                     reviewsListIntent.putExtra(Constants.KEY_LESSON_ID, lesson.lessonID);
+                    reviewsListIntent.putExtra(Constants.KEY_LESSON_DATE, lesson.getDate());
                     startActivity(reviewsListIntent);
                 });
             }

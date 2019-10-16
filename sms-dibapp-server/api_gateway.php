@@ -28,7 +28,7 @@ if(isset($input[ACTION])){
 			$response = getClassList($input[KEY_USER_ID]);
 			break;
 		case ACTION_GET_STUDENT_LESSON_LIST: 
-			$response = getStudentLessonList($input[KEY_USER_ID]);
+			$response = getStudentLessonList($input[KEY_USER_ID], $input[KEY_LESSON_DATE]);
 			break;
 		case ACTION_GET_PROFESSOR_LESSON_LIST: 
 			$response = getProfessorLessonList($input[KEY_CLASS_ID]);
@@ -47,6 +47,24 @@ if(isset($input[ACTION])){
 			break;
 		case ACTION_CHECK_LESSON_EVALUATED:
 			$response = checkEvaluatedLesson($input);
+			break;
+		case ACTION_GET_LESSON_QUESTION:
+			$response = getLessonQuestions($input);
+			break;
+		case ACTION_GET_LESSON_REVIEW:
+			$response = getLessonReviews($input);
+			break;
+		case ACTION_GET_CLASS_NAME:
+			$response = getClassName($input[KEY_CLASS_ID]);
+			break;
+		case ACTION_GET_AVERAGE_RATING:
+			$response = getAverageRating($input);
+			break;		
+		case ACTION_GET_TOTAL_MEMBERS:
+			$response = getTotalMembers($input);
+			break;		
+		case ACTION_GET_ATTENDANCE_CHART:
+			$response = getAttedanceChart($input);
 			break;
 		default: 
 			$response = new Response(ACTION_NOT_DEFINED_TEXT, ACTION_NOT_DEFINED_CODE); 

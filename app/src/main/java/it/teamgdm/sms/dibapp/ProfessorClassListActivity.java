@@ -49,7 +49,8 @@ public class ProfessorClassListActivity extends BaseActivity {
 
         recyclerView = findViewById(R.id.class_list);
         textViewEmptyClassList = findViewById(R.id.class_list_empty);
-
+        disableBackButton();
+        getSupportActionBar().setTitle(getTitle() + " - " + Constants.KEY_CLASS_LIST);
         setupRecyclerView();
     }
 

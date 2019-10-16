@@ -61,7 +61,7 @@ public class StudentLessonBottomNotInGeofenceFragment extends Fragment {
         Button buttonQuestion = rootView.findViewById(R.id.questionButton);
 
         classLessonInProgress.setBackgroundColor(Color.GREEN);
-        classLessonInProgress.setText(R.string.classLessonInProgress);
+        classLessonInProgress.setText(R.string.lessonInProgress);
 
         buttonPartecipate.setEnabled(false);
         buttonEvaluate.setEnabled(false);

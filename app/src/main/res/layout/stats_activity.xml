@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar" />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/averageText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            android:gravity="center"
+            android:text="@string/average_text_string"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#999"
+            app:layout_constraintBottom_toTopOf="@id/averageRate"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <RatingBar
+            android:id="@+id/averageRate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:isIndicator="true"
+            android:progressTint="@color/ratingColorPrimary"
+            android:secondaryProgressTint="@color/ratingColorPrimary"
+            app:layout_constraintBottom_toTopOf="@id/totalText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/averageText" />
+
+        <TextView
+            android:id="@+id/ratingValueProfStats"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/averageRate"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/averageRate"
+            app:layout_constraintTop_toTopOf="@+id/averageRate" />
+
+        <TextView
+            android:id="@+id/totalText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            android:gravity="center"
+            android:text="@string/total_member_text_string"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#999"
+            app:layout_constraintBottom_toTopOf="@id/totalNumber"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/averageRate" />
+
+        <TextView
+            android:id="@+id/totalNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="#333"
+            android:textSize="35sp"
+            app:layout_constraintBottom_toTopOf="@id/distributionText"
+            app:layout_constraintTop_toBottomOf="@id/totalText"
+            tools:layout_editor_absoluteX="25dp" />
+
+        <TextView
+            android:id="@+id/distributionText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            android:gravity="center"
+            android:text="@string/distribution_text_string"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#999"
+            app:layout_constraintBottom_toTopOf="@id/barGraph"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/totalNumber" />
+
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/barGraph"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="@dimen/fab_margin"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/distributionText" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

@@ -27,6 +27,8 @@ public class LoginActivity extends BaseActivity {
 
         buttonSignIn = findViewById(R.id.sign_inButton);
         buttonRegister = findViewById(R.id.registerButton);
+
+        disableBackButton();
     }
 
     @Override

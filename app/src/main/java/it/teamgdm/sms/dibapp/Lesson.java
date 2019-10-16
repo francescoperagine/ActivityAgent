@@ -23,11 +23,11 @@ public class Lesson extends Exam implements Serializable {
     String lessonDescription;
     String room;
 
-    public boolean isExpanded() {
+    boolean isExpanded() {
         return expanded;
     }
 
-    public void setExpanded(boolean expanded) {
+    void setExpanded(boolean expanded) {
         this.expanded = expanded;
     }
 

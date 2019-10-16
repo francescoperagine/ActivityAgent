@@ -51,7 +51,8 @@ public class StudentLessonListActivity extends BaseActivity {
 
         recyclerView = findViewById(R.id.class_list);
         textViewEmptyClassList = findViewById(R.id.class_list_empty);
-
+        getSupportActionBar().setTitle(R.string.lesson_today_schedule);
+        disableBackButton();
         setupRecyclerView();
     }
 
@@ -126,6 +127,8 @@ public class StudentLessonListActivity extends BaseActivity {
         public void onBindViewHolder(final ViewHolder holder, int position) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -onBindViewHolder-");
             holder.titleView.setText(classList.get(position).className);
+            String lessonCalendarTime = getString(R.string.from) + " " + classList.get(position).getTimeStringFromDate(classList.get(position).timeStart) + " " + getString(R.string.to) + " " +  classList.get(position).getTimeStringFromDate(classList.get(position).timeEnd);
+            holder.lessonTime.setText(lessonCalendarTime);
             if (classList.get(position).isInProgress()) {
                 holder.titleView.setBackgroundColor(Color.GREEN);
             }
@@ -141,11 +144,13 @@ public class StudentLessonListActivity extends BaseActivity {
 
         class ViewHolder extends RecyclerView.ViewHolder {
             final TextView titleView;
+            final TextView lessonTime;
 
             ViewHolder(View view) {
                 super(view);
                 Log.i(Constants.TAG, getClass().getSimpleName() + " -ViewHolder-");
-                titleView = view.findViewById(R.id.studentContent);
+                titleView = view.findViewById(R.id.studentLessonTitle);
+                lessonTime = view.findViewById(R.id.studentLessonTime);
             }
         }
     }

@@ -2,6 +2,7 @@ package it.teamgdm.sms.dibapp;
 
 public final class Constants {
 
+    static final Object KEY_CLASS_LIST = "Courses";
     static final String KEY_GEOFENCE_LOCATION_UPDATE = "requestLocationUpdate";
     static final String HAS_GEOFENCE_PERMISSION = "hasGeofencePermission";
     static final String LESSON_NEW_QUESTION = "lessonNewQuestion";
@@ -65,7 +66,11 @@ public final class Constants {
     static final String GET_STUDENT_LESSON_LIST = "getStudentLessonList";
     static final String GET_LESSON_QUESTIONS = "getLessonQuestions";
     static final String GET_LESSON_REVIEWS = "getLessonReviews";
+    static final String GET_AVERAGE_RATING = "getAverageRating";
+    static final String GET_TOTAL_MEMBERS = "getTotalMembers";
+    static final String GET_ATTENDANCE_CHART = "getAttedanceChart";
     static final String CHECK_EXISTING_EVALUATE = "checkEvaluatedLesson";
+    static final String GET_CLASS_NAME = "getClassName";
 
     // DB STUDENT_CAREER TABLE ATTRIBUTES
 
@@ -75,7 +80,7 @@ public final class Constants {
     static final String KEY_CLASS_DESCRIPTION = "classDescription";
     static final String KEY_LESSON_YEAR = "classYear";
     static final String KEY_LESSON_SEMESTER = "classSemester";
-    static final String KEY_CLASS_LESSON_DATE = "classLessonDate";
+    static final String KEY_LESSON_DATE = "lessonDate";
     static final String KEY_LESSON_TIME_START = "classLessonTimeStart";
     static final String KEY_LESSON_TIME_END ="classLessonTimeEnd";
     static final String KEY_LESSON_SUMMARY = "classLessonSummary";
