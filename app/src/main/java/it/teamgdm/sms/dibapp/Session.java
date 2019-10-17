@@ -13,6 +13,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
 class Session {
 
     private static Context applicationContext;
@@ -78,6 +81,8 @@ class Session {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -logout-");
         sharedPreferencesEditor.clear().commit();
         Intent mainActivityIntent = new Intent(applicationContext, MainActivity.class);
+        mainActivityIntent.addFlags(FLAG_ACTIVITY_CLEAR_TOP);
+        mainActivityIntent.addFlags(FLAG_ACTIVITY_NEW_TASK);
         applicationContext.startActivity(mainActivityIntent);
     }
 

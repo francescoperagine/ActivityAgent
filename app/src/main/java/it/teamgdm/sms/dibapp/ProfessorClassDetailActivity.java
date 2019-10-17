@@ -11,10 +11,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONArray;
@@ -113,26 +115,7 @@ public class ProfessorClassDetailActivity extends BaseActivity {
             mParentActivity = parent;
             mTwoPane = twoPane;
         }
-/*
-        private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
 
-            @Override
-            public void onClick(View view) {
-                int classID = (Integer) view.getTag();
-                Log.i(Constants.TAG, getClass().getSimpleName() + " ClassRecyclerViewAdapter-OnClickListener-");
-                if (mTwoPane) {
-                    Log.i(Constants.TAG, getClass().getSimpleName() + " ClassRecyclerViewAdapter-OnClickListener-mTwoPane- arguments");
-               //     ProfessorClassDetailFragment detailFragment = ProfessorClassDetailFragment.newInstance(classID, true);
-               //     mParentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.class_detail_container, detailFragment).commit();
-                } else {
-                    Context context = view.getContext();
-                    Intent profClassDetailIntent = new Intent (context, ProfessorClassDetailActivity.class);
-                    profClassDetailIntent.putExtra(Constants.KEY_CLASS_ID, classID);
-                    context.startActivity(profClassDetailIntent);
-                }
-            }
-        };
-*/
         @NonNull
         @Override
         public ClassRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -168,7 +151,7 @@ public class ProfessorClassDetailActivity extends BaseActivity {
         class ViewHolder extends RecyclerView.ViewHolder {
             final TextView lessonTitle;
             final View lessonDetail;
-            final TextView lessonInProgress;
+            final ImageView lessonInProgressImage;
             final TextView lessonTime;
             final TextView lessonAttendance;
             final RatingBar ratingBarProf;
@@ -180,7 +163,7 @@ public class ProfessorClassDetailActivity extends BaseActivity {
                 super(view);
                 Log.i(Constants.TAG, getClass().getSimpleName() + " -ViewHolder-");
                 lessonTitle = view.findViewById(R.id.className);
-                lessonInProgress = view.findViewById(R.id.lessonInProgress);
+                lessonInProgressImage = view.findViewById(R.id.lessonInProgressImageProfessor);
                 lessonDetail = view.findViewById(R.id.lessonDetail);
                 ratingBarProf = view.findViewById(R.id.ratingBarProf);
                 ratingValueProf = view.findViewById(R.id.ratingValueProf);
@@ -205,11 +188,9 @@ public class ProfessorClassDetailActivity extends BaseActivity {
 
                 //checking if lesson is in progress
                 if(lesson.isInProgress()) {
-                    lessonInProgress.setText(R.string.lesson_in_progress);
-                    lessonInProgress.setBackgroundColor(Color.GREEN);
-                } else {
-                    lessonInProgress.setText(R.string.lesson_not_in_progress);
-                    lessonInProgress.setEnabled(false);
+                    lessonInProgressImage.setVisibility(View.VISIBLE);
+                    lessonInProgressImage.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorLessonInProgressText));
+                    lessonInProgressImage.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorLessonInProgressBackground));
                 }
                 ratingBarProf.setRating(lesson.rating);
                 ratingBarProf.setIsIndicator(true);

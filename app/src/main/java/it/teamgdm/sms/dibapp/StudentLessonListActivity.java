@@ -2,20 +2,24 @@ package it.teamgdm.sms.dibapp;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONArray;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * An activity representing a list of Exams. This activity
@@ -50,8 +54,9 @@ public class StudentLessonListActivity extends BaseActivity {
         }
 
         recyclerView = findViewById(R.id.class_list);
-        textViewEmptyClassList = findViewById(R.id.class_list_empty);
-        getSupportActionBar().setTitle(R.string.lesson_today_schedule);
+        textViewEmptyClassList = findViewById(R.id.lesson_list_empty);
+        String today = new SimpleDateFormat(Constants.DATE_FORMAT, Locale.getDefault()).format(new Date());
+        getSupportActionBar().setTitle(getString(R.string.lesson_today_schedule) + Constants.KEY_BLANK + today);
         disableBackButton();
         setupRecyclerView();
     }
@@ -130,7 +135,9 @@ public class StudentLessonListActivity extends BaseActivity {
             String lessonCalendarTime = getString(R.string.from) + " " + classList.get(position).getTimeStringFromDate(classList.get(position).timeStart) + " " + getString(R.string.to) + " " +  classList.get(position).getTimeStringFromDate(classList.get(position).timeEnd);
             holder.lessonTime.setText(lessonCalendarTime);
             if (classList.get(position).isInProgress()) {
-                holder.titleView.setBackgroundColor(Color.GREEN);
+                holder.lessonInProgressImage.setVisibility(View.VISIBLE);
+                holder.lessonInProgressImage.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorLessonInProgressText));
+                holder.lessonInProgressImage.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorLessonInProgressBackground));
             }
             holder.itemView.setTag(classList.get(position).lessonID);
             holder.itemView.setOnClickListener(mOnClickListener);
@@ -145,12 +152,14 @@ public class StudentLessonListActivity extends BaseActivity {
         class ViewHolder extends RecyclerView.ViewHolder {
             final TextView titleView;
             final TextView lessonTime;
+            final ImageView lessonInProgressImage;
 
             ViewHolder(View view) {
                 super(view);
                 Log.i(Constants.TAG, getClass().getSimpleName() + " -ViewHolder-");
                 titleView = view.findViewById(R.id.studentLessonTitle);
                 lessonTime = view.findViewById(R.id.studentLessonTime);
+                lessonInProgressImage = view.findViewById(R.id.lessonInProgressImage);
             }
         }
     }

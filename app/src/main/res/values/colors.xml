@@ -4,5 +4,6 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="ratingColorPrimary">@android:color/holo_orange_light</color>
-
+    <color name="colorLessonInProgressBackground">#008577</color>
+    <color name="colorLessonInProgressText">#FFFFFF</color>
 </resources>
