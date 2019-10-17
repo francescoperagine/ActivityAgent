@@ -1,6 +1,5 @@
 package it.teamgdm.sms.dibapp;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 
@@ -77,7 +77,8 @@ public class StudentLessonBottomFragment extends Fragment {
         buttonEvaluate.setOnClickListener(evaluateButtonListener);
         buttonQuestion.setOnClickListener(questionButtonListener);
 
-        classLessonInProgress.setBackgroundColor(Color.GREEN);
+        classLessonInProgress.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorLessonInProgressBackground));
+        classLessonInProgress.setTextColor(ContextCompat.getColor(getContext(), R.color.colorLessonInProgressText));
         classLessonInProgress.setText(R.string.lessonInProgress);
 
         buttonAttendanceChecker();

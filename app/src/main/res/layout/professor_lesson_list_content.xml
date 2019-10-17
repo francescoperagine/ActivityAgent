@@ -6,20 +6,43 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/className"
+    <LinearLayout
+        android:id="@+id/lessonTitle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:paddingTop="@dimen/textDefaultPadding"
-        android:paddingBottom="@dimen/textDefaultPadding"
-        android:textAppearance="?attr/textAppearanceListItem"
-        android:textSize="18sp" />
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/professorLessonTime"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/className"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingBottom="@dimen/textDefaultPadding"
+                android:textAppearance="?attr/textAppearanceListItem" />
+
+            <TextView
+                android:id="@+id/professorLessonTime"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/lessonInProgressImageProfessor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:contentDescription="@string/lesson_in_progress"
+            android:padding="@dimen/fab_margin"
+            android:visibility="invisible"
+            app:srcCompat="@drawable/ic_record_voice_over_black_24dp" />
+    </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/lessonDetail"
@@ -32,28 +55,17 @@
         tools:context=".ProfessorClassDetailActivity"
         tools:ignore="MergeRootFrame">
 
-        <TextView
-            android:id="@+id/lessonInProgress"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/textDefaultPadding"
-            android:clickable="false"
-            android:gravity="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <RatingBar
             android:id="@+id/ratingBarProf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/fab_margin"
             android:isIndicator="true"
             android:numStars="5"
             android:progressTint="@color/ratingColorPrimary"
             android:secondaryProgressTint="@color/ratingColorPrimary"
             android:stepSize="0.1"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/attendance"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -84,11 +96,12 @@
             android:id="@+id/attendance"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/textDefaultPadding"
             android:gravity="center"
+            android:padding="@dimen/textDefaultPadding"
+            app:layout_constraintBottom_toTopOf="@id/questionButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lessonInProgress" />
+            app:layout_constraintTop_toBottomOf="@id/ratingBarProf" />
 
         <TextView
             android:id="@+id/ratingValueProf"
