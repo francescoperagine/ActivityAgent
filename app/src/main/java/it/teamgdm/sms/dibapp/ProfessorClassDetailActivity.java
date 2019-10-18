@@ -163,7 +163,7 @@ public class ProfessorClassDetailActivity extends BaseActivity {
                 super(view);
                 Log.i(Constants.TAG, getClass().getSimpleName() + " -ViewHolder-");
                 lessonTitle = view.findViewById(R.id.className);
-                lessonInProgressImage = view.findViewById(R.id.lessonInProgressImageProfessor);
+                lessonInProgressImage = view.findViewById(R.id.lessonInProgressProfessorIcon);
                 lessonDetail = view.findViewById(R.id.lessonDetail);
                 ratingBarProf = view.findViewById(R.id.ratingBarProf);
                 ratingValueProf = view.findViewById(R.id.ratingValueProf);
@@ -191,6 +191,9 @@ public class ProfessorClassDetailActivity extends BaseActivity {
                     lessonInProgressImage.setVisibility(View.VISIBLE);
                     lessonInProgressImage.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorLessonInProgressText));
                     lessonInProgressImage.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorLessonInProgressBackground));
+                }
+                else{
+                    lessonInProgressImage.setVisibility(View.INVISIBLE);
                 }
                 ratingBarProf.setRating(lesson.rating);
                 ratingBarProf.setIsIndicator(true);
