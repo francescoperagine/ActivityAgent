@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
 import java.util.Objects;
@@ -63,7 +64,9 @@ public class StudentQuestionFragment extends DialogFragment {
         Button submitButton = view.findViewById(R.id.submitQuestion);
 
         cancelButton.setOnClickListener(cancelButtonListener);
+        cancelButton.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.secondaryColor));
         submitButton.setOnClickListener(submitButtonListener);
+        submitButton.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.secondaryColor));
 
         questionText = view.findViewById(R.id.questionButton);
         questionText.addTextChangedListener(new EmptyTextButtonDisabler(submitButton, questionText));

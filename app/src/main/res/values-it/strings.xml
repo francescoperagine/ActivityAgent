@@ -100,7 +100,7 @@
     <string name="attendance">"Studenti registrati: "</string>
     <string name="from">"Dal: "</string>
     <string name="lesson_in_progress">Lezione in corso</string>
-    <string name="lesson_not_in_progress">Lezione finita</string>
+    <string name="lesson_not_in_progress_text">Lezione finita</string>
     <string name="to">" al: "</string>
     <string name="edit">modifica</string>
     <string name="total_member_text_string">Numero di iscritti</string>

@@ -11,6 +11,7 @@ import android.widget.RatingBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
 import java.util.Objects;
@@ -32,7 +33,7 @@ public class StudentEvaluateFragment extends DialogFragment {
     private EditText reviewText;
     private RatingBar reviewRating;
 
-    static StudentEvaluateFragment newInstante(int classLessonID) {
+    static StudentEvaluateFragment newInstance(int classLessonID) {
         StudentEvaluateFragment evaluateFragment = new StudentEvaluateFragment();
         Bundle arguments = new Bundle();
         arguments.putInt(Constants.KEY_LESSON_ID, classLessonID);
@@ -40,7 +41,7 @@ public class StudentEvaluateFragment extends DialogFragment {
         return evaluateFragment;
     }
 
-    static StudentEvaluateFragment newInstante(int classLessonID, String summary, String description, float rating) {
+    static StudentEvaluateFragment newInstance(int classLessonID, String summary, String description, float rating) {
         StudentEvaluateFragment evaluateFragment = new StudentEvaluateFragment();
         Bundle arguments = new Bundle();
         arguments.putInt(Constants.KEY_LESSON_ID, classLessonID);
@@ -79,7 +80,9 @@ public class StudentEvaluateFragment extends DialogFragment {
         reviewRating = view.findViewById(R.id.reviewRating);
 
         Button cancelButton = view.findViewById(R.id.cancelReview);
+        cancelButton.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.secondaryColor));
         Button submitButton = view.findViewById(R.id.submitReview);
+        submitButton.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.secondaryColor));
 
         //SEND button starts disabled
         submitButton.setEnabled(false);

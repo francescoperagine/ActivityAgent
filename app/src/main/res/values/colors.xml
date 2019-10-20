@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
-    <color name="ratingColorPrimary">@android:color/holo_orange_light</color>
-    <color name="colorLessonInProgressBackground">#008577</color>
-    <color name="colorLessonInProgressText">#FFFFFF</color>
+    <color name="primaryColor">#7b1fa2</color>
+    <color name="primaryLightColor">#ae52d4</color>
+    <color name="primaryDarkColor">#4a0072</color>
+    <color name="secondaryColor">#d81b60</color>
+    <color name="secondaryLightColor">#ff5c8d</color>
+    <color name="secondaryDarkColor">#a00037</color>
+    <color name="primaryTextColor">#ffffff</color>
+    <color name="menuTextColor">#000000</color>
+
     <color name="colorButtonPressed">#269e91</color>
 
     <color name="white">#FFFFFF</color>
@@ -14,5 +17,4 @@
     <color name="yellow">#FFFF00</color>
     <color name="blue">#00008B</color>
     <color name="green">#008000</color>
-
 </resources>

@@ -6,15 +6,18 @@
         android:id="@+id/profileButton"
         android:icon="@drawable/ic_person_black_24dp"
         android:title="@string/dashboard_menu_user_profile"
+        android:background="?attr/colorPrimary"
         app:showAsAction="never" />
     <item
         android:id="@+id/settingsButton"
         android:icon="@drawable/ic_settings"
+        android:background="?attr/colorPrimary"
         android:title="@string/dashboard_menu_settings"
         app:showAsAction="never" />
     <item
         android:id="@+id/logoutButton"
         android:icon="@drawable/ic_exit"
+        android:background="?attr/colorPrimary"
         android:title="@string/dashboard_menu_exit"
         app:showAsAction="never" />
 </menu>
