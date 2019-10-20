@@ -58,7 +58,7 @@ define("GET_LESSON_QUESTION", "SELECT question FROM class_lesson_question WHERE 
 define("GET_LESSON_REVIEW", "SELECT rating, summary, review FROM class_lesson_attendance_rating WHERE lessonID = ? and rating IS NOT NULL");
 define("GET_AVERAGE_RATING", "SELECT AVG(cla.rating) AS avgrating FROM class_room_calendar AS crc JOIN class_room_lesson AS crl JOIN class_lesson_attendance_rating AS cla WHERE crc.ID = crl.calendarID AND crl.ID = cla.lessonID AND crc.classID = ?");
 define("GET_TOTAL_MEMBERS", "SELECT COUNT(*) as count FROM student_career WHERE classID = ?");
-define("GET_ATTENDANCE_CHART", "SELECT COUNT(cla.ID) AS attendance, DATE_FORMAT(crl.timeStart, '%d/%m/%Y') AS date FROM class_room_calendar AS crc JOIN class_room_lesson AS crl JOIN class_lesson_attendance_rating AS cla WHERE crc.ID = crl.calendarID AND crl.ID = cla.lessonID AND crc.classID = ? GROUP BY crl.ID ORDER BY crl.timeStart");
+define("GET_ATTENDANCE_CHART", "SELECT COUNT(cla.ID) AS attendance, COUNT(cla.rating) AS review, DATE_FORMAT(crl.timeStart, '%d/%m/%Y') AS date FROM class_room_calendar AS crc JOIN class_room_lesson AS crl JOIN class_lesson_attendance_rating AS cla WHERE crc.ID = crl.calendarID AND crl.ID = cla.lessonID AND crc.classID = ? GROUP BY crl.ID ORDER BY crl.timeStart");
 define("GET_CLASS_NAME_QUERY", "SELECT name as className FROM class WHERE ID = ?");	  
 	  
 class Response {

@@ -6,4 +6,13 @@
     <color name="ratingColorPrimary">@android:color/holo_orange_light</color>
     <color name="colorLessonInProgressBackground">#008577</color>
     <color name="colorLessonInProgressText">#FFFFFF</color>
+    <color name="colorButtonPressed">#269e91</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="red">#FF0000</color>
+    <color name="yellow">#FFFF00</color>
+    <color name="blue">#00008B</color>
+    <color name="green">#008000</color>
+
 </resources>

@@ -199,8 +199,8 @@ public class ProfessorClassDetailActivity extends BaseActivity {
                 ratingBarProf.setIsIndicator(true);
 
                 if(lesson.rating > 0) {
-                    String rating = Float.toString(lesson.rating);
-                    ratingValueProf.setText(rating);
+                    String ratingStr = String.format("%.1f", lesson.rating);
+                    ratingValueProf.setText(ratingStr);
                 } else {
                     ratingValueProf.setText("0.0");
                 }
