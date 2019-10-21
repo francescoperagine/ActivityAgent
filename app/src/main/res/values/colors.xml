@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="primaryColor">#7b1fa2</color>
-    <color name="primaryLightColor">#ae52d4</color>
+    <color name="primaryLightColor">#AE52D4</color>
     <color name="primaryDarkColor">#4a0072</color>
     <color name="secondaryColor">#d81b60</color>
     <color name="secondaryLightColor">#ff5c8d</color>
@@ -11,7 +11,7 @@
     <color name="disabledDark">#999999</color>
     <color name="disabledLight">#dddddd</color>
 
-    <color name="colorButtonPressed">#269e91</color>
+    <color name="colorButtonPressed">#269E91</color>
 
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>

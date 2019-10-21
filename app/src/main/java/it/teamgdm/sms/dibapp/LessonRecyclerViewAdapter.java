@@ -81,6 +81,8 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
         final ImageView lessonInProgressImage;
         final View studentLessonContainer, studentLessonDetail, studentLessonBottomMenu;
         View reviewContainer;
+        View lessonContainer;
+        View holder;
 
         ToggleButton buttonPartecipate, buttonReview;
         Button buttonQuestion;
@@ -88,6 +90,7 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
         ViewHolder(View view) {
             super(view);
             Log.i(Constants.TAG, getClass().getSimpleName() + " -ViewHolder-");
+            holder = view;
             titleView = view.findViewById(R.id.className);
             classDescription = view.findViewById(R.id.classDescription);
             lessonSummary = view.findViewById(R.id.lessonSummary);
@@ -106,7 +109,10 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
             buttonQuestion = view.findViewById(R.id.questionButton);
 
             bottomMenuAlternateView = view.findViewById(R.id.bottomMenuAlternateView);
+
+            lessonContainer = view.findViewById(R.id.lessonContainer);
             reviewContainer = view.findViewById(R.id.reviewContainer);
+            reviewContainer.setId(View.generateViewId());
         }
 
         void bind(Lesson lesson) {
@@ -235,20 +241,31 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
             JSONArray existingEvaluation = DAO.getExistingEvaluation(Session.getUserID(), lessonReviewID);
             if(currentLessonReview != 0) hideEvaluationUI(currentLessonReview);
             StudentReviewFragment evaluateFragment = null;
-            if(!DAO.evaluatedLessonResponseIsNull(existingEvaluation)){
+            if(DAO.hasEvaluation(existingEvaluation)){
                 JSONObject objResponse;
                 try {
+                    Log.i(Constants.TAG, getClass().getSimpleName() + " -showEvaluationUI-lessonID not null");
                     objResponse = existingEvaluation.getJSONObject(0);
                     evaluateFragment = StudentReviewFragment.newInstance(lessonReviewID, objResponse.optString("summary"), objResponse.optString("review"), (float) objResponse.optDouble("rating"));
                 } catch (JSONException ignored) {
                 }
-            } else{
+            } else {
+                Log.i(Constants.TAG, getClass().getSimpleName() + " -showEvaluationUI-lessonID null");
                 evaluateFragment = StudentReviewFragment.newInstance(lessonReviewID);
             }
+            evaluateFragment.setStudentEvaluateFragmentInterfaceCallback(this);
             currentLessonReview = lessonReviewID;
-            parent.getSupportFragmentManager().beginTransaction().add(R.id.reviewContainer, evaluateFragment, String.valueOf(lessonReviewID)).commit();
-        }
 
+            parent.getSupportFragmentManager().beginTransaction().replace(reviewContainer.getId(), evaluateFragment, String.valueOf(lessonReviewID)).commit();
+        }
+/*
+        private LinearLayout getNewLayout(int lessonID) {
+            LinearLayout linearLayout = new LinearLayout(holder.getContext());
+            linearLayout.setId(lessonID);
+            lessonContainer.addV
+            return linearLayout;
+        }
+*/
         private final View.OnClickListener questionButtonListener = v -> {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -questionButtonListener-");
             showQuestionUI();
@@ -278,6 +295,7 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
         public void setReview(int lessonID, String summary, String review, int rating) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -setReview-");
             if(DAO.setReview(lessonID,summary,review,rating))  {
+                buttonReview.setChecked(false);
                 Toast.makeText(parent, parent.getString(R.string.review_sent), Toast.LENGTH_SHORT).show();
                 Log.i(Constants.TAG, getClass().getSimpleName() + " -setReview-question sent-");
             } else {

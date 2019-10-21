@@ -205,7 +205,7 @@ public class StudentLessonDetailActivity extends BaseActivity implements
 
         StudentReviewFragment evaluateFragment = null;
 
-        if(!DAO.evaluatedLessonResponseIsNull(response)){
+        if(!DAO.hasEvaluation(response)){
             evaluateFragment = StudentReviewFragment.newInstance(lesson.lessonID);
         }
         else{

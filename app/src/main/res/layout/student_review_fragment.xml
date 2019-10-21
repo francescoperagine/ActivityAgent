@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="bottom"
+    android:layout_gravity="bottom|center_horizontal"
+    android:layout_margin="@dimen/text_margin"
+    android:background="@drawable/border"
     android:orientation="vertical"
     android:padding="@dimen/textDefaultPadding">
 
@@ -14,7 +17,7 @@
         android:layout_gravity="center"
         android:isIndicator="false"
         android:numStars="5"
-        android:progressTint="?attr/colorSecondary"
+        android:progressTint="?attr/colorAccent"
         android:stepSize="1"
         app:layout_constraintBottom_toTopOf="@id/reviewSummary"
         app:layout_constraintEnd_toEndOf="parent"
@@ -31,7 +34,9 @@
         app:layout_constraintBottom_toTopOf="@id/reviewText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/reviewRating" />
+        app:layout_constraintTop_toBottomOf="@+id/reviewRating"
+        android:autofillHints=""
+        tools:targetApi="o" />
 
     <EditText
         android:id="@+id/reviewText"
@@ -39,15 +44,20 @@
         android:layout_height="wrap_content"
         android:gravity="clip_vertical"
         android:hint="@string/review_description_text"
+        android:lines="3"
         android:padding="@dimen/text_margin"
         app:layout_constraintBottom_toTopOf="@id/cancelReview"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/reviewSummary" />
+        app:layout_constraintTop_toBottomOf="@+id/reviewSummary"
+        android:autofillHints=""
+        android:inputType="text"
+        tools:targetApi="o" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:orientation="horizontal"
         android:padding="@dimen/textDefaultPadding">
 

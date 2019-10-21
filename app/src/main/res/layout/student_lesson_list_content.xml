@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/lessonContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -115,8 +115,8 @@
                 android:backgroundTint="@color/ic_toggle_partecipation_background"
                 android:drawableStart="@drawable/ic_toggle_button_partecipation"
                 android:drawablePadding="@dimen/textDefaultPadding"
-                android:includeFontPadding="false"
                 android:drawableTint="@color/ic_toggle_partecipation_text"
+                android:includeFontPadding="false"
                 android:textColor="@color/ic_toggle_partecipation_text"
 
                 android:textOff="@string/partecipateButtonText"
@@ -133,8 +133,8 @@
                 android:layout_marginEnd="7dp"
                 android:backgroundTint="@color/ic_toggle_review_background"
                 android:drawableStart="@drawable/ic_rate_review_black_24dp"
-                android:drawableTint="@color/ic_toggle_review_text"
                 android:drawablePadding="@dimen/textDefaultPadding"
+                android:drawableTint="@color/ic_toggle_review_text"
                 android:includeFontPadding="false"
                 android:textColor="@color/ic_toggle_review_text"
                 android:textOff="@string/review_title"
