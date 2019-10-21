@@ -26,7 +26,7 @@ import java.util.HashMap;
  * in a {@link StudentLessonListActivity}.
  */
 public class StudentLessonDetailActivity extends BaseActivity implements
-        StudentEvaluateFragment.StudentEvaluateFragmentInterface,
+        StudentReviewFragment.StudentEvaluateFragmentInterface,
         StudentQuestionFragment.StudentQuestionFragmentInterface,
         DibappBroadcastReceiver.GeofenceReceiverInterface {
 
@@ -48,7 +48,7 @@ public class StudentLessonDetailActivity extends BaseActivity implements
         geofenceAPI = new GeofenceAPI(this);
 
         buttonPartecipate = findViewById(R.id.partecipateButton);
-        buttonEvaluate = findViewById(R.id.evaluateButton);
+        buttonEvaluate = findViewById(R.id.reviewButton);
         buttonQuestion = findViewById(R.id.questionButton);
 
         buttonMenuAlternateView = findViewById(R.id.bottomMenuAlternateView);
@@ -203,27 +203,27 @@ public class StudentLessonDetailActivity extends BaseActivity implements
         params.put(Constants.KEY_LESSON_ID, String.valueOf(lesson.lessonID));
         JSONArray response = DAO.getFromDB(params);
 
-        StudentEvaluateFragment evaluateFragment = null;
+        StudentReviewFragment evaluateFragment = null;
 
         if(!DAO.evaluatedLessonResponseIsNull(response)){
-            evaluateFragment = StudentEvaluateFragment.newInstance(lesson.lessonID);
+            evaluateFragment = StudentReviewFragment.newInstance(lesson.lessonID);
         }
         else{
             JSONObject objResponse;
             try {
                 objResponse = response.getJSONObject(0);
-                evaluateFragment = StudentEvaluateFragment.newInstance(lesson.lessonID, objResponse.optString("summary"), objResponse.optString("review"), (float) objResponse.optDouble("rating"));
+                evaluateFragment = StudentReviewFragment.newInstance(lesson.lessonID, objResponse.optString("summary"), objResponse.optString("review"), (float) objResponse.optDouble("rating"));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-        getSupportFragmentManager().beginTransaction().replace(R.id.alternateDetailContainer, evaluateFragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.reviewContainer, evaluateFragment).commit();
     }
 
     private void showQuestionUI() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -questionButton-");
         StudentQuestionFragment questionFragment = StudentQuestionFragment.newInstante(lesson.lessonID);
-        getSupportFragmentManager().beginTransaction().replace(R.id.alternateDetailContainer, questionFragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.reviewContainer, questionFragment).commit();
     }
 
     @Override

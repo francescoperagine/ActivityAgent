@@ -123,7 +123,7 @@
     <string name="total_member_text_string">Number of participants</string>
     <string name="distribution_text_string">Attendance Distribution</string>
     <string name="question_title">Questions</string>
-    <string name="review_title">Reviews</string>
+    <string name="review_title">Review</string>
     <string name="class_no_lesson_scheduled_text">No lessons scheduled for this class.</string>
     <string name="lesson_today_schedule">Lessons of </string>
     <string name="lesson_no_lesson_scheduled_text">No lessons scheduled for today.</string>

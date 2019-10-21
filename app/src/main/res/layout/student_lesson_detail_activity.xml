@@ -25,7 +25,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/alternateDetailContainer"
+        android:id="@+id/reviewContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:foregroundGravity="bottom"
@@ -52,7 +52,7 @@
             android:layout_height="0dp"
             android:layout_marginEnd="7dp"
             android:backgroundTint="@android:color/transparent"
-            android:drawableStart="@drawable/ic_partecipation_toggle"
+            android:drawableStart="@drawable/ic_toggle_button_partecipation"
             android:drawableTint="?attr/colorAccent"
             android:includeFontPadding="false"
             android:textColor="@color/secondaryColor"
@@ -74,13 +74,13 @@
             app:backgroundTint="?attr/colorAccent"
             app:icon="@drawable/ic_question_answer_black_24dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/evaluateButton"
+            app:layout_constraintEnd_toStartOf="@+id/reviewButton"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toEndOf="@id/partecipateButton"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/evaluateButton"
+            android:id="@+id/reviewButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal|center_vertical"

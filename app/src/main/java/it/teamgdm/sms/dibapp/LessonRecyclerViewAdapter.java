@@ -14,6 +14,7 @@ import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.location.Geofence;
@@ -29,6 +30,7 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
 
     private ArrayList<Lesson> lessonList;
     private StudentLessonListActivity parent;
+    static int currentLessonReview = 0;
 
     LessonRecyclerViewAdapter(StudentLessonListActivity parent, ArrayList<Lesson> lessonList, boolean twoPane) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -ClassRecyclerViewAdapter-");
@@ -69,28 +71,19 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements
-            StudentEvaluateFragment.StudentEvaluateFragmentInterface,
+            StudentReviewFragment.StudentEvaluateFragmentInterface,
             StudentQuestionFragment.StudentQuestionFragmentInterface,
             DibappBroadcastReceiver.GeofenceReceiverInterface {
 
         Lesson lesson;
-        final TextView titleView;
-        final TextView classDescription;
-        final TextView lessonSummary;
-        final TextView lessonDescription;
-        final TextView lessonTime;
-        final ImageView lessonInProgressImage;
-        final View studentLessonContainer;
-        final View studentLessonDetail;
-        final View studentLessonBottomMenu;
+        final TextView titleView, classDescription, lessonSummary, lessonDescription, lessonTime, bottomMenuAlternateView;
         final ProgressBar lessonProgressBar;
+        final ImageView lessonInProgressImage;
+        final View studentLessonContainer, studentLessonDetail, studentLessonBottomMenu;
+        View reviewContainer;
 
-        ToggleButton buttonPartecipate;
-        Button buttonEvaluate;
+        ToggleButton buttonPartecipate, buttonReview;
         Button buttonQuestion;
-        TextView bottomMenuAlternateView;
-
-        boolean evaluationUIisVisible;
 
         ViewHolder(View view) {
             super(view);
@@ -109,10 +102,11 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
             lessonProgressBar = view.findViewById(R.id.timeProgressBar);
 
             buttonPartecipate = view.findViewById(R.id.partecipateButton);
-            buttonEvaluate = view.findViewById(R.id.evaluateButton);
+            buttonReview = view.findViewById(R.id.reviewButton);
             buttonQuestion = view.findViewById(R.id.questionButton);
 
             bottomMenuAlternateView = view.findViewById(R.id.bottomMenuAlternateView);
+            reviewContainer = view.findViewById(R.id.reviewContainer);
         }
 
         void bind(Lesson lesson) {
@@ -128,21 +122,21 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
             String lessonCalendarTime = parent.getString(R.string.from) + " " + lesson.getTimeStringFromDate(lesson.timeStart) + " " + parent.getString(R.string.to) + " " +  lesson.getTimeStringFromDate(lesson.timeEnd);
             lessonTime.setText(lessonCalendarTime);
 
-            setTextViewContent(lesson.classDescription, classDescription);
-            setTextViewContent(lesson.lessonSummary, lessonSummary);
-            setTextViewContent(lesson.lessonDescription, lessonDescription);
+            setTextViewContent(classDescription, lesson.classDescription);
+            setTextViewContent(lessonSummary, lesson.lessonSummary);
+            setTextViewContent(lessonDescription, lesson.lessonDescription);
             setLessonInProgressImage();
 
             setProgressTimeBar();
 
             buttonPartecipate.setOnClickListener(partecipateButtonListener);
-            buttonEvaluate.setOnClickListener(evaluateButtonListener);
+            buttonReview.setOnClickListener(evaluateButtonListener);
             buttonQuestion.setOnClickListener(questionButtonListener);
 
-            featurePanelHandler(lesson.isInProgress(), "");
+            featurePanelHandler(lesson.isInProgress(), null);
         }
 
-        void setTextViewContent(String text, TextView textView) {
+        void setTextViewContent(TextView textView, String text) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -setTextViewContent-");
             if(text == null || text.isEmpty() || text.equals("null")) {
                 textView.setVisibility(View.GONE);
@@ -204,7 +198,7 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
             Log.i(Constants.TAG, getClass().getSimpleName() + " -featureActivator-");
             buttonPartecipate.setChecked(isUserAttendingLesson);
             buttonQuestion.setEnabled(isUserAttendingLesson);
-            buttonEvaluate.setEnabled(isUserAttendingLesson);
+            buttonReview.setEnabled(isUserAttendingLesson);
         }
 
         private void featurePanelHandler(boolean menuVisibility, String alternateViewText) {
@@ -215,47 +209,50 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
                 featureActivator(DAO.isUserAttendingLesson(lesson.lessonID, Session.getUserID()));
             } else {
                 studentLessonBottomMenu.setVisibility(View.GONE);
-                setTextViewContent(alternateViewText, bottomMenuAlternateView);
+                setTextViewContent(bottomMenuAlternateView, alternateViewText);
             }
         }
         private final View.OnClickListener evaluateButtonListener = v -> {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -evaluateButtonListener-");
-            if(evaluationUIisVisible) {
-                hideEvaluationUI();
+            if(buttonReview.isChecked()) {
+                showEvaluationUI(lesson.lessonID);
             } else {
-                showEvaluationUI();
+                hideEvaluationUI(lesson.lessonID);
             }
         };
+
+        private void hideEvaluationUI(int lessonReviewID) {
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -hideEvaluationUI-lessonID " + lessonReviewID);
+            Fragment fragment = parent.getSupportFragmentManager().findFragmentByTag(String.valueOf(lessonReviewID));
+            currentLessonReview = 0;
+            if(fragment != null){
+                parent.getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+            }
+        }
+
+        private void showEvaluationUI(int lessonReviewID) {
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -showEvaluationUI-lessonID " + lessonReviewID);
+            JSONArray existingEvaluation = DAO.getExistingEvaluation(Session.getUserID(), lessonReviewID);
+            if(currentLessonReview != 0) hideEvaluationUI(currentLessonReview);
+            StudentReviewFragment evaluateFragment = null;
+            if(!DAO.evaluatedLessonResponseIsNull(existingEvaluation)){
+                JSONObject objResponse;
+                try {
+                    objResponse = existingEvaluation.getJSONObject(0);
+                    evaluateFragment = StudentReviewFragment.newInstance(lessonReviewID, objResponse.optString("summary"), objResponse.optString("review"), (float) objResponse.optDouble("rating"));
+                } catch (JSONException ignored) {
+                }
+            } else{
+                evaluateFragment = StudentReviewFragment.newInstance(lessonReviewID);
+            }
+            currentLessonReview = lessonReviewID;
+            parent.getSupportFragmentManager().beginTransaction().add(R.id.reviewContainer, evaluateFragment, String.valueOf(lessonReviewID)).commit();
+        }
 
         private final View.OnClickListener questionButtonListener = v -> {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -questionButtonListener-");
             showQuestionUI();
         };
-
-        private void hideEvaluationUI() {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -hideEvaluationUI-");
-            parent.getSupportFragmentManager().popBackStack();
-            evaluationUIisVisible = false;
-        }
-
-        private void showEvaluationUI() {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -showEvaluationUI-");
-            JSONArray existingEvaluation = DAO.getExistingEvaluation(Session.getUserID(), lesson.lessonID);
-            StudentEvaluateFragment evaluateFragment = null;
-            if(!DAO.evaluatedLessonResponseIsNull(existingEvaluation)){
-                JSONObject objResponse;
-                try {
-                    objResponse = existingEvaluation.getJSONObject(0);
-                    evaluateFragment = StudentEvaluateFragment.newInstance(lesson.lessonID, objResponse.optString("summary"), objResponse.optString("review"), (float) objResponse.optDouble("rating"));
-                } catch (JSONException ignored) {
-                }
-            } else{
-                evaluateFragment = StudentEvaluateFragment.newInstance(lesson.lessonID);
-            }
-            assert evaluateFragment != null;
-            evaluationUIisVisible = true;
-            parent.getSupportFragmentManager().beginTransaction().replace(R.id.alternateDetailContainer, evaluateFragment).commit();
-        }
 
         private void showQuestionUI() {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -showQuestionUI-");

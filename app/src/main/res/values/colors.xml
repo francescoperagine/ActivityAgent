@@ -8,6 +8,8 @@
     <color name="secondaryDarkColor">#a00037</color>
     <color name="primaryTextColor">#ffffff</color>
     <color name="menuTextColor">#000000</color>
+    <color name="disabledDark">#999999</color>
+    <color name="disabledLight">#dddddd</color>
 
     <color name="colorButtonPressed">#269e91</color>
 
@@ -17,4 +19,5 @@
     <color name="yellow">#FFFF00</color>
     <color name="blue">#00008B</color>
     <color name="green">#008000</color>
+
 </resources>

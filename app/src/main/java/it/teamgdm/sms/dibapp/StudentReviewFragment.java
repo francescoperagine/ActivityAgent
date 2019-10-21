@@ -16,7 +16,7 @@ import androidx.fragment.app.DialogFragment;
 
 import java.util.Objects;
 
-public class StudentEvaluateFragment extends DialogFragment {
+public class StudentReviewFragment extends DialogFragment {
 
     private StudentEvaluateFragmentInterface studentEvaluateFragmentInterfaceCallback;
 
@@ -33,16 +33,16 @@ public class StudentEvaluateFragment extends DialogFragment {
     private EditText reviewText;
     private RatingBar reviewRating;
 
-    static StudentEvaluateFragment newInstance(int classLessonID) {
-        StudentEvaluateFragment evaluateFragment = new StudentEvaluateFragment();
+    static StudentReviewFragment newInstance(int classLessonID) {
+        StudentReviewFragment evaluateFragment = new StudentReviewFragment();
         Bundle arguments = new Bundle();
         arguments.putInt(Constants.KEY_LESSON_ID, classLessonID);
         evaluateFragment.setArguments(arguments);
         return evaluateFragment;
     }
 
-    static StudentEvaluateFragment newInstance(int classLessonID, String summary, String description, float rating) {
-        StudentEvaluateFragment evaluateFragment = new StudentEvaluateFragment();
+    static StudentReviewFragment newInstance(int classLessonID, String summary, String description, float rating) {
+        StudentReviewFragment evaluateFragment = new StudentReviewFragment();
         Bundle arguments = new Bundle();
         arguments.putInt(Constants.KEY_LESSON_ID, classLessonID);
         arguments.putString(Constants.KEY_CLASS_LESSON_REVIEW_SUMMARY, summary);
@@ -66,7 +66,7 @@ public class StudentEvaluateFragment extends DialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreateView-");
         super.onCreateView(inflater, container, savedInstanceState);
-        return inflater.inflate(R.layout.student_evaluate_fragment, container, false);
+        return inflater.inflate(R.layout.student_review_fragment, container, false);
     }
 
 
