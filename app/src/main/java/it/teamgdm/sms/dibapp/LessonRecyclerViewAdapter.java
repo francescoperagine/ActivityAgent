@@ -215,7 +215,14 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
 
         private boolean userIsAlreadyPartecipatingLesson() {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -userIsAlreadyPartecipatingLesson-" + currentLessonPartecipation);
-            return currentLessonPartecipation != 0;
+            boolean lessonInProgress = false;
+            if(currentLessonPartecipation != 0 && DAO.isLessonInProgress(currentLessonPartecipation)) {
+                Log.i(Constants.TAG, getClass().getSimpleName() + " -userIsAlreadyPartecipatingLesson-lesson in still in progress");
+                lessonInProgress = currentLessonPartecipation != 0;
+            } else {
+                currentLessonPartecipation = 0;
+            }
+            return lessonInProgress;
         }
 
         private void updateCurrentLessonPartecipation(boolean buttonIsChecked) {

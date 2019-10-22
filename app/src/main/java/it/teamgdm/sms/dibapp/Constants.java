@@ -2,6 +2,8 @@ package it.teamgdm.sms.dibapp;
 
 public final class Constants {
 
+
+    static final String KEY_COUNT = "count";
     static final String KEY_QUESTION_RATE = "rate";
     static final String KEY_QUESTION_ID = "ID";
     static final Object KEY_CLASS_LIST = "Courses";
@@ -73,6 +75,7 @@ public final class Constants {
     static final String GET_ATTENDANCE_CHART = "getAttedanceChart";
     static final String GET_EXISTING_EVALUATION = "checkEvaluatedLesson";
     static final String GET_CLASS_NAME = "getClassName";
+    static final String GET_LESSON_IN_PROGRESS = "getLessonInProgress";
 
     // DB STUDENT_CAREER TABLE ATTRIBUTES
 

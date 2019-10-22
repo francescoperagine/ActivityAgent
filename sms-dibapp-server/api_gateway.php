@@ -66,7 +66,10 @@ if(isset($input[ACTION])){
 		case ACTION_GET_ATTENDANCE_CHART:
 			$response = getAttedanceChart($input);
 			break;
-		default: 
+		case ACTION_GET_LESSON_IN_PROGRESS:
+			$response = getLessonInProgress($input[KEY_CLASS_LESSON_ID]);
+			break;
+		default:
 			$response = new Response(ACTION_NOT_DEFINED_TEXT, ACTION_NOT_DEFINED_CODE); 
 			break;
 	}

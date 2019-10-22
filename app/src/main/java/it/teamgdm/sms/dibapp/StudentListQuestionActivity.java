@@ -59,7 +59,7 @@ public class StudentListQuestionActivity extends BaseActivity {
 
     @Override
     int getLayoutResource() {
-        return R.layout.activity_student_list_question;
+        return R.layout.student_question_list_activity;
     }
 
 }

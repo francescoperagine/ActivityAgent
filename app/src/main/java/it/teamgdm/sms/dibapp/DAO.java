@@ -11,7 +11,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.ConcurrentNavigableMap;
 import java.util.concurrent.ExecutionException;
 
 class DAO {
@@ -213,5 +212,19 @@ class DAO {
         params.put(Constants.KEY_USER_ID, String.valueOf(userID));
         params.put(Constants.KEY_LESSON_ID, String.valueOf(lessonID));
         return getFromDB(params);
+    }
+
+    static boolean isLessonInProgress(int lessonID) {
+        Log.i(Constants.TAG, DAO.class.getSimpleName() + " -isLessonInProgress- lessonID " + lessonID);
+        HashMap<String, String> params = new HashMap<>();
+        params.put(Constants.KEY_ACTION, Constants.GET_LESSON_IN_PROGRESS);
+        params.put(Constants.KEY_LESSON_ID, String.valueOf(lessonID));
+        int response = 0;
+        try {
+            response = getFromDB(params).getJSONObject(0).getInt(Constants.KEY_COUNT);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return response == 1;
     }
 }
