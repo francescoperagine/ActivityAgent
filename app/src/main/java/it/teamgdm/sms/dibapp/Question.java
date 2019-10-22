@@ -6,19 +6,19 @@ public class Question {
     private String question;
     private int rate;
 
-    public int getRate() {
+    int getRate() {
         return rate;
     }
 
-    public void setRate(int rate) {
+    void setRate(int rate) {
         this.rate = rate;
     }
 
-    public String getQuestion() {
+    String getQuestion() {
         return question;
     }
 
-    public void setQuestion(String question) {
+    void setQuestion(String question) {
         this.question = question;
     }
 
@@ -28,6 +28,11 @@ public class Question {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "ID\t" + id + "\tQuestion\t" +question + "\trate\t" + rate;
     }
 
 

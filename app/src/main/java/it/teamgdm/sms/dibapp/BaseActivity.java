@@ -2,18 +2,24 @@ package it.teamgdm.sms.dibapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 
+import java.util.Objects;
+
 public abstract class BaseActivity extends AppCompatActivity {
 
     Toolbar toolbar;
-    private boolean backButtonEnabled;
+    TextView titleView;
+    private boolean backButtonEnabled = true;
+    private boolean toolbarEnabled = true;
 
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-");
@@ -21,13 +27,18 @@ public abstract class BaseActivity extends AppCompatActivity {
         setContentView(getLayoutResource());
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        backButtonEnabled = true;
+        titleView = findViewById(R.id.toolbarTitle);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        if(backButtonEnabled) {
+        if(toolbarEnabled) {
+            titleView.setText(Objects.requireNonNull(getSupportActionBar()).getTitle());
+            titleView.setSelected(true);
+            titleView.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+        }
+        if(toolbarEnabled && backButtonEnabled) {
             if(getSupportActionBar() != null) {
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -72,6 +83,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         this.onBackPressed();
         return true;
     }
+
+    protected void disableToolbar() { toolbarEnabled = false; }
 
     protected void disableBackButton() {
         backButtonEnabled = false;

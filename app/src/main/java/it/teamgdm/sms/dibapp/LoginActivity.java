@@ -29,6 +29,7 @@ public class LoginActivity extends BaseActivity {
         buttonRegister = findViewById(R.id.registerButton);
 
         disableBackButton();
+        disableToolbar();
     }
 
     @Override

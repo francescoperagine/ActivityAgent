@@ -1,5 +1,6 @@
 package it.teamgdm.sms.dibapp;
 
+import android.content.Intent;
 import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -72,8 +73,7 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
 
     class ViewHolder extends RecyclerView.ViewHolder implements
             StudentReviewFragment.StudentEvaluateFragmentInterface,
-            StudentQuestionFragment.StudentQuestionFragmentInterface,
-            DibappBroadcastReceiver.GeofenceReceiverInterface {
+            StudentQuestionFragment.StudentQuestionFragmentInterface {
 
         Lesson lesson;
         final TextView titleView, classDescription, lessonSummary, lessonDescription, lessonTime, bottomMenuAlternateView;
@@ -82,7 +82,6 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
         final View studentLessonContainer, studentLessonDetail, studentLessonBottomMenu;
         View reviewContainer;
         View lessonContainer;
-        View holder;
 
         ToggleButton buttonPartecipate, buttonReview;
         Button buttonQuestion;
@@ -90,7 +89,7 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
         ViewHolder(View view) {
             super(view);
             Log.i(Constants.TAG, getClass().getSimpleName() + " -ViewHolder-");
-            holder = view;
+
             titleView = view.findViewById(R.id.className);
             classDescription = view.findViewById(R.id.classDescription);
             lessonSummary = view.findViewById(R.id.lessonSummary);
@@ -134,12 +133,16 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
             setLessonInProgressImage();
 
             setProgressTimeBar();
+            setButtonListener();
 
-            buttonPartecipate.setOnClickListener(partecipateButtonListener);
-            buttonReview.setOnClickListener(evaluateButtonListener);
-            buttonQuestion.setOnClickListener(questionButtonListener);
-
-            featurePanelHandler(lesson.isInProgress(), null);
+            // Create the detail fragment and add it to the activity using a fragment transaction.
+            if(GeofenceAPI.hasGeofencePermissions) {
+                Log.i(Constants.TAG, getClass().getSimpleName() + " -onStart-Has geofence permission.");
+                featurePanelHandler(lesson.isInProgress(), null);
+            } else {
+                Log.i(Constants.TAG, getClass().getSimpleName() + " -onStart-No geofence permission.");
+                featurePanelHandler(false, parent.getResources().getString(R.string.no_geofence_permission_text));
+            }
         }
 
         void setTextViewContent(TextView textView, String text) {
@@ -185,6 +188,12 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
             return progress;
         }
 
+        private void setButtonListener() {
+            buttonPartecipate.setOnClickListener(partecipateButtonListener);
+            buttonReview.setOnClickListener(evaluateButtonListener);
+            buttonQuestion.setOnClickListener(questionButtonListener);
+        }
+
         private final View.OnClickListener partecipateButtonListener = v -> {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -partecipateButtonListener-");
             setAttendance(lesson.lessonID, buttonPartecipate.isChecked());
@@ -209,7 +218,8 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
 
         private void featurePanelHandler(boolean menuVisibility, String alternateViewText) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -featurePanelHandler-");
-            if(menuVisibility) {
+            notifyGeofenceTransition();
+            if(menuVisibility && StudentLessonListActivity.geofenceTransitionAction == Geofence.GEOFENCE_TRANSITION_DWELL) {
                 bottomMenuAlternateView.setVisibility(View.GONE);
                 studentLessonBottomMenu.setVisibility(View.VISIBLE);
                 featureActivator(DAO.isUserAttendingLesson(lesson.lessonID, Session.getUserID()));
@@ -258,14 +268,7 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
 
             parent.getSupportFragmentManager().beginTransaction().replace(reviewContainer.getId(), evaluateFragment, String.valueOf(lessonReviewID)).commit();
         }
-/*
-        private LinearLayout getNewLayout(int lessonID) {
-            LinearLayout linearLayout = new LinearLayout(holder.getContext());
-            linearLayout.setId(lessonID);
-            lessonContainer.addV
-            return linearLayout;
-        }
-*/
+
         private final View.OnClickListener questionButtonListener = v -> {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -questionButtonListener-");
             showQuestionUI();
@@ -273,11 +276,13 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
 
         private void showQuestionUI() {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -showQuestionUI-");
-      /*    Intent questionIntent = new Intent(Constants.GET_LESSON_QUESTIONS);
-            questionIntent.addFlags(parent, QuestionListActivity.class);
+            Intent questionIntent = new Intent(parent, StudentListQuestionActivity.class);
+            questionIntent.setAction(Constants.GET_LESSON_QUESTIONS);
             questionIntent.putExtra(Constants.KEY_LESSON_ID, lesson.lessonID);
+            questionIntent.putExtra(Constants.KEY_CLASS_NAME, lesson.className);
+            questionIntent.putExtra(Constants.KEY_LESSON_DATE, lesson.getDate());
             parent.startActivity(questionIntent);
-       */ }
+        }
 
         @Override
         public void sendQuestion(int lessonID, String input) {
@@ -304,29 +309,17 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
             }
         }
 
-        @Override
-        public void onGeofenceTransitionAction(int geofenceReceiverAction) {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -onGeofenceTransitionAction-"+ geofenceReceiverAction + " lesson in progress " + lesson.isInProgress() );
-            if(lesson.isInProgress()) {
-                setGeofenceResponse(geofenceReceiverAction);
-            } else {
-                featurePanelHandler(false, parent.getResources().getString(R.string.lesson_not_in_progress_text));
-            }
-        }
-
-        void setGeofenceResponse(int geofenceTransitionAction) {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -getBottomFragment-"+ geofenceTransitionAction);
-            if (geofenceTransitionAction == Geofence.GEOFENCE_TRANSITION_DWELL) {
+        void notifyGeofenceTransition() {
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -getBottomFragment-"+ StudentLessonListActivity.geofenceTransitionAction);
+            if (StudentLessonListActivity.geofenceTransitionAction == Geofence.GEOFENCE_TRANSITION_DWELL) {
                 String message = parent.getResources().getString(R.string.geofence_transition_dwelling);
                 Log.i(Constants.TAG, getClass().getSimpleName() + " " + message);
                 Toast.makeText(parent, message, Toast.LENGTH_SHORT).show();
-                featurePanelHandler(true, "");
             } else {
-                Log.i(Constants.TAG, getClass().getSimpleName() + " " + parent.getResources().getString(R.string.geofence_transition_left));
-                featurePanelHandler(false, parent.getResources().getString(R.string.geofence_transition_left));
+                String message = parent.getResources().getString(R.string.geofence_transition_left);
+                Log.i(Constants.TAG, getClass().getSimpleName() + " " + message);
+                Toast.makeText(parent, message, Toast.LENGTH_SHORT).show();
             }
         }
-
-
     }
 }

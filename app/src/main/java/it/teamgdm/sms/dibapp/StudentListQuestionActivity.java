@@ -2,7 +2,6 @@ package it.teamgdm.sms.dibapp;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import org.json.JSONArray;
@@ -17,35 +16,31 @@ public class StudentListQuestionActivity extends BaseActivity {
 
 
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-
         //create object of listview
         ListView listView= findViewById(R.id.listviewstudent);
 
         int lessonID = getIntent().getIntExtra(Constants.KEY_LESSON_ID, 0);
+        String className = getIntent().getStringExtra(Constants.KEY_CLASS_NAME);
         String date = getIntent().getStringExtra(Constants.KEY_LESSON_DATE);
 
-        getSupportActionBar().setTitle(getResources().getString(R.string.question_title) + " - " + date);
+        getSupportActionBar().setTitle(className + " - " + date);
 
         //query
         JSONArray response = DAO.getLessonQuestion(lessonID);
 
-        Log.i(Constants.TAG, "QUESTION RESPONSE = " + response.toString() + response.length());
+        Log.i(Constants.TAG, "QUESTION RESPONSE = " + response.toString() + " lenght " + response.length());
 
         //Add elements to arraylist
         int totalQuestion = response.length();
         for (int i = 0; i < totalQuestion; i++) {
             try {
-                Question quest = new Question();
-                String qst = response.getJSONObject(i).optString("question");
-                quest.setQuestion(qst);
-                int id = response.getJSONObject(i).optInt("ID", 0);
-                quest.setId(id);
-                int rate = response.getJSONObject(i).optInt("rate", 0 );
-                quest.setRate(rate);
-
-                questionArray.add(quest);
+                Question question = new Question();
+                question.setQuestion(response.getJSONObject(i).optString(Constants.KEY_QUESTION));
+                question.setId(response.getJSONObject(i).optInt(Constants.KEY_QUESTION_ID, 0));
+                question.setRate(response.getJSONObject(i).optInt(Constants.KEY_QUESTION_RATE, 0 ));
+                questionArray.add(question);
+                Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-Question " + question.toString());
             } catch (JSONException e) {
                 e.printStackTrace();
             }

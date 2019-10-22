@@ -146,6 +146,8 @@
     <string name="menu_send">Send</string>
     <string name="lesson_today_schedule_empty_text">No lessons scheduled for today.</string>
     <string name="attendance_already_set">Attendance is already set for another lesson.</string>
+    <string name="question_like_button_text">Like</string>
+    <string name="question_dislike_button_text">Dislike</string>
 
 
 </resources>

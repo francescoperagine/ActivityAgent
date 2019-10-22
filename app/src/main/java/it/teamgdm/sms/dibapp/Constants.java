@@ -2,6 +2,8 @@ package it.teamgdm.sms.dibapp;
 
 public final class Constants {
 
+    static final String KEY_QUESTION_RATE = "rate";
+    static final String KEY_QUESTION_ID = "ID";
     static final Object KEY_CLASS_LIST = "Courses";
     static final String KEY_GEOFENCE_LOCATION_UPDATE = "requestLocationUpdate";
     static final String HAS_GEOFENCE_PERMISSION = "hasGeofencePermission";
