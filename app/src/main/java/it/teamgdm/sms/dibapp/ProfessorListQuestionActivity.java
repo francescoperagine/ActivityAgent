@@ -16,7 +16,7 @@ public class ProfessorListQuestionActivity extends BaseActivity {
     final ArrayList<String> questionArray = new ArrayList<>();
 
     protected void onCreate(Bundle savedInstanceState) {
-
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-");
         super.onCreate(savedInstanceState);
 
         //create object of listview
