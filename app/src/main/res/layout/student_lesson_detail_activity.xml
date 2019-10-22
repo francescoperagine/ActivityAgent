@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,22 +7,103 @@
     android:orientation="vertical">
 
     <include
-        layout="@layout/toolbar"
-        app:layout_constraintTop_toTopOf="parent"
-        android:gravity="clip_vertical" />
+        android:id="@id/toolbar"
+        layout="@layout/toolbar" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/dashboardDetailContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
         android:orientation="vertical"
-        tools:context=".StudentLessonDetailActivity" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/dashboardButtonContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintVertical_bias="0.0" >
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-</LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/reviewContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:foregroundGravity="bottom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bottomMenu">
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bottomMenu"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:elevation="5dp"
+        android:gravity="bottom|end"
+        android:padding="@dimen/activity_vertical_margin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ToggleButton
+            android:id="@+id/partecipateButton"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginEnd="7dp"
+            android:backgroundTint="@android:color/transparent"
+            android:drawableStart="@drawable/ic_toggle_button_partecipation"
+            android:drawableTint="?attr/colorAccent"
+            android:includeFontPadding="false"
+            android:textColor="@color/secondaryColor"
+            android:textOff="@string/partecipateButtonText"
+            android:textOn="@string/partecipateUndoButtonText"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/questionButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="RtlHardcoded,RtlSymmetry" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/questionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="7dp"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="@string/question_button_test"
+            app:backgroundTint="?attr/colorAccent"
+            app:icon="@drawable/ic_question_answer_black_24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/reviewButton"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/partecipateButton"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/reviewButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="@string/review_button_text"
+            app:backgroundTint="?attr/colorAccent"
+            app:icon="@drawable/ic_rate_review_black_24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/questionButton"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/bottomMenuAlternateView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:gravity="center_horizontal|center_vertical"
+        android:textSize="18sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/bottomMenu" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

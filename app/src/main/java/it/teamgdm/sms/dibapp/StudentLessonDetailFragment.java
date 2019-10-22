@@ -36,8 +36,8 @@ public class StudentLessonDetailFragment extends Fragment {
         if(getArguments() != null) {
             Log.i(Constants.TAG, StudentLessonDetailFragment.class.getSimpleName() + " -onCreate-arguments \n" + getArguments());
             lesson = (Lesson) getArguments().getSerializable(Constants.KEY_CLASS_LESSON);
-        }
 
+        }
     }
 
     @Override
@@ -46,36 +46,17 @@ public class StudentLessonDetailFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.student_lesson_detail_fragment, container, false);
 
         TextView className = rootView.findViewById(R.id.className);
-        TextView classYear = rootView.findViewById(R.id.classYear);
-        TextView classSemester = rootView.findViewById(R.id.classSemester);
-        TextView classCode = rootView.findViewById(R.id.classCode);
-        TextView classDescription = rootView.findViewById(R.id.classDescription);
-        TextView classLessonDate = rootView.findViewById(R.id.classLessonDate);
-        TextView classLessonTimeStart = rootView.findViewById(R.id.classLessonTimeStart);
-        TextView classLessonTimeEnd = rootView.findViewById(R.id.classLessonTimeEnd);
-        TextView classLessonSummary = rootView.findViewById(R.id.classLessonSummary);
-        TextView classLessonDescription = rootView.findViewById(R.id.classLessonDescription);
+        TextView classLessonTimeStart = rootView.findViewById(R.id.lessonTimeStart);
+        TextView classLessonTimeEnd = rootView.findViewById(R.id.lessonTimeEnd);
+        TextView classLessonSummary = rootView.findViewById(R.id.lessonSummary);
+        TextView classLessonDescription = rootView.findViewById(R.id.lessonDescription);
 
         className.setText(lesson.className);
-        if(getActivity().getClass().equals(StudentLessonDetailActivity.class)) className.setVisibility(View.GONE);
-
-        String year = getString(R.string.classYearText) + ": " + lesson.classYear;
-        classYear.setText(year);
-
-        String semester = getString(R.string.classSemesterText) + ": " + lesson.classsemester;
-        classSemester.setText(semester);
-
-        String code = getString(R.string.classCodeText) + ": " + lesson.classCode;
-        classCode.setText(code);
-
-        if(lesson.classDescription.equals("null")) {
-            classDescription.setText(getString(R.string.noClassDescriptionSetText));
+        if(getArguments().getBoolean(Constants.TWO_PANEL)) {
+            className.setVisibility(View.VISIBLE);
         } else {
-            classDescription.setText(lesson.classDescription);
+            className.setVisibility(View.GONE);
         }
-
-        String lessonDate = getString(R.string.lessonDate) + "\n" + lesson.getDate();
-        classLessonDate.setText(lessonDate);
 
         String lessonTimeStart = getString(R.string.lessonStartAt) + "\n" + lesson.getTimeStringFromDate(lesson.timeStart);
         classLessonTimeStart.setText(lessonTimeStart);

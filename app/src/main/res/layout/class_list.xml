@@ -12,9 +12,10 @@
         android:name="it.teamgdm.sms.dibapp.ClassListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="16dp"
         android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
         android:layout_marginRight="16dp"
+        android:duplicateParentState="true"
         app:layoutManager="LinearLayoutManager"
         tools:context=".StudentLessonListActivity"
         tools:listitem="@layout/student_lesson_list_content" />

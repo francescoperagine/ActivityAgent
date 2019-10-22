@@ -162,13 +162,14 @@ class DAO {
         return getFromDB(param);
     }
 
-    static boolean checkEvaluatedLessonResponse(JSONArray response){
-        Log.i(Constants.TAG, DAO.class.getSimpleName() + " -checkEvaluatedLessonResponse- " + response);
+    static boolean hasEvaluation(JSONArray response){
+        Log.i(Constants.TAG, DAO.class.getSimpleName() + " -hasEvaluation- " + response);
         boolean result = false;
         try {
             JSONObject o = response.getJSONObject(0);
             Log.i(Constants.TAG, o.toString());
             result = o.optInt("count") != 0;
+            Log.i(Constants.TAG, DAO.class.getSimpleName() + " -hasEvaluation- " + true);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -203,5 +204,14 @@ class DAO {
             e.printStackTrace();
         }
         return className;
+    }
+
+    static JSONArray getExistingEvaluation(int userID, int lessonID) {
+        Log.i(Constants.TAG, DAO.class.getSimpleName() + " -getExistingEvaluation- user " + userID + "\tlessonID " + lessonID);
+        HashMap<String, String> params = new HashMap<>();
+        params.put(Constants.KEY_ACTION, Constants.GET_EXISTING_EVALUATION);
+        params.put(Constants.KEY_USER_ID, String.valueOf(userID));
+        params.put(Constants.KEY_LESSON_ID, String.valueOf(lessonID));
+        return getFromDB(params);
     }
 }

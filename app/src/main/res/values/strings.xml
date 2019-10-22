@@ -36,9 +36,9 @@
     <string name="roleSelectionErrorText">Select your role</string>
     <string name="dashboard_menu_user_profile">Profile</string>
     <string name="title_activity_settings">Settings</string>
-    <string name="lesson_evaluated_string">Lesson already evaluated</string>
-    <string name="lesson_in_progress">Lesson in progress</string>
-    <string name="lesson_not_in_progress">Lesson ended</string>
+    <string name="lesson_evaluated_string">Lesson already evaluated.</string>
+    <string name="lesson_in_progress">Lesson in progress.</string>
+    <string name="lesson_not_in_progress_text">Lesson not in progress.</string>
     <string name="from">From: </string>
     <string name="to"> to: </string>
     <string name="attendance">Students registered: </string>
@@ -68,8 +68,8 @@
     <string name="title_exam_detail">Exam Detail</string>
     <string name="examListActivityTitle">Exams list</string>
     <string name="profileActivityTitle">Profile</string>
-    <string name="partecipateButtonText">Enter class</string>
-    <string name="partecipateUndoButtonText">Leave class</string>
+    <string name="partecipateButtonText">Enter</string>
+    <string name="partecipateUndoButtonText">Leave</string>
     <string name="evaluateButtonText">Evaluate</string>
     <string name="informationButton">Informations</string>
     <string name="title_activity_profile">Profile</string>
@@ -126,7 +126,7 @@
     <string name="total_member_text_string">Number of participants</string>
     <string name="distribution_text_string">Attendance Distribution</string>
     <string name="question_title">Questions</string>
-    <string name="review_title">Reviews</string>
+    <string name="review_title">Review</string>
     <string name="class_no_lesson_scheduled_text">No lessons scheduled for this class.</string>
     <string name="lesson_today_schedule">Lessons of </string>
     <string name="lesson_no_lesson_scheduled_text">No lessons scheduled for today.</string>
@@ -145,6 +145,7 @@
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
     <string name="lesson_today_schedule_empty_text">No lessons scheduled for today.</string>
+    <string name="attendance_already_set">Attendance is already set for another lesson.</string>
 
 
 </resources>
