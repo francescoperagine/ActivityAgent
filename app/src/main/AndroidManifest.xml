@@ -4,14 +4,6 @@
     package="it.teamgdm.sms.dibapp"
     tools:ignore="GoogleAppIndexingWarning">
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
-    <uses-permission
-        android:name="android.permission.ACCESS_WIFI_STATE"
-        tools:ignore="ManifestOrder" />
-
     <application
         android:allowBackup="true"
         android:fullBackupContent="true"
@@ -24,6 +16,7 @@
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true"
         tools:targetApi="n">
+        <activity android:name=".StudentListQuestionActivity"></activity>
         <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,7 +28,7 @@
         <activity android:name=".RegisterActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".ProfessorClassListActivity" />
-        <activity android:name=".ProfessorClassDetailActivity"/>
+        <activity android:name=".ProfessorClassDetailActivity" />
         <activity
             android:name=".StudentLessonListActivity"
             android:label="@string/title_exam_list" />
@@ -62,6 +55,13 @@
             android:name="com.google.android.geo.dibapp"
             android:value="AIzaSyDFaIq_Xvymvwd1HfwALGlA565CfNH_vds" />
     </application>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission
+        android:name="android.permission.ACCESS_WIFI_STATE"
+        tools:ignore="ManifestOrder" />
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
 </manifest>

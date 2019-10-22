@@ -46,6 +46,9 @@
     <string name="sort_descend">Sort Descending</string>
     <string name="daily_attendance">Daily attendance</string>
     <string name="review_per_lesson">Review per lesson</string>
+    <string name="name">Name: </string>
+    <string name="surname">Surname: </string>
+    <string name="role">Role: </string>
 
 
     <!-- Preference Titles -->
