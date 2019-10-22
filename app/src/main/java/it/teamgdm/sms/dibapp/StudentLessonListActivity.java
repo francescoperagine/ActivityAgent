@@ -55,6 +55,31 @@ public class StudentLessonListActivity extends BaseActivity implements
         setupRecyclerView();
     }
 
+    private void setupRecyclerView() {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -setupRecyclerView-");
+        LessonList lessonListData = new StudentCareer();
+        JSONArray lessonListLoader = DAO.getLessonList(Session.getUserID(), Constants.KEY_ROLE_STUDENT);
+        lessonListData.setLessonList(lessonListLoader);
+        ArrayList<Lesson> classList = lessonListData.getLessonList();
+        if(classList.isEmpty()) {
+            recyclerView.setVisibility(View.GONE);
+            textViewEmptyClassList.setVisibility(View.VISIBLE);
+        } else {
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -setupRecyclerView-");
+            recyclerView.setVisibility(View.VISIBLE);
+            adapter = new LessonRecyclerViewAdapter(this, classList, mTwoPane);
+            recyclerView.setAdapter(adapter);
+            textViewEmptyClassList.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void onGeofenceTransitionAction(int geofenceReceiverAction) {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onGeofenceTransitionAction-");
+        geofenceTransitionAction = geofenceReceiverAction;
+        adapter.notifyDataSetChanged();
+    }
+
     @Override
     protected void onResume() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onResume-");
@@ -101,30 +126,5 @@ public class StudentLessonListActivity extends BaseActivity implements
     protected int getLayoutResource() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -getLayoutResource-");
         return R.layout.item_list_activity;
-    }
-
-    private void setupRecyclerView() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -setupRecyclerView-");
-        LessonList lessonListData = new StudentCareer();
-        JSONArray lessonListLoader = DAO.getLessonList(Session.getUserID(), Constants.KEY_ROLE_STUDENT);
-        lessonListData.setLessonList(lessonListLoader);
-        ArrayList<Lesson> classList = lessonListData.getLessonList();
-        if(classList.isEmpty()) {
-            recyclerView.setVisibility(View.GONE);
-            textViewEmptyClassList.setVisibility(View.VISIBLE);
-        } else {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -setupRecyclerView-");
-            recyclerView.setVisibility(View.VISIBLE);
-            adapter = new LessonRecyclerViewAdapter(this, classList, mTwoPane);
-            recyclerView.setAdapter(adapter);
-            textViewEmptyClassList.setVisibility(View.GONE);
-        }
-    }
-
-    @Override
-    public void onGeofenceTransitionAction(int geofenceReceiverAction) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -onGeofenceTransitionAction-");
-        geofenceTransitionAction = geofenceReceiverAction;
-        adapter.notifyDataSetChanged();
     }
 }

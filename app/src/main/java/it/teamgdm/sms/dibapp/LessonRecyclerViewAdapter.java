@@ -31,6 +31,7 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
 
     private ArrayList<Lesson> lessonList;
     private StudentLessonListActivity parent;
+    static int currentLessonPartecipation;
     static int currentLessonReview = 0;
 
     LessonRecyclerViewAdapter(StudentLessonListActivity parent, ArrayList<Lesson> lessonList, boolean twoPane) {
@@ -196,13 +197,42 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
 
         private final View.OnClickListener partecipateButtonListener = v -> {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -partecipateButtonListener-");
-            setAttendance(lesson.lessonID, buttonPartecipate.isChecked());
-            featureActivator(buttonPartecipate.isChecked());
+            if(buttonPartecipate.isChecked() && userIsAlreadyPartecipatingLesson()) {
+                if(userIsAlreadyPartecipatingLesson()) {
+                    String message = parent.getResources().getString(R.string.attendance_already_set);
+                    buttonPartecipate.setChecked(false);
+                    Toast.makeText(parent, message, Toast.LENGTH_SHORT).show();
+                } else {
+                    setAttendance(buttonPartecipate.isChecked());
+                    updateCurrentLessonPartecipation(buttonPartecipate.isChecked());
+                    featureActivator(buttonPartecipate.isChecked());
+                }
+            } else {
+                updateCurrentLessonPartecipation(buttonPartecipate.isChecked());
+                featureActivator(buttonPartecipate.isChecked());
+            }
         };
 
-        void setAttendance(int lessonID, boolean isUserAttendingLesson) {
+        private boolean userIsAlreadyPartecipatingLesson() {
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -userIsAlreadyPartecipatingLesson-" + currentLessonPartecipation);
+            return currentLessonPartecipation != 0;
+        }
+
+        private void updateCurrentLessonPartecipation(boolean buttonIsChecked) {
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -updateCurrentLessonPartecipation- button checked " + buttonIsChecked);
+            if(buttonIsChecked) {
+                currentLessonPartecipation = lesson.lessonID;
+            } else {
+                if(parent.getSupportFragmentManager().findFragmentByTag(String.valueOf(lesson.lessonID)) != null){
+                    hideEvaluationUI(lesson.lessonID);
+                }
+                currentLessonPartecipation = 0;
+            }
+        }
+
+        void setAttendance(boolean isUserAttendingLesson) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -setAttendance-" + isUserAttendingLesson);
-            if(DAO.setAttendance(lessonID, isUserAttendingLesson)) {
+            if(DAO.setAttendance(lesson.lessonID, isUserAttendingLesson)) {
                 Toast.makeText(parent, parent.getString(R.string.attendance_set), Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(parent, parent.getString(R.string.attendance_not_set), Toast.LENGTH_SHORT).show();
