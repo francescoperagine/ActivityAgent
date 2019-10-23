@@ -54,7 +54,7 @@ class GeofenceAPI {
     private void createLocationRequest() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -createLocationRequest-");
         locationRequest = LocationRequest.create();
-        locationRequest.setInterval(3000);
+        locationRequest.setInterval(5000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 

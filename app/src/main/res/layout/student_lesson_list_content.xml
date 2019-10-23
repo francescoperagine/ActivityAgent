@@ -110,53 +110,64 @@
                 android:id="@+id/partecipateButton"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_marginEnd="7dp"
                 android:backgroundTint="@color/ic_toggle_partecipation_background"
                 android:drawableStart="@drawable/ic_toggle_button_partecipation"
                 android:drawablePadding="@dimen/textDefaultPadding"
                 android:drawableTint="@color/ic_toggle_partecipation_text"
+                android:gravity="center_horizontal|center_vertical"
                 android:includeFontPadding="false"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
                 android:textColor="@color/ic_toggle_partecipation_text"
-
                 android:textOff="@string/partecipateButtonText"
                 android:textOn="@string/partecipateUndoButtonText"
+                android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/questionButton"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <Button
+                android:id="@+id/questionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:height="48dp"
+
+
+                android:gravity="center_horizontal|center_vertical"
+                android:minWidth="0dp"
+                android:padding="6dp"
+                android:text="@string/question_button_test"
+                android:textSize="12sp"
+                app:icon="@drawable/ic_question_answer_black_24dp"
+                app:iconGravity="start"
+                app:layout_constraintBottom_toBottomOf="@+id/partecipateButton"
+                app:layout_constraintEnd_toStartOf="@+id/reviewButton"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toEndOf="@id/partecipateButton"
+                app:layout_constraintTop_toTopOf="@+id/partecipateButton" />
+
             <ToggleButton
                 android:id="@+id/reviewButton"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_marginEnd="7dp"
+                android:layout_height="wrap_content"
+
                 android:backgroundTint="@color/ic_toggle_review_background"
                 android:drawableStart="@drawable/ic_rate_review_black_24dp"
                 android:drawablePadding="@dimen/textDefaultPadding"
                 android:drawableTint="@color/ic_toggle_review_text"
-                android:includeFontPadding="false"
+                android:gravity="center_horizontal|center_vertical"
+                android:includeFontPadding="true"
+                android:maxHeight="0dp"
+                android:minWidth="0dp"
                 android:textColor="@color/ic_toggle_review_text"
                 android:textOff="@string/review_title"
                 android:textOn="@string/review_title"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/questionButton"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/questionButton"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/questionButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="7dp"
-                android:background="@drawable/ic_button"
-                android:gravity="center_horizontal|center_vertical"
-                android:text="@string/question_button_test"
-                app:icon="@drawable/ic_question_answer_black_24dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/reviewButton"
-                app:layout_constraintHorizontal_bias="0"
-                app:layout_constraintStart_toEndOf="@id/partecipateButton"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@+id/questionButton" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -185,7 +196,7 @@
         app:layout_constraintBottom_toTopOf="@id/divider2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/studentLessonDetail"></LinearLayout>
+        app:layout_constraintTop_toBottomOf="@id/studentLessonDetail" />
 
     <View
         android:id="@+id/divider2"
