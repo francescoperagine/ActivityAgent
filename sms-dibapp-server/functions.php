@@ -54,18 +54,19 @@ define("UNSET_ATTENDANCE_QUERY", "DELETE FROM class_lesson_attendance_rating WHE
 define("IS_USER_ATTENDING_LESSON_QUERY", "SELECT COUNT(*) as attendance FROM class_lesson_attendance_rating WHERE studentID = :userID AND lessonID = :lessonID");
 define("SET_CLASS_LESSON_REVIEW_QUERY", "UPDATE class_lesson_attendance_rating SET summary = :summary, review = :review, rating = :rating WHERE studentID = :userID AND lessonID = :lessonID");
 define("CHECK_IF_LESSON_ALREADY_EVALUATED", "SELECT count(*) as count, summary, review, rating FROM class_lesson_attendance_rating WHERE studentID = :studentID AND lessonID = :lessonID AND rating IS NOT NULL");
-define("GET_LESSON_QUESTION", "SELECT question FROM class_lesson_question WHERE lessonID = ?");
+define("GET_LESSON_QUESTION", "SELECT question, ID, rate FROM class_lesson_question_rated WHERE lessonID = ?");
 define("GET_LESSON_REVIEW", "SELECT rating, summary, review FROM class_lesson_attendance_rating WHERE lessonID = ? and rating IS NOT NULL");
 define("GET_AVERAGE_RATING", "SELECT AVG(cla.rating) AS avgrating FROM class_room_calendar AS crc JOIN class_room_lesson AS crl JOIN class_lesson_attendance_rating AS cla WHERE crc.ID = crl.calendarID AND crl.ID = cla.lessonID AND crc.classID = ?");
 define("GET_TOTAL_MEMBERS", "SELECT COUNT(*) as count FROM student_career WHERE classID = ?");
-define("GET_ATTENDANCE_CHART", "SELECT COUNT(cla.ID) AS attendance, DATE_FORMAT(crl.timeStart, '%d/%m/%Y') AS date FROM class_room_calendar AS crc JOIN class_room_lesson AS crl JOIN class_lesson_attendance_rating AS cla WHERE crc.ID = crl.calendarID AND crl.ID = cla.lessonID AND crc.classID = ? GROUP BY crl.ID ORDER BY crl.timeStart");
+define("GET_ATTENDANCE_CHART", "SELECT COUNT(cla.ID) AS attendance, COUNT(cla.rating) AS review, DATE_FORMAT(crl.timeStart, '%d/%m/%Y') AS date FROM class_room_calendar AS crc JOIN class_room_lesson AS crl LEFT JOIN class_lesson_attendance_rating AS cla ON crl.ID = cla.lessonID WHERE crc.ID = crl.calendarID AND crc.classID = ? GROUP BY crl.ID ORDER BY crl.timeStart");
 define("GET_CLASS_NAME_QUERY", "SELECT name as className FROM class WHERE ID = ?");	  
-	  
+define("GET_LESSON_IN_PROGRESS_QUERY", "SELECT COUNT(*) AS count FROM class_room_lesson WHERE ID = ? AND CURRENT_TIMESTAMP >= timeStart AND CURRENT_TIMESTAMP <= timeEnd");
+
 class Response {
-	
+
 	var $message;
 	var $code;
-	
+
 	function __construct(string $message, int $code) {
 		$this->message = $message;
 		$this->code = $code;
@@ -77,10 +78,10 @@ function login(array $input) {
 		try {
 			credentialAreNotNull($input['email'], $input['password']);
 			userExists($input[KEY_USER_EMAIL]);
-			verifyPassword($input[KEY_USER_EMAIL], $input['password']);	
+			verifyPassword($input[KEY_USER_EMAIL], $input['password']);
 			$response = new Response(QUERY_OK_TEXT, QUERY_OK_CODE);
 		} catch( Exception $e) {
-			$response = new Response($e->getMessage(), intval($e->getCode())); 
+			$response = new Response($e->getMessage(), intval($e->getCode()));
 		}
 	}
 	return($response);
@@ -89,7 +90,7 @@ function login(array $input) {
 function credentialAreNotNull(string $email, string $password) {
 	if($email == '' || $password == '') {
 		throw new Exception(MISSING_MANDATORY_PARAMETERS_TEXT, MISSING_MANDATORY_PARAMETERS_CODE);
-	}	
+	}
 }
 
 function userExists(string $email){
@@ -119,7 +120,7 @@ function registration(array $input) {
 		} catch(Exception $e) {
 			$response = registerNewUser($input);
 		}
-	} else { 
+	} else {
 		$response = new Response(MISSING_MANDATORY_PARAMETERS_TEXT, MISSING_MANDATORY_PARAMETERS_CODE);
 	}
 	return $response;
@@ -148,7 +149,7 @@ function registerNewUser(array $input) {
 	//Generate a unique password Hash
 	$passwordHash = password_hash(concatPasswordWithSalt($input[KEY_USER_PASSWORD],$salt),PASSWORD_DEFAULT);
 	$response = null;
-	
+
 	//Query to register new user
 	$stmt1 = $connection->prepare(REGISTER_NEW_USER_QUERY);
 	$stmt1->bindValue(':name', $input[KEY_USER_NAME]);
@@ -158,7 +159,7 @@ function registerNewUser(array $input) {
 	$stmt1->bindValue(':passwordHash', $passwordHash);
 	$stmt1->bindValue(':salt', $salt);
 	$stmt1->bindValue(':registrationDate', $input[KEY_USER_REGISTRATION_DATE]);
-	
+
 	$stmt2 = $connection->prepare(REGISTER_NEW_USER_DEGREECOURSE_QUERY);
 	$stmt2->bindValue(':email', $input[KEY_USER_EMAIL]);
 	$stmt2->bindValue(':degreecourse', $input[KEY_DEGREECOURSE]);
@@ -166,13 +167,13 @@ function registerNewUser(array $input) {
 	$stmt3 = $connection->prepare(REGISTER_NEW_USER_ROLE_QUERY);
 	$stmt3->bindValue(':email', $input[KEY_USER_EMAIL]);
 	$stmt3->bindValue(':roleName', $input[KEY_USER_ROLE_NAME]);
-	
+
 	$stmt4 = $connection->prepare(SET_STUDENT_CAREER_QUERY);
 	$stmt4->bindValue(':email', $input[KEY_USER_EMAIL]);
 	$stmt4->bindValue(':degreecourse', $input[KEY_DEGREECOURSE]);
-	
+
 	switch ($input[KEY_USER_ROLE_NAME]) {
-		case USER_ROLE_STUDENT: 
+		case USER_ROLE_STUDENT:
 			$connection->beginTransaction();
 			if($stmt1->execute() && $stmt2->execute() && $stmt3->execute() && $stmt4->execute()){
 				$connection->commit();
@@ -180,10 +181,10 @@ function registerNewUser(array $input) {
 			} else {
 				$connection->rollBack();
 				$response = new Response(QUERY_NOT_OK_TEXT, QUERY_NOT_OK_CODE);
-			} 
+			}
 			break;
 		case USER_ROLE_BACKOFFICE_OPERATOR:
-		case USER_ROLE_TEACHER:	
+		case USER_ROLE_TEACHER:
 			$connection->beginTransaction();
 			if( $stmt1->execute() && $stmt2->execute() && $stmt3->execute()){
 				$connection->commit();
@@ -192,7 +193,7 @@ function registerNewUser(array $input) {
 				$connection->rollBack();
 				$response = new Response(QUERY_NOT_OK_TEXT, QUERY_NOT_OK_CODE);
 			}
-				
+
 		default: break;
 	}
 	return $response;
@@ -226,7 +227,7 @@ function askAQuestion(int $lessonID, int $userID, string $question, string $time
 
 function setAttendance(int $lessonID, int $userID, string $attendance, string $time = null) {
 	$userAttendance = ($attendance === 'true');
-	global $connection;	
+	global $connection;
 	if($userAttendance == true) {
 		$stmt = $connection->prepare(SET_ATTENDANCE_QUERY);
 		$stmt->bindValue(':time', $time);
@@ -247,7 +248,7 @@ function setAttendance(int $lessonID, int $userID, string $attendance, string $t
 }
 
 function isUserAttendingLesson(int $lessonID, int $userID) {
-	global $connection;	
+	global $connection;
 	$stmt = $connection->prepare(IS_USER_ATTENDING_LESSON_QUERY);
 	$stmt->bindValue(':lessonID', $lessonID);
 	$stmt->bindValue(':userID', $userID);
@@ -257,7 +258,7 @@ function isUserAttendingLesson(int $lessonID, int $userID) {
 }
 
 function setReview($input) {
-	global $connection;	
+	global $connection;
 	$stmt = $connection->prepare(SET_CLASS_LESSON_REVIEW_QUERY);
 	$stmt->bindValue(':lessonID', $input[KEY_CLASS_LESSON_ID]);
 	$stmt->bindValue(':userID', $input[KEY_USER_ID]);
@@ -355,6 +356,14 @@ function getAttedanceChart(array $input){
 	global $connection;
 	$stmt = $connection->prepare(GET_ATTENDANCE_CHART);
 	$stmt->execute([$input[KEY_CLASS_ID]]);
+	$response = $stmt->fetchAll(PDO::FETCH_OBJ);
+	return $response;
+}
+
+function getLessonInProgress(int $lessonID) {
+	global $connection;
+	$stmt = $connection->prepare(GET_LESSON_IN_PROGRESS_QUERY);
+	$stmt->execute([$lessonID]);
 	$response = $stmt->fetchAll(PDO::FETCH_OBJ);
 	return $response;
 }

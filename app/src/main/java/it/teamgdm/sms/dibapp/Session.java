@@ -100,4 +100,22 @@ class Session {
         Log.i(Constants.TAG, Session.class.getSimpleName() + " -userIsProfessor?-");
         return Constants.KEY_ROLE_PROFESSOR.equals(sharedPreferences.getString(Constants.KEY_USER_ROLE_NAME, null));
     }
+
+    static String getUserName() {
+        Log.i(Constants.TAG, Session.class.getSimpleName() + " -getUserName-");
+        return sharedPreferences.getString(Constants.KEY_USER_NAME, Constants.KEY_EMPTY);
+    }
+
+    static String getUserSurname(){
+        Log.i(Constants.TAG, Session.class.getSimpleName() + " -getUserSurname-");
+        return sharedPreferences.getString(Constants.KEY_USER_SURNAME, Constants.KEY_EMPTY);
+    }
+
+    static String getUserRole(){
+        Log.i(Constants.TAG, Session.class.getSimpleName() + " -getUserRole-");
+        return sharedPreferences.getString(Constants.KEY_USER_ROLE_NAME, Constants.KEY_EMPTY);
+
+
+
+    }
 }

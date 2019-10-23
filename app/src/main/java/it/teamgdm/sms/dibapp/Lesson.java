@@ -12,7 +12,7 @@ import java.util.Locale;
 
 public class Lesson extends Exam implements Serializable {
 
-
+    private boolean expanded;
     int lessonID;
     int calendarID;
     float rating;
@@ -30,8 +30,6 @@ public class Lesson extends Exam implements Serializable {
     void setExpanded(boolean expanded) {
         this.expanded = expanded;
     }
-
-    private boolean expanded;
 
     Lesson() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -Lesson-");

@@ -2,6 +2,10 @@ package it.teamgdm.sms.dibapp;
 
 public final class Constants {
 
+
+    static final String KEY_COUNT = "count";
+    static final String KEY_QUESTION_RATE = "rate";
+    static final String KEY_QUESTION_ID = "ID";
     static final Object KEY_CLASS_LIST = "Courses";
     static final String KEY_GEOFENCE_LOCATION_UPDATE = "requestLocationUpdate";
     static final String HAS_GEOFENCE_PERMISSION = "hasGeofencePermission";
@@ -69,8 +73,9 @@ public final class Constants {
     static final String GET_AVERAGE_RATING = "getAverageRating";
     static final String GET_TOTAL_MEMBERS = "getTotalMembers";
     static final String GET_ATTENDANCE_CHART = "getAttedanceChart";
-    static final String CHECK_EXISTING_EVALUATE = "checkEvaluatedLesson";
+    static final String GET_EXISTING_EVALUATION = "checkEvaluatedLesson";
     static final String GET_CLASS_NAME = "getClassName";
+    static final String GET_LESSON_IN_PROGRESS = "getLessonInProgress";
 
     // DB STUDENT_CAREER TABLE ATTRIBUTES
 
@@ -94,8 +99,8 @@ public final class Constants {
     static final String KEY_LESSON_ATTENDANCE = "attendance";
 
 
-    static final String KEY_CLASS_LESSON_REVIEW_SUMMARY = "classLessonReviewSummary";
-    static final String KEY_CLASS_LESSON_REVIEW_DESCRIPTION = "classLessonReviewDescription";
+    static final String KEY_LESSON_REVIEW_SUMMARY = "classLessonReviewSummary";
+    static final String KEY_LESSON_REVIEW_DESCRIPTION = "classLessonReviewDescription";
     static final String KEY_LESSON_REVIEW_RATING = "classLessonReviewRating";
     static final String KEY_LESSON_REVIEW_ATTENDANCE = "classLessonReviewAttendance";
 

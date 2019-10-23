@@ -60,8 +60,8 @@ public class StatsActivity extends BaseActivity {
             float rate = (float) responseAverage.getJSONObject(0).optDouble("avgrating");
             rateBar.setRating(rate);
             if((int) rate > 0) {
-                String rating = Float.toString(rate);
-                rateValue.setText(rating);
+                String ratingStr = String.format("%.1f", rate);
+                rateValue.setText(ratingStr);
             } else {
                 rateValue.setText("0.0");
             }
@@ -81,32 +81,37 @@ public class StatsActivity extends BaseActivity {
             e.printStackTrace();
         }
 
-        List<BarEntry> entries = new ArrayList<>();
+        //START HYSTOGRAM SETTINGS
+
+        //BarChart entries declaration
+        ArrayList<BarEntry> attendanceEntries = new ArrayList<>();
+        ArrayList<BarEntry> reviewEntries = new ArrayList<>();
         ArrayList<String> labels = new ArrayList<String> ();
 
+        //query
         HashMap<String, String> paramsAttendance = new HashMap<>();
         paramsAttendance.put(Constants.KEY_ACTION, Constants.GET_ATTENDANCE_CHART);
         paramsAttendance.put(KEY_CLASS_ID, String.valueOf(classID));
         JSONArray responseAttendance = DAO.getFromDB(paramsAttendance);
 
-        //Add elements to arraylist
+        //Add elements to ArrayLists
         int totalLesson = responseAttendance.length();
         for (int i = 0; i < totalLesson; i++) {
             try {
                 int attendance = responseAttendance.getJSONObject(i).optInt("attendance");
+                int review = responseAttendance.getJSONObject(i).optInt("review");
                 String date = responseAttendance.getJSONObject(i).optString("date");
-                entries.add(new BarEntry(i, attendance));
+                attendanceEntries.add(new BarEntry(i, attendance));
+                reviewEntries.add(new BarEntry(i, review));
                 labels.add(date);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
 
-
-
         //HYSTOGRAM SETTINGS
 
-        BarDataSet barDataSet = new BarDataSet(entries, "Daily attendance");
+        BarDataSet barDataSet = new BarDataSet(attendanceEntries, getString(R.string.daily_attendance));
         barDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
         barDataSet.setBarBorderColor(Color.BLACK);
         barDataSet.setBarBorderWidth(2.0f);
@@ -114,15 +119,23 @@ public class StatsActivity extends BaseActivity {
         barDataSet.setValueTextSize(12);
         barDataSet.setValueTextColor(Color.BLACK);
 
+        BarDataSet barDataSet2 = new BarDataSet(reviewEntries, getString(R.string.review_per_lesson));
+        barDataSet2.setAxisDependency(YAxis.AxisDependency.LEFT);
+        barDataSet2.setBarBorderColor(Color.BLACK);
+        barDataSet2.setBarBorderWidth(2.0f);
+        barDataSet2.setColor(Color.BLUE);
+        barDataSet2.setValueTextSize(12);
+        barDataSet2.setValueTextColor(Color.BLACK);
+
         //FORMATTER (value on bars from float to integer)
         barDataSet.setValueFormatter(new BarChartIntergerFormatter());
+        barDataSet2.setValueFormatter(new BarChartIntergerFormatter());
 
-        BarData barData = new BarData(barDataSet);
+        BarData barData = new BarData(barDataSet, barDataSet2);
 
         barData.setHighlightEnabled(false);
 
         barChart.getDescription().setText("");
-        barChart.getDescription().setTextSize(12);
         barChart.getAxisLeft().setAxisMinimum(0);
         //value on the left vertical axe from float to integer
         barChart.getAxisLeft().setGranularity(1.0f);
@@ -139,7 +152,14 @@ public class StatsActivity extends BaseActivity {
         barChart.getXAxis().setLabelRotationAngle(45);
         barChart.getXAxis().setLabelCount(barDataSet.getEntryCount());
 
+        //barChart.setFitBars(true);
+
+        barData.setBarWidth(0.4f); // set the width of each bar
         barChart.setData(barData);
+        barChart.groupBars(-0.5f, 0.2f, 0f); // perform the "explicit" grouping
+        barChart.setVisibleXRangeMaximum(6); // allow 6 values to be displayed at once on the x-axis, not more
+        barChart.moveViewToX(-0.5f); //start at the beginning of the chart
+        barChart.invalidate(); // refresh
 
     }
 

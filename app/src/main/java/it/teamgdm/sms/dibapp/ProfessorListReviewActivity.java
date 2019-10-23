@@ -1,8 +1,15 @@
 package it.teamgdm.sms.dibapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,6 +23,13 @@ public class ProfessorListReviewActivity extends BaseActivity {
 
     //the listview
     ListView listView;
+
+    ReviewListAdapter adapterMax;
+    ReviewListAdapter adapterMin;
+
+    Boolean filterFlag = false;
+
+    Toast toast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,16 +63,67 @@ public class ProfessorListReviewActivity extends BaseActivity {
             }
         }
 
-        //creating the adapter
-        ReviewListAdapter adapter = new ReviewListAdapter(this, R.layout.review_list, reviewList);
+        //creating sorted lists
+        reviewList.sort(new ComparatorReviewMaxToMin());
+        ArrayList<Review> reviewListMax = (ArrayList<Review>) reviewList.clone();
+        reviewList.sort(new ComparatorReviewMaxToMin().reversed());
+        ArrayList<Review> reviewListMin = (ArrayList<Review>) reviewList.clone();
+
+        //creating the adapters
+        adapterMax = new ReviewListAdapter(this, R.layout.review_list, reviewListMax);
+        adapterMin = new ReviewListAdapter(this, R.layout.review_list, reviewListMin);
 
         //attaching adapter to the listview
-        listView.setAdapter(adapter);
+        listView.setAdapter(adapterMax);
+
     }
 
     @Override
     int getLayoutResource() {
         return R.layout.professor_list_reviews;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreateOptionsMenu-");
+        getMenuInflater().inflate(R.menu.filter_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onOptionsItemSelected-");
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.filterButton:
+
+                String toastSortText;
+
+                if(filterFlag == false){
+                    listView.setAdapter(adapterMin);
+                    item.setIcon(R.drawable.ic_ascend_star);
+                    filterFlag = true;
+                    toastSortText = getString(R.string.sort_ascend);
+                }
+                else{
+                    listView.setAdapter(adapterMax);
+                    item.setIcon(R.drawable.ic_descend_star);
+                    filterFlag = false;
+                    toastSortText = getString(R.string.sort_descend);
+                }
+
+                //if the filter button is pressed again before the previous toast is dismissed, this control dismiss it immediately
+                if (toast != null) {
+                    toast.cancel();
+                }
+
+                toast = Toast.makeText(getApplicationContext(), toastSortText, Toast.LENGTH_SHORT);
+                toast.show();
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
 }

@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.0.1
+-- version 4.8.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Ott 11, 2019 alle 20:03
--- Versione del server: 10.4.6-MariaDB
--- Versione PHP: 7.3.9
+-- Creato il: Ott 22, 2019 alle 02:42
+-- Versione del server: 10.1.31-MariaDB
+-- Versione PHP: 7.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -31,10 +31,10 @@ SET time_zone = "+00:00";
 CREATE TABLE `class` (
   `ID` int(11) NOT NULL,
   `name` varchar(256) DEFAULT NULL,
-  `description` text DEFAULT NULL,
+  `description` text,
   `code` varchar(10) DEFAULT NULL,
   `year` int(1) NOT NULL,
-  `semester` int(1) DEFAULT 0
+  `semester` int(1) DEFAULT '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 --
@@ -95,7 +95,7 @@ CREATE TABLE `class_lesson_attendance_rating` (
   `lessonID` int(11) NOT NULL,
   `rating` int(1) DEFAULT NULL,
   `summary` varchar(128) DEFAULT NULL,
-  `review` text DEFAULT NULL,
+  `review` text,
   `time` datetime DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
@@ -129,6 +129,21 @@ CREATE TABLE `class_lesson_question` (
 INSERT INTO `class_lesson_question` (`ID`, `lessonID`, `studentID`, `question`, `time`) VALUES
 (15, 5, 1, 'question test', '2019-10-07 13:01:37'),
 (16, 6, 1, 'text', '2019-10-07 09:54:15');
+
+-- --------------------------------------------------------
+
+--
+-- Struttura stand-in per le viste `class_lesson_question_rated`
+-- (Vedi sotto per la vista effettiva)
+--
+CREATE TABLE `class_lesson_question_rated` (
+`ID` int(11)
+,`studentID` int(11)
+,`question` text
+,`time` datetime
+,`rate` decimal(32,0)
+,`lessonID` int(11)
+);
 
 -- --------------------------------------------------------
 
@@ -219,7 +234,7 @@ CREATE TABLE `class_room_lesson` (
   `timeStart` datetime DEFAULT NULL,
   `timeEnd` datetime DEFAULT NULL,
   `summary` varchar(128) DEFAULT NULL,
-  `description` text DEFAULT NULL
+  `description` text
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 --
@@ -241,7 +256,7 @@ INSERT INTO `class_room_lesson` (`ID`, `calendarID`, `roomID`, `timeStart`, `tim
 CREATE TABLE `degreecourse` (
   `ID` int(11) NOT NULL,
   `name` varchar(256) NOT NULL,
-  `description` text DEFAULT NULL,
+  `description` text,
   `ministerialDecree` varchar(128) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
@@ -345,6 +360,26 @@ INSERT INTO `professor_teaching` (`ID`, `professorID`, `classID`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Struttura della tabella `question_rate`
+--
+
+CREATE TABLE `question_rate` (
+  `questionID` int(11) NOT NULL,
+  `studentID` int(11) NOT NULL,
+  `questionRate` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dump dei dati per la tabella `question_rate`
+--
+
+INSERT INTO `question_rate` (`questionID`, `studentID`, `questionRate`) VALUES
+(15, 41, 1),
+(15, 42, 1);
+
+-- --------------------------------------------------------
+
+--
 -- Struttura della tabella `role`
 --
 
@@ -401,7 +436,7 @@ CREATE TABLE `student_career` (
   `ID` int(11) NOT NULL,
   `studentID` int(11) NOT NULL,
   `classID` int(11) NOT NULL,
-  `passed` tinyint(1) NOT NULL DEFAULT 0,
+  `passed` tinyint(1) NOT NULL DEFAULT '0',
   `vote` int(2) NOT NULL,
   `praise` tinyint(1) DEFAULT NULL,
   `passedDate` date DEFAULT NULL
@@ -481,7 +516,7 @@ CREATE TABLE `user` (
   `email` varchar(128) NOT NULL,
   `passwordHash` varchar(256) NOT NULL,
   `salt` varchar(256) NOT NULL,
-  `registrationDate` datetime DEFAULT current_timestamp(),
+  `registrationDate` datetime DEFAULT CURRENT_TIMESTAMP,
   `roleID` int(11) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
@@ -515,6 +550,15 @@ INSERT INTO `user_degreecourse` (`ID`, `userID`, `degreecourseID`) VALUES
 (2, 19, 2),
 (3, 19, 1),
 (17, 41, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Struttura per vista `class_lesson_question_rated`
+--
+DROP TABLE IF EXISTS `class_lesson_question_rated`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `class_lesson_question_rated`  AS  select `clq`.`ID` AS `ID`,`clq`.`studentID` AS `studentID`,`clq`.`question` AS `question`,`clq`.`time` AS `time`,sum(`qr`.`questionRate`) AS `rate`,`clq`.`lessonID` AS `lessonID` from (`class_lesson_question` `clq` left join `question_rate` `qr` on((`clq`.`ID` = `qr`.`questionID`))) group by `clq`.`ID` ;
 
 --
 -- Indici per le tabelle scaricate
@@ -567,6 +611,12 @@ ALTER TABLE `degreecourse_class`
 --
 ALTER TABLE `professor_teaching`
   ADD PRIMARY KEY (`ID`);
+
+--
+-- Indici per le tabelle `question_rate`
+--
+ALTER TABLE `question_rate`
+  ADD PRIMARY KEY (`questionID`,`studentID`);
 
 --
 -- Indici per le tabelle `role`
@@ -680,6 +730,16 @@ ALTER TABLE `user`
 --
 ALTER TABLE `user_degreecourse`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+
+--
+-- Limiti per le tabelle scaricate
+--
+
+--
+-- Limiti per la tabella `question_rate`
+--
+ALTER TABLE `question_rate`
+  ADD CONSTRAINT `question_rate_ibfk_1` FOREIGN KEY (`questionID`) REFERENCES `class_lesson_question` (`ID`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

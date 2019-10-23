@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <TextView
+        android:id="@+id/questionRating"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:gravity="center_vertical"
+        android:padding="@dimen/textDefaultPadding"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/questiontext"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/questiontext"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center_vertical"
+        android:padding="@dimen/textDefaultPadding"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/questionLikeButton"
+        app:layout_constraintStart_toEndOf="@id/questionRating"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/questionLikeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/questiontext"
+        android:layout_alignParentStart="true"
+        android:backgroundTint="@android:color/transparent"
+        android:gravity="center_horizontal|center_vertical"
+        android:src="@drawable/ic_thumb_up_black_24dp"
+        android:tint="@color/green"
+        app:layout_constraintBottom_toBottomOf="@+id/questiontext"
+        app:layout_constraintEnd_toStartOf="@id/questionDislikeButton"
+        app:layout_constraintStart_toEndOf="@id/questiontext"
+        app:layout_constraintTop_toTopOf="@id/questiontext"
+        android:contentDescription="@string/question_like_button_text" />
+
+    <ImageButton
+        android:id="@+id/questionDislikeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/questiontext"
+        android:layout_alignParentEnd="true"
+        android:backgroundTint="@android:color/transparent"
+        android:drawableTop="@drawable/ic_thumb_down_black_24dp"
+        android:gravity="center_horizontal|center_vertical"
+        android:src="@drawable/ic_thumb_down_black_24dp"
+        android:tint="@color/red"
+        app:layout_constraintBottom_toBottomOf="@+id/questionLikeButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/questionLikeButton"
+        app:layout_constraintTop_toTopOf="@id/questionLikeButton"
+        android:contentDescription="@string/question_dislike_button_text" />
+
+    <View
+        android:id="@+id/divider3"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="@dimen/textDefaultPadding"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/questiontext" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
