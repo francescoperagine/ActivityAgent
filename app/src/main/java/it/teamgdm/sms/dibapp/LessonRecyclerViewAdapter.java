@@ -199,22 +199,22 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
             Log.i(Constants.TAG, getClass().getSimpleName() + " -partecipateButtonListener-");
             if(buttonPartecipate.isChecked()) {
                 if(userIsAlreadyPartecipatingLesson()) {
+                    String message = parent.getResources().getString(R.string.attendance_already_set);
                     buttonPartecipate.setChecked(false);
-                    Toast.makeText(parent, parent.getResources().getString(R.string.attendance_already_set), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(parent, message, Toast.LENGTH_SHORT).show();
                 } else {
-                    setAttendanceFeatureStatus(buttonPartecipate.isChecked(), parent.getResources().getString(R.string.attendance_set));
+                    setAttendance(buttonPartecipate.isChecked());
+                    updateCurrentLessonPartecipation(buttonPartecipate.isChecked());
+                    featureActivator(buttonPartecipate.isChecked());
+                    Toast.makeText(parent, parent.getResources().getString(R.string.attendance_set), Toast.LENGTH_SHORT).show();
                 }
             } else {
-                setAttendanceFeatureStatus(buttonPartecipate.isChecked(), parent.getResources().getString(R.string.attendance_not_set));
+                setAttendance(buttonPartecipate.isChecked());
+                Toast.makeText(parent, parent.getResources().getString(R.string.attendance_not_set), Toast.LENGTH_SHORT).show();
+                updateCurrentLessonPartecipation(buttonPartecipate.isChecked());
+                featureActivator(buttonPartecipate.isChecked());
             }
         };
-
-        void setAttendanceFeatureStatus(boolean isButtonChecked, String message) {
-            setAttendance(isButtonChecked);
-            updateCurrentLessonPartecipation(isButtonChecked);
-            featureActivator(isButtonChecked);
-            Toast.makeText(parent, message, Toast.LENGTH_SHORT).show();
-        }
 
         private boolean userIsAlreadyPartecipatingLesson() {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -userIsAlreadyPartecipatingLesson-" + currentLessonPartecipation);
