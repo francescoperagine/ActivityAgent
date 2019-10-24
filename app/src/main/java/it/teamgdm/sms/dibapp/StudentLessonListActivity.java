@@ -77,7 +77,7 @@ public class StudentLessonListActivity extends BaseActivity implements
     public void onGeofenceTransitionAction(int geofenceReceiverAction) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onGeofenceTransitionAction-");
         geofenceTransitionAction = geofenceReceiverAction;
-        adapter.notifyDataSetChanged();
+        adapter.notifyItemChanged(geofenceTransitionAction);
     }
 
     @Override

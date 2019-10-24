@@ -144,7 +144,9 @@ static void setQuestionRate (int userID, int questionID, int rate){
         params.put(Constants.KEY_ACTION, Constants.KEY_SET_ATTENDANCE);
         params.put(Constants.KEY_LESSON_ID, String.valueOf(lessonID));
         params.put(Constants.KEY_USER_ID, String.valueOf(Session.getUserID()));
-        params.put(Constants.KEY_TIME, new SimpleDateFormat(Constants.DATETIME_FORMAT, Locale.getDefault()).format(new Date()));
+        if(isUserAttendingLesson) {
+            params.put(Constants.KEY_TIME, new SimpleDateFormat(Constants.DATETIME_FORMAT, Locale.getDefault()).format(new Date()));
+        }
         params.put(Constants.KEY_USER_ATTENDANCE, String.valueOf(isUserAttendingLesson));
         return isDataSent(params);
     }
