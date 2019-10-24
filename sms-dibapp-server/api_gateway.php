@@ -69,6 +69,15 @@ if(isset($input[ACTION])){
 		case ACTION_GET_LESSON_IN_PROGRESS:
 			$response = getLessonInProgress($input[KEY_CLASS_LESSON_ID]);
 			break;
+		case IS_QUESTION_RATED:
+			$response = questionIsRated($input[KEY_USER_ID], $input[KEY_QUESTION_ID]);
+			break;
+		case ACTION_DELETE_QUESTION_RATE:
+			$response = deleteQuestionRate($input[KEY_USER_ID], $input[KEY_QUESTION_ID]);
+			break;
+		case ACTION_SET_QUESTION_RATE:
+			$response = setQuestionRate($input[KEY_USER_ID], $input[KEY_QUESTION_ID], $input[KEY_QUESTION_RATE]);
+			break;
 		default:
 			$response = new Response(ACTION_NOT_DEFINED_TEXT, ACTION_NOT_DEFINED_CODE); 
 			break;

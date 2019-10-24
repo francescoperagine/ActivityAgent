@@ -2,6 +2,7 @@ package it.teamgdm.sms.dibapp;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,8 @@ public class StudentQuestionAdapter extends ArrayAdapter<Question> {
     public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
         questionHolder holder;
+        int likeFlag;
+        int dislikeFlag;
 
         if (row == null) {
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();
@@ -45,12 +48,51 @@ public class StudentQuestionAdapter extends ArrayAdapter<Question> {
         Question question = data.get(position);
         holder.textQuestion.setText(question.getQuestion());
         holder.rate.setText(String.valueOf(question.getRate()));
-        holder.btnRateBad.setOnClickListener(v -> Toast.makeText(context, "-1 button Clicked", Toast.LENGTH_LONG).show());
+        int flag = DAO.isQuestionRated( Session.getUserID(),question.getId() );
+
+        if(flag ==-1){
+            holder.btnRateGood.setColorFilter(Color.GRAY);
+            holder.btnRateBad.setColorFilter(Color.RED);
+
+        }
+        else{
+            if (flag == 1) {
+            holder.btnRateBad.setColorFilter(Color.GRAY);
+            holder.btnRateGood.setColorFilter(Color.GREEN);
+
+        } else {
+                holder.btnRateGood.setColorFilter(Color.GRAY);
+                holder.btnRateBad.setColorFilter(Color.GRAY);
+
+            }
+        }
+
+        holder.btnRateBad.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+
+                    holder.btnRateBad.setColorFilter(Color.RED);
+                    holder.btnRateGood.setColorFilter(Color.GRAY);
+                    DAO.deleteQuestionRate(Session.getUserID(), question.getId());
+                    DAO.setQuestionRate(Session.getUserID(), question.getId(), Constants.RATE_BAD);
+                    int newRate = Integer.parseInt(holder.rate.getText().toString()) - 1;
+                    holder.rate.setText(String.valueOf(newRate));
+
+
+                                                 }
+                                             });
+
         holder.btnRateGood.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "+1 button Clicked", Toast.LENGTH_LONG).show();
+
+
+                holder.btnRateGood.setColorFilter(Color.GREEN);
+                holder.btnRateBad.setColorFilter(Color.GRAY);
+                DAO.deleteQuestionRate(Session.getUserID(), question.getId());
+                DAO.setQuestionRate(Session.getUserID(), question.getId(), Constants.RATE_GOOD);
+                int newRate = Integer.parseInt(holder.rate.getText().toString()) + 1;
+                holder.rate.setText(String.valueOf(newRate));
             }
         });
         return row;

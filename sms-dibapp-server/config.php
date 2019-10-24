@@ -23,6 +23,9 @@ define("ACTION_GET_TOTAL_MEMBERS", "getTotalMembers");
 define("ACTION_GET_ATTENDANCE_CHART", "getAttedanceChart");
 define("ACTION_GET_CLASS_NAME", "getClassName");
 define("ACTION_GET_LESSON_IN_PROGRESS", "getLessonInProgress");
+define("IS_QUESTION_RATED", "isQuestionRated");
+define("ACTION_DELETE_QUESTION_RATE", "deleteQuestionRate");
+define("ACTION_SET_QUESTION_RATE", "setQuestionRate");
 
 define("ACTION_NOT_DEFINED_TEXT", "Action not defined");
 define("ACTION_NOT_DEFINED_CODE", 101);
@@ -46,6 +49,8 @@ define("KEY_USER_EMAIL", "email");
 define("KEY_TIME", "time");
 define("KEY_CLASS_ID", "classID");
 define("KEY_QUESTION", "question");
+define("KEY_QUESTION_ID", "questionID");
+define("KEY_QUESTION_RATE", "rate");
 define("KEY_CLASS_LESSON_ID", "lessonID");
 define("KEY_CLASS_LESSON_ATTENDANCE", "attendance");
 define("KEY_CLASS_LESSON_REVIEW_SUMMARY", "reviewSummary");

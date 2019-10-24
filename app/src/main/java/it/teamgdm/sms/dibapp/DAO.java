@@ -87,6 +87,45 @@ class DAO {
         return response == 1;
     }
 
+    static int isQuestionRated (int userID, int questionID){
+        Log.i(Constants.TAG, DAO.class.getSimpleName() + " isQuestionRated ");
+        HashMap<String, String> params = new HashMap<>();
+        params.put(Constants.KEY_ACTION, Constants.IS_QUESTION_RATED);
+        params.put(Constants.KEY_USER_ID, String.valueOf(userID));
+        params.put(Constants.KEY_QUESTION_ID2, String.valueOf(questionID));
+        int response = 0;
+        try {
+            try{
+            response = getFromDB(params).getJSONObject(0).optInt(Constants.QUESTION_RATE, 0);}
+            catch (NullPointerException e){
+                response = 0;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return response;
+    }
+
+    static boolean deleteQuestionRate (int userID, int questionID){
+        Log.i(Constants.TAG, DAO.class.getSimpleName() + " deleteQuestionRate ");
+        HashMap<String, String> params = new HashMap<>();
+        params.put(Constants.KEY_ACTION, Constants.ACTION_DELETE_QUESTION_RATE);
+        params.put(Constants.KEY_USER_ID, String.valueOf(userID));
+        params.put(Constants.KEY_QUESTION_ID2, String.valueOf(questionID));
+        return isDataSent(params);
+    }
+
+static void setQuestionRate (int userID, int questionID, int rate){
+    Log.i(Constants.TAG, DAO.class.getSimpleName() + " deleteQuestionRate ");
+    HashMap<String, String> params = new HashMap<>();
+    params.put(Constants.KEY_ACTION, Constants.ACTION_SET_QUESTION_RATE);
+    params.put(Constants.KEY_USER_ID, String.valueOf(userID));
+    params.put(Constants.KEY_QUESTION_ID2, String.valueOf(questionID));
+    params.put(Constants.KEY_QUESTION_RATE, String.valueOf(rate));
+    getFromDB(params);
+}
+
+
     static boolean sendQuestion(int lessonID, String input) {
         Log.i(Constants.TAG, DAO.class.getSimpleName() + " -sendQuestion- lessonID " + lessonID);
         HashMap<String, String> params = new HashMap<>();

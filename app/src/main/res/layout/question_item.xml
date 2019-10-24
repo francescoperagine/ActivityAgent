@@ -20,7 +20,7 @@
     <TextView
         android:id="@+id/questiontext"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:padding="@dimen/textDefaultPadding"
         app:layout_constraintBottom_toBottomOf="parent"

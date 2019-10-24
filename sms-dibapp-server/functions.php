@@ -3,6 +3,9 @@
 include 'db_connect.php';
 include 'config.php';
 
+define ("SET_QUESTION_RATE_QUERY", "INSERT INTO question_rate(questionID, studentID, questionRate) VALUES ( :questionID , :studentID , :rate )");
+define("DELETE_QUESTION_RATE_QUERY", "DELETE FROM question_rate WHERE questionID = :questionID AND studentID = :studentID");
+define("QUESTION_RATED_QUERY", "SELECT questionRate FROM question_rate WHERE questionID = :questionID AND studentID = :studentID ");
 define("USER_EXISTS_QUERY", "SELECT count(*) as count FROM user WHERE email = ?");
 define("VERIFY_PASSWORD_QUERY", "SELECT passwordHash, salt FROM user WHERE email = ?");
 define("GET_ROLE_LIST_QUERY", "SELECT name FROM role ORDER BY name");
@@ -101,6 +104,16 @@ function userExists(string $email){
 	if($result->count != 1) throw new Exception(INVALID_EMAIL_TEXT, INVALID_EMAIL_CODE);
 }
 
+function questionIsRated(string $userid, string $questionid){
+	global $connection;
+	$stmt = $connection->prepare(QUESTION_RATED_QUERY);
+	$stmt->bindValue(':studentID', $userid);
+	$stmt->bindValue(':questionID', $questionid);
+	$stmt->execute();
+	$response = $stmt->fetch(PDO::FETCH_OBJ);
+	return $response;
+}
+
 function verifyPassword(string $email, string $password) {
 	global $connection;
 	$stmt = $connection->prepare(VERIFY_PASSWORD_QUERY);
@@ -141,6 +154,43 @@ function getDegreecourseList() {
 	$response = $stmt->fetchAll(PDO::FETCH_OBJ);
 	return $response;
 }
+
+function deleteQuestionRate (string $studentID, string $questionID){
+	global $connection;
+	$stmt = $connection->prepare(DELETE_QUESTION_RATE_QUERY);
+	$stmt->bindValue(':studentID', $studentID);
+	$stmt->bindValue(':questionID', $questionID);
+	$stmt->execute();
+	$connection->beginTransaction();
+	if($stmt->execute()){
+		$connection->commit();
+		$response = new Response(QUERY_OK_TEXT, QUERY_OK_CODE);
+	} else {
+		$connection->rollBack();
+		$response = new Response(QUERY_NOT_OK_TEXT, QUERY_NOT_OK_CODE);
+	}
+	return $response;
+	
+}
+
+function setQuestionRate (string $studentID, string $questionID, string $rate){
+	global $connection;
+	$stmt = $connection->prepare(SET_QUESTION_RATE_QUERY);
+	$stmt->bindValue(':studentID', $studentID);
+	$stmt->bindValue(':questionID', $questionID);
+	$stmt->bindValue(':rate', $rate);
+	$stmt->execute();
+	$connection->beginTransaction();
+	if($stmt->execute()){
+		$connection->commit();
+		$response = new Response(QUERY_OK_TEXT, QUERY_OK_CODE);
+	} else {
+		$connection->rollBack();
+		$response = new Response(QUERY_NOT_OK_TEXT, QUERY_NOT_OK_CODE);
+	}
+	return $response; 
+}
+
 
 function registerNewUser(array $input) {
 	global $connection;
