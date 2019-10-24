@@ -80,7 +80,7 @@ public class ProfessorListQuestionActivity extends BaseActivity {
         adapterRate = new QuestionListAdapter(this, R.layout.professor_question_item, questionListRate);
 
         //assign adapter to listview
-        listView.setAdapter(adapterTime);
+        listView.setAdapter(adapterRate);
 
     }
 
