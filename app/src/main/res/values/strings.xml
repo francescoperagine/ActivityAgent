@@ -44,6 +44,8 @@
     <string name="attendance">Students registered: </string>
     <string name="sort_ascend">Sort Ascending</string>
     <string name="sort_descend">Sort Descending</string>
+    <string name="sort_rate">Sort by Rate</string>
+    <string name="sort_time">Sort by Insert Time</string>
     <string name="daily_attendance">Daily attendance</string>
     <string name="review_per_lesson">Review per lesson</string>
     <string name="name">Name: </string>

@@ -115,15 +115,15 @@ class DAO {
         return isDataSent(params);
     }
 
-static void setQuestionRate (int userID, int questionID, int rate){
-    Log.i(Constants.TAG, DAO.class.getSimpleName() + " deleteQuestionRate ");
-    HashMap<String, String> params = new HashMap<>();
-    params.put(Constants.KEY_ACTION, Constants.ACTION_SET_QUESTION_RATE);
-    params.put(Constants.KEY_USER_ID, String.valueOf(userID));
-    params.put(Constants.KEY_QUESTION_ID2, String.valueOf(questionID));
-    params.put(Constants.KEY_QUESTION_RATE, String.valueOf(rate));
-    getFromDB(params);
-}
+    static void setQuestionRate (int userID, int questionID, int rate){
+        Log.i(Constants.TAG, DAO.class.getSimpleName() + " deleteQuestionRate ");
+        HashMap<String, String> params = new HashMap<>();
+        params.put(Constants.KEY_ACTION, Constants.ACTION_SET_QUESTION_RATE);
+        params.put(Constants.KEY_USER_ID, String.valueOf(userID));
+        params.put(Constants.KEY_QUESTION_ID2, String.valueOf(questionID));
+        params.put(Constants.KEY_QUESTION_RATE, String.valueOf(rate));
+        getFromDB(params);
+    }
 
 
     static boolean sendQuestion(int lessonID, String input) {

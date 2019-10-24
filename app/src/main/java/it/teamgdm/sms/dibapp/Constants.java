@@ -24,6 +24,7 @@ public final class Constants {
     static final String IS_USER_ATTENDING_LESSON = "isUserAttendingLesson";
     static final String KEY_USER_ATTENDANCE = "attendance";
     static final String KEY_QUESTION = "question";
+    static final String KEY_QUESTION_TIME = "time";
     static final String USER_QUESTION_ASK = "askAQuestion";
     static final String KEY_CLASS_LESSON = "lesson";
     static final String KEY_SET_ATTENDANCE = "setAttendance";

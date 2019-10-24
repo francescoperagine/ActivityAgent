@@ -6,8 +6,12 @@ import android.widget.ListView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class StudentListQuestionActivity extends BaseActivity {
 
@@ -35,13 +39,19 @@ public class StudentListQuestionActivity extends BaseActivity {
         int totalQuestion = response.length();
         for (int i = 0; i < totalQuestion; i++) {
             try {
-                Question question = new Question();
-                question.setQuestion(response.getJSONObject(i).optString(Constants.KEY_QUESTION));
-                question.setId(response.getJSONObject(i).optInt(Constants.KEY_QUESTION_ID, 0));
-                question.setRate(response.getJSONObject(i).optInt(Constants.KEY_QUESTION_RATE, 0 ));
+                JSONObject obj = response.getJSONObject(i);
+                String qst = obj.optString(Constants.KEY_QUESTION);
+                int id = obj.optInt(Constants.KEY_QUESTION_ID);
+                int rate = obj.optInt(Constants.KEY_QUESTION_RATE);
+                String dateStr = obj.getString(Constants.KEY_QUESTION_TIME);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date dateQst = sdf.parse(dateStr);
+                Question question = new Question(id, qst, rate, dateQst);
                 questionArray.add(question);
                 Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-Question " + question.toString());
             } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (ParseException e) {
                 e.printStackTrace();
             }
         }

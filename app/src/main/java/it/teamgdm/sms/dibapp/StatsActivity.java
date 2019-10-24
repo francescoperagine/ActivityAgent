@@ -115,7 +115,7 @@ public class StatsActivity extends BaseActivity {
         barDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
         barDataSet.setBarBorderColor(Color.BLACK);
         barDataSet.setBarBorderWidth(2.0f);
-        barDataSet.setColor(Color.parseColor("#008577"));
+        barDataSet.setColor(getColor(R.color.primaryColor));
         barDataSet.setValueTextSize(12);
         barDataSet.setValueTextColor(Color.BLACK);
 
@@ -123,7 +123,7 @@ public class StatsActivity extends BaseActivity {
         barDataSet2.setAxisDependency(YAxis.AxisDependency.LEFT);
         barDataSet2.setBarBorderColor(Color.BLACK);
         barDataSet2.setBarBorderWidth(2.0f);
-        barDataSet2.setColor(Color.BLUE);
+        barDataSet2.setColor(getColor(R.color.secondaryColor));
         barDataSet2.setValueTextSize(12);
         barDataSet2.setValueTextColor(Color.BLACK);
 
