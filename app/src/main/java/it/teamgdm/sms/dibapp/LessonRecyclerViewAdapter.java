@@ -1,15 +1,11 @@
 package it.teamgdm.sms.dibapp;
 
 import android.content.Intent;
-import android.graphics.Point;
 import android.transition.TransitionManager;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -30,7 +26,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Locale;
 
 public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecyclerViewAdapter.ViewHolder> {
 
@@ -204,22 +199,22 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
             Log.i(Constants.TAG, getClass().getSimpleName() + " -partecipateButtonListener-");
             if(buttonPartecipate.isChecked()) {
                 if(userIsAlreadyPartecipatingLesson()) {
-                    String message = parent.getResources().getString(R.string.attendance_already_set);
                     buttonPartecipate.setChecked(false);
-                    Toast.makeText(parent, message, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(parent, parent.getResources().getString(R.string.attendance_already_set), Toast.LENGTH_SHORT).show();
                 } else {
-                    setAttendance(buttonPartecipate.isChecked());
-                    updateCurrentLessonPartecipation(buttonPartecipate.isChecked());
-                    featureActivator(buttonPartecipate.isChecked());
-                    Toast.makeText(parent, parent.getResources().getString(R.string.attendance_set), Toast.LENGTH_SHORT).show();
+                    setAttendanceFeatureStatus(buttonPartecipate.isChecked(), parent.getResources().getString(R.string.attendance_set));
                 }
             } else {
-                setAttendance(buttonPartecipate.isChecked());
-                Toast.makeText(parent, parent.getResources().getString(R.string.attendance_not_set), Toast.LENGTH_SHORT).show();
-                updateCurrentLessonPartecipation(buttonPartecipate.isChecked());
-                featureActivator(buttonPartecipate.isChecked());
+                setAttendanceFeatureStatus(buttonPartecipate.isChecked(), parent.getResources().getString(R.string.attendance_not_set));
             }
         };
+
+        void setAttendanceFeatureStatus(boolean isButtonChecked, String message) {
+            setAttendance(isButtonChecked);
+            updateCurrentLessonPartecipation(isButtonChecked);
+            featureActivator(isButtonChecked);
+            Toast.makeText(parent, message, Toast.LENGTH_SHORT).show();
+        }
 
         private boolean userIsAlreadyPartecipatingLesson() {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -userIsAlreadyPartecipatingLesson-" + currentLessonPartecipation);
@@ -241,6 +236,7 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
                 if(parent.getSupportFragmentManager().findFragmentByTag(String.valueOf(lesson.lessonID)) != null){
                     hideEvaluationUI(lesson.lessonID);
                 }
+                buttonReview.setChecked(false);
                 currentLessonPartecipation = 0;
             }
         }

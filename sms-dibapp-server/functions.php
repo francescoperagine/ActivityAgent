@@ -278,7 +278,7 @@ function askAQuestion(int $lessonID, int $userID, string $question, string $time
 function setAttendance(int $lessonID, int $userID, string $attendance, string $time = null) {
 	$userAttendance = ($attendance === 'true');
 	global $connection;
-	if($userAttendance == true) {
+	if($userAttendance == true && $time != null) {
 		$stmt = $connection->prepare(SET_ATTENDANCE_QUERY);
 		$stmt->bindValue(':time', $time);
 	} else {

@@ -37,7 +37,7 @@ if(isset($input[ACTION])){
 			$response = askAQuestion($input[KEY_CLASS_LESSON_ID], $input[KEY_USER_ID], $input[KEY_QUESTION], $input[KEY_TIME]);
 			break;
 		case ACTION_SET_ATTENDANCE:
-			$response = setAttendance($input[KEY_CLASS_LESSON_ID], $input[KEY_USER_ID], $input[KEY_CLASS_LESSON_ATTENDANCE], $input[KEY_TIME]);
+			$response = setAttendance($input[KEY_CLASS_LESSON_ID], $input[KEY_USER_ID], $input[KEY_CLASS_LESSON_ATTENDANCE], $input[KEY_TIME] = null);
 			break;
 		case ACTION_SET_REVIEW: 
 			$response = setReview($input);
