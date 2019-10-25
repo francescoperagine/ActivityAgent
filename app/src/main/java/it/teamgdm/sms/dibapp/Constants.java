@@ -2,6 +2,7 @@ package it.teamgdm.sms.dibapp;
 
 public final class Constants {
 
+    static final String KEY_ACTION_LOGOUT = "logout";
     static final int RATE_GOOD = 1;
     static final int RATE_BAD = -1;
     static final String ACTION_SET_QUESTION_RATE = "setQuestionRate";

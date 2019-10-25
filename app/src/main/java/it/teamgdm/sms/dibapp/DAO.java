@@ -137,18 +137,16 @@ class DAO {
         return isDataSent(params);
     }
 
-    static boolean setAttendance(int lessonID, boolean isUserAttendingLesson) {
+    static void setAttendance(int lessonID, boolean isUserAttendingLesson) {
         Log.i(Constants.TAG, DAO.class.getSimpleName() + " -setAttendance- set to " + isUserAttendingLesson);
         // Registers the lesson's classAttendance into the DB
         HashMap<String, String> params = new HashMap<>();
         params.put(Constants.KEY_ACTION, Constants.KEY_SET_ATTENDANCE);
         params.put(Constants.KEY_LESSON_ID, String.valueOf(lessonID));
         params.put(Constants.KEY_USER_ID, String.valueOf(Session.getUserID()));
-        if(isUserAttendingLesson) {
-            params.put(Constants.KEY_TIME, new SimpleDateFormat(Constants.DATETIME_FORMAT, Locale.getDefault()).format(new Date()));
-        }
-        params.put(Constants.KEY_USER_ATTENDANCE, String.valueOf(isUserAttendingLesson));
-        return isDataSent(params);
+        params.put(Constants.KEY_LESSON_ATTENDANCE, String.valueOf(isUserAttendingLesson));
+        params.put(Constants.KEY_TIME, new SimpleDateFormat(Constants.DATETIME_FORMAT, Locale.getDefault()).format(new Date()));
+        getFromDB(params);
     }
 
     static boolean setReview(int lessonID, String summary, String review, int rating) {

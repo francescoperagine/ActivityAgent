@@ -14,8 +14,6 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
-import java.util.Objects;
-
 public class StudentReviewFragment extends DialogFragment {
 
     private StudentEvaluateFragmentInterface studentEvaluateFragmentInterfaceCallback;
@@ -119,7 +117,7 @@ public class StudentReviewFragment extends DialogFragment {
 
     private final View.OnClickListener cancelButtonListener = v -> {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -cancelButtonListener-");
-        Objects.requireNonNull(getDialog()).dismiss();
+        getFragmentManager().beginTransaction().remove(StudentReviewFragment.this).commit();
     };
 
     private final View.OnClickListener submitButtonListener = v -> {

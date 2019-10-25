@@ -1,6 +1,9 @@
 package it.teamgdm.sms.dibapp;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -10,9 +13,11 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.FragmentManager;
 
 import java.util.Objects;
+
+import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
@@ -20,6 +25,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     TextView titleView;
     private boolean backButtonEnabled = true;
     private boolean toolbarEnabled = true;
+    BroadcastReceiver receiver;
+    IntentFilter intentFilter = new IntentFilter();
 
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-");
@@ -28,6 +35,20 @@ public abstract class BaseActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         titleView = findViewById(R.id.toolbarTitle);
+        intentFilter.addAction(Constants.KEY_ACTION_LOGOUT);
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Log.d("onReceive","Logout in progress");
+                //At this point you should start the login activity and finish this one
+                Intent mainActivityIntent = new Intent(context, MainActivity.class);
+                mainActivityIntent.addFlags(FLAG_ACTIVITY_CLEAR_TOP);
+                mainActivityIntent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(mainActivityIntent);
+                finish();
+            }
+        };
+        registerReceiver(receiver, intentFilter);
     }
 
     @Override
@@ -44,6 +65,12 @@ public abstract class BaseActivity extends AppCompatActivity {
                 getSupportActionBar().setDisplayShowHomeEnabled(true);
             }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(receiver);
     }
 
     abstract int getLayoutResource();
@@ -69,9 +96,8 @@ public abstract class BaseActivity extends AppCompatActivity {
                 startActivity(settingIntent);
                 return true;
             case R.id.logoutButton:
-                FragmentManager fragmentManager = this.getSupportFragmentManager();
-                LogoutDialogFragment logoutDialogFragment = new LogoutDialogFragment(this);
-                logoutDialogFragment.show(fragmentManager, "logout_fragment");
+                LogoutDialog logoutDialog = new LogoutDialog(this);
+                logoutDialog.show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

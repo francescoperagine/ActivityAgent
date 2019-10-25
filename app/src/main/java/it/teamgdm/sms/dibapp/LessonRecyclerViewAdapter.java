@@ -199,22 +199,24 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
             Log.i(Constants.TAG, getClass().getSimpleName() + " -partecipateButtonListener-");
             if(buttonPartecipate.isChecked()) {
                 if(userIsAlreadyPartecipatingLesson()) {
+                    Log.i(Constants.TAG, getClass().getSimpleName() + " -partecipateButtonListener-user is already partecipating a lesson");
                     String message = parent.getResources().getString(R.string.attendance_already_set);
                     buttonPartecipate.setChecked(false);
                     Toast.makeText(parent, message, Toast.LENGTH_SHORT).show();
                 } else {
-                    setAttendance(buttonPartecipate.isChecked());
-                    updateCurrentLessonPartecipation(buttonPartecipate.isChecked());
-                    featureActivator(buttonPartecipate.isChecked());
-                    Toast.makeText(parent, parent.getResources().getString(R.string.attendance_set), Toast.LENGTH_SHORT).show();
+                    updateAttendanceStatus(buttonPartecipate.isChecked(), R.string.attendance_set);
                 }
             } else {
-                setAttendance(buttonPartecipate.isChecked());
-                Toast.makeText(parent, parent.getResources().getString(R.string.attendance_not_set), Toast.LENGTH_SHORT).show();
-                updateCurrentLessonPartecipation(buttonPartecipate.isChecked());
-                featureActivator(buttonPartecipate.isChecked());
+                updateAttendanceStatus(buttonPartecipate.isChecked(), R.string.attendance_not_set);
             }
         };
+
+        void updateAttendanceStatus(boolean buttonIsChecked, int resourceString) {
+            setAttendance(buttonIsChecked);
+            updateCurrentLessonPartecipation(buttonIsChecked);
+            Toast.makeText(parent, parent.getResources().getString(resourceString), Toast.LENGTH_SHORT).show();
+            featureActivator(buttonIsChecked);
+        }
 
         private boolean userIsAlreadyPartecipatingLesson() {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -userIsAlreadyPartecipatingLesson-" + currentLessonPartecipation);
@@ -255,7 +257,6 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
 
         private void featurePanelHandler(boolean menuVisibility, String alternateViewText) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -featurePanelHandler-");
-            notifyGeofenceTransition();
             if(menuVisibility && StudentLessonListActivity.geofenceTransitionAction == Geofence.GEOFENCE_TRANSITION_DWELL) {
                 bottomMenuAlternateView.setVisibility(View.GONE);
                 studentLessonBottomMenu.setVisibility(View.VISIBLE);
@@ -346,17 +347,5 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
             }
         }
 
-        void notifyGeofenceTransition() {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -getBottomFragment-"+ StudentLessonListActivity.geofenceTransitionAction);
-            if (StudentLessonListActivity.geofenceTransitionAction == Geofence.GEOFENCE_TRANSITION_DWELL) {
-                String message = parent.getResources().getString(R.string.geofence_transition_dwelling);
-                Log.i(Constants.TAG, getClass().getSimpleName() + " " + message);
-                Toast.makeText(parent, message, Toast.LENGTH_SHORT).show();
-            } else {
-                String message = parent.getResources().getString(R.string.geofence_transition_left);
-                Log.i(Constants.TAG, getClass().getSimpleName() + " " + message);
-                Toast.makeText(parent, message, Toast.LENGTH_SHORT).show();
-            }
-        }
     }
 }
