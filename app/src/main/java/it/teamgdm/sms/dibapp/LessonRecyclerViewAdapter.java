@@ -338,13 +338,17 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
         public void setReview(int lessonID, String summary, String review, int rating) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -setReview-");
             if(DAO.setReview(lessonID,summary,review,rating))  {
-                buttonReview.setChecked(false);
                 Toast.makeText(parent, parent.getString(R.string.review_sent), Toast.LENGTH_SHORT).show();
                 Log.i(Constants.TAG, getClass().getSimpleName() + " -setReview-question sent-");
             } else {
                 Toast.makeText(parent, parent.getString(R.string.review_not_sent), Toast.LENGTH_SHORT).show();
                 Log.i(Constants.TAG, getClass().getSimpleName() + " -setReview-question not sent-");
             }
+        }
+
+        @Override
+        public void turnOffButton() {
+            buttonReview.setChecked(false);
         }
 
     }
