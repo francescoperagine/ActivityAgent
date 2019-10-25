@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RegisterActivity">
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+
+            <ImageView
+                android:id="@+id/logo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@+string/contentDescriptionLogo"
+                app:srcCompat="@mipmap/dib_logo"
+                tools:layout_editor_absoluteX="43dp"
+                tools:layout_editor_absoluteY="16dp"/>
+
+            <EditText
+                android:id="@+id/name"
+                android:layout_width="400dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:autofillHints="@string/namePromptHint"
+                android:hint="@string/namePromptHint"
+                android:imeOptions="actionDone"
+                android:includeFontPadding="true"
+                android:inputType="textPersonName"
+                android:padding="@dimen/textDefaultPadding"
+                android:selectAllOnFocus="true"
+                app:layout_constraintBottom_toTopOf="@+id/surname"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/logo"
+                tools:targetApi="o" />
+
+            <EditText
+                android:id="@+id/surname"
+                android:layout_width="400dp"
+                android:layout_height="wrap_content"
+                android:autofillHints="@string/surnamePromptHint"
+                android:hint="@string/surnamePromptHint"
+                android:imeOptions="actionDone"
+                android:includeFontPadding="true"
+                android:inputType="textPersonName"
+                android:padding="@dimen/textDefaultPadding"
+                android:selectAllOnFocus="true"
+                app:layout_constraintBottom_toTopOf="@+id/ssn"
+                app:layout_constraintEnd_toEndOf="@+id/name"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="@+id/name"
+                app:layout_constraintTop_toBottomOf="@+id/name"
+                tools:targetApi="o" />
+
+            <EditText
+                android:id="@+id/ssn"
+                android:layout_width="400dp"
+                android:layout_height="wrap_content"
+                android:autofillHints="@string/ssnPromptHint"
+                android:hint="@string/ssnPromptHint"
+                android:imeOptions="actionDone"
+                android:includeFontPadding="true"
+                android:inputType="number"
+                android:padding="@dimen/textDefaultPadding"
+                android:selectAllOnFocus="true"
+                app:layout_constraintBottom_toTopOf="@id/degreecourse"
+                app:layout_constraintEnd_toEndOf="@id/surname"
+                app:layout_constraintStart_toStartOf="@id/surname"
+                app:layout_constraintTop_toBottomOf="@id/surname"
+                tools:targetApi="o" />
+
+            <Spinner
+                android:id="@+id/degreecourse"
+                android:layout_width="400dp"
+                android:layout_height="wrap_content"
+                android:spinnerMode="dialog"
+                app:layout_constraintBottom_toTopOf="@id/role"
+                app:layout_constraintEnd_toEndOf="@+id/ssn"
+                app:layout_constraintStart_toStartOf="@+id/ssn"
+                app:layout_constraintTop_toBottomOf="@id/ssn" />
+
+            <Spinner
+                android:id="@+id/role"
+                android:layout_width="400dp"
+                android:layout_height="wrap_content"
+                android:spinnerMode="dialog"
+                app:layout_constraintBottom_toTopOf="@id/email"
+                app:layout_constraintEnd_toEndOf="@id/degreecourse"
+                app:layout_constraintStart_toStartOf="@id/degreecourse"
+                app:layout_constraintTop_toBottomOf="@id/degreecourse" />
+
+            <EditText
+                android:id="@+id/email"
+                android:layout_width="400dp"
+                android:layout_height="wrap_content"
+                android:autofillHints="@string/emailPromptHint"
+                android:hint="@string/emailPromptHint"
+                android:includeFontPadding="true"
+                android:inputType="textEmailAddress"
+                android:padding="@dimen/textDefaultPadding"
+                android:selectAllOnFocus="true"
+                app:layout_constraintBottom_toTopOf="@id/password"
+                app:layout_constraintEnd_toEndOf="@id/role"
+                app:layout_constraintStart_toStartOf="@id/role"
+                app:layout_constraintTop_toBottomOf="@id/role"
+                tools:targetApi="o" />
+
+            <EditText
+                android:id="@+id/password"
+                android:layout_width="400dp"
+                android:layout_height="wrap_content"
+
+                android:autofillHints="@string/passwordPromptHint"
+                android:hint="@string/passwordPromptHint"
+                android:imeOptions="actionDone"
+                android:includeFontPadding="true"
+                android:inputType="textPassword"
+                android:padding="@dimen/textDefaultPadding"
+                android:selectAllOnFocus="true"
+                app:layout_constraintBottom_toTopOf="@+id/confirmPassword"
+                app:layout_constraintEnd_toEndOf="@+id/email"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="@+id/email"
+                app:layout_constraintTop_toBottomOf="@+id/email"
+                tools:targetApi="o" />
+
+            <EditText
+                android:id="@+id/confirmPassword"
+                android:layout_width="400dp"
+                android:layout_height="wrap_content"
+
+                android:autofillHints="@string/confirmPasswordPromptHint"
+                android:hint="@string/confirmPasswordPromptHint"
+                android:imeOptions="actionDone"
+                android:includeFontPadding="true"
+                android:inputType="textPassword"
+                android:padding="@dimen/textDefaultPadding"
+                android:selectAllOnFocus="true"
+                app:layout_constraintBottom_toTopOf="@+id/registerButton"
+                app:layout_constraintEnd_toEndOf="@+id/password"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="@+id/password"
+                app:layout_constraintTop_toBottomOf="@+id/password"
+                tools:targetApi="o" />
+
+            <Button
+                android:id="@+id/registerButton"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="@string/action_register"
+                app:layout_constraintBottom_toTopOf="@+id/alreadyRegistered"
+                app:layout_constraintEnd_toEndOf="@+id/confirmPassword"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="@+id/confirmPassword"
+                app:layout_constraintTop_toBottomOf="@+id/confirmPassword" />
+
+            <TextView
+                android:id="@+id/alreadyRegistered"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/alreadyRegistered"
+                app:layout_constraintBottom_toTopOf="@+id/sign_inButton"
+                app:layout_constraintEnd_toEndOf="@+id/registerButton"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="@+id/registerButton"
+                app:layout_constraintTop_toBottomOf="@+id/registerButton" />
+
+            <Button
+                android:id="@+id/sign_inButton"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/action_sign_in"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/registerButton"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="@+id/registerButton"
+                app:layout_constraintTop_toBottomOf="@+id/registerButton" />
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

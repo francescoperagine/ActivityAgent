@@ -1,14 +1,17 @@
 package it.teamgdm.sms.dibapp;
 
+import android.os.Bundle;
+import android.view.WindowManager;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.os.Handler;
 
 public class SplashActivity extends AppCompatActivity {
 
-    private final int SPLASH_DISPLAY_LENGTH = 1000;
+    ProgressBar progressBar;
+    TextView textView;
 
 
     @Override
@@ -16,13 +19,21 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(icicle);
         setContentView(R.layout.splashscreen);
 
-        /* New Handler to start the MainActivity
-         * and closes this Splash-Screen after 1 second.*/
-        new Handler().postDelayed(() -> {
-            /* Creates an Intent that will start the MainActivity. */
-            Intent mainIntent = new Intent(SplashActivity.this,MainActivity.class);
-            SplashActivity.this.startActivity(mainIntent);
-            SplashActivity.this.finish();
-        }, SPLASH_DISPLAY_LENGTH);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN );
+
+        progressBar = findViewById(R.id.progress_bar);
+        textView = findViewById(R.id.text_view);
+
+        progressBar.setMax(100);
+        progressBar.setScaleY(3f);
+
+        progressAnimation();
+    }
+
+    public void progressAnimation(){
+        ProgressBarAnimation anim = new ProgressBarAnimation(this, progressBar, textView, 0f, 100f);
+        anim.setDuration(8000);
+        progressBar.setAnimation(anim);
     }
 }

@@ -26,6 +26,7 @@ public class RegisterActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         disableBackButton();
+        disableToolbar();
 
         editTextName = findViewById(R.id.name);
         editTextSurname = findViewById(R.id.surname);
