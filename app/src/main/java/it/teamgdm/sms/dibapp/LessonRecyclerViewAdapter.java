@@ -313,7 +313,7 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
 
         private void showQuestionUI() {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -showQuestionUI-");
-            Intent questionIntent = new Intent(parent, StudentListQuestionActivity.class);
+            Intent questionIntent = new Intent(parent, StudentQuestionListActivity.class);
             questionIntent.setAction(Constants.GET_LESSON_QUESTIONS);
             questionIntent.putExtra(Constants.KEY_LESSON_ID, lesson.lessonID);
             questionIntent.putExtra(Constants.KEY_CLASS_NAME, lesson.className);

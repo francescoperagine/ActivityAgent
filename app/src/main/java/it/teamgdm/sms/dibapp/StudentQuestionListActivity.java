@@ -23,11 +23,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-public class StudentListQuestionActivity extends BaseActivity {
+public class StudentQuestionListActivity extends BaseActivity {
 
     //create ArrayList of String
-    private ArrayList<Question> questionArray = new ArrayList<>();
+    private ArrayList<Question> questionList;
     private static boolean addQuestionButtonStatus;
+    ListView listView;
     View newQuestionLayout;
     TextView question_list_empty;
     EditText questionText;
@@ -39,7 +40,7 @@ public class StudentListQuestionActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //create object of listview
-        ListView listView= findViewById(R.id.listviewstudent);
+        listView = findViewById(R.id.listviewstudent);
         newQuestionLayout = findViewById(R.id.addQuestionContainer);
         question_list_empty = findViewById(R.id.question_list_empty);
         addQuestionButton = findViewById(R.id.addQuestionButton);
@@ -53,31 +54,9 @@ public class StudentListQuestionActivity extends BaseActivity {
 
         getSupportActionBar().setTitle(className + " - " + date);
 
-        //query
-        JSONArray response = DAO.getLessonQuestion(lessonID);
-
-        Log.i(Constants.TAG, "QUESTION RESPONSE = " + response.toString() + " lenght " + response.length());
-
-        //Add elements to arraylist
-        int totalQuestion = response.length();
-        if(totalQuestion != 0) {
+        questionList = getQuestionList(lessonID);
+        if(questionList != null) {
             question_list_empty.setVisibility(View.GONE);
-            for (int i = 0; i < totalQuestion; i++) {
-                try {
-                    JSONObject obj = response.getJSONObject(i);
-                    String qst = obj.optString(Constants.KEY_QUESTION);
-                    int id = obj.optInt(Constants.KEY_QUESTION_ID);
-                    int rate = obj.optInt(Constants.KEY_QUESTION_RATE);
-                    String dateStr = obj.getString(Constants.KEY_QUESTION_TIME);
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-                    Date dateQst = sdf.parse(dateStr);
-                    Question question = new Question(id, qst, rate, dateQst);
-                    questionArray.add(question);
-                    Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-Question " + question.toString());
-                } catch (JSONException | ParseException e) {
-                    e.printStackTrace();
-                }
-            }
         } else {
             question_list_empty.setVisibility(View.VISIBLE);
         }
@@ -85,35 +64,53 @@ public class StudentListQuestionActivity extends BaseActivity {
         cancelQuestion.setOnClickListener(cancelQuestionListener);
         submitQuestion.setOnClickListener(submitQuestionListener);
 
-        studentQuestionAdapter = new StudentQuestionAdapter(this, R.layout.question_item, questionArray);
-        //Create Adapter
-        //ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, questionArray);
+        setListView();
+    }
 
+    void setListView() {
+        studentQuestionAdapter = new StudentQuestionAdapter(this, R.layout.question_item, questionList);
         //assign adapter to listview
         listView.setAdapter(studentQuestionAdapter);
     }
 
+    ArrayList<Question> getQuestionList(int lessonID) {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -getQuestionList-");
+        JSONArray response = DAO.getLessonQuestion(lessonID);
+        ArrayList<Question> arrayList = new ArrayList<>();
+        for (int i = 0; i < response.length(); i++) {
+            try {
+                JSONObject obj = response.getJSONObject(i);
+                String qst = obj.optString(Constants.KEY_QUESTION);
+                int id = obj.optInt(Constants.KEY_QUESTION_ID);
+                int rate = obj.optInt(Constants.KEY_QUESTION_RATE);
+                String dateStr = obj.getString(Constants.KEY_QUESTION_TIME);
+                Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).parse(dateStr);
+                Question question = new Question(id, qst, rate, date);
+                arrayList.add(question);
+                Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-Question " + question.toString());
+            } catch (JSONException | ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return arrayList;
+    }
+
     private final View.OnClickListener cancelQuestionListener = v -> {
-        String input = questionText.getText().toString();
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -submitButtonListener-classLessonID input" + input);
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -cancelQuestionListener-");
         newQuestionLayout.setVisibility(View.GONE);
     };
 
     private final View.OnClickListener submitQuestionListener = v -> {
         String input = questionText.getText().toString();
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -submitButtonListener-classLessonID input" + input);
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -submitQuestionListener-");
 
         sendQuestion(lessonID, input);
         newQuestionLayout.setVisibility(View.GONE);
         questionText.setText("");
         menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_add_24dp));
+        questionList = getQuestionList(lessonID);
+        setListView();
     };
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        question_list_empty.setVisibility(View.GONE);
-    }
 
     public void sendQuestion(int lessonID, String input) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -sendQuestion-");

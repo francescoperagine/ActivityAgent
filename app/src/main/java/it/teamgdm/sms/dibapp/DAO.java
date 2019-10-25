@@ -97,9 +97,9 @@ class DAO {
         try {
             response = getFromDB(params).getJSONObject(0).optInt(Constants.QUESTION_RATE, 0);
             }catch (Exception e) {
-            e.printStackTrace();
             response = 0;
         }
+        Log.i(Constants.TAG, DAO.class.getSimpleName() + " isQuestionRated response " + response);
         return response;
     }
 
