@@ -24,6 +24,7 @@ public class StudentReviewFragment extends DialogFragment {
 
     interface StudentEvaluateFragmentInterface {
         void setReview(int lessonID, String summary, String review, int rating);
+        void turnOffButton();
     }
 
     private int classLessonID;
@@ -117,6 +118,7 @@ public class StudentReviewFragment extends DialogFragment {
 
     private final View.OnClickListener cancelButtonListener = v -> {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -cancelButtonListener-");
+        studentEvaluateFragmentInterfaceCallback.turnOffButton();
         getFragmentManager().beginTransaction().remove(StudentReviewFragment.this).commit();
     };
 
@@ -126,7 +128,7 @@ public class StudentReviewFragment extends DialogFragment {
         //int not float because rating 1 to 5 with width 1
         int rating = (int) reviewRating.getRating();
         Log.i(Constants.TAG, getClass().getSimpleName() + " -submitButtonListener-classLessonID " + classLessonID + " summary " + summary + " text " + text + " rating " + rating);
-
+        studentEvaluateFragmentInterfaceCallback.turnOffButton();
         studentEvaluateFragmentInterfaceCallback.setReview(classLessonID, summary, text, rating);
         getFragmentManager().beginTransaction().remove(StudentReviewFragment.this).commit();
     };
