@@ -20,7 +20,7 @@
     <TextView
         android:id="@+id/questiontext"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:padding="@dimen/textDefaultPadding"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -28,33 +28,41 @@
         app:layout_constraintStart_toEndOf="@id/questionRating"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageButton
+    <CheckBox
         android:id="@+id/questionLikeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/questiontext"
         android:layout_alignParentStart="true"
-        android:backgroundTint="@android:color/transparent"
         android:gravity="center_horizontal|center_vertical"
-        android:src="@drawable/ic_thumb_up_black_24dp"
-        android:tint="@color/green"
+
+        android:layout_margin="5dp"
+
+        android:button="@drawable/selector_thumb_up"
+        android:buttonTint="@drawable/selector_thumb_up"
+
+        android:text="@null"
+
         app:layout_constraintBottom_toBottomOf="@+id/questiontext"
         app:layout_constraintEnd_toStartOf="@id/questionDislikeButton"
         app:layout_constraintStart_toEndOf="@id/questiontext"
         app:layout_constraintTop_toTopOf="@id/questiontext"
         android:contentDescription="@string/question_like_button_text" />
 
-    <ImageButton
+    <CheckBox
         android:id="@+id/questionDislikeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/questiontext"
         android:layout_alignParentEnd="true"
-        android:backgroundTint="@android:color/transparent"
-        android:drawableTop="@drawable/ic_thumb_down_black_24dp"
         android:gravity="center_horizontal|center_vertical"
-        android:src="@drawable/ic_thumb_down_black_24dp"
-        android:tint="@color/red"
+
+        android:layout_margin="5dp"
+
+        android:button="@drawable/selector_thumb_down"
+        android:buttonTint="@drawable/selector_thumb_down"
+        android:text="@null"
+
         app:layout_constraintBottom_toBottomOf="@+id/questionLikeButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/questionLikeButton"

@@ -3,47 +3,50 @@
 include 'db_connect.php';
 include 'config.php';
 
+define ("SET_QUESTION_RATE_QUERY", "INSERT INTO question_rate(questionID, studentID, questionRate) VALUES ( :questionID , :studentID , :rate )");
+define("DELETE_QUESTION_RATE_QUERY", "DELETE FROM question_rate WHERE questionID = :questionID AND studentID = :studentID");
+define("QUESTION_RATED_QUERY", "SELECT questionRate FROM question_rate WHERE questionID = :questionID AND studentID = :studentID ");
 define("USER_EXISTS_QUERY", "SELECT count(*) as count FROM user WHERE email = ?");
 define("VERIFY_PASSWORD_QUERY", "SELECT passwordHash, salt FROM user WHERE email = ?");
 define("GET_ROLE_LIST_QUERY", "SELECT name FROM role ORDER BY name");
 define("GET_DEGREECOURSE_LIST_QUERY", "SELECT name FROM degreecourse ORDER BY name");
-define("REGISTER_NEW_USER_QUERY", 
+define("REGISTER_NEW_USER_QUERY",
 	"INSERT INTO user(serialNumber, name, surname, email, passwordHash, salt) VALUES (:serialNumber, :name, :surname, :email, :passwordHash, :salt)");
-define("REGISTER_NEW_USER_DEGREECOURSE_QUERY", 
+define("REGISTER_NEW_USER_DEGREECOURSE_QUERY",
 	"INSERT INTO user_degreecourse(userID, degreecourseID) SELECT user.ID, degreecourse.ID FROM user, degreecourse WHERE EMAIL = :email AND degreecourse.name = :degreecourse");
-define("REGISTER_NEW_USER_ROLE_QUERY", 
-	"UPDATE user SET user.roleID = (SELECT ID from role WHERE name = :roleName) WHERE user.email = :email"); 
+define("REGISTER_NEW_USER_ROLE_QUERY",
+	"UPDATE user SET user.roleID = (SELECT ID from role WHERE name = :roleName) WHERE user.email = :email");
 define("SET_STUDENT_CAREER_QUERY",
-	"INSERT INTO student_career(studentID, classID) 
+	"INSERT INTO student_career(studentID, classID)
 	SELECT user.ID,degreecourse_class.classID
     FROM user, user_degreecourse, degreecourse, degreecourse_class
     WHERE email = :email
       AND user.ID = user_degreecourse.userID
       AND degreecourse_class.degreecourseID = degreecourse.ID
       AND degreecourse.name = :degreecourse");
-define("GET_PROFESSOR_CLASS_LIST_QUERY", 
+define("GET_PROFESSOR_CLASS_LIST_QUERY",
 	"SELECT c.ID as classID, c.name as className, c.code as classCode, c.description as classDescription, c.year as classYear, c.semester as classSemester
 	FROM professor_teaching as pt, class as c
-	WHERE pt.classID = c.ID 
+	WHERE pt.classID = c.ID
 	AND pt.professorID = ?
     ORDER BY className");
-define("GET_PROFESSOR_LESSON_LIST_QUERY", 
+define("GET_PROFESSOR_LESSON_LIST_QUERY",
 	"SELECT l.ID as lessonID, l.timeStart as classLessonTimeStart, l.timeEnd as classLessonTimeEnd, l.summary as lessonSummary, l.description as lessonDescription, r.name as roomName, tmpAttendance.rating as classLessonReviewRating, tmpAttendance.attendance as classLessonReviewAttendance
-	FROM 
-    class_room_lesson as l 
+	FROM
+    class_room_lesson as l
     JOIN  class_room_calendar as c ON c.ID = l.calendarID
     JOIN room as r on l.roomID = r.ID
-    LEFT JOIN (SELECT a.lessonID as lessonID, AVG(rating) as rating, COUNT(*) as attendance FROM class_lesson_attendance_rating as a, class_room_lesson as l where a.lessonID = l.ID GROUP BY a.lessonID) as tmpAttendance on tmpAttendance.lessonID = l.ID 
+    LEFT JOIN (SELECT a.lessonID as lessonID, AVG(rating) as rating, COUNT(*) as attendance FROM class_lesson_attendance_rating as a, class_room_lesson as l where a.lessonID = l.ID GROUP BY a.lessonID) as tmpAttendance on tmpAttendance.lessonID = l.ID
 	WHERE c.classID = :classID
 	ORDER BY l.timeStart DESC");
 // Gets the list of active lessons
-define("GET_STUDENT_LESSON_LIST_QUERY", 
-	"SELECT crl.ID as lessonID, c.ID as classID, c.name as className, c.code as classCode, c.description as classDescription, c.year as classYear, c.semester as classSemester, crl.timeStart as classLessonTimeStart, crl.timeEnd as classLessonTimeEnd, crl.summary as classLessonSummary , crl.description as classLessonDescription 
+define("GET_STUDENT_LESSON_LIST_QUERY",
+	"SELECT crl.ID as lessonID, c.ID as classID, c.name as className, c.code as classCode, c.description as classDescription, c.year as classYear, c.semester as classSemester, crl.timeStart as classLessonTimeStart, crl.timeEnd as classLessonTimeEnd, crl.summary as classLessonSummary , crl.description as classLessonDescription
 	FROM student_career as s, class as c, class_room_calendar as crc, class_room_lesson as crl
-	WHERE s.classID = c.ID 
+	WHERE s.classID = c.ID
 	AND c.ID = crc.classID
 	AND crc.ID = crl.calendarID
-	AND s.studentID = :studentID
+	AND s.studentID = :userID
 	AND crl.timeStart LIKE :date
 	ORDER BY c.year, className");
 define("GET_USER_DETAILS_QUERY", "SELECT u.ID as userID, u.name as name, u.surname as surname, u.email as email, u.registrationDate as registrationDate, r.name as roleName FROM user as u, role as r WHERE u.roleID = r.ID AND email = ?");
@@ -59,7 +62,7 @@ define("GET_LESSON_REVIEW", "SELECT rating, summary, review FROM class_lesson_at
 define("GET_AVERAGE_RATING", "SELECT AVG(cla.rating) AS avgrating FROM class_room_calendar AS crc JOIN class_room_lesson AS crl JOIN class_lesson_attendance_rating AS cla WHERE crc.ID = crl.calendarID AND crl.ID = cla.lessonID AND crc.classID = ?");
 define("GET_TOTAL_MEMBERS", "SELECT COUNT(*) as count FROM student_career WHERE classID = ?");
 define("GET_ATTENDANCE_CHART", "SELECT COUNT(cla.ID) AS attendance, COUNT(cla.rating) AS review, DATE_FORMAT(crl.timeStart, '%d/%m/%Y') AS date FROM class_room_calendar AS crc JOIN class_room_lesson AS crl LEFT JOIN class_lesson_attendance_rating AS cla ON crl.ID = cla.lessonID WHERE crc.ID = crl.calendarID AND crc.classID = ? GROUP BY crl.ID ORDER BY crl.timeStart");
-define("GET_CLASS_NAME_QUERY", "SELECT name as className FROM class WHERE ID = ?");	  
+define("GET_CLASS_NAME_QUERY", "SELECT name as className FROM class WHERE ID = ?");
 define("GET_LESSON_IN_PROGRESS_QUERY", "SELECT COUNT(*) AS count FROM class_room_lesson WHERE ID = ? AND CURRENT_TIMESTAMP >= timeStart AND CURRENT_TIMESTAMP <= timeEnd");
 
 class Response {
@@ -99,6 +102,16 @@ function userExists(string $email){
 	$stmt->execute([$email]);
 	$result = $stmt->fetch(PDO::FETCH_OBJ);
 	if($result->count != 1) throw new Exception(INVALID_EMAIL_TEXT, INVALID_EMAIL_CODE);
+}
+
+function questionIsRated(string $userid, string $questionid){
+	global $connection;
+	$stmt = $connection->prepare(QUESTION_RATED_QUERY);
+	$stmt->bindValue(':studentID', $userid);
+	$stmt->bindValue(':questionID', $questionid);
+	$stmt->execute();
+	$response = $stmt->fetch(PDO::FETCH_OBJ);
+	return $response;
 }
 
 function verifyPassword(string $email, string $password) {
@@ -141,6 +154,43 @@ function getDegreecourseList() {
 	$response = $stmt->fetchAll(PDO::FETCH_OBJ);
 	return $response;
 }
+
+function deleteQuestionRate (string $studentID, string $questionID){
+	global $connection;
+	$stmt = $connection->prepare(DELETE_QUESTION_RATE_QUERY);
+	$stmt->bindValue(':studentID', $studentID);
+	$stmt->bindValue(':questionID', $questionID);
+	$stmt->execute();
+	$connection->beginTransaction();
+	if($stmt->execute()){
+		$connection->commit();
+		$response = new Response(QUERY_OK_TEXT, QUERY_OK_CODE);
+	} else {
+		$connection->rollBack();
+		$response = new Response(QUERY_NOT_OK_TEXT, QUERY_NOT_OK_CODE);
+	}
+	return $response;
+
+}
+
+function setQuestionRate (string $studentID, string $questionID, string $rate){
+	global $connection;
+	$stmt = $connection->prepare(SET_QUESTION_RATE_QUERY);
+	$stmt->bindValue(':studentID', $studentID);
+	$stmt->bindValue(':questionID', $questionID);
+	$stmt->bindValue(':rate', $rate);
+	$stmt->execute();
+	$connection->beginTransaction();
+	if($stmt->execute()){
+		$connection->commit();
+		$response = new Response(QUERY_OK_TEXT, QUERY_OK_CODE);
+	} else {
+		$connection->rollBack();
+		$response = new Response(QUERY_NOT_OK_TEXT, QUERY_NOT_OK_CODE);
+	}
+	return $response;
+}
+
 
 function registerNewUser(array $input) {
 	global $connection;
@@ -225,10 +275,9 @@ function askAQuestion(int $lessonID, int $userID, string $question, string $time
 	return $response;
 }
 
-function setAttendance(int $lessonID, int $userID, string $attendance, string $time = null) {
-	$userAttendance = ($attendance === 'true');
+function setAttendance(int $lessonID, int $userID, string $attendance, string $time) {
 	global $connection;
-	if($userAttendance == true) {
+	if($attendance === "true") {
 		$stmt = $connection->prepare(SET_ATTENDANCE_QUERY);
 		$stmt->bindValue(':time', $time);
 	} else {
@@ -303,7 +352,7 @@ function getProfessorLessonList($classID) {
 function getStudentLessonList(int $userID, string $date) {
 	global $connection;
 	$stmt = $connection->prepare(GET_STUDENT_LESSON_LIST_QUERY);
-	$stmt->bindValue(':studentID', $userID);
+	$stmt->bindValue(':userID', $userID);
 	$stmt->bindValue(':date', $date);
 	$stmt->execute();
 	$response = $stmt->fetchAll(PDO::FETCH_OBJ);

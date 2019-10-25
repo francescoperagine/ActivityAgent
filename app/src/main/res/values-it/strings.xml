@@ -107,4 +107,6 @@
     <string name="sort_descend">Ordine decrescente</string>
     <string name="sort_ascend">Ordine crescente</string>
     <string name="review_title">Valutazione</string>
+    <string name="sort_rate">Ordine per voto</string>
+    <string name="sort_time">Ordine dal più recente</string>
 </resources>

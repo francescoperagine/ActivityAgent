@@ -1,13 +1,9 @@
 package it.teamgdm.sms.dibapp;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -33,6 +29,7 @@ public class ProfessorListReviewActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-");
         super.onCreate(savedInstanceState);
 
         //initializing objects
@@ -86,7 +83,7 @@ public class ProfessorListReviewActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreateOptionsMenu-");
-        getMenuInflater().inflate(R.menu.filter_menu, menu);
+        getMenuInflater().inflate(R.menu.filter_review_menu, menu);
         return true;
     }
 

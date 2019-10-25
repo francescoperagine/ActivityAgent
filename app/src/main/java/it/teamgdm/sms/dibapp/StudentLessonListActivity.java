@@ -6,8 +6,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.gms.location.Geofence;
 
 import org.json.JSONArray;
 
@@ -77,7 +80,21 @@ public class StudentLessonListActivity extends BaseActivity implements
     public void onGeofenceTransitionAction(int geofenceReceiverAction) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onGeofenceTransitionAction-");
         geofenceTransitionAction = geofenceReceiverAction;
-        adapter.notifyDataSetChanged();
+        if(adapter != null) adapter.notifyDataSetChanged();
+        notifyGeofenceTransition();
+    }
+
+    void notifyGeofenceTransition() {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -getBottomFragment-"+ StudentLessonListActivity.geofenceTransitionAction);
+        if (StudentLessonListActivity.geofenceTransitionAction == Geofence.GEOFENCE_TRANSITION_DWELL) {
+            String message = getResources().getString(R.string.geofence_transition_dwelling);
+            Log.i(Constants.TAG, getClass().getSimpleName() + " " + message);
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        } else {
+            String message = getResources().getString(R.string.geofence_transition_left);
+            Log.i(Constants.TAG, getClass().getSimpleName() + " " + message);
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -126,5 +143,12 @@ public class StudentLessonListActivity extends BaseActivity implements
     protected int getLayoutResource() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -getLayoutResource-");
         return R.layout.item_list_activity;
+    }
+
+    public void onBackPressed(){
+        Intent a = new Intent(Intent.ACTION_MAIN);
+        a.addCategory(Intent.CATEGORY_HOME);
+        a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(a);
     }
 }

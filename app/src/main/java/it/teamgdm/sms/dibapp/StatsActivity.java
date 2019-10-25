@@ -1,16 +1,10 @@
 package it.teamgdm.sms.dibapp;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
 import android.widget.RatingBar;
 import android.widget.TextView;
-
-import androidx.fragment.app.FragmentManager;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -25,7 +19,6 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import static it.teamgdm.sms.dibapp.Constants.KEY_CLASS_ID;
 
@@ -115,7 +108,7 @@ public class StatsActivity extends BaseActivity {
         barDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
         barDataSet.setBarBorderColor(Color.BLACK);
         barDataSet.setBarBorderWidth(2.0f);
-        barDataSet.setColor(Color.parseColor("#008577"));
+        barDataSet.setColor(getColor(R.color.primaryColor));
         barDataSet.setValueTextSize(12);
         barDataSet.setValueTextColor(Color.BLACK);
 
@@ -123,7 +116,7 @@ public class StatsActivity extends BaseActivity {
         barDataSet2.setAxisDependency(YAxis.AxisDependency.LEFT);
         barDataSet2.setBarBorderColor(Color.BLACK);
         barDataSet2.setBarBorderWidth(2.0f);
-        barDataSet2.setColor(Color.BLUE);
+        barDataSet2.setColor(getColor(R.color.secondaryColor));
         barDataSet2.setValueTextSize(12);
         barDataSet2.setValueTextColor(Color.BLACK);
 
@@ -161,36 +154,6 @@ public class StatsActivity extends BaseActivity {
         barChart.moveViewToX(-0.5f); //start at the beginning of the chart
         barChart.invalidate(); // refresh
 
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreateOptionsMenu-");
-        getMenuInflater().inflate(R.menu.app_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -onOptionsItemSelected-");
-        int id = item.getItemId();
-        switch (id) {
-            case R.id.profileButton:
-                Intent profileIntent = new Intent(this, ProfileActivity.class);
-                startActivity(profileIntent);
-                return true;
-            case R.id.settingsButton:
-                Intent settingIntent = new Intent(this, SettingsActivity.class);
-                startActivity(settingIntent);
-                return true;
-            case R.id.logoutButton:
-                FragmentManager fragmentManager = this.getSupportFragmentManager();
-                LogoutDialogFragment logoutDialogFragment = new LogoutDialogFragment(this);
-                logoutDialogFragment.show(fragmentManager, "logout_fragment");
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     @Override

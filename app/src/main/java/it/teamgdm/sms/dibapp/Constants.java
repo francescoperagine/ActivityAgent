@@ -2,10 +2,15 @@ package it.teamgdm.sms.dibapp;
 
 public final class Constants {
 
-
+    static final String KEY_ACTION_LOGOUT = "logout";
+    static final int RATE_GOOD = 1;
+    static final int RATE_BAD = -1;
+    static final String ACTION_SET_QUESTION_RATE = "setQuestionRate";
+    static final String ACTION_DELETE_QUESTION_RATE = "deleteQuestionRate";
     static final String KEY_COUNT = "count";
     static final String KEY_QUESTION_RATE = "rate";
     static final String KEY_QUESTION_ID = "ID";
+    static final String KEY_QUESTION_ID2 = "questionID";
     static final Object KEY_CLASS_LIST = "Courses";
     static final String KEY_GEOFENCE_LOCATION_UPDATE = "requestLocationUpdate";
     static final String HAS_GEOFENCE_PERMISSION = "hasGeofencePermission";
@@ -20,6 +25,7 @@ public final class Constants {
     static final String IS_USER_ATTENDING_LESSON = "isUserAttendingLesson";
     static final String KEY_USER_ATTENDANCE = "attendance";
     static final String KEY_QUESTION = "question";
+    static final String KEY_QUESTION_TIME = "time";
     static final String USER_QUESTION_ASK = "askAQuestion";
     static final String KEY_CLASS_LESSON = "lesson";
     static final String KEY_SET_ATTENDANCE = "setAttendance";
@@ -34,6 +40,8 @@ public final class Constants {
     static final String DATE_FORMAT = "yyyy-MM-dd";
     static final String TIME_FORMAT = "HH:mm:ss";
     static final String DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
+
+    static final String QUESTION_RATE = "questionRate";
 
     // USER DETAILS
 
@@ -59,7 +67,7 @@ public final class Constants {
     static final String KEY_ROLE_STUDENT = "student";
 
     // DB ACTIONS
-
+    static final String IS_QUESTION_RATED = "isQuestionRated";
     static final String USER_LOGIN = "login";
     static final String USER_REGISTRATION = "userRegistration";
     static final String GET_USER_DETAILS = "getUserDetails";
@@ -97,6 +105,7 @@ public final class Constants {
     static final String KEY_LESSON_ID = "lessonID";
     static final String KEY_LESSON_CALENDAR_ID = "calendarID";
     static final String KEY_LESSON_ATTENDANCE = "attendance";
+
 
 
     static final String KEY_LESSON_REVIEW_SUMMARY = "classLessonReviewSummary";

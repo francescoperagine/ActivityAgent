@@ -197,21 +197,26 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
 
         private final View.OnClickListener partecipateButtonListener = v -> {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -partecipateButtonListener-");
-            if(buttonPartecipate.isChecked() && userIsAlreadyPartecipatingLesson()) {
+            if(buttonPartecipate.isChecked()) {
                 if(userIsAlreadyPartecipatingLesson()) {
+                    Log.i(Constants.TAG, getClass().getSimpleName() + " -partecipateButtonListener-user is already partecipating a lesson");
                     String message = parent.getResources().getString(R.string.attendance_already_set);
                     buttonPartecipate.setChecked(false);
                     Toast.makeText(parent, message, Toast.LENGTH_SHORT).show();
                 } else {
-                    setAttendance(buttonPartecipate.isChecked());
-                    updateCurrentLessonPartecipation(buttonPartecipate.isChecked());
-                    featureActivator(buttonPartecipate.isChecked());
+                    updateAttendanceStatus(buttonPartecipate.isChecked(), R.string.attendance_set);
                 }
             } else {
-                updateCurrentLessonPartecipation(buttonPartecipate.isChecked());
-                featureActivator(buttonPartecipate.isChecked());
+                updateAttendanceStatus(buttonPartecipate.isChecked(), R.string.attendance_not_set);
             }
         };
+
+        void updateAttendanceStatus(boolean buttonIsChecked, int resourceString) {
+            setAttendance(buttonIsChecked);
+            updateCurrentLessonPartecipation(buttonIsChecked);
+            Toast.makeText(parent, parent.getResources().getString(resourceString), Toast.LENGTH_SHORT).show();
+            featureActivator(buttonIsChecked);
+        }
 
         private boolean userIsAlreadyPartecipatingLesson() {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -userIsAlreadyPartecipatingLesson-" + currentLessonPartecipation);
@@ -233,17 +238,14 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
                 if(parent.getSupportFragmentManager().findFragmentByTag(String.valueOf(lesson.lessonID)) != null){
                     hideEvaluationUI(lesson.lessonID);
                 }
+                buttonReview.setChecked(false);
                 currentLessonPartecipation = 0;
             }
         }
 
         void setAttendance(boolean isUserAttendingLesson) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -setAttendance-" + isUserAttendingLesson);
-            if(DAO.setAttendance(lesson.lessonID, isUserAttendingLesson)) {
-                Toast.makeText(parent, parent.getString(R.string.attendance_set), Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(parent, parent.getString(R.string.attendance_not_set), Toast.LENGTH_SHORT).show();
-            }
+            DAO.setAttendance(lesson.lessonID, isUserAttendingLesson);
         }
 
         private void featureActivator(boolean isUserAttendingLesson) {
@@ -255,7 +257,6 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
 
         private void featurePanelHandler(boolean menuVisibility, String alternateViewText) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -featurePanelHandler-");
-            notifyGeofenceTransition();
             if(menuVisibility && StudentLessonListActivity.geofenceTransitionAction == Geofence.GEOFENCE_TRANSITION_DWELL) {
                 bottomMenuAlternateView.setVisibility(View.GONE);
                 studentLessonBottomMenu.setVisibility(View.VISIBLE);
@@ -346,17 +347,5 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
             }
         }
 
-        void notifyGeofenceTransition() {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -getBottomFragment-"+ StudentLessonListActivity.geofenceTransitionAction);
-            if (StudentLessonListActivity.geofenceTransitionAction == Geofence.GEOFENCE_TRANSITION_DWELL) {
-                String message = parent.getResources().getString(R.string.geofence_transition_dwelling);
-                Log.i(Constants.TAG, getClass().getSimpleName() + " " + message);
-                Toast.makeText(parent, message, Toast.LENGTH_SHORT).show();
-            } else {
-                String message = parent.getResources().getString(R.string.geofence_transition_left);
-                Log.i(Constants.TAG, getClass().getSimpleName() + " " + message);
-                Toast.makeText(parent, message, Toast.LENGTH_SHORT).show();
-            }
-        }
     }
 }

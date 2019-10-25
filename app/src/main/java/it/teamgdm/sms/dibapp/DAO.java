@@ -87,6 +87,45 @@ class DAO {
         return response == 1;
     }
 
+    static int isQuestionRated (int userID, int questionID){
+        Log.i(Constants.TAG, DAO.class.getSimpleName() + " isQuestionRated ");
+        HashMap<String, String> params = new HashMap<>();
+        params.put(Constants.KEY_ACTION, Constants.IS_QUESTION_RATED);
+        params.put(Constants.KEY_USER_ID, String.valueOf(userID));
+        params.put(Constants.KEY_QUESTION_ID2, String.valueOf(questionID));
+        int response = 0;
+        try {
+            try{
+            response = getFromDB(params).getJSONObject(0).optInt(Constants.QUESTION_RATE, 0);}
+            catch (NullPointerException e){
+                response = 0;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return response;
+    }
+
+    static boolean deleteQuestionRate (int userID, int questionID){
+        Log.i(Constants.TAG, DAO.class.getSimpleName() + " deleteQuestionRate ");
+        HashMap<String, String> params = new HashMap<>();
+        params.put(Constants.KEY_ACTION, Constants.ACTION_DELETE_QUESTION_RATE);
+        params.put(Constants.KEY_USER_ID, String.valueOf(userID));
+        params.put(Constants.KEY_QUESTION_ID2, String.valueOf(questionID));
+        return isDataSent(params);
+    }
+
+    static void setQuestionRate (int userID, int questionID, int rate){
+        Log.i(Constants.TAG, DAO.class.getSimpleName() + " deleteQuestionRate ");
+        HashMap<String, String> params = new HashMap<>();
+        params.put(Constants.KEY_ACTION, Constants.ACTION_SET_QUESTION_RATE);
+        params.put(Constants.KEY_USER_ID, String.valueOf(userID));
+        params.put(Constants.KEY_QUESTION_ID2, String.valueOf(questionID));
+        params.put(Constants.KEY_QUESTION_RATE, String.valueOf(rate));
+        getFromDB(params);
+    }
+
+
     static boolean sendQuestion(int lessonID, String input) {
         Log.i(Constants.TAG, DAO.class.getSimpleName() + " -sendQuestion- lessonID " + lessonID);
         HashMap<String, String> params = new HashMap<>();
@@ -98,16 +137,16 @@ class DAO {
         return isDataSent(params);
     }
 
-    static boolean setAttendance(int lessonID, boolean isUserAttendingLesson) {
+    static void setAttendance(int lessonID, boolean isUserAttendingLesson) {
         Log.i(Constants.TAG, DAO.class.getSimpleName() + " -setAttendance- set to " + isUserAttendingLesson);
         // Registers the lesson's classAttendance into the DB
         HashMap<String, String> params = new HashMap<>();
         params.put(Constants.KEY_ACTION, Constants.KEY_SET_ATTENDANCE);
         params.put(Constants.KEY_LESSON_ID, String.valueOf(lessonID));
         params.put(Constants.KEY_USER_ID, String.valueOf(Session.getUserID()));
+        params.put(Constants.KEY_LESSON_ATTENDANCE, String.valueOf(isUserAttendingLesson));
         params.put(Constants.KEY_TIME, new SimpleDateFormat(Constants.DATETIME_FORMAT, Locale.getDefault()).format(new Date()));
-        params.put(Constants.KEY_USER_ATTENDANCE, String.valueOf(isUserAttendingLesson));
-        return isDataSent(params);
+        getFromDB(params);
     }
 
     static boolean setReview(int lessonID, String summary, String review, int rating) {

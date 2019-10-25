@@ -16,6 +16,8 @@ public class ProfileActivity extends BaseActivity {
         name = findViewById(R.id.name);
         surname = findViewById(R.id.surname);
         role = findViewById(R.id.userRole);
+
+        getSupportActionBar().setTitle(getString(R.string.profileActivityTitle));
     }
 
     @Override
