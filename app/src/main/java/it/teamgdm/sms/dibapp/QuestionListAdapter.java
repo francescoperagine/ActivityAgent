@@ -59,4 +59,10 @@ public class QuestionListAdapter extends ArrayAdapter<Question> {
         return view;
     }
 
+    //prevent the on click visual feedback when a list item is pressed
+    @Override
+    public boolean isEnabled(int position) {
+        return false;
+    }
+
 }
