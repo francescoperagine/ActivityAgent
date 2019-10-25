@@ -3,6 +3,7 @@ package it.teamgdm.sms.dibapp;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -17,13 +18,9 @@ import java.util.Objects;
 
 public class StudentQuestionFragment extends DialogFragment {
 
-    private StudentQuestionFragmentInterface studentQuestionFragmentInterfaceCallback;
+    private StudentQuestionToLessonRecyclerInterface studentQuestionToLessonRecyclerInterfaceCallback;
 
-    void setStudentQuestionFragmentInterfaceCallback(StudentQuestionFragmentInterface studentQuestionFragmentInterfaceCallback) {
-        this.studentQuestionFragmentInterfaceCallback = studentQuestionFragmentInterfaceCallback;
-    }
-
-    interface StudentQuestionFragmentInterface {
+    interface StudentQuestionToLessonRecyclerInterface {
         void sendQuestion(int lessonID, String input);
     }
 
@@ -81,9 +78,8 @@ public class StudentQuestionFragment extends DialogFragment {
         String input = questionText.getText().toString();
         Log.i(Constants.TAG, getClass().getSimpleName() + " -submitButtonListener-classLessonID " + classLessonID + " input" + input);
 
-        studentQuestionFragmentInterfaceCallback.sendQuestion(classLessonID, input);
+        studentQuestionToLessonRecyclerInterfaceCallback.sendQuestion(classLessonID, input);
         Objects.requireNonNull(getDialog()).dismiss();
     };
-
 
 }

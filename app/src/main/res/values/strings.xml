@@ -150,6 +150,9 @@
     <string name="attendance_already_set">Attendance is already set for another lesson.</string>
     <string name="question_like_button_text">Like</string>
     <string name="question_dislike_button_text">Dislike</string>
+    <string name="no_question_asked_text">No question asked yet.</string>
+    <string name="statistics_text">Statistics</string>
+    <string name="question_add_text">Add question</string>
 
 
 </resources>

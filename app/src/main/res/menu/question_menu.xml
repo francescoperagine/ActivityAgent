@@ -3,9 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/statsButton"
-        android:icon="@drawable/ic_action_name"
-        android:title="@string/statistics_text"
+        android:id="@+id/addQuestionButton"
+        android:icon="@drawable/ic_add_24dp"
+        android:title="@string/question_add_text"
         app:showAsAction="always" />
     <item
         android:id="@+id/profileButton"

@@ -73,8 +73,7 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements
-            StudentReviewFragment.StudentEvaluateFragmentInterface,
-            StudentQuestionFragment.StudentQuestionFragmentInterface {
+            StudentReviewFragment.StudentEvaluateFragmentInterface {
 
         Lesson lesson;
         final TextView titleView, classDescription, lessonSummary, lessonDescription, lessonTime, bottomMenuAlternateView;
@@ -320,18 +319,6 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
             questionIntent.putExtra(Constants.KEY_CLASS_NAME, lesson.className);
             questionIntent.putExtra(Constants.KEY_LESSON_DATE, lesson.getDate());
             parent.startActivity(questionIntent);
-        }
-
-        @Override
-        public void sendQuestion(int lessonID, String input) {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -sendQuestion-");
-            if(DAO.sendQuestion(lessonID, input)) {
-                Toast.makeText(parent, parent.getString(R.string.question_sent), Toast.LENGTH_SHORT).show();
-                Log.i(Constants.TAG, getClass().getSimpleName() + " -sendQuestion-question sent-");
-            } else {
-                Toast.makeText(parent, parent.getResources().getString(R.string.question_not_sent), Toast.LENGTH_SHORT).show();
-                Log.i(Constants.TAG, getClass().getSimpleName() + " -sendQuestion-question not sent-");
-            }
         }
 
         @Override
