@@ -24,6 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/question_write_yours_here_text"
+            android:inputType="text"
             android:lines="5"
             android:padding="@dimen/fab_margin">
 
@@ -54,6 +55,16 @@
                 app:layout_constraintStart_toEndOf="@+id/questionCancelButton" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="@dimen/textDefaultPadding"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="?android:attr/listDivider" />
 
     </LinearLayout>
 
