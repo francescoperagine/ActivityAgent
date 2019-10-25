@@ -11,6 +11,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.content.ContextCompat;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,6 +33,8 @@ public class StudentListQuestionActivity extends BaseActivity {
     EditText questionText;
     Button addQuestionButton, submitQuestion, cancelQuestion;
     int lessonID;
+    Menu menu;
+    StudentQuestionAdapter studentQuestionAdapter;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,15 +85,12 @@ public class StudentListQuestionActivity extends BaseActivity {
         cancelQuestion.setOnClickListener(cancelQuestionListener);
         submitQuestion.setOnClickListener(submitQuestionListener);
 
-        StudentQuestionAdapter studentQuestionAdapter = new StudentQuestionAdapter(this, R.layout.question_item, questionArray);
+        studentQuestionAdapter = new StudentQuestionAdapter(this, R.layout.question_item, questionArray);
         //Create Adapter
         //ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, questionArray);
 
-
-
         //assign adapter to listview
         listView.setAdapter(studentQuestionAdapter);
-
     }
 
     private final View.OnClickListener cancelQuestionListener = v -> {
@@ -104,6 +105,8 @@ public class StudentListQuestionActivity extends BaseActivity {
 
         sendQuestion(lessonID, input);
         newQuestionLayout.setVisibility(View.GONE);
+        questionText.setText("");
+        menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_add_24dp));
     };
 
     @Override
@@ -144,6 +147,7 @@ public class StudentListQuestionActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreateOptionsMenu-");
+        this.menu = menu;
         getMenuInflater().inflate(R.menu.question_menu, menu);
         return true;
     }

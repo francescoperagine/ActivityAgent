@@ -24,8 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/question_write_yours_here_text"
-            android:inputType="text"
-            android:lines="5"
+            android:inputType="textMultiLine|text"
             android:padding="@dimen/fab_margin">
 
 

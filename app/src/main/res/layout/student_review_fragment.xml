@@ -28,30 +28,29 @@
         android:id="@+id/reviewSummary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:autofillHints=""
         android:hint="@string/review_summary_text"
-        android:inputType="text"
+        android:inputType="textMultiLine|text"
         android:padding="@dimen/text_margin"
         app:layout_constraintBottom_toTopOf="@id/reviewText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/reviewRating"
-        android:autofillHints=""
         tools:targetApi="o" />
 
     <EditText
         android:id="@+id/reviewText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:autofillHints=""
         android:gravity="clip_vertical"
         android:hint="@string/review_description_text"
-        android:lines="3"
+        android:inputType="textMultiLine|text"
         android:padding="@dimen/text_margin"
         app:layout_constraintBottom_toTopOf="@id/cancelReview"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/reviewSummary"
-        android:autofillHints=""
-        android:inputType="text"
         tools:targetApi="o" />
 
     <androidx.constraintlayout.widget.ConstraintLayout

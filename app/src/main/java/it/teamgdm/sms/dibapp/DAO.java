@@ -87,21 +87,18 @@ class DAO {
         return response == 1;
     }
 
-    static int isQuestionRated (int userID, int questionID){
+    static int isQuestionRated (int userID, int questionID) {
         Log.i(Constants.TAG, DAO.class.getSimpleName() + " isQuestionRated ");
         HashMap<String, String> params = new HashMap<>();
         params.put(Constants.KEY_ACTION, Constants.IS_QUESTION_RATED);
         params.put(Constants.KEY_USER_ID, String.valueOf(userID));
         params.put(Constants.KEY_QUESTION_ID2, String.valueOf(questionID));
-        int response = 0;
+        int response;
         try {
-            try{
-            response = getFromDB(params).getJSONObject(0).optInt(Constants.QUESTION_RATE, 0);}
-            catch (NullPointerException e){
-                response = 0;
-            }
-        } catch (JSONException e) {
+            response = getFromDB(params).getJSONObject(0).optInt(Constants.QUESTION_RATE, 0);
+            }catch (Exception e) {
             e.printStackTrace();
+            response = 0;
         }
         return response;
     }
