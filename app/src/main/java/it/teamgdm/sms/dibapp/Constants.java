@@ -2,6 +2,10 @@ package it.teamgdm.sms.dibapp;
 
 public final class Constants {
 
+    static final String REVIEW_COUNT = "reviewCount" ;
+    static final String GET_REVIEW_COUNT = "getReviewCount" ;
+    static final String QUESTION_COUNT = "questionCount";
+    static final String GET_QUESTION_COUNT = "getQuestionCount";
     static final String KEY_ACTION_LOGOUT = "logout";
     static final int RATE_GOOD = 1;
     static final int RATE_BAD = -1;

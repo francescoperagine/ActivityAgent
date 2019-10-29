@@ -87,6 +87,37 @@ class DAO {
         return response == 1;
     }
 
+
+    static int questionCount(int lessonID){
+        Log.i(Constants.TAG, DAO.class.getSimpleName() + " questionCount ");
+        HashMap<String, String> params = new HashMap<>();
+        params.put(Constants.KEY_ACTION, Constants.GET_QUESTION_COUNT);
+        params.put(Constants.KEY_LESSON_ID, String.valueOf(lessonID));
+        int response;
+        try {
+            response = getFromDB(params).getJSONObject(0).optInt(Constants.QUESTION_COUNT);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            response = 0;
+        }
+        return response;
+    }
+
+    static int reviewCount(int lessonID){
+        Log.i(Constants.TAG, DAO.class.getSimpleName() + " questionCount ");
+        HashMap<String, String> params = new HashMap<>();
+        params.put(Constants.KEY_ACTION, Constants.GET_REVIEW_COUNT);
+        params.put(Constants.KEY_LESSON_ID, String.valueOf(lessonID));
+        int response;
+        try {
+            response = getFromDB(params).getJSONObject(0).optInt(Constants.REVIEW_COUNT);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            response = 0;
+        }
+        return response;
+    }
+
     static int isQuestionRated (int userID, int questionID) {
         Log.i(Constants.TAG, DAO.class.getSimpleName() + " isQuestionRated ");
         HashMap<String, String> params = new HashMap<>();
@@ -113,7 +144,7 @@ class DAO {
     }
 
     static void setQuestionRate (int userID, int questionID, int rate){
-        Log.i(Constants.TAG, DAO.class.getSimpleName() + " deleteQuestionRate ");
+        Log.i(Constants.TAG, DAO.class.getSimpleName() + " setQuestionRate ");
         HashMap<String, String> params = new HashMap<>();
         params.put(Constants.KEY_ACTION, Constants.ACTION_SET_QUESTION_RATE);
         params.put(Constants.KEY_USER_ID, String.valueOf(userID));

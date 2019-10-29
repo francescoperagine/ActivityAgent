@@ -27,7 +27,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import java.util.ArrayList;
 
 class GeofenceAPI {
-    
+
     private Context context;
     private ArrayList<Geofence> geofenceList;
     private PendingIntent geofencePendingIntent;

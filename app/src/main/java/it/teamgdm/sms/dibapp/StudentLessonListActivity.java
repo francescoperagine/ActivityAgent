@@ -102,32 +102,40 @@ public class StudentLessonListActivity extends BaseActivity implements
     protected void onResume() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onResume-");
         super.onResume();
-        if(geofenceAPI.hasGeofencePermissions()){
-            startLocationUpdates();
-        } else {
-            geofenceAPI.askGeofencePermissions();
+        if(geofenceAPI != null) {
+            if(geofenceAPI.hasGeofencePermissions()){
+                startLocationUpdates();
+            } else {
+                geofenceAPI.askGeofencePermissions();
+            }
         }
     }
 
     private void startLocationUpdates() {
         registerReceiver(dibappBroadcastReceiver, intentFilter);
-        geofenceAPI.startLocationUpdates();
+        if(geofenceAPI != null) {
+            geofenceAPI.startLocationUpdates();
+        }
     }
 
     @Override
     protected void onPause() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onPause-");
         super.onPause();
-        if(geofenceAPI.hasGeofencePermissions()){
-            stopLocationsUpdate();
-        } else {
-            geofenceAPI.askGeofencePermissions();
+        if(geofenceAPI != null) {
+            if(geofenceAPI.hasGeofencePermissions()){
+                stopLocationsUpdate();
+            } else {
+                geofenceAPI.askGeofencePermissions();
+            }
         }
     }
 
     private void stopLocationsUpdate() {
-        geofenceAPI.stopLocationUpdates();
-        unregisterReceiver(dibappBroadcastReceiver);
+        if(geofenceAPI != null) {
+            geofenceAPI.stopLocationUpdates();
+            unregisterReceiver(dibappBroadcastReceiver);
+        }
     }
 
     @Override
@@ -139,7 +147,8 @@ public class StudentLessonListActivity extends BaseActivity implements
             geofenceAPI = new GeofenceAPI(this);
             startLocationUpdates();
         } else {
-            Toast.makeText(this, R.string.no_geofence_feature_text, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.geofence_permission_not_granted, Toast.LENGTH_LONG).show();
+            geofenceAPI = null;
         }
     }
 
@@ -156,7 +165,9 @@ public class StudentLessonListActivity extends BaseActivity implements
     protected void onDestroy() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onDestroy-");
         super.onDestroy();
-        geofenceAPI.removeGeofences();
+        if(geofenceAPI != null) {
+            geofenceAPI.removeGeofences();
+        }
     }
 
     @Override
