@@ -27,81 +27,46 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import java.util.ArrayList;
 
 class GeofenceAPI {
-
+    
     private Context context;
     private ArrayList<Geofence> geofenceList;
     private PendingIntent geofencePendingIntent;
     private GeofencingClient geofencingClient;
     private String[] permissions;
-    static boolean hasGeofencePermissions;
     private FusedLocationProviderClient fusedLocationProviderClient;
-    private LocationRequest locationRequest;
+    private LocationRequest locationRequest = new LocationRequest();
     private LocationCallback locationCallback = new LocationCallback();
 
     GeofenceAPI(Context context) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -constructor-");
         this.context = context;
-        geofenceList = new ArrayList<>();
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient((Activity) context);
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -constructor-fusedLocationProviderClient\t" + fusedLocationProviderClient);
         permissions  = setGeofencePermissions();
-        geofencePermissionHandler();
-        hasGeofencePermissions = hasGeofencePermissions();
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
+        if(hasGeofencePermissions()) geofenceInit();
+    }
+
+    private void geofenceInit(){
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -geofenceInit-");
+        setGeofences();
+        registerGeofences();
         createLocationRequest();
-        getLocation();
-        startLocationUpdates();
-    }
-
-    private void createLocationRequest() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -createLocationRequest-");
-        locationRequest = LocationRequest.create();
-        locationRequest.setInterval(5000);
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-    }
-
-    private void getLocation() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -getLocation-");
         fusedLocationProviderClient.getLastLocation();
     }
 
     void startLocationUpdates() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -startLocationUpdates-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -startLocationUpdates-\nfusedlocationProvider \t" + fusedLocationProviderClient + "\nLocation request\t" + locationRequest + "\n locationCallback \t" + locationCallback + "\n looper \t" + Looper.getMainLooper());
         fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
     }
 
-    private String[] setGeofencePermissions() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -setGeofencePermissions-");
-        String[] permissions;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-            permissions = new String[] {
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
-            };
-        } else {
-            permissions = new String[]{
-                    Manifest.permission.ACCESS_FINE_LOCATION
-            };
-        }
-        return permissions;
-    }
-
-    private void geofencePermissionHandler(){
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -geofencePermissionHandler-");
-        if(!hasGeofencePermissions()) {
-            askGeofencePermissions();
-        } else {
-            geofenceInit();
-        }
-    }
-
-    private void geofenceInit() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -geofenceInit-");
-        geofencingClient = LocationServices.getGeofencingClient(context);
-        setGeofences();
-        registerGeofences();
+    void stopLocationUpdates() {
+        fusedLocationProviderClient.removeLocationUpdates(locationCallback);
+        removeLocationRequest();
     }
 
     private void setGeofences() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -setGeofences-");
+        geofenceList = new ArrayList<>();
         Geofence dibGeofence = getGeofence(Constants.GEOFENCE_DIB_NAME, Constants.GEOFENCE_DIB_LATITUDE, Constants.GEOFENCE_DIB_LONGITUDE, Constants.GEOFENCE_METER_RADIUS_DIB, Constants.GEOFENCE_DIB_NAME);
         Geofence pdaGeofence = getGeofence(Constants.GEOFENCE_PDA_NAME, Constants.GEOFENCE_PDA_LATITUDE, Constants.GEOFENCE_PDA_LONGITUDE, Constants.GEOFENCE_METER_RADIUS_PDA, Constants.GEOFENCE_PDA_NAME);
         geofenceList.add(dibGeofence);
@@ -121,7 +86,7 @@ class GeofenceAPI {
 
     private void registerGeofences() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -registerGeofences-");
-
+        geofencingClient = LocationServices.getGeofencingClient(context);
         geofencingClient.addGeofences(getGeofencingRequest(), getGeofencePendingIntent())
             .addOnSuccessListener((Activity) context, new OnSuccessListener<Void>() {
                 @Override
@@ -144,6 +109,18 @@ class GeofenceAPI {
                     }
                 }
             });
+    }
+
+    private void createLocationRequest() {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -createLocationRequest-");
+        locationRequest = LocationRequest.create();
+        locationRequest.setFastestInterval(1000);
+        locationRequest.setInterval(5000);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+    }
+
+    private void removeLocationRequest() {
+        locationRequest = null;
     }
 
     private GeofencingRequest getGeofencingRequest() {
@@ -176,23 +153,35 @@ class GeofenceAPI {
         geofencingClient.removeGeofences(geofencePendingIntent);
     }
 
-    private boolean hasGeofencePermissions() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -hasGeofencePermissions-");
-        for(String permission : permissions) {
-            if(ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_DENIED) {
+    private String[] setGeofencePermissions() {
+        Log.i(Constants.TAG, GeofenceAPI.class.getSimpleName() + " -setGeofencePermissions-");
+        String[] permissions;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            permissions = new String[] {
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
+            };
+        } else {
+            permissions = new String[]{
+                    Manifest.permission.ACCESS_FINE_LOCATION
+            };
+        }
+        return permissions;
+    }
 
-                return false;
+    boolean hasGeofencePermissions() {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -hasGeofencePermissions-");
+        boolean needMorePermissions = false;
+        for(String permission : permissions) {
+            if(ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                needMorePermissions = true;
             }
         }
-        return true;
+        return !needMorePermissions;
     }
 
-    private void askGeofencePermissions() {
+    void askGeofencePermissions() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -askGeofencePermissions-");
         ActivityCompat.requestPermissions((Activity) context, permissions, Constants.GEOFENCE_PERMISSION_REQUEST_CODE);
-    }
-
-    void stopLocationUpdates() {
-        fusedLocationProviderClient.removeLocationUpdates(locationCallback);
     }
 }

@@ -31,13 +31,15 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
 
     private ArrayList<Lesson> lessonList;
     private StudentLessonListActivity parent;
+    private GeofenceAPI geofenceAPI;
     static int currentLessonPartecipation;
     static int currentLessonReview = 0;
 
-    LessonRecyclerViewAdapter(StudentLessonListActivity parent, ArrayList<Lesson> lessonList, boolean twoPane) {
+    LessonRecyclerViewAdapter(StudentLessonListActivity parent, ArrayList<Lesson> lessonList, GeofenceAPI geofenceAPI, boolean twoPane) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -ClassRecyclerViewAdapter-");
         this.parent = parent;
         this.lessonList = lessonList;
+        this.geofenceAPI = geofenceAPI;
     }
 
     @NonNull
@@ -136,7 +138,7 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
             setButtonListener();
 
             // Create the detail fragment and add it to the activity using a fragment transaction.
-            if(GeofenceAPI.hasGeofencePermissions) {
+            if(geofenceAPI.hasGeofencePermissions()) {
                 Log.i(Constants.TAG, getClass().getSimpleName() + " -onStart-Has geofence permission.");
                 featurePanelHandler(lesson.isInProgress(), null);
             } else {

@@ -153,6 +153,8 @@
     <string name="no_question_asked_text">No question asked yet.</string>
     <string name="statistics_text">Statistics</string>
     <string name="question_add_text">Add question</string>
+    <string name="no_geofence_feature_text">You won\'t be able to register your presence during the lesson.</string>
+    <string name="geofence_permission_granted">Permissions granted.</string>
 
 
 </resources>
