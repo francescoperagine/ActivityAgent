@@ -130,7 +130,8 @@ public class StudentQuestionListActivity extends BaseActivity {
         if (id == R.id.addQuestionButton) {
             if(!addQuestionButtonStatus) {
                 newQuestionLayout.setVisibility(View.VISIBLE);
-                questionText.setText("");
+                questionText.setError(null);
+                questionText.setText(Constants.KEY_EMPTY);
                 item.setIcon(R.drawable.ic_cancel_24dp);
             } else {
                 newQuestionLayout.setVisibility(View.GONE);
