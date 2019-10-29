@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,7 +33,8 @@ public class StudentQuestionListActivity extends BaseActivity {
     View newQuestionLayout;
     TextView question_list_empty;
     EditText questionText;
-    Button addQuestionButton, submitQuestion, cancelQuestion;
+    Button addQuestionButton;
+    ImageButton submitQuestion;
     int lessonID;
     Menu menu;
     StudentQuestionAdapter studentQuestionAdapter;
@@ -46,7 +48,6 @@ public class StudentQuestionListActivity extends BaseActivity {
         addQuestionButton = findViewById(R.id.addQuestionButton);
         questionText = findViewById(R.id.questionText);
         submitQuestion = findViewById(R.id.questionSubmitButton);
-        cancelQuestion = findViewById(R.id.questionCancelButton);
 
         lessonID = getIntent().getIntExtra(Constants.KEY_LESSON_ID, 0);
         String className = getIntent().getStringExtra(Constants.KEY_CLASS_NAME);
@@ -61,7 +62,6 @@ public class StudentQuestionListActivity extends BaseActivity {
             question_list_empty.setVisibility(View.VISIBLE);
         }
 
-        cancelQuestion.setOnClickListener(cancelQuestionListener);
         submitQuestion.setOnClickListener(submitQuestionListener);
 
         setListView();
@@ -95,21 +95,21 @@ public class StudentQuestionListActivity extends BaseActivity {
         return arrayList;
     }
 
-    private final View.OnClickListener cancelQuestionListener = v -> {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -cancelQuestionListener-");
-        newQuestionLayout.setVisibility(View.GONE);
-    };
-
     private final View.OnClickListener submitQuestionListener = v -> {
         String input = questionText.getText().toString();
         Log.i(Constants.TAG, getClass().getSimpleName() + " -submitQuestionListener-");
-
-        sendQuestion(lessonID, input);
-        newQuestionLayout.setVisibility(View.GONE);
-        questionText.setText("");
-        menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_add_24dp));
-        questionList = getQuestionList(lessonID);
-        setListView();
+        if(input.isEmpty() || input == null) {
+            questionText.setError(getResources().getString(R.string.field) + " " + getResources().getString(R.string.inputCannotBeEmpty));
+            questionText.requestFocus();
+            return;
+        } else {
+            sendQuestion(lessonID, input);
+            newQuestionLayout.setVisibility(View.GONE);
+            questionText.setText("");
+            menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_add_24dp));
+            questionList = getQuestionList(lessonID);
+            setListView();
+        }
     };
 
     public void sendQuestion(int lessonID, String input) {
@@ -130,6 +130,7 @@ public class StudentQuestionListActivity extends BaseActivity {
         if (id == R.id.addQuestionButton) {
             if(!addQuestionButtonStatus) {
                 newQuestionLayout.setVisibility(View.VISIBLE);
+                questionText.setText("");
                 item.setIcon(R.drawable.ic_cancel_24dp);
             } else {
                 newQuestionLayout.setVisibility(View.GONE);

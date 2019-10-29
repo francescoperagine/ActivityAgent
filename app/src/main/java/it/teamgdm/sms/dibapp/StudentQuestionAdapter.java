@@ -1,20 +1,13 @@
 package it.teamgdm.sms.dibapp;
 
-import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageButton;
-import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import java.util.ArrayList;
 
@@ -68,11 +61,9 @@ public class StudentQuestionAdapter extends ArrayAdapter<Question> {
         else if (flag == 1) {
                 btnRateGood.setChecked(true);
                 btnRateBad.setChecked(false);
-        }
-        else {
+        } else {
                 btnRateGood.setChecked(false);
                 btnRateBad.setChecked(false);
-
         }
 
         //listeners on buttons

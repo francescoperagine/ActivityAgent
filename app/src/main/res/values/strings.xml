@@ -157,6 +157,7 @@
     <string name="no_review_text">No reviews</string>
     <string name="geofence_permission_granted">Permissions granted</string>
     <string name="geofence_permission_not_granted">Permissions not granted, geofence features disabled.</string>
+    <string name="field">Field</string>
 
 
 </resources>

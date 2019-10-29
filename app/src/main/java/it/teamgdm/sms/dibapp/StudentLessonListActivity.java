@@ -143,11 +143,9 @@ public class StudentLessonListActivity extends BaseActivity implements
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onRequestPermissionsResult-\t");
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if(hasAllPermissionsGranted(grantResults)) {
-            Toast.makeText(this, R.string.geofence_permission_granted, Toast.LENGTH_LONG).show();
             geofenceAPI = new GeofenceAPI(this);
             startLocationUpdates();
         } else {
-            Toast.makeText(this, R.string.geofence_permission_not_granted, Toast.LENGTH_LONG).show();
             geofenceAPI = null;
         }
     }
