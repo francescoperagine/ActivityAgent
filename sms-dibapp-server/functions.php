@@ -3,7 +3,9 @@
 include 'db_connect.php';
 include 'config.php';
 
-define ("SET_QUESTION_RATE_QUERY", "INSERT INTO question_rate(questionID, studentID, questionRate) VALUES ( :questionID , :studentID , :rate )");
+define("GET_REVIEW_COUNT_QUERY", "SELECT COUNT(rating) AS reviewCount FROM class_lesson_attendance_rating WHERE lessonID = ?");
+define("GET_QUESTION_COUNT_QUERY", "SELECT COUNT(ID) AS questionCount FROM class_lesson_question WHERE lessonID = ?");
+define("SET_QUESTION_RATE_QUERY", "INSERT INTO question_rate(questionID, studentID, questionRate) VALUES ( :questionID , :studentID , :rate )");
 define("DELETE_QUESTION_RATE_QUERY", "DELETE FROM question_rate WHERE questionID = :questionID AND studentID = :studentID");
 define("QUESTION_RATED_QUERY", "SELECT questionRate FROM question_rate WHERE questionID = :questionID AND studentID = :studentID ");
 define("USER_EXISTS_QUERY", "SELECT count(*) as count FROM user WHERE email = ?");
@@ -110,6 +112,22 @@ function questionIsRated(string $userid, string $questionid){
 	$stmt->bindValue(':studentID', $userid);
 	$stmt->bindValue(':questionID', $questionid);
 	$stmt->execute();
+	$response = $stmt->fetch(PDO::FETCH_OBJ);
+	return $response;
+}
+
+function getReviewCount(string $lessonID){
+	global $connection;
+	$stmt = $connection->prepare(GET_REVIEW_COUNT_QUERY);
+	$stmt->execute([$lessonID]);
+	$response = $stmt->fetch(PDO::FETCH_OBJ);
+	return $response;
+}
+
+function getQuestionCount(string $lessonID){
+	global $connection;
+	$stmt = $connection->prepare(GET_QUESTION_COUNT_QUERY);
+	$stmt->execute([$lessonID]);
 	$response = $stmt->fetch(PDO::FETCH_OBJ);
 	return $response;
 }

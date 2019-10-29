@@ -132,17 +132,17 @@
     <string name="class_no_lesson_scheduled_text">No lessons scheduled for this class.</string>
     <string name="lesson_today_schedule">Lessons of </string>
     <string name="lesson_no_lesson_scheduled_text">No lessons scheduled for today.</string>
-    <string name="title_activity_main2">Main2Activity</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
+    <string name="title_activity_main2" translatable="false">Main2Activity</string>
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
+    <string name="nav_header_title" translatable="false">Android Studio</string>
+    <string name="nav_header_subtitle" translatable="false">android.studio@android.com</string>
+    <string name="nav_header_desc" translatable="false">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <string name="menu_home">Home</string>
+    <string name="menu_home" translatable="false">Home</string>
     <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_slideshow" translatable="false">Slideshow</string>
     <string name="menu_tools">Tools</string>
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
@@ -153,6 +153,8 @@
     <string name="no_question_asked_text">No question asked yet.</string>
     <string name="statistics_text">Statistics</string>
     <string name="question_add_text">Add question</string>
+    <string name="no_question_text">No questions</string>
+    <string name="no_review_text">No reviews</string>
 
 
 </resources>
