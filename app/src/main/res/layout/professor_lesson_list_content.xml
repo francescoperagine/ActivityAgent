@@ -77,6 +77,8 @@
             android:layout_marginTop="64dp"
             android:padding="@dimen/textDefaultPadding"
             android:text="@string/question_button_test"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/reviewButton"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ratingBarProf" />
 
@@ -84,11 +86,14 @@
             android:id="@+id/reviewButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="118dp"
             android:layout_marginTop="64dp"
             android:layout_marginEnd="48dp"
             android:padding="@dimen/textDefaultPadding"
             android:text="@string/review_button_text"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/questionButton"
             app:layout_constraintTop_toBottomOf="@+id/ratingBarProf" />
 
         <TextView
