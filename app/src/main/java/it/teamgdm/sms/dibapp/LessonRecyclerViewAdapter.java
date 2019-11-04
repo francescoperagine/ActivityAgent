@@ -143,6 +143,9 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
                 Log.i(Constants.TAG, getClass().getSimpleName() + " -onStart-No geofence permission.");
                 featurePanelHandler(false, parent.getResources().getString(R.string.no_geofence_permission_text));
             }
+            if(DAO.isUserAttendingLesson(lesson.lessonID, Session.getUserID())) {
+                currentLessonPartecipation = lesson.lessonID;
+            }
         }
 
         void setTextViewContent(TextView textView, String text) {
@@ -196,8 +199,10 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
 
         private final View.OnClickListener partecipateButtonListener = v -> {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -partecipateButtonListener-");
-            if(buttonPartecipate.isChecked()) {
-                if(userIsAlreadyPartecipatingLesson()) {
+            if(DAO.isUserAttendingLesson(lesson.lessonID, Session.getUserID())) {
+                updateAttendanceStatus(buttonPartecipate.isChecked(), R.string.attendance_not_set);
+            } else {
+                if(userIsAlreadyPartecipatingLesson() && buttonPartecipate.isChecked()) {
                     Log.i(Constants.TAG, getClass().getSimpleName() + " -partecipateButtonListener-user is already partecipating a lesson");
                     String message = parent.getResources().getString(R.string.attendance_already_set);
                     buttonPartecipate.setChecked(false);
@@ -205,8 +210,6 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
                 } else {
                     updateAttendanceStatus(buttonPartecipate.isChecked(), R.string.attendance_set);
                 }
-            } else {
-                updateAttendanceStatus(buttonPartecipate.isChecked(), R.string.attendance_not_set);
             }
         };
 

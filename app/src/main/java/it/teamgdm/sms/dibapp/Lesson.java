@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class Lesson extends Exam implements Serializable {
+public class Lesson extends Exam  {
 
     private boolean expanded;
     int lessonID;
