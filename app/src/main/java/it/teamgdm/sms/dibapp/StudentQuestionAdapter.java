@@ -55,10 +55,10 @@ public class StudentQuestionAdapter extends ArrayAdapter<Question> {
         Question question = data.get(position);
 
         //adding values to the list item
-        textQuestion.setText(question.getQuestion());
-        rate.setText(String.valueOf(question.getRate()));;
+        textQuestion.setText(question.question);
+        rate.setText(String.valueOf(question.rate));;
 
-        int flag = DAO.isQuestionRated( Session.getUserID(),question.getId() );
+        int flag = DAO.isQuestionRated( Session.getUserID(),question.id);
 
         if(flag ==-1){
             btnRateGood.setChecked(false);
@@ -94,9 +94,9 @@ public class StudentQuestionAdapter extends ArrayAdapter<Question> {
                         btnRateBad.setChecked(false);
                     }
 
-                    DAO.deleteQuestionRate(Session.getUserID(), question.getId());
+                    DAO.deleteQuestionRate(Session.getUserID(), question.id);
 
-                    DAO.setQuestionRate(Session.getUserID(), question.getId(), Constants.RATE_GOOD);
+                    DAO.setQuestionRate(Session.getUserID(), question.id, Constants.RATE_GOOD);
 
                     rate.setText(String.valueOf(newRate));
 
@@ -109,7 +109,7 @@ public class StudentQuestionAdapter extends ArrayAdapter<Question> {
                     else{
                         newRate = Integer.parseInt(rate.getText().toString()) - 1;
 
-                        DAO.deleteQuestionRate(Session.getUserID(), question.getId());
+                        DAO.deleteQuestionRate(Session.getUserID(), question.id);
 
                         rate.setText(String.valueOf(newRate));
                     }
@@ -136,9 +136,9 @@ public class StudentQuestionAdapter extends ArrayAdapter<Question> {
                         btnRateGood.setChecked(false);
                     }
 
-                    DAO.deleteQuestionRate(Session.getUserID(), question.getId());
+                    DAO.deleteQuestionRate(Session.getUserID(), question.id);
 
-                    DAO.setQuestionRate(Session.getUserID(), question.getId(), Constants.RATE_BAD);
+                    DAO.setQuestionRate(Session.getUserID(), question.id, Constants.RATE_BAD);
 
                     rate.setText(String.valueOf(newRate));
                 }
@@ -149,7 +149,7 @@ public class StudentQuestionAdapter extends ArrayAdapter<Question> {
                     else{
                         newRate = Integer.parseInt(rate.getText().toString()) + 1;
 
-                        DAO.deleteQuestionRate(Session.getUserID(), question.getId());
+                        DAO.deleteQuestionRate(Session.getUserID(), question.id);
 
                         rate.setText(String.valueOf(newRate));
                     }

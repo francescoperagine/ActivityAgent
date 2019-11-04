@@ -15,6 +15,7 @@ import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class ProfessorListQuestionActivity extends BaseActivity {
 
@@ -54,13 +55,14 @@ public class ProfessorListQuestionActivity extends BaseActivity {
         for (int i = 0; i < totalQuestion; i++) {
             try {
                 JSONObject obj = response.getJSONObject(i);
-                String qst = obj.optString(Constants.KEY_QUESTION);
-                int id = obj.optInt(Constants.KEY_QUESTION_ID);
-                int rate = obj.optInt(Constants.KEY_QUESTION_RATE);
-                String dateStr = obj.getString(Constants.KEY_QUESTION_TIME);
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                Date dateQst = sdf.parse(dateStr);
-                questionArray.add(new Question(id, qst, rate, dateQst));
+                SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATETIME_FORMAT, Locale.getDefault());
+                Date dateQst = sdf.parse(obj.getString(Constants.KEY_QUESTION_TIME));
+                questionArray.add(
+                    Question.Builder.create(obj.optInt(Constants.KEY_QUESTION_ID))
+                    .question(obj.optString(Constants.KEY_QUESTION))
+                    .rate(obj.optInt(Constants.KEY_QUESTION_RATE))
+                    .date(dateQst)
+                    .build());
 
             } catch (JSONException e) {
                 e.printStackTrace();

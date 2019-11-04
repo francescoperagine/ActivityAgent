@@ -10,7 +10,7 @@ class Exam implements Serializable {
     int classCode;
     String classDescription;
     int classYear;
-    int classsemester;
+    int classSemester;
 
     @NonNull
     public String toString() {

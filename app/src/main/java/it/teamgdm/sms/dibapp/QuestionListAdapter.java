@@ -52,8 +52,8 @@ public class QuestionListAdapter extends ArrayAdapter<Question> {
         Log.i(Constants.TAG, "QUESTION CONTENT = " + qst.toString());
 
         //adding values to the list item
-        rateText.setText(String.valueOf(qst.getRate()));
-        qstText.setText(qst.getQuestion());
+        rateText.setText(String.valueOf(qst.rate));
+        qstText.setText(qst.question);
 
         //finally returning the view
         return view;

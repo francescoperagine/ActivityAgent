@@ -2,50 +2,52 @@ package it.teamgdm.sms.dibapp;
 
 import java.util.Date;
 
-public class Question {
+public final class Question {
 
-    private int id;
-    private String question;
-    private int rate;
-    private Date date;
+    public final int id;
+    public final String question;
+    public final int rate;
+    public final Date date;
 
-    public Question(int id, String question, int rate, Date date) {
+    private Question(final int id, final String question, final int rate, final Date date) {
         this.id = id;
         this.question = question;
         this.rate = rate;
         this.date = date;
     }
 
-    public Date getDate() {
-        return date;
-    }
+    public static class Builder {
+        private int id;
+        private String question;
+        private int rate;
+        private Date date;
 
-    public void setDate(Date date) {
-        this.date = date;
-    }
+        private Builder(final int id) {
+            this.id = id;
+        }
 
-    int getRate() {
-        return rate;
-    }
+        public Builder question(final String question) {
+            this.question = question;
+            return this;
+        }
 
-    void setRate(int rate) {
-        this.rate = rate;
-    }
+        public Builder rate(final int rate) {
+            this.rate = rate;
+            return this;
+        }
 
-    String getQuestion() {
-        return question;
-    }
+        public Builder date(final Date date) {
+            this.date = date;
+            return this;
+        }
 
-    void setQuestion(String question) {
-        this.question = question;
-    }
+        public static Builder create(final int id) {
+            return new Builder(id);
+        }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+        public Question build() {
+            return new Question(id, question, rate, date);
+        }
     }
 
     @Override

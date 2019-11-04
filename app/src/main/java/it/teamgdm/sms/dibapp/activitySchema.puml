@@ -1,0 +1,38 @@
+@startuml
+(*top)  --> Main
+
+if ""
+note left: if is logged
+    [true] If "" then
+    note left: role check
+        --> [Professor] ProfessorClassList
+            --> [class selection] ProfessorClassDetail
+            --> [class lesson list] ClassRecyclerView
+            --> [lesson detail] ===professorLessonDetail===
+            --> [show questions] ProfessorListQuestion
+            ===professorLessonDetail=== --> [show reviews] ProfessorListReview
+    else
+    --> [Student] StudentLessonList
+        --> [lesson selection] LessonRecyclerView
+        --> if "" then
+        note left: user enters the class
+                --> [yes] ===showInteractivePanel===
+                --> [show questions] StudentQuestionList
+                --> [new question] StudentQuestionList
+                ===showInteractivePanel=== --> StudentReview
+                --> [send/edit review] StudentReview
+            else
+                --> [no] LessonRecyclerView
+            EndIf
+
+    EndIf
+else
+    --> [false] Login
+    if "" then
+        note right: if is registered
+        --> [sign-in] Main
+    else
+        -->[false] Register
+        Register --> [sign-on] Login
+
+@enduml

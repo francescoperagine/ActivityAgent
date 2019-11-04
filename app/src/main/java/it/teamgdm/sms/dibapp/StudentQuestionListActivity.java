@@ -27,7 +27,7 @@ public class StudentQuestionListActivity extends BaseActivity {
 
     //create ArrayList of String
     private ArrayList<Question> questionList;
-    private static boolean addQuestionButtonStatus;
+    private static boolean addQuestionButtonStatus = false;
     ListView listView;
     View newQuestionLayout;
     TextView question_list_empty;
@@ -79,16 +79,13 @@ public class StudentQuestionListActivity extends BaseActivity {
         ArrayList<Question> arrayList = new ArrayList<>();
         for (int i = 0; i < response.length(); i++) {
             try {
-                JSONObject obj = response.getJSONObject(i);
-                String qst = obj.optString(Constants.KEY_QUESTION);
-                int id = obj.optInt(Constants.KEY_QUESTION_ID);
-                int rate = obj.optInt(Constants.KEY_QUESTION_RATE);
-                String dateStr = obj.getString(Constants.KEY_QUESTION_TIME);
-                Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).parse(dateStr);
-                Question question = new Question(id, qst, rate, date);
-                arrayList.add(question);
-                Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-Question " + question.toString());
-            } catch (JSONException | ParseException e) {
+                Question q = Question.Builder.create(response.optInt(response.getJSONObject(i).optInt(Constants.KEY_QUESTION_ID, 0)))
+                        .question(response.getJSONObject(i).optString(Constants.KEY_QUESTION))
+                        .rate(response.getJSONObject(i).optInt(Constants.KEY_QUESTION_RATE, 0 ))
+                        .build();
+                arrayList.add(q);
+                Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-Question " + q.toString());
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
@@ -98,6 +95,8 @@ public class StudentQuestionListActivity extends BaseActivity {
     private final View.OnClickListener cancelQuestionListener = v -> {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -cancelQuestionListener-");
         newQuestionLayout.setVisibility(View.GONE);
+        addQuestionButtonStatus = !addQuestionButtonStatus;
+        menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_add_24dp));
     };
 
     private final View.OnClickListener submitQuestionListener = v -> {
@@ -106,6 +105,7 @@ public class StudentQuestionListActivity extends BaseActivity {
 
         sendQuestion(lessonID, input);
         newQuestionLayout.setVisibility(View.GONE);
+        addQuestionButtonStatus = !addQuestionButtonStatus;
         questionText.setText("");
         menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_add_24dp));
         questionList = getQuestionList(lessonID);
@@ -125,17 +125,17 @@ public class StudentQuestionListActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -onOptionsItemSelected-");
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onOptionsItemSelected-addQuestionButtonStatus " + addQuestionButtonStatus);
         int id = item.getItemId();
         if (id == R.id.addQuestionButton) {
-            if(!addQuestionButtonStatus) {
+            addQuestionButtonStatus = !addQuestionButtonStatus;
+            if(addQuestionButtonStatus) {
                 newQuestionLayout.setVisibility(View.VISIBLE);
                 item.setIcon(R.drawable.ic_cancel_24dp);
             } else {
                 newQuestionLayout.setVisibility(View.GONE);
                 item.setIcon(R.drawable.ic_add_24dp);
             }
-            addQuestionButtonStatus = !addQuestionButtonStatus;
             return true;
         }
         return super.onOptionsItemSelected(item);

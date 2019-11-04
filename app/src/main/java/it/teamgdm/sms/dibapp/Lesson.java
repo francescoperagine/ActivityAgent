@@ -39,7 +39,7 @@ public class Lesson extends Exam implements Serializable {
     public String toString() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -toString-");
         return "\nClassID \t " + classID + "\nLessonID \t " + lessonID + "\nName \t" + className + "\nclassCode \t" + classCode + "\nclassDescription \t" + classDescription + "\nclassYear \t" + classYear +
-                "\nclasssemester \t" + classsemester + "\ndate \t" + getDate() + "\ntimeStart \t" + timeStart + "\ntimeEnd \t" + timeEnd +
+                "\nclassSemester \t" + classSemester + "\ndate \t" + getDate() + "\ntimeStart \t" + timeStart + "\ntimeEnd \t" + timeEnd +
                 "\nlessonSummary \t" + lessonSummary + "\nlessonDescription \t" + lessonDescription;
     }
 

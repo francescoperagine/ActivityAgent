@@ -6,10 +6,10 @@ public class ComparatorQuestionMostRecent implements Comparator<Question> {
 
     @Override
     public int compare(Question a, Question b) {
-        if(a.getDate().after(b.getDate())){
+        if(a.date.after(b.date)){
             return -1;
         }
-        else if(a.getDate().before(b.getDate())){
+        else if(a.date.before(b.date)){
             return 1;
         }
         else{

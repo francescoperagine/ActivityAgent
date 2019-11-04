@@ -30,7 +30,7 @@ class StudentCareer extends LessonList {
                 lesson.classDescription = o.optString(Constants.KEY_CLASS_DESCRIPTION);
                 lesson.classCode = o.optInt(Constants.KEY_CLASS_CODE);
                 lesson.classYear = o.optInt(Constants.KEY_LESSON_YEAR);
-                lesson.classsemester = o.optInt(Constants.KEY_LESSON_SEMESTER);
+                lesson.classSemester = o.optInt(Constants.KEY_LESSON_SEMESTER);
                 lesson.timeStart = lesson.getTimestampFromString(o.optString(Constants.KEY_LESSON_TIME_START));
                 lesson.timeEnd = lesson.getTimestampFromString(o.optString(Constants.KEY_LESSON_TIME_END));
                 lesson.lessonSummary = o.optString(Constants.KEY_LESSON_SUMMARY);

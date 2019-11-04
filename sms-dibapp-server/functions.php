@@ -5,13 +5,13 @@ include 'config.php';
 
 define ("SET_QUESTION_RATE_QUERY", "INSERT INTO question_rate(questionID, studentID, questionRate) VALUES ( :questionID , :studentID , :rate )");
 define("DELETE_QUESTION_RATE_QUERY", "DELETE FROM question_rate WHERE questionID = :questionID AND studentID = :studentID");
-define("QUESTION_RATED_QUERY", "SELECT questionRate FROM question_rate WHERE questionID = :questionID AND studentID = :studentID ");
+define("QUESTION_RATED_QUERY", "SELECT questionRate FROM question_rate WHERE questionID = :questionID AND studentID = :studentID");
 define("USER_EXISTS_QUERY", "SELECT count(*) as count FROM user WHERE email = ?");
 define("VERIFY_PASSWORD_QUERY", "SELECT passwordHash, salt FROM user WHERE email = ?");
 define("GET_ROLE_LIST_QUERY", "SELECT name FROM role ORDER BY name");
 define("GET_DEGREECOURSE_LIST_QUERY", "SELECT name FROM degreecourse ORDER BY name");
 define("REGISTER_NEW_USER_QUERY",
-	"INSERT INTO user(serialNumber, name, surname, email, passwordHash, salt) VALUES (:serialNumber, :name, :surname, :email, :passwordHash, :salt)");
+	"INSERT INTO user(serialNumber, name, surname, email, passwordHash, salt, registrationDate) VALUES (:serialNumber, :name, :surname, :email, :passwordHash, :salt, :registrationDate)");
 define("REGISTER_NEW_USER_DEGREECOURSE_QUERY",
 	"INSERT INTO user_degreecourse(userID, degreecourseID) SELECT user.ID, degreecourse.ID FROM user, degreecourse WHERE EMAIL = :email AND degreecourse.name = :degreecourse");
 define("REGISTER_NEW_USER_ROLE_QUERY",
@@ -57,7 +57,7 @@ define("UNSET_ATTENDANCE_QUERY", "DELETE FROM class_lesson_attendance_rating WHE
 define("IS_USER_ATTENDING_LESSON_QUERY", "SELECT COUNT(*) as attendance FROM class_lesson_attendance_rating WHERE studentID = :userID AND lessonID = :lessonID");
 define("SET_CLASS_LESSON_REVIEW_QUERY", "UPDATE class_lesson_attendance_rating SET summary = :summary, review = :review, rating = :rating WHERE studentID = :userID AND lessonID = :lessonID");
 define("CHECK_IF_LESSON_ALREADY_EVALUATED", "SELECT count(*) as count, summary, review, rating FROM class_lesson_attendance_rating WHERE studentID = :studentID AND lessonID = :lessonID AND rating IS NOT NULL");
-define("GET_LESSON_QUESTION", "SELECT question, ID, rate, time FROM class_lesson_question_rated WHERE lessonID = ?");
+define("GET_LESSON_QUESTION", "SELECT question, ID, rate, time FROM class_lesson_question_rated WHERE lessonID = ? ORDER BY rate DESC");
 define("GET_LESSON_REVIEW", "SELECT rating, summary, review FROM class_lesson_attendance_rating WHERE lessonID = ? and rating IS NOT NULL");
 define("GET_AVERAGE_RATING", "SELECT AVG(cla.rating) AS avgrating FROM class_room_calendar AS crc JOIN class_room_lesson AS crl JOIN class_lesson_attendance_rating AS cla WHERE crc.ID = crl.calendarID AND crl.ID = cla.lessonID AND crc.classID = ?");
 define("GET_TOTAL_MEMBERS", "SELECT COUNT(*) as count FROM student_career WHERE classID = ?");
@@ -125,7 +125,7 @@ function verifyPassword(string $email, string $password) {
 }
 
 function registration(array $input) {
-	if(isset($input[KEY_USER_NAME]) && isset($input[KEY_USER_SURNAME]) && isset($input[KEY_USER_SERIAL_NUMBER]) && isset($input[degreecourse]) && isset($input[KEY_USER_ROLE_NAME]) && isset($input[KEY_USER_EMAIL]) && isset($input[KEY_USER_PASSWORD]) && isset($input[KEY_USER_REGISTRATION_DATE])){
+	if(isset($input[KEY_USER_NAME]) && isset($input[KEY_USER_SURNAME]) && isset($input[KEY_USER_SERIAL_NUMBER]) && isset($input[KEY_DEGREECOURSE]) && isset($input[KEY_USER_ROLE_NAME]) && isset($input[KEY_USER_EMAIL]) && isset($input[KEY_USER_PASSWORD]) && isset($input[KEY_USER_REGISTRATION_DATE])){
 	//Register the user if doesn't exists
 		try {
 			userExists($input[KEY_USER_EMAIL]);
