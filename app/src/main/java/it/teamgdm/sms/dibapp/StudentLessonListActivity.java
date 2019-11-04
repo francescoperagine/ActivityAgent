@@ -2,12 +2,14 @@ package it.teamgdm.sms.dibapp;
 
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.location.Geofence;
@@ -30,16 +32,16 @@ public class StudentLessonListActivity extends BaseActivity implements
     private boolean mTwoPane;
     Intent loginIntent;
     RecyclerView recyclerView;
+    View classListContainer;
     RecyclerView.Adapter adapter;
     TextView textViewEmptyClassList;
 
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-");
         super.onCreate(savedInstanceState);
-        loginIntent = getIntent();
-
         dibappBroadcastReceiver = new DibappBroadcastReceiver(this);
         geofenceAPI = new GeofenceAPI(this);
+        loginIntent = getIntent();
 
         if (findViewById(R.id.class_detail_container) != null) {
             // The detail container view will be present only in the
@@ -48,13 +50,12 @@ public class StudentLessonListActivity extends BaseActivity implements
             // activity should be in two-pane mode.
             mTwoPane = true;
         }
-
+        classListContainer = findViewById(R.id.classListContainer);
         recyclerView = findViewById(R.id.class_list);
         textViewEmptyClassList = findViewById(R.id.lesson_list_empty);
         String today = new SimpleDateFormat(Constants.DATE_FORMAT, Locale.getDefault()).format(new Date());
         getSupportActionBar().setTitle(getString(R.string.lesson_today_schedule) + Constants.KEY_BLANK + today);
         disableBackButton();
-
         setupRecyclerView();
     }
 
@@ -70,7 +71,7 @@ public class StudentLessonListActivity extends BaseActivity implements
         } else {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -setupRecyclerView-");
             recyclerView.setVisibility(View.VISIBLE);
-            adapter = new LessonRecyclerViewAdapter(this, classList, mTwoPane);
+            adapter = new LessonRecyclerViewAdapter(this, classList, geofenceAPI, mTwoPane);
             recyclerView.setAdapter(adapter);
             textViewEmptyClassList.setVisibility(View.GONE);
         }
@@ -101,16 +102,18 @@ public class StudentLessonListActivity extends BaseActivity implements
     protected void onResume() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onResume-");
         super.onResume();
-
-        if(GeofenceAPI.hasGeofencePermissions){
-            registerReceiver(dibappBroadcastReceiver, intentFilter);
-            startLocationUpdates();
+        if(geofenceAPI != null) {
+            if(geofenceAPI.hasGeofencePermissions()){
+                startLocationUpdates();
+            } else {
+                geofenceAPI.askGeofencePermissions();
+            }
         }
     }
 
     private void startLocationUpdates() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -startLocationUpdates-");
-        if(GeofenceAPI.hasGeofencePermissions) {
+        registerReceiver(dibappBroadcastReceiver, intentFilter);
+        if(geofenceAPI != null) {
             geofenceAPI.startLocationUpdates();
         }
     }
@@ -119,24 +122,50 @@ public class StudentLessonListActivity extends BaseActivity implements
     protected void onPause() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onPause-");
         super.onPause();
-        if(GeofenceAPI.hasGeofencePermissions){
-            unregisterReceiver(dibappBroadcastReceiver);
-            stopLocationUpdates();
+        if(geofenceAPI != null) {
+            if(geofenceAPI.hasGeofencePermissions()){
+                stopLocationsUpdate();
+            } else {
+                geofenceAPI.askGeofencePermissions();
+            }
         }
     }
 
-    private void stopLocationUpdates() {
-        Log.i(Constants.TAG, getClass().getSimpleName() + " -stopLocationUpdates-");
-        if(GeofenceAPI.hasGeofencePermissions) {
+    private void stopLocationsUpdate() {
+        if(geofenceAPI != null) {
             geofenceAPI.stopLocationUpdates();
+            unregisterReceiver(dibappBroadcastReceiver);
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onRequestPermissionsResult-\t");
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(hasAllPermissionsGranted(grantResults)) {
+            geofenceAPI = new GeofenceAPI(this);
+            startLocationUpdates();
+        } else {
+            geofenceAPI = null;
+        }
+    }
+
+    public boolean hasAllPermissionsGranted(@NonNull int[] grantResults) {
+        for (int grantResult : grantResults) {
+            if (grantResult == PackageManager.PERMISSION_DENIED) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
     protected void onDestroy() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onDestroy-");
         super.onDestroy();
-        geofenceAPI.removeGeofences();
+        if(geofenceAPI != null) {
+            geofenceAPI.removeGeofences();
+        }
     }
 
     @Override

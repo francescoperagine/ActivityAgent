@@ -78,6 +78,12 @@ if(isset($input[ACTION])){
 		case ACTION_SET_QUESTION_RATE:
 			$response = setQuestionRate($input[KEY_USER_ID], $input[KEY_QUESTION_ID], $input[KEY_QUESTION_RATE]);
 			break;
+		case ACTION_GET_QUESTION_COUNT:
+			$response = getQuestionCount($input[KEY_CLASS_LESSON_ID]);
+			break;
+		case ACTION_GET_REVIEW_COUNT:
+			$response = getReviewCount($input[KEY_CLASS_LESSON_ID]);
+			break;
 		default:
 			$response = new Response(ACTION_NOT_DEFINED_TEXT, ACTION_NOT_DEFINED_CODE); 
 			break;

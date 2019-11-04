@@ -12,60 +12,61 @@
         android:id="@id/toolbar"
         layout="@layout/toolbar" />
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/addQuestionContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_marginEnd="@dimen/textDefaultPadding"
+        android:foregroundGravity="fill_horizontal|center_horizontal"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/textDefaultPadding"
         android:visibility="gone">
 
         <EditText
             android:id="@+id/questionText"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="@string/question_write_yours_here_text"
-            android:inputType="textMultiLine|text"
-            android:padding="@dimen/fab_margin">
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:padding="@dimen/fab_margin"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/questionSubmitButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
 
         </EditText>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/questionCancelButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/cancel_button_text"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/questionSubmitButton"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <Button
-                android:id="@+id/questionSubmitButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/submit_button_text"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/questionCancelButton" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageButton
+            android:id="@+id/questionSubmitButton"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:background="@android:color/transparent"
+            android:drawableTint="?attr/colorAccent"
+            android:gravity="center_horizontal"
+            android:padding="@dimen/textDefaultPadding"
+            android:src="@drawable/ic_send_24dp"
+            android:tint="?attr/colorAccent"
+            app:layout_constraintBottom_toBottomOf="@+id/questionText"
+            app:layout_constraintDimensionRatio="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/questionText"
+            app:layout_constraintTop_toTopOf="@+id/questionText" />
 
         <View
             android:id="@+id/divider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_margin="@dimen/textDefaultPadding"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:background="?android:attr/listDivider" />
+            android:background="?android:attr/listDivider"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/questionText" />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ListView
         android:id="@+id/listviewstudent"

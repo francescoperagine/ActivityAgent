@@ -29,15 +29,18 @@ import java.util.Date;
 
 public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecyclerViewAdapter.ViewHolder> {
 
+    private static int currentLessonPartecipation;
+    private static int currentLessonReview = 0;
+
     private ArrayList<Lesson> lessonList;
     private StudentLessonListActivity parent;
-    static int currentLessonPartecipation;
-    static int currentLessonReview = 0;
+    private GeofenceAPI geofenceAPI;
 
-    LessonRecyclerViewAdapter(StudentLessonListActivity parent, ArrayList<Lesson> lessonList, boolean twoPane) {
+    LessonRecyclerViewAdapter(StudentLessonListActivity parent, ArrayList<Lesson> lessonList, GeofenceAPI geofenceAPI, boolean twoPane) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -ClassRecyclerViewAdapter-");
         this.parent = parent;
         this.lessonList = lessonList;
+        this.geofenceAPI = geofenceAPI;
     }
 
     @NonNull
@@ -72,11 +75,10 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
         return lessonList.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder implements
-            StudentReviewFragment.StudentEvaluateFragmentInterface {
+    class ViewHolder extends RecyclerView.ViewHolder implements StudentReviewFragment.StudentEvaluateFragmentInterface {
 
         Lesson lesson;
-        final TextView titleView, classDescription, lessonSummary, lessonDescription, lessonTime, bottomMenuAlternateView;
+        final TextView titleView, classDescription, lessonSummary, lessonDescription, lessonTime;
         final ProgressBar lessonProgressBar;
         final ImageView lessonInProgressImage;
         final View studentLessonContainer, studentLessonDetail, studentLessonBottomMenu;
@@ -107,8 +109,6 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
             buttonReview = view.findViewById(R.id.reviewButton);
             buttonQuestion = view.findViewById(R.id.questionButton);
 
-            bottomMenuAlternateView = view.findViewById(R.id.bottomMenuAlternateView);
-
             lessonContainer = view.findViewById(R.id.lessonContainer);
             reviewContainer = view.findViewById(R.id.reviewContainer);
             reviewContainer.setId(View.generateViewId());
@@ -136,7 +136,7 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
             setButtonListener();
 
             // Create the detail fragment and add it to the activity using a fragment transaction.
-            if(GeofenceAPI.hasGeofencePermissions) {
+            if(geofenceAPI.hasGeofencePermissions()) {
                 Log.i(Constants.TAG, getClass().getSimpleName() + " -onStart-Has geofence permission.");
                 featurePanelHandler(lesson.isInProgress(), null);
             } else {
@@ -254,15 +254,16 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
             buttonReview.setEnabled(isUserAttendingLesson);
         }
 
-        private void featurePanelHandler(boolean menuVisibility, String alternateViewText) {
+        private void featurePanelHandler(boolean menuVisibility, String message) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -featurePanelHandler-");
             if(menuVisibility && StudentLessonListActivity.geofenceTransitionAction == Geofence.GEOFENCE_TRANSITION_DWELL) {
-                bottomMenuAlternateView.setVisibility(View.GONE);
                 studentLessonBottomMenu.setVisibility(View.VISIBLE);
                 featureActivator(DAO.isUserAttendingLesson(lesson.lessonID, Session.getUserID()));
             } else {
+                if(message != null) {
+                    Toast.makeText(parent, message, Toast.LENGTH_SHORT).show();
+                }
                 studentLessonBottomMenu.setVisibility(View.GONE);
-                setTextViewContent(bottomMenuAlternateView, alternateViewText);
             }
         }
         private final View.OnClickListener evaluateButtonListener = v -> {
