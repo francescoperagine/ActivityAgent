@@ -13,11 +13,6 @@
         android:title="@string/dashboard_menu_user_profile"
         app:showAsAction="never" />
     <item
-        android:id="@+id/settingsButton"
-        android:icon="@drawable/ic_settings"
-        android:title="@string/dashboard_menu_settings"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/logoutButton"
         android:icon="@drawable/ic_exit"
         android:title="@string/dashboard_menu_exit"
