@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Ott 22, 2019 alle 02:42
+-- Creato il: Nov 06, 2019 alle 00:48
 -- Versione del server: 10.1.31-MariaDB
 -- Versione PHP: 7.2.4
 
@@ -104,9 +104,58 @@ CREATE TABLE `class_lesson_attendance_rating` (
 --
 
 INSERT INTO `class_lesson_attendance_rating` (`ID`, `studentID`, `lessonID`, `rating`, `summary`, `review`, `time`) VALUES
-(1, 1, 5, 5, 'test', 'test', '2019-10-07 13:01:18'),
-(63, 1, 6, 5, 'test', '', '2019-10-07 09:53:49'),
-(64, 1, 8, 4, '123', '4444', NULL);
+(68, 45, 6, 3, 'Lezione mediocre', 'É stata una lezione mediocre.', '2019-09-30 10:55:38'),
+(73, 44, 6, NULL, NULL, NULL, '2019-09-30 11:00:30'),
+(74, 41, 6, NULL, NULL, NULL, '2019-09-30 11:00:30'),
+(69, 46, 6, 5, 'Ottima lezione', 'É stata una lezione ottima.', '2019-09-30 10:55:38'),
+(70, 47, 6, 3, 'Lezione mediocre', 'É stata una lezione a tratti noiosa.', '2019-09-30 10:55:38'),
+(71, 48, 6, 4, 'Bella lezione', 'É stata una lezione gradevole.', '2019-09-30 10:55:38'),
+(72, 49, 6, 1, 'Pessima lezione', 'É stata una lezione pessima.', '2019-09-30 10:55:38'),
+(75, 42, 6, NULL, NULL, NULL, '2019-09-30 11:00:30'),
+(76, 43, 6, NULL, NULL, NULL, '2019-09-30 11:00:30'),
+(87, 44, 10, NULL, NULL, NULL, '2019-09-30 11:00:30'),
+(88, 41, 10, NULL, NULL, NULL, '2019-09-30 11:00:30'),
+(78, 44, 9, NULL, NULL, NULL, '2019-09-30 11:00:30'),
+(79, 41, 9, NULL, NULL, NULL, '2019-09-30 11:00:30'),
+(80, 46, 9, 5, 'Ottima lezione', 'É stata una lezione ottima.', '2019-09-30 10:55:38'),
+(86, 45, 10, 3, 'Lezione mediocre', 'É stata una lezione mediocre.', '2019-09-30 10:55:38'),
+(82, 48, 9, 4, 'Bella lezione', 'É stata una lezione gradevole.', '2019-09-30 10:55:38'),
+(83, 49, 9, 1, 'Pessima lezione', 'É stata una lezione pessima.', '2019-09-30 10:55:38'),
+(84, 42, 9, NULL, NULL, NULL, '2019-09-30 11:00:30'),
+(85, 43, 9, NULL, NULL, NULL, '2019-09-30 11:00:30'),
+(89, 46, 10, 5, 'Ottima lezione', 'É stata una lezione ottima.', '2019-09-30 10:55:38'),
+(90, 47, 10, 3, 'Lezione mediocre', 'É stata una lezione a tratti noiosa.', '2019-09-30 10:55:38'),
+(91, 48, 10, 4, 'Bella lezione', 'É stata una lezione gradevole.', '2019-09-30 10:55:38'),
+(92, 49, 10, 1, 'Pessima lezione', 'É stata una lezione pessima.', '2019-09-30 10:55:38'),
+(93, 42, 10, NULL, NULL, NULL, '2019-09-30 11:00:30'),
+(94, 43, 10, NULL, NULL, NULL, '2019-09-30 11:00:30'),
+(95, 48, 11, 4, 'Bella lezione', 'É stata una lezione gradevole.', '2019-09-30 10:55:38'),
+(96, 49, 11, 1, 'Pessima lezione', 'É stata una lezione pessima.', '2019-09-30 10:55:38'),
+(97, 42, 11, NULL, NULL, NULL, '2019-09-30 11:00:30'),
+(98, 43, 11, NULL, NULL, NULL, '2019-09-30 11:00:30'),
+(99, 46, 12, 5, 'Ottima lezione', 'É stata una lezione ottima.', '2019-09-30 10:55:38'),
+(100, 47, 12, 3, 'Lezione mediocre', 'É stata una lezione a tratti noiosa.', '2019-09-30 10:55:38'),
+(101, 48, 12, 4, 'Bella lezione', 'É stata una lezione gradevole.', '2019-09-30 10:55:38'),
+(102, 49, 12, 1, 'Pessima lezione', 'É stata una lezione pessima.', '2019-09-30 10:55:38'),
+(103, 42, 12, NULL, NULL, NULL, '2019-09-30 11:00:30'),
+(104, 43, 12, NULL, NULL, NULL, '2019-09-30 11:00:30'),
+(105, 41, 13, NULL, NULL, NULL, '2019-09-30 11:00:30'),
+(106, 45, 13, 3, 'Lezione mediocre', 'É stata una lezione mediocre.', '2019-09-30 10:55:38'),
+(107, 46, 13, 5, 'Ottima lezione', 'É stata una lezione ottima.', '2019-09-30 10:55:38'),
+(108, 47, 13, 3, 'Lezione mediocre', 'É stata una lezione a tratti noiosa.', '2019-09-30 10:55:38'),
+(109, 48, 13, 4, 'Bella lezione', 'É stata una lezione gradevole.', '2019-09-30 10:55:38'),
+(110, 49, 13, 1, 'Pessima lezione', 'É stata una lezione pessima.', '2019-09-30 10:55:38'),
+(111, 42, 13, NULL, NULL, NULL, '2019-09-30 11:00:30'),
+(112, 43, 13, NULL, NULL, NULL, '2019-09-30 11:00:30'),
+(113, 49, 14, 1, 'Pessima lezione', 'É stata una lezione pessima.', '2019-09-30 10:55:38'),
+(114, 42, 14, NULL, NULL, NULL, '2019-09-30 11:00:30'),
+(115, 43, 14, NULL, NULL, NULL, '2019-09-30 11:00:30'),
+(116, 44, 14, NULL, NULL, NULL, '2019-09-30 11:00:30'),
+(117, 46, 15, 5, 'Ottima lezione', 'É stata una lezione ottima.', '2019-09-30 10:55:38'),
+(118, 48, 15, 4, 'Bella lezione', 'É stata una lezione gradevole.', '2019-09-30 10:55:38'),
+(119, 49, 15, 1, 'Pessima lezione', 'É stata una lezione pessima.', '2019-09-30 10:55:38'),
+(120, 42, 15, NULL, NULL, NULL, '2019-09-30 11:00:30'),
+(121, 43, 15, NULL, NULL, NULL, '2019-09-30 11:00:30');
 
 -- --------------------------------------------------------
 
@@ -127,8 +176,34 @@ CREATE TABLE `class_lesson_question` (
 --
 
 INSERT INTO `class_lesson_question` (`ID`, `lessonID`, `studentID`, `question`, `time`) VALUES
-(15, 5, 1, 'question test', '2019-10-07 13:01:37'),
-(16, 6, 1, 'text', '2019-10-07 09:54:15');
+(17, 6, 44, 'Può ripetere il titolo del libro di testo?', '2019-09-30 10:57:42'),
+(18, 6, 44, 'Può spiegare meglio l\'ultimo argomento?', '2019-09-30 11:02:47'),
+(19, 6, 44, 'Ci saranno esoneri?', '2019-09-30 11:03:09'),
+(20, 6, 45, 'Quanto costa il libro di testo?', '2019-09-30 10:57:42'),
+(21, 6, 46, 'Dove possiamo trovare le slide?', '2019-09-30 11:02:47'),
+(22, 6, 47, 'Quale sarà la modalità d\'esame?', '2019-09-30 11:03:09'),
+(23, 9, 44, 'Può ripetere il titolo del libro di testo?', '2019-09-30 10:57:42'),
+(24, 9, 44, 'Può spiegare meglio l\'ultimo argomento?', '2019-09-30 11:02:47'),
+(25, 10, 44, 'Ci saranno esoneri?', '2019-09-30 11:03:09'),
+(26, 10, 45, 'Quanto costa il libro di testo?', '2019-09-30 10:57:42'),
+(27, 10, 46, 'Dove possiamo trovare le slide?', '2019-09-30 11:02:47'),
+(28, 10, 47, 'Quale sarà la modalità d\'esame?', '2019-09-30 11:03:09'),
+(29, 11, 44, 'Può ripetere il titolo del libro di testo?', '2019-09-30 10:57:42'),
+(30, 11, 44, 'Può spiegare meglio l\'ultimo argomento?', '2019-09-30 11:02:47'),
+(31, 11, 44, 'Ci saranno esoneri?', '2019-09-30 11:03:09'),
+(32, 12, 45, 'Quanto costa il libro di testo?', '2019-09-30 10:57:42'),
+(33, 12, 46, 'Dove possiamo trovare le slide?', '2019-09-30 11:02:47'),
+(34, 12, 47, 'Quale sarà la modalità d\'esame?', '2019-09-30 11:03:09'),
+(35, 13, 44, 'Può ripetere il titolo del libro di testo?', '2019-09-30 10:57:42'),
+(36, 13, 44, 'Può spiegare meglio l\'ultimo argomento?', '2019-09-30 11:02:47'),
+(37, 14, 44, 'Ci saranno esoneri?', '2019-09-30 11:03:09'),
+(38, 14, 45, 'Quanto costa il libro di testo?', '2019-09-30 10:57:42'),
+(39, 15, 46, 'Dove possiamo trovare le slide?', '2019-09-30 11:02:47'),
+(40, 15, 47, 'Quale sarà la modalità d\'esame?', '2019-09-30 11:03:09'),
+(41, 15, 44, 'Può ripetere il titolo del libro di testo?', '2019-09-30 10:57:42'),
+(42, 15, 44, 'Può spiegare meglio l\'ultimo argomento?', '2019-09-30 11:02:47'),
+(43, 15, 44, 'Ci saranno esoneri?', '2019-09-30 11:03:09'),
+(44, 15, 45, 'Quanto costa il libro di testo?', '2019-09-30 10:57:42');
 
 -- --------------------------------------------------------
 
@@ -242,10 +317,17 @@ CREATE TABLE `class_room_lesson` (
 --
 
 INSERT INTO `class_room_lesson` (`ID`, `calendarID`, `roomID`, `timeStart`, `timeEnd`, `summary`, `description`) VALUES
-(6, 1, 10, '2019-10-10 09:30:00', '2019-10-10 22:33:00', NULL, NULL),
-(5, 35, 5, '2019-10-04 08:00:00', '2019-10-04 23:49:00', NULL, NULL),
-(7, 1, 1, '2019-10-11 07:00:00', '2019-10-11 21:00:00', 'sommario', 'descrizione'),
-(8, 49, 6, '2019-10-10 06:00:00', '2019-10-10 13:00:00', NULL, NULL);
+(6, 1, 10, '2019-09-30 09:00:00', '2019-09-30 12:00:00', NULL, NULL),
+(11, 1, 10, '2019-10-21 09:00:00', '2019-10-21 12:00:00', NULL, NULL),
+(9, 1, 10, '2019-10-07 09:00:00', '2019-10-07 12:00:00', NULL, NULL),
+(10, 1, 10, '2019-10-14 09:00:00', '2019-10-14 12:00:00', NULL, NULL),
+(12, 1, 10, '2019-10-28 09:00:00', '2019-10-28 12:00:00', NULL, NULL),
+(13, 1, 10, '2019-11-04 09:00:00', '2019-11-04 12:00:00', NULL, NULL),
+(14, 1, 10, '2019-11-11 09:00:00', '2019-11-11 12:00:00', NULL, NULL),
+(15, 1, 10, '2019-11-18 09:00:00', '2019-11-18 12:00:00', NULL, NULL),
+(16, 35, 10, '2019-11-18 09:00:00', '2019-11-18 12:00:00', NULL, NULL),
+(17, 35, 10, '2019-11-11 09:00:00', '2019-11-11 12:00:00', NULL, NULL),
+(18, 35, 10, '2019-11-04 09:00:00', '2019-11-04 12:00:00', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -374,8 +456,47 @@ CREATE TABLE `question_rate` (
 --
 
 INSERT INTO `question_rate` (`questionID`, `studentID`, `questionRate`) VALUES
-(15, 41, 1),
-(15, 42, 1);
+(17, 44, 1),
+(17, 45, 1),
+(17, 46, 1),
+(18, 44, 1),
+(18, 45, 1),
+(18, 46, 1),
+(19, 44, 1),
+(19, 45, 1),
+(20, 44, -1),
+(20, 45, -1),
+(21, 44, -1),
+(21, 45, -1),
+(21, 46, -1),
+(21, 47, -1),
+(24, 44, 1),
+(24, 45, 1),
+(24, 46, 1),
+(26, 44, 1),
+(26, 45, 1),
+(26, 46, 1),
+(29, 44, -1),
+(29, 45, -1),
+(30, 44, 1),
+(30, 45, 1),
+(32, 44, 1),
+(32, 45, 1),
+(34, 44, -1),
+(34, 45, -1),
+(36, 44, 1),
+(36, 45, 1),
+(36, 46, 1),
+(38, 44, 1),
+(38, 45, 1),
+(39, 44, 1),
+(39, 45, 1),
+(39, 46, 1),
+(40, 44, -1),
+(40, 45, -1),
+(40, 46, 1),
+(41, 44, -1),
+(41, 45, -1);
 
 -- --------------------------------------------------------
 
@@ -500,7 +621,231 @@ INSERT INTO `student_career` (`ID`, `studentID`, `classID`, `passed`, `vote`, `p
 (53, 41, 44, 0, 0, NULL, NULL),
 (54, 41, 45, 0, 0, NULL, NULL),
 (55, 41, 46, 0, 0, NULL, NULL),
-(56, 41, 47, 0, 0, NULL, NULL);
+(56, 41, 47, 0, 0, NULL, NULL),
+(57, 42, 8, 0, 0, NULL, NULL),
+(58, 42, 1, 0, 0, NULL, NULL),
+(59, 42, 2, 0, 0, NULL, NULL),
+(60, 42, 9, 0, 0, NULL, NULL),
+(61, 42, 10, 0, 0, NULL, NULL),
+(62, 42, 11, 0, 0, NULL, NULL),
+(63, 42, 15, 0, 0, NULL, NULL),
+(64, 42, 3, 0, 0, NULL, NULL),
+(65, 42, 5, 0, 0, NULL, NULL),
+(66, 42, 4, 0, 0, NULL, NULL),
+(67, 42, 16, 0, 0, NULL, NULL),
+(68, 42, 6, 0, 0, NULL, NULL),
+(69, 42, 17, 0, 0, NULL, NULL),
+(70, 42, 18, 0, 0, NULL, NULL),
+(71, 42, 12, 0, 0, NULL, NULL),
+(72, 42, 7, 0, 0, NULL, NULL),
+(73, 42, 19, 0, 0, NULL, NULL),
+(74, 42, 13, 0, 0, NULL, NULL),
+(75, 42, 14, 0, 0, NULL, NULL),
+(76, 42, 20, 0, 0, NULL, NULL),
+(77, 42, 42, 0, 0, NULL, NULL),
+(78, 42, 55, 0, 0, NULL, NULL),
+(79, 42, 41, 0, 0, NULL, NULL),
+(80, 42, 43, 0, 0, NULL, NULL),
+(81, 42, 44, 0, 0, NULL, NULL),
+(82, 42, 45, 0, 0, NULL, NULL),
+(83, 42, 46, 0, 0, NULL, NULL),
+(84, 42, 47, 0, 0, NULL, NULL),
+(88, 43, 8, 0, 0, NULL, NULL),
+(89, 43, 1, 0, 0, NULL, NULL),
+(90, 43, 2, 0, 0, NULL, NULL),
+(91, 43, 9, 0, 0, NULL, NULL),
+(92, 43, 10, 0, 0, NULL, NULL),
+(93, 43, 11, 0, 0, NULL, NULL),
+(94, 43, 15, 0, 0, NULL, NULL),
+(95, 43, 3, 0, 0, NULL, NULL),
+(96, 43, 5, 0, 0, NULL, NULL),
+(97, 43, 4, 0, 0, NULL, NULL),
+(98, 43, 16, 0, 0, NULL, NULL),
+(99, 43, 6, 0, 0, NULL, NULL),
+(100, 43, 17, 0, 0, NULL, NULL),
+(101, 43, 18, 0, 0, NULL, NULL),
+(102, 43, 12, 0, 0, NULL, NULL),
+(103, 43, 7, 0, 0, NULL, NULL),
+(104, 43, 19, 0, 0, NULL, NULL),
+(105, 43, 13, 0, 0, NULL, NULL),
+(106, 43, 14, 0, 0, NULL, NULL),
+(107, 43, 20, 0, 0, NULL, NULL),
+(108, 43, 42, 0, 0, NULL, NULL),
+(109, 43, 55, 0, 0, NULL, NULL),
+(110, 43, 41, 0, 0, NULL, NULL),
+(111, 43, 43, 0, 0, NULL, NULL),
+(112, 43, 44, 0, 0, NULL, NULL),
+(113, 43, 45, 0, 0, NULL, NULL),
+(114, 43, 46, 0, 0, NULL, NULL),
+(115, 43, 47, 0, 0, NULL, NULL),
+(119, 44, 8, 0, 0, NULL, NULL),
+(120, 44, 1, 0, 0, NULL, NULL),
+(121, 44, 2, 0, 0, NULL, NULL),
+(122, 44, 9, 0, 0, NULL, NULL),
+(123, 44, 10, 0, 0, NULL, NULL),
+(124, 44, 11, 0, 0, NULL, NULL),
+(125, 44, 15, 0, 0, NULL, NULL),
+(126, 44, 3, 0, 0, NULL, NULL),
+(127, 44, 5, 0, 0, NULL, NULL),
+(128, 44, 4, 0, 0, NULL, NULL),
+(129, 44, 16, 0, 0, NULL, NULL),
+(130, 44, 6, 0, 0, NULL, NULL),
+(131, 44, 17, 0, 0, NULL, NULL),
+(132, 44, 18, 0, 0, NULL, NULL),
+(133, 44, 12, 0, 0, NULL, NULL),
+(134, 44, 7, 0, 0, NULL, NULL),
+(135, 44, 19, 0, 0, NULL, NULL),
+(136, 44, 13, 0, 0, NULL, NULL),
+(137, 44, 14, 0, 0, NULL, NULL),
+(138, 44, 20, 0, 0, NULL, NULL),
+(139, 44, 42, 0, 0, NULL, NULL),
+(140, 44, 55, 0, 0, NULL, NULL),
+(141, 44, 41, 0, 0, NULL, NULL),
+(142, 44, 43, 0, 0, NULL, NULL),
+(143, 44, 44, 0, 0, NULL, NULL),
+(144, 44, 45, 0, 0, NULL, NULL),
+(145, 44, 46, 0, 0, NULL, NULL),
+(146, 44, 47, 0, 0, NULL, NULL),
+(150, 45, 8, 0, 0, NULL, NULL),
+(151, 45, 1, 0, 0, NULL, NULL),
+(152, 45, 2, 0, 0, NULL, NULL),
+(153, 45, 9, 0, 0, NULL, NULL),
+(154, 45, 10, 0, 0, NULL, NULL),
+(155, 45, 11, 0, 0, NULL, NULL),
+(156, 45, 15, 0, 0, NULL, NULL),
+(157, 45, 3, 0, 0, NULL, NULL),
+(158, 45, 5, 0, 0, NULL, NULL),
+(159, 45, 4, 0, 0, NULL, NULL),
+(160, 45, 16, 0, 0, NULL, NULL),
+(161, 45, 6, 0, 0, NULL, NULL),
+(162, 45, 17, 0, 0, NULL, NULL),
+(163, 45, 18, 0, 0, NULL, NULL),
+(164, 45, 12, 0, 0, NULL, NULL),
+(165, 45, 7, 0, 0, NULL, NULL),
+(166, 45, 19, 0, 0, NULL, NULL),
+(167, 45, 13, 0, 0, NULL, NULL),
+(168, 45, 14, 0, 0, NULL, NULL),
+(169, 45, 20, 0, 0, NULL, NULL),
+(170, 45, 42, 0, 0, NULL, NULL),
+(171, 45, 55, 0, 0, NULL, NULL),
+(172, 45, 41, 0, 0, NULL, NULL),
+(173, 45, 43, 0, 0, NULL, NULL),
+(174, 45, 44, 0, 0, NULL, NULL),
+(175, 45, 45, 0, 0, NULL, NULL),
+(176, 45, 46, 0, 0, NULL, NULL),
+(177, 45, 47, 0, 0, NULL, NULL),
+(181, 46, 8, 0, 0, NULL, NULL),
+(182, 46, 1, 0, 0, NULL, NULL),
+(183, 46, 2, 0, 0, NULL, NULL),
+(184, 46, 9, 0, 0, NULL, NULL),
+(185, 46, 10, 0, 0, NULL, NULL),
+(186, 46, 11, 0, 0, NULL, NULL),
+(187, 46, 15, 0, 0, NULL, NULL),
+(188, 46, 3, 0, 0, NULL, NULL),
+(189, 46, 5, 0, 0, NULL, NULL),
+(190, 46, 4, 0, 0, NULL, NULL),
+(191, 46, 16, 0, 0, NULL, NULL),
+(192, 46, 6, 0, 0, NULL, NULL),
+(193, 46, 17, 0, 0, NULL, NULL),
+(194, 46, 18, 0, 0, NULL, NULL),
+(195, 46, 12, 0, 0, NULL, NULL),
+(196, 46, 7, 0, 0, NULL, NULL),
+(197, 46, 19, 0, 0, NULL, NULL),
+(198, 46, 13, 0, 0, NULL, NULL),
+(199, 46, 14, 0, 0, NULL, NULL),
+(200, 46, 20, 0, 0, NULL, NULL),
+(201, 46, 42, 0, 0, NULL, NULL),
+(202, 46, 55, 0, 0, NULL, NULL),
+(203, 46, 41, 0, 0, NULL, NULL),
+(204, 46, 43, 0, 0, NULL, NULL),
+(205, 46, 44, 0, 0, NULL, NULL),
+(206, 46, 45, 0, 0, NULL, NULL),
+(207, 46, 46, 0, 0, NULL, NULL),
+(208, 46, 47, 0, 0, NULL, NULL),
+(212, 47, 8, 0, 0, NULL, NULL),
+(213, 47, 1, 0, 0, NULL, NULL),
+(214, 47, 2, 0, 0, NULL, NULL),
+(215, 47, 9, 0, 0, NULL, NULL),
+(216, 47, 10, 0, 0, NULL, NULL),
+(217, 47, 11, 0, 0, NULL, NULL),
+(218, 47, 15, 0, 0, NULL, NULL),
+(219, 47, 3, 0, 0, NULL, NULL),
+(220, 47, 5, 0, 0, NULL, NULL),
+(221, 47, 4, 0, 0, NULL, NULL),
+(222, 47, 16, 0, 0, NULL, NULL),
+(223, 47, 6, 0, 0, NULL, NULL),
+(224, 47, 17, 0, 0, NULL, NULL),
+(225, 47, 18, 0, 0, NULL, NULL),
+(226, 47, 12, 0, 0, NULL, NULL),
+(227, 47, 7, 0, 0, NULL, NULL),
+(228, 47, 19, 0, 0, NULL, NULL),
+(229, 47, 13, 0, 0, NULL, NULL),
+(230, 47, 14, 0, 0, NULL, NULL),
+(231, 47, 20, 0, 0, NULL, NULL),
+(232, 47, 42, 0, 0, NULL, NULL),
+(233, 47, 55, 0, 0, NULL, NULL),
+(234, 47, 41, 0, 0, NULL, NULL),
+(235, 47, 43, 0, 0, NULL, NULL),
+(236, 47, 44, 0, 0, NULL, NULL),
+(237, 47, 45, 0, 0, NULL, NULL),
+(238, 47, 46, 0, 0, NULL, NULL),
+(239, 47, 47, 0, 0, NULL, NULL),
+(243, 48, 8, 0, 0, NULL, NULL),
+(244, 48, 1, 0, 0, NULL, NULL),
+(245, 48, 2, 0, 0, NULL, NULL),
+(246, 48, 9, 0, 0, NULL, NULL),
+(247, 48, 10, 0, 0, NULL, NULL),
+(248, 48, 11, 0, 0, NULL, NULL),
+(249, 48, 15, 0, 0, NULL, NULL),
+(250, 48, 3, 0, 0, NULL, NULL),
+(251, 48, 5, 0, 0, NULL, NULL),
+(252, 48, 4, 0, 0, NULL, NULL),
+(253, 48, 16, 0, 0, NULL, NULL),
+(254, 48, 6, 0, 0, NULL, NULL),
+(255, 48, 17, 0, 0, NULL, NULL),
+(256, 48, 18, 0, 0, NULL, NULL),
+(257, 48, 12, 0, 0, NULL, NULL),
+(258, 48, 7, 0, 0, NULL, NULL),
+(259, 48, 19, 0, 0, NULL, NULL),
+(260, 48, 13, 0, 0, NULL, NULL),
+(261, 48, 14, 0, 0, NULL, NULL),
+(262, 48, 20, 0, 0, NULL, NULL),
+(263, 48, 42, 0, 0, NULL, NULL),
+(264, 48, 55, 0, 0, NULL, NULL),
+(265, 48, 41, 0, 0, NULL, NULL),
+(266, 48, 43, 0, 0, NULL, NULL),
+(267, 48, 44, 0, 0, NULL, NULL),
+(268, 48, 45, 0, 0, NULL, NULL),
+(269, 48, 46, 0, 0, NULL, NULL),
+(270, 48, 47, 0, 0, NULL, NULL),
+(274, 49, 8, 0, 0, NULL, NULL),
+(275, 49, 1, 0, 0, NULL, NULL),
+(276, 49, 2, 0, 0, NULL, NULL),
+(277, 49, 9, 0, 0, NULL, NULL),
+(278, 49, 10, 0, 0, NULL, NULL),
+(279, 49, 11, 0, 0, NULL, NULL),
+(280, 49, 15, 0, 0, NULL, NULL),
+(281, 49, 3, 0, 0, NULL, NULL),
+(282, 49, 5, 0, 0, NULL, NULL),
+(283, 49, 4, 0, 0, NULL, NULL),
+(284, 49, 16, 0, 0, NULL, NULL),
+(285, 49, 6, 0, 0, NULL, NULL),
+(286, 49, 17, 0, 0, NULL, NULL),
+(287, 49, 18, 0, 0, NULL, NULL),
+(288, 49, 12, 0, 0, NULL, NULL),
+(289, 49, 7, 0, 0, NULL, NULL),
+(290, 49, 19, 0, 0, NULL, NULL),
+(291, 49, 13, 0, 0, NULL, NULL),
+(292, 49, 14, 0, 0, NULL, NULL),
+(293, 49, 20, 0, 0, NULL, NULL),
+(294, 49, 42, 0, 0, NULL, NULL),
+(295, 49, 55, 0, 0, NULL, NULL),
+(296, 49, 41, 0, 0, NULL, NULL),
+(297, 49, 43, 0, 0, NULL, NULL),
+(298, 49, 44, 0, 0, NULL, NULL),
+(299, 49, 45, 0, 0, NULL, NULL),
+(300, 49, 46, 0, 0, NULL, NULL),
+(301, 49, 47, 0, 0, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -527,7 +872,15 @@ CREATE TABLE `user` (
 INSERT INTO `user` (`ID`, `serialNumber`, `name`, `surname`, `email`, `passwordHash`, `salt`, `registrationDate`, `roleID`) VALUES
 (1, '443020', 'Francesco', 'Peragine', 'francescoperagine@gmail.com', '$2y$10$wG9wq4KArvDcbwwbVlsogu6Z9IIl8uTlxfIKb4hW5th/EIiZD8W8W', 'f627667e46de19e736b1a8239b0928a4eba100e522bbc3d0a9cf2a21f9c891ff', '2019-08-01 10:39:44', 2),
 (19, '123456', 'Paolo', 'Buono', 'buono@uniba.it', '$2y$10$zDnrHIsGSEgiuVzSJk7Z7u/TnIjWxfCg1xgx6v6fg3ZRvrk49JC1i', 'debd8a7b1884f93e0573fa704ffae26231b79fb5c6f97d72e6f5c5986ccd8bce', '2019-08-13 10:39:44', 1),
-(41, '123444', 'Francesco', 'Laghetti', 'francesco.laghetti@libero.it', '$2y$10$o2bHbye/pBqrjXC4MxKYteNhaCJo/bG1CXp.K12hQIw0HLJaYRv4.', 'cf1b79f0f1cf791138aff07248274504a5d86cc63ec66fb30e080cd7d4ee1792', '2019-10-03 19:53:12', 2);
+(41, '123444', 'Francesco', 'Laghetti', 'francesco.laghetti@libero.it', '$2y$10$o2bHbye/pBqrjXC4MxKYteNhaCJo/bG1CXp.K12hQIw0HLJaYRv4.', 'cf1b79f0f1cf791138aff07248274504a5d86cc63ec66fb30e080cd7d4ee1792', '2019-10-03 19:53:12', 2),
+(42, '999888', 'Emilio', 'Solfrizzi', 'solfrizzi@gmail.com', '$2y$10$hec8Rg6UGpfQbN1JYF1ol.0m7/VEM20.DSt5CRP1VAGSttIGrHBgu', 'ad377c0711b3cbb23f6f9187992678b436f46d3d64f9ac7da12654fd276b36c8', '2019-11-05 22:25:15', 2),
+(43, '888777', 'Diego Armando', 'Maradona', 'maradona@gmail.com', '$2y$10$ZyZL8U1iWQFqs/aBiU3O9eYimbOnJp3fNposnzR2KPuuK0M.4QnlW', '058a375f8e46847f1fb1825ab99ba9a007ddc048b07ef39b892ea8a8a0dd7911', '2019-11-05 22:26:07', 2),
+(44, '777666', 'Marco', 'Bellinelli', 'bellinelli@gmail.com', '$2y$10$AzqOx3Wl7wZjyW8XyGYfSOmZx16kaeYD/Y2AoeTVChC.FsfwjO9sK', '8ddae61e25463ecfbbcd68ddf5f943ce542bf8a8b3e072e5769d04aebff1204d', '2019-11-05 22:27:09', 2),
+(45, '666555', 'Margherita', 'Hack', 'hack@gmail.com', '$2y$10$9YMMdDH5Y0YUn9VkItDmy.rdZBMVOKyQYH/v2S3ZjXIqt/d6H7VRW', '39efda91470634410cf105ddfe1e1cdae663c56a7ee3d5f19a5d0f4812390abc', '2019-11-05 22:29:04', 2),
+(46, '555444', 'Pinco', 'Pallino', 'pallino@gmail.com', '$2y$10$9TAFRKESonGJpx/vFNJxou5XkboTZuFEm/DVW39mtv93hRS0mnBWW', 'e4506f27761add5c69224e6914e3bbb67c276ec1a1f75397e1805a42a6dc3060', '2019-11-05 22:30:16', 2),
+(47, '444333', 'Maria', 'Maddalena', 'maddalena@gmail.com', '$2y$10$vphdPxMLVvNfrru58DvtJ.WPh0y3/qEhbbzhnbfxyulX/bXy5sUdy', 'db6c041511c82db21af891eab8239ea9f216f50279a1534a17891454fb5db8a8', '2019-11-05 22:31:12', 2),
+(48, '333222', 'Marco', 'Togni', 'togni@gmail.com', '$2y$10$zGfTyINbvUeUmNUb8tiA7ONV/Zynyto0qdIVRu27UtcntO.GTGyle', 'aa1a36402cb40d8f824bd91d0de6c56df6bf984397ec30c326a130647e9bfc72', '2019-11-05 22:40:30', 2),
+(49, '222111', 'Donato', 'Cavallo', 'cavallo@gmail.com', '$2y$10$IG8jSwyRw9zRQXMz7lYbku2bdUFMKPbhk8Pnu7c5JewagTHvYAcgW', '4749c5b4a010c70e117455b5df83b851760cea46eb52da9e3dc34d166853ff56', '2019-11-05 22:41:14', 2);
 
 -- --------------------------------------------------------
 
@@ -549,7 +902,15 @@ INSERT INTO `user_degreecourse` (`ID`, `userID`, `degreecourseID`) VALUES
 (1, 1, 2),
 (2, 19, 2),
 (3, 19, 1),
-(17, 41, 2);
+(17, 41, 2),
+(18, 42, 2),
+(19, 43, 2),
+(20, 44, 2),
+(21, 45, 2),
+(22, 46, 2),
+(23, 47, 2),
+(24, 48, 2),
+(25, 49, 2);
 
 -- --------------------------------------------------------
 
@@ -663,13 +1024,13 @@ ALTER TABLE `class`
 -- AUTO_INCREMENT per la tabella `class_lesson_attendance_rating`
 --
 ALTER TABLE `class_lesson_attendance_rating`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=122;
 
 --
 -- AUTO_INCREMENT per la tabella `class_lesson_question`
 --
 ALTER TABLE `class_lesson_question`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT per la tabella `class_room_calendar`
@@ -681,7 +1042,7 @@ ALTER TABLE `class_room_calendar`
 -- AUTO_INCREMENT per la tabella `class_room_lesson`
 --
 ALTER TABLE `class_room_lesson`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT per la tabella `degreecourse`
@@ -717,19 +1078,19 @@ ALTER TABLE `room`
 -- AUTO_INCREMENT per la tabella `student_career`
 --
 ALTER TABLE `student_career`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=305;
 
 --
 -- AUTO_INCREMENT per la tabella `user`
 --
 ALTER TABLE `user`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
 
 --
 -- AUTO_INCREMENT per la tabella `user_degreecourse`
 --
 ALTER TABLE `user_degreecourse`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- Limiti per le tabelle scaricate
