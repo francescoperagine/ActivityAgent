@@ -67,6 +67,12 @@ public class StudentQuestionListActivity extends BaseActivity {
         setListView();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        addQuestionButtonStatus = false;
+    }
+
     void setListView() {
         studentQuestionAdapter = new StudentQuestionAdapter(this, R.layout.question_item, questionList);
         //assign adapter to listview
