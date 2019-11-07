@@ -69,7 +69,7 @@ public class Lesson extends Exam  {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -isInProgress-");
         Date now = new Date();
         TimeZone tz = TimeZone.getDefault();
-        if(!tz.inDaylightTime(new Date())) {
+        if(tz.inDaylightTime(new Date())) {
             now = new Date(System.currentTimeMillis() + 3600 * 1000);
         }
         Log.i(Constants.TAG, getClass().getSimpleName() + " -isInProgress- now " + now);
