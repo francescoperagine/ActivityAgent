@@ -2,7 +2,10 @@ package it.teamgdm.sms.dibapp;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ProfileActivity extends BaseActivity {
 
@@ -44,6 +47,13 @@ public class ProfileActivity extends BaseActivity {
     @Override
     int getLayoutResource() {
         return R.layout.activity_profile;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreateOptionsMenu-");
+        getMenuInflater().inflate(R.menu.profile_menu, menu);
+        return true;
     }
 
 }

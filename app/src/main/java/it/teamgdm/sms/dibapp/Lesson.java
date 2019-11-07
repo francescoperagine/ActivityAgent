@@ -4,11 +4,11 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class Lesson extends Exam  {
 
@@ -21,7 +21,7 @@ public class Lesson extends Exam  {
     Date timeEnd;
     String lessonSummary;
     String lessonDescription;
-    String room;
+    //String room;
 
     boolean isExpanded() {
         return expanded;
@@ -68,6 +68,11 @@ public class Lesson extends Exam  {
     boolean isInProgress() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -isInProgress-");
         Date now = new Date();
+        TimeZone tz = TimeZone.getDefault();
+        if(tz.inDaylightTime(new Date())) {
+            now = new Date(System.currentTimeMillis() + 3600 * 1000);
+        }
+        Log.i(Constants.TAG, getClass().getSimpleName() + " -isInProgress- now " + now);
         return now.after(timeStart) && now.before(timeEnd);
     }
 

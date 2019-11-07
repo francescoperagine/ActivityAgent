@@ -7,31 +7,14 @@
     android:padding="16dp"
     tools:context=".SplashActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0 %"
-        android:textColor="#000"
-        android:textSize="25sp"
-        android:id="@+id/text_view"
-        android:layout_centerHorizontal="true"
-        android:layout_above="@id/progress_bar" />
-
-    <ProgressBar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/progress_bar"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="20dp" />
-
-      <ImageView
-        android:id="@+id/splashscreen"
+    <ImageView
+        android:id="@+id/logo"
         android:layout_width="213dp"
-        android:layout_height="413dp"
+        android:layout_height="213dp"
         android:layout_gravity="center"
         android:contentDescription="App logo"
         android:src="@drawable/dib_logo"
+        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
 

@@ -1,18 +1,18 @@
 package it.teamgdm.sms.dibapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.WindowManager;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 
 public class SplashActivity extends AppCompatActivity {
 
-    ProgressBar progressBar;
-    TextView textView;
-
+    ImageView logo;
 
     @Override
     public void onCreate(Bundle icicle) {
@@ -20,20 +20,24 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.splashscreen);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN );
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        progressBar = findViewById(R.id.progress_bar);
-        textView = findViewById(R.id.text_view);
 
-        progressBar.setMax(100);
-        progressBar.setScaleY(3f);
+        Animation fadeout = AnimationUtils.loadAnimation(SplashActivity.this,R.anim.fadeout);
+        logo = findViewById(R.id.logo);
 
-        progressAnimation();
+        fadeout.setAnimationListener(new Animation.AnimationListener() {
+                public void onAnimationStart(Animation animation) {}
+                public void onAnimationRepeat(Animation animation) {}
+                public void onAnimationEnd(Animation animation) {
+                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }
+            });
+        logo.setAnimation(fadeout);
+        fadeout.start();
+
     }
 
-    public void progressAnimation(){
-        ProgressBarAnimation anim = new ProgressBarAnimation(this, progressBar, textView, 0f, 100f);
-        anim.setDuration(500);
-        progressBar.setAnimation(anim);
-    }
+
 }

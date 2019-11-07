@@ -91,10 +91,6 @@ public abstract class BaseActivity extends AppCompatActivity {
                 Intent profileIntent = new Intent(this, ProfileActivity.class);
                 startActivity(profileIntent);
                 return true;
-            case R.id.settingsButton:
-                Intent settingIntent = new Intent(this, SettingsActivity.class);
-                startActivity(settingIntent);
-                return true;
             case R.id.logoutButton:
                 LogoutDialog logoutDialog = new LogoutDialog(this);
                 logoutDialog.show();
