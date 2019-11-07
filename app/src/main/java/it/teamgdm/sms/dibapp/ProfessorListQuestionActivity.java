@@ -64,9 +64,7 @@ public class ProfessorListQuestionActivity extends BaseActivity {
                     .date(dateQst)
                     .build());
 
-            } catch (JSONException e) {
-                e.printStackTrace();
-            } catch (ParseException e) {
+            } catch (JSONException | ParseException e) {
                 e.printStackTrace();
             }
         }
@@ -102,36 +100,32 @@ public class ProfessorListQuestionActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onOptionsItemSelected-");
         int id = item.getItemId();
-        switch (id) {
-            case R.id.filterButton:
+        if (id == R.id.filterButton) {
+            String toastSortText;
 
-                String toastSortText;
+            if (! filterFlag) {
+                listView.setAdapter(adapterTime);
+                item.setIcon(R.drawable.ic_rate_filter);
+                filterFlag = true;
+                toastSortText = getString(R.string.sort_time);
+            } else {
+                listView.setAdapter(adapterRate);
+                item.setIcon(R.drawable.ic_clock_filter);
+                filterFlag = false;
+                toastSortText = getString(R.string.sort_rate);
+            }
 
-                if(filterFlag == false){
-                    listView.setAdapter(adapterTime);
-                    item.setIcon(R.drawable.ic_rate_filter);
-                    filterFlag = true;
-                    toastSortText = getString(R.string.sort_time);
-                }
-                else{
-                    listView.setAdapter(adapterRate);
-                    item.setIcon(R.drawable.ic_clock_filter);
-                    filterFlag = false;
-                    toastSortText = getString(R.string.sort_rate);
-                }
+            //if the filter button is pressed again before the previous toast is dismissed, this control dismiss it immediately
+            if (toast != null) {
+                toast.cancel();
+            }
 
-                //if the filter button is pressed again before the previous toast is dismissed, this control dismiss it immediately
-                if (toast != null) {
-                    toast.cancel();
-                }
+            toast = Toast.makeText(getApplicationContext(), toastSortText, Toast.LENGTH_SHORT);
+            toast.show();
 
-                toast = Toast.makeText(getApplicationContext(), toastSortText, Toast.LENGTH_SHORT);
-                toast.show();
-
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
 }

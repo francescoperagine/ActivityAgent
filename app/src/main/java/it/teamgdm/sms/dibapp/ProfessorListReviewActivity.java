@@ -91,36 +91,32 @@ public class ProfessorListReviewActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onOptionsItemSelected-");
         int id = item.getItemId();
-        switch (id) {
-            case R.id.filterButton:
+        if (id == R.id.filterButton) {
+            String toastSortText;
 
-                String toastSortText;
+            if (! filterFlag) {
+                listView.setAdapter(adapterMin);
+                item.setIcon(R.drawable.ic_ascend_star);
+                filterFlag = true;
+                toastSortText = getString(R.string.sort_ascend);
+            } else {
+                listView.setAdapter(adapterMax);
+                item.setIcon(R.drawable.ic_descend_star);
+                filterFlag = false;
+                toastSortText = getString(R.string.sort_descend);
+            }
 
-                if(filterFlag == false){
-                    listView.setAdapter(adapterMin);
-                    item.setIcon(R.drawable.ic_ascend_star);
-                    filterFlag = true;
-                    toastSortText = getString(R.string.sort_ascend);
-                }
-                else{
-                    listView.setAdapter(adapterMax);
-                    item.setIcon(R.drawable.ic_descend_star);
-                    filterFlag = false;
-                    toastSortText = getString(R.string.sort_descend);
-                }
+            //if the filter button is pressed again before the previous toast is dismissed, this control dismiss it immediately
+            if (toast != null) {
+                toast.cancel();
+            }
 
-                //if the filter button is pressed again before the previous toast is dismissed, this control dismiss it immediately
-                if (toast != null) {
-                    toast.cancel();
-                }
+            toast = Toast.makeText(getApplicationContext(), toastSortText, Toast.LENGTH_SHORT);
+            toast.show();
 
-                toast = Toast.makeText(getApplicationContext(), toastSortText, Toast.LENGTH_SHORT);
-                toast.show();
-
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
 }
