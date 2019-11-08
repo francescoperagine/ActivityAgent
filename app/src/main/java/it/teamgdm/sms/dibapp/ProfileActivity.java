@@ -7,9 +7,11 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+
 public class ProfileActivity extends BaseActivity {
 
-   private TextView name, surname, role;
+   private TextView name, surname, role, degreeCourse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +21,7 @@ public class ProfileActivity extends BaseActivity {
         name = findViewById(R.id.name);
         surname = findViewById(R.id.surname);
         role = findViewById(R.id.userRole);
+        degreeCourse = findViewById(R.id.degreeCourse);
 
         getSupportActionBar().setTitle(getString(R.string.profileActivityTitle));
     }
@@ -26,8 +29,9 @@ public class ProfileActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        Session session = new Session(getApplicationContext());
 
-        String nameStr, surnameStr, roleStr;
+        String nameStr, surnameStr, roleStr, degreeStr;
 
         nameStr = getString(R.string.name) + " "+ Session.getUserName();
         name.setText(nameStr);
@@ -39,8 +43,15 @@ public class ProfileActivity extends BaseActivity {
         roleStr = getString(R.string.role) + " " + Session.getUserRole();
         role.setText(roleStr);
 
-
-
+        if(!session.userIsProfessor()) {
+            degreeStr = getString(R.string.degreeCourse);
+            try {
+                degreeStr += DAO.getDegreeCourseName(Session.getUserID()).getJSONObject(0).getString("name");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            degreeCourse.setText(degreeStr);
+        }
 
     }
 

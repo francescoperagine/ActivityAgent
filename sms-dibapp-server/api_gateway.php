@@ -84,6 +84,9 @@ if(isset($input[ACTION])){
 		case ACTION_GET_REVIEW_COUNT:
 			$response = getReviewCount($input[KEY_CLASS_LESSON_ID]);
 			break;
+		case ACTION_GET_DEGREECOURSE_NAME:
+			$response = getDegreeCourseName($input[KEY_USER_ID]);
+			break;
 		default:
 			$response = new Response(ACTION_NOT_DEFINED_TEXT, ACTION_NOT_DEFINED_CODE); 
 			break;

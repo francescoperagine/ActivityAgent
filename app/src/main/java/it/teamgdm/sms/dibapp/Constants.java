@@ -2,6 +2,7 @@ package it.teamgdm.sms.dibapp;
 
 public final class Constants {
 
+    static final String GET_DEGREECOURSE_NAME = "getDegreeCourseName";
     static final String REVIEW_COUNT = "reviewCount" ;
     static final String GET_REVIEW_COUNT = "getReviewCount" ;
     static final String QUESTION_COUNT = "questionCount";

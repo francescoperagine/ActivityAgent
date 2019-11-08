@@ -137,4 +137,5 @@
     <string name="menu_tools">Strumenti</string>
     <string name="attendance_already_set">Hai già dato la presenza ad un\'altra lezione</string>
     <string name="average_text_string">Valutazione media</string>
+    <string name="degreeCourse">"Corso di laurea: "</string>
 </resources>

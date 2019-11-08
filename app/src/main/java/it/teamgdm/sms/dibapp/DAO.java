@@ -257,6 +257,15 @@ class DAO {
         params.put(Constants.KEY_LESSON_ID, String.valueOf(lessonID));
         return getFromDB(params);
     }
+    
+    static JSONArray getDegreeCourseName(int userID) {
+        Log.i(Constants.TAG, DAO.class.getSimpleName() + " -getDegreeCourseName");
+        HashMap<String, String> params = new HashMap<>();
+        params.put(Constants.KEY_ACTION, Constants.GET_DEGREECOURSE_NAME);
+        params.put(Constants.KEY_USER_ID, String.valueOf(userID));
+        return getFromDB(params);
+    }
+
 
     static String getClassName(int classID) {
         Log.i(Constants.TAG, DAO.class.getSimpleName() + " -getClassName- classID " + classID);

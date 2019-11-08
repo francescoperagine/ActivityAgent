@@ -3,6 +3,7 @@
 include 'db_connect.php';
 include 'config.php';
 
+define("GET_DEGREECOURSE_NAME_QUERY", "SELECT degreecourse.name FROM user_degreecourse JOIN degreecourse WHERE user_degreecourse.degreecourseID = degreecourse.ID AND user_degreecourse.userID = ?");
 define("GET_REVIEW_COUNT_QUERY", "SELECT COUNT(rating) AS reviewCount FROM class_lesson_attendance_rating WHERE lessonID = ?");
 define("GET_QUESTION_COUNT_QUERY", "SELECT COUNT(ID) AS questionCount FROM class_lesson_question WHERE lessonID = ?");
 define("SET_QUESTION_RATE_QUERY", "INSERT INTO question_rate(questionID, studentID, questionRate) VALUES ( :questionID , :studentID , :rate )");
@@ -112,6 +113,14 @@ function questionIsRated(string $userid, string $questionid){
 	$stmt->bindValue(':studentID', $userid);
 	$stmt->bindValue(':questionID', $questionid);
 	$stmt->execute();
+	$response = $stmt->fetch(PDO::FETCH_OBJ);
+	return $response;
+}
+
+function getDegreeCourseName(string $userID){
+	global $connection;
+	$stmt = $connection->prepare(GET_DEGREECOURSE_NAME_QUERY);
+	$stmt->execute([$userID]);
 	$response = $stmt->fetch(PDO::FETCH_OBJ);
 	return $response;
 }

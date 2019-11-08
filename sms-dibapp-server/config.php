@@ -28,6 +28,7 @@ define("ACTION_DELETE_QUESTION_RATE", "deleteQuestionRate");
 define("ACTION_SET_QUESTION_RATE", "setQuestionRate");
 define("ACTION_GET_QUESTION_COUNT", "getQuestionCount");
 define("ACTION_GET_REVIEW_COUNT", "getReviewCount");
+define("ACTION_GET_DEGREECOURSE_NAME", "getDegreeCourseName");
 
 define("ACTION_NOT_DEFINED_TEXT", "Action not defined");
 define("ACTION_NOT_DEFINED_CODE", 101);

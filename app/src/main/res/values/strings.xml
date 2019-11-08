@@ -158,6 +158,7 @@
     <string name="geofence_permission_granted">Permissions granted</string>
     <string name="geofence_permission_not_granted">Permissions not granted, geofence features disabled.</string>
     <string name="field">Field</string>
+    <string name="degreeCourse">"Degree course: "</string>
 
 
 </resources>
