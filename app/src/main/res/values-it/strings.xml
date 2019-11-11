@@ -36,10 +36,10 @@
     <string name="attachment_summary_off">Scarica allegati solo quando è manualmente richiesto</string>
     <string name="attachment_summary_on">Scarica automaticamente gli allegati delle email in arrivo</string>
     <string name="attachment_title">Scarica gli allegati in arrivo</string>
-    <string name="attendance_not_set">Presenza non confermata</string>
+    <string name="attendance_removed">Presenza rimossa.</string>
     <string name="attendance_set">Presenza confermata</string>
     <string name="classCodeText">Codice</string>
-    <string name="lessonInProgress">Lezione in corso...</string>
+    <string name="lessonInProgress">Lezione in corso…</string>
     <string name="cancel_button_text">Annulla</string>
     <string name="lessonNotInProgress">Nessuna lezione in questo momento.</string>
     <string name="classSemesterText">Semestre</string>
@@ -63,7 +63,6 @@
     <string name="messages_header">Messaggi</string>
     <string name="noClassDescriptionSetText">Nessuna descrizione inserita per questo corso.</string>
     <string name="noLessonDescriptionSetText">Nessuna descrizione inserita per questa lezione.</string>
-    <string name="no_geofence_permission_text">Permessi di geofence non concessi.</string>
     <string name="profileActivityTitle">Profilo</string>
     <string name="submit_button_text">Inserisci</string>
     <string name="signature_title">La tua firma</string>
@@ -138,4 +137,7 @@
     <string name="attendance_already_set">Hai già dato la presenza ad un\'altra lezione</string>
     <string name="average_text_string">Valutazione media</string>
     <string name="degreeCourse">"Corso di laurea: "</string>
+    <string name="field">Campo</string>
+    <string name="geofence_permission_not_granted">Permessi di localizzazione non concessi. Le funzionalità aggiuntive sono disabilitate.</string>
+    <string name="geofence_permission_granted">Permessi per accedere alla posizione concessi.</string>
 </resources>

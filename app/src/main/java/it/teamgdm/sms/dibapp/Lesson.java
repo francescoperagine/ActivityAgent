@@ -21,7 +21,6 @@ public class Lesson extends Exam  {
     Date timeEnd;
     String lessonSummary;
     String lessonDescription;
-    //String room;
 
     boolean isExpanded() {
         return expanded;

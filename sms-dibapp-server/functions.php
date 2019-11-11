@@ -6,7 +6,7 @@ include 'config.php';
 define("GET_DEGREECOURSE_NAME_QUERY", "SELECT degreecourse.name FROM user_degreecourse JOIN degreecourse WHERE user_degreecourse.degreecourseID = degreecourse.ID AND user_degreecourse.userID = ?");
 define("GET_REVIEW_COUNT_QUERY", "SELECT COUNT(rating) AS reviewCount FROM class_lesson_attendance_rating WHERE lessonID = ?");
 define("GET_QUESTION_COUNT_QUERY", "SELECT COUNT(ID) AS questionCount FROM class_lesson_question WHERE lessonID = ?");
-define("SET_QUESTION_RATE_QUERY", "INSERT INTO question_rate(questionID, studentID, questionRate) VALUES ( :questionID , :studentID , :rate )");
+define("SET_QUESTION_RATE_QUERY", "INSERT IGNORE INTO question_rate(questionID, studentID, questionRate) VALUES ( :questionID , :studentID , :rate )");
 define("DELETE_QUESTION_RATE_QUERY", "DELETE FROM question_rate WHERE questionID = :questionID AND studentID = :studentID");
 define("QUESTION_RATED_QUERY", "SELECT questionRate FROM question_rate WHERE questionID = :questionID AND studentID = :studentID");
 define("USER_EXISTS_QUERY", "SELECT count(*) as count FROM user WHERE email = ?");
@@ -66,7 +66,7 @@ define("GET_AVERAGE_RATING", "SELECT AVG(cla.rating) AS avgrating FROM class_roo
 define("GET_TOTAL_MEMBERS", "SELECT COUNT(*) as count FROM student_career WHERE classID = ?");
 define("GET_ATTENDANCE_CHART", "SELECT COUNT(cla.ID) AS attendance, COUNT(cla.rating) AS review, DATE_FORMAT(crl.timeStart, '%d/%m/%Y') AS date FROM class_room_calendar AS crc JOIN class_room_lesson AS crl LEFT JOIN class_lesson_attendance_rating AS cla ON crl.ID = cla.lessonID WHERE crc.ID = crl.calendarID AND crc.classID = ? GROUP BY crl.ID ORDER BY crl.timeStart");
 define("GET_CLASS_NAME_QUERY", "SELECT name as className FROM class WHERE ID = ?");
-define("GET_LESSON_IN_PROGRESS_QUERY", "SELECT COUNT(*) AS count FROM class_room_lesson WHERE ID = ? AND CURRENT_TIMESTAMP >= timeStart AND CURRENT_TIMESTAMP <= timeEnd");
+define("GET_LESSON_IN_PROGRESS_QUERY", "SELECT COUNT(*) AS count FROM class_room_lesson WHERE ID = :lessonID AND :currentTime >= timeStart AND :currentTime <= timeEnd");
 
 class Response {
 
@@ -436,11 +436,13 @@ function getAttedanceChart(array $input){
 	return $response;
 }
 
-function getLessonInProgress(int $lessonID) {
+function getLessonInProgress(int $lessonID, string $currentTime) {
 	global $connection;
 	$stmt = $connection->prepare(GET_LESSON_IN_PROGRESS_QUERY);
-	$stmt->execute([$lessonID]);
-	$response = $stmt->fetchAll(PDO::FETCH_OBJ);
+	$stmt->bindValue(':lessonID', $lessonID);
+	$stmt->bindValue(':currentTime', $currentTime);
+	$stmt->execute();
+	$response = $stmt->fetch(PDO::FETCH_OBJ);
 	return $response;
 }
 

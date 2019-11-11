@@ -21,32 +21,14 @@ public class DibappBroadcastReceiver extends BroadcastReceiver {
         this.geofenceReceiverInterfaceCallback = callback;
     }
 
-    /** Lesson broadcast interface for callback **/
-/*
-    interface LessonBroadcastReceiverInterface {
-        void onNewQuestionSent();
-    }
-
-    private LessonBroadcastReceiverInterface lessonBroadcastReceiverInterfaceCallback;
-
-    void setLessonBroadcastReceiverInterfaceCallback(LessonBroadcastReceiverInterface callback) {
-        this.lessonBroadcastReceiverInterfaceCallback = callback;
-    }
-*/
     static int geofenceLastTriggeredAction;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onReceive-");
         if(intent.getAction()!=null) {
-            switch (intent.getAction()) {
-                case Constants.GEOFENCE_TRANSITION_ACTION:
-                    geofenceIntentReceiver(context, intent);
-                    break;
-                case Constants.LESSON_NEW_QUESTION:
-                //    lessonBroadcastReceiverInterfaceCallback.onNewQuestionSent();
-                    break;
-                default: break;
+            if (Constants.GEOFENCE_TRANSITION_ACTION.equals(intent.getAction())) {
+                geofenceIntentReceiver(context, intent);
             }
         }
     }
@@ -69,8 +51,4 @@ public class DibappBroadcastReceiver extends BroadcastReceiver {
         }
         geofenceReceiverInterfaceCallback.onGeofenceTransitionAction(geofenceTransitionAction);
     }
-
-
-
-
 }

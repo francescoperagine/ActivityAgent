@@ -295,6 +295,7 @@ class DAO {
         HashMap<String, String> params = new HashMap<>();
         params.put(Constants.KEY_ACTION, Constants.GET_LESSON_IN_PROGRESS);
         params.put(Constants.KEY_LESSON_ID, String.valueOf(lessonID));
+        params.put(Constants.KEY_CURRENT_TIME, new SimpleDateFormat(Constants.DATETIME_FORMAT, Locale.getDefault()).format(new Date()));
         int response = 0;
         try {
             response = getFromDB(params).getJSONObject(0).getInt(Constants.KEY_COUNT);

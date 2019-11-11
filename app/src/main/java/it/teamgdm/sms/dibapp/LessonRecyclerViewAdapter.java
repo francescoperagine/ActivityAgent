@@ -141,10 +141,10 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
                 featurePanelHandler(lesson.isInProgress(), null);
             } else {
                 Log.i(Constants.TAG, getClass().getSimpleName() + " -onStart-No geofence permission.");
-                featurePanelHandler(false, parent.getResources().getString(R.string.no_geofence_permission_text));
+                featurePanelHandler(false, parent.getResources().getString(R.string.geofence_permission_not_granted));
             }
             if(DAO.isUserAttendingLesson(lesson.lessonID, Session.getUserID())) {
-                currentLessonPartecipation = lesson.lessonID;
+                updateAttendanceStatus(buttonPartecipate.isChecked(), R.string.attendance_set);
             }
         }
 
@@ -199,17 +199,26 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
 
         private final View.OnClickListener partecipateButtonListener = v -> {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -partecipateButtonListener-");
-            if(DAO.isUserAttendingLesson(lesson.lessonID, Session.getUserID())) {
-                updateAttendanceStatus(buttonPartecipate.isChecked(), R.string.attendance_not_set);
+
+            /*
+             * If the user is already participating a lesson, then he can leave it.
+             */
+            if(currentLessonPartecipation == lesson.lessonID && DAO.isUserAttendingLesson(currentLessonPartecipation, Session.getUserID()) && !buttonPartecipate.isChecked()) {
+                updateAttendanceStatus(buttonPartecipate.isChecked(), R.string.attendance_removed);
+
+                /*
+                 * If the user is already partecipating another lesson in progress shows notice
+                 */
+            } else if(currentLessonPartecipation != lesson.lessonID && DAO.isUserAttendingLesson(currentLessonPartecipation, Session.getUserID()) && DAO.isLessonInProgress(currentLessonPartecipation) && buttonPartecipate.isChecked()) {
+                Log.i(Constants.TAG, getClass().getSimpleName() + " -partecipateButtonListener-user is already partecipating a lesson");
+                String message = parent.getResources().getString(R.string.attendance_already_set);
+                buttonPartecipate.setChecked(false);
+                Toast.makeText(parent, message, Toast.LENGTH_SHORT).show();
+                /*
+                 * Else the user can participate a lesson.
+                 */
             } else {
-                if(userIsAlreadyPartecipatingLesson() && buttonPartecipate.isChecked()) {
-                    Log.i(Constants.TAG, getClass().getSimpleName() + " -partecipateButtonListener-user is already partecipating a lesson");
-                    String message = parent.getResources().getString(R.string.attendance_already_set);
-                    buttonPartecipate.setChecked(false);
-                    Toast.makeText(parent, message, Toast.LENGTH_SHORT).show();
-                } else {
-                    updateAttendanceStatus(buttonPartecipate.isChecked(), R.string.attendance_set);
-                }
+                updateAttendanceStatus(buttonPartecipate.isChecked(), R.string.attendance_set);
             }
         };
 
@@ -220,22 +229,16 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
             featureActivator(buttonIsChecked);
         }
 
-        private boolean userIsAlreadyPartecipatingLesson() {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -userIsAlreadyPartecipatingLesson-" + currentLessonPartecipation);
-            boolean lessonInProgress = false;
-            if(currentLessonPartecipation != 0 && DAO.isLessonInProgress(currentLessonPartecipation)) {
-                Log.i(Constants.TAG, getClass().getSimpleName() + " -userIsAlreadyPartecipatingLesson-lesson in still in progress");
-                lessonInProgress = currentLessonPartecipation != 0;
-            } else {
-                currentLessonPartecipation = 0;
-            }
-            return lessonInProgress;
+        void setAttendance(boolean isUserAttendingLesson) {
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -setAttendance-" + isUserAttendingLesson);
+            DAO.setAttendance(lesson.lessonID, isUserAttendingLesson);
         }
 
         private void updateCurrentLessonPartecipation(boolean buttonIsChecked) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -updateCurrentLessonPartecipation- button checked " + buttonIsChecked);
             if(buttonIsChecked) {
                 currentLessonPartecipation = lesson.lessonID;
+                Log.i(Constants.TAG, getClass().getSimpleName() + " -updateCurrentLessonPartecipation- button checked currentLessonPartecipation" + currentLessonPartecipation);
             } else {
                 if(parent.getSupportFragmentManager().findFragmentByTag(String.valueOf(lesson.lessonID)) != null){
                     hideEvaluationUI(lesson.lessonID);
@@ -243,11 +246,6 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
                 buttonReview.setChecked(false);
                 currentLessonPartecipation = 0;
             }
-        }
-
-        void setAttendance(boolean isUserAttendingLesson) {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -setAttendance-" + isUserAttendingLesson);
-            DAO.setAttendance(lesson.lessonID, isUserAttendingLesson);
         }
 
         private void featureActivator(boolean isUserAttendingLesson) {

@@ -2,31 +2,18 @@ package it.teamgdm.sms.dibapp;
 
 public final class Constants {
 
-    static final String GET_DEGREECOURSE_NAME = "getDegreeCourseName";
-    static final String REVIEW_COUNT = "reviewCount" ;
-    static final String GET_REVIEW_COUNT = "getReviewCount" ;
-    static final String QUESTION_COUNT = "questionCount";
-    static final String GET_QUESTION_COUNT = "getQuestionCount";
+    static final String KEY_CURRENT_TIME = "currentTime";
+
     static final String KEY_ACTION_LOGOUT = "logout";
     static final int RATE_GOOD = 1;
     static final int RATE_BAD = -1;
-    static final String ACTION_SET_QUESTION_RATE = "setQuestionRate";
-    static final String ACTION_DELETE_QUESTION_RATE = "deleteQuestionRate";
-    static final String KEY_COUNT = "count";
-    static final String KEY_QUESTION_RATE = "rate";
-    static final String KEY_QUESTION_ID = "ID";
-    static final String KEY_QUESTION_ID2 = "questionID";
-    static final Object KEY_CLASS_LIST = "Courses";
-    static final String LESSON_NEW_QUESTION = "lessonNewQuestion";
-    static final String KEY_TIME = "time";
+
     static final String USER_SEND_REVIEW = "sendReview";
     static final String KEY_REVIEW_TEXT = "reviewText";
     static final String KEY_REVIEW_SUMMARY = "reviewSummary";
     static final String KEY_REVIEW_RATING = "reviewRating";
     static final String IS_USER_ATTENDING_LESSON = "isUserAttendingLesson";
-    static final String KEY_USER_ATTENDANCE = "attendance";
-    static final String KEY_QUESTION = "question";
-    static final String KEY_QUESTION_TIME = "time";
+
     static final String USER_QUESTION_ASK = "askAQuestion";
     static final String KEY_SET_ATTENDANCE = "setAttendance";
     static final String TAG = "dibApp";
@@ -35,17 +22,15 @@ public final class Constants {
     static final String REQUEST_METHOD = "POST";
     static final String KEY_ACTION = "action";
     static final String KEY_CODE = "code";
+    static final int OK_CODE = 100;
 
     static final String DATE_FORMAT = "yyyy-MM-dd";
     static final String TIME_FORMAT = "HH:mm:ss";
     static final String DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
-    static final String QUESTION_RATE = "questionRate";
-
     // USER DETAILS
 
     static final String USER_IS_LOGGED_IN = "userIsLoggedIn";
-
     static final String KEY_USER_ID = "userID";
     static final String KEY_USER_NAME = "name";
     static final String KEY_USER_SURNAME = "surname";
@@ -58,14 +43,13 @@ public final class Constants {
     static final String KEY_EMPTY = "";
     static final String KEY_BLANK = " ";
 
-    static final int OK_CODE = 100;
-
     // USER ROLES
 
     static final String KEY_ROLE_PROFESSOR = "professor";
     static final String KEY_ROLE_STUDENT = "student";
 
     // DB ACTIONS
+
     static final String IS_QUESTION_RATED = "isQuestionRated";
     static final String USER_LOGIN = "login";
     static final String USER_REGISTRATION = "userRegistration";
@@ -83,6 +67,11 @@ public final class Constants {
     static final String GET_EXISTING_EVALUATION = "checkEvaluatedLesson";
     static final String GET_CLASS_NAME = "getClassName";
     static final String GET_LESSON_IN_PROGRESS = "getLessonInProgress";
+    static final String GET_DEGREECOURSE_NAME = "getDegreeCourseName";
+    static final String GET_REVIEW_COUNT = "getReviewCount" ;
+    static final String GET_QUESTION_COUNT = "getQuestionCount";
+    static final String ACTION_SET_QUESTION_RATE = "setQuestionRate";
+    static final String ACTION_DELETE_QUESTION_RATE = "deleteQuestionRate";
 
     // DB STUDENT_CAREER TABLE ATTRIBUTES
 
@@ -100,13 +89,22 @@ public final class Constants {
     static final String KEY_LESSON_ID = "lessonID";
     static final String KEY_LESSON_CALENDAR_ID = "calendarID";
     static final String KEY_LESSON_ATTENDANCE = "attendance";
-
-
-
     static final String KEY_LESSON_REVIEW_SUMMARY = "classLessonReviewSummary";
     static final String KEY_LESSON_REVIEW_DESCRIPTION = "classLessonReviewDescription";
     static final String KEY_LESSON_REVIEW_RATING = "classLessonReviewRating";
     static final String KEY_LESSON_REVIEW_ATTENDANCE = "classLessonReviewAttendance";
+    static final String KEY_QUESTION_RATE = "rate";
+    static final String KEY_QUESTION_ID = "ID";
+    static final String KEY_QUESTION_ID2 = "questionID";
+    static final String QUESTION_RATE = "questionRate";
+    static final String KEY_USER_ATTENDANCE = "attendance";
+    static final String KEY_QUESTION = "question";
+    static final String KEY_QUESTION_TIME = "time";
+    static final String REVIEW_COUNT = "reviewCount" ;
+    static final String QUESTION_COUNT = "questionCount";
+    static final String KEY_COUNT = "count";
+    static final Object KEY_CLASS_LIST = "Courses";
+    static final String KEY_TIME = "time";
 
     // GEOFENCE
 
@@ -120,7 +118,6 @@ public final class Constants {
     static final String GEOFENCE_DIB_NAME = "Dipartimento di Informatica";
     static final double GEOFENCE_DIB_LATITUDE = 41.109725;
     static final double GEOFENCE_DIB_LONGITUDE = 16.881521;
-
 
     static final String GEOFENCE_PDA_NAME = "Palazzo delle Aule";
     static final double GEOFENCE_PDA_LATITUDE = 41.109388;

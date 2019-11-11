@@ -60,6 +60,7 @@ define("KEY_CLASS_LESSON_REVIEW_SUMMARY", "reviewSummary");
 define("KEY_CLASS_LESSON_REVIEW_TEXT", "reviewText");
 define("KEY_CLASS_LESSON_REVIEW_RATING", "reviewRating");
 define("KEY_LESSON_DATE", "lessonDate");
+define("KEY_CURRENT_TIME", "currentTime");
 
 // Response
 

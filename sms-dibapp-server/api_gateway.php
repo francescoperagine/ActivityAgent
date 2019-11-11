@@ -67,7 +67,7 @@ if(isset($input[ACTION])){
 			$response = getAttedanceChart($input);
 			break;
 		case ACTION_GET_LESSON_IN_PROGRESS:
-			$response = getLessonInProgress($input[KEY_CLASS_LESSON_ID]);
+			$response = getLessonInProgress($input[KEY_CLASS_LESSON_ID], $input[KEY_CURRENT_TIME]);
 			break;
 		case IS_QUESTION_RATED:
 			$response = questionIsRated($input[KEY_USER_ID], $input[KEY_QUESTION_ID]);
