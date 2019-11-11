@@ -173,7 +173,7 @@ class GeofenceAPI {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -hasGeofencePermissions-");
         boolean needMorePermissions = false;
         for(String permission : permissions) {
-            if(ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+            if(ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_DENIED) {
                 needMorePermissions = true;
             }
         }
@@ -182,6 +182,14 @@ class GeofenceAPI {
 
     void askGeofencePermissions() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -askGeofencePermissions-");
-        ActivityCompat.requestPermissions((Activity) context, permissions, Constants.GEOFENCE_PERMISSION_REQUEST_CODE);
+        boolean canAskPermissions = true;
+        for(String permission:permissions) {
+            if(ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, permission)) {
+                canAskPermissions = false;
+            }
+        }
+        if(canAskPermissions) {
+            ActivityCompat.requestPermissions((Activity) context, permissions, Constants.GEOFENCE_PERMISSION_REQUEST_CODE);
+        }
     }
 }

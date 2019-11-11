@@ -19,6 +19,8 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
+import java.util.Objects;
 
 import static it.teamgdm.sms.dibapp.Constants.KEY_CLASS_ID;
 
@@ -42,7 +44,7 @@ public class StatsActivity extends BaseActivity {
         int classID = getIntent().getIntExtra(Constants.KEY_CLASS_ID, 0);
         String className = getIntent().getStringExtra(Constants.KEY_CLASS_NAME);
 
-        getSupportActionBar().setTitle(className);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(className);
 
         HashMap<String, String> paramsAverage = new HashMap<>();
         paramsAverage.put(Constants.KEY_ACTION, Constants.GET_AVERAGE_RATING);
@@ -53,7 +55,7 @@ public class StatsActivity extends BaseActivity {
             float rate = (float) responseAverage.getJSONObject(0).optDouble("avgrating");
             rateBar.setRating(rate);
             if((int) rate > 0) {
-                String ratingStr = String.format("%.1f", rate);
+                String ratingStr = String.format(Locale.getDefault(),"%.1f", rate);
                 rateValue.setText(ratingStr);
             } else {
                 rateValue.setText("0.0");
@@ -79,7 +81,7 @@ public class StatsActivity extends BaseActivity {
         //BarChart entries declaration
         ArrayList<BarEntry> attendanceEntries = new ArrayList<>();
         ArrayList<BarEntry> reviewEntries = new ArrayList<>();
-        ArrayList<String> labels = new ArrayList<String> ();
+        ArrayList<String> labels = new ArrayList<>();
 
         //query
         HashMap<String, String> paramsAttendance = new HashMap<>();

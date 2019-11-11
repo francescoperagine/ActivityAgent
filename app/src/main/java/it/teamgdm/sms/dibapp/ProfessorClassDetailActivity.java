@@ -13,10 +13,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.json.JSONArray;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class ProfessorClassDetailActivity extends BaseActivity {
-
-    private boolean mTwoPane;
 
     Bundle savedInstanceState;
     RecyclerView recyclerView;
@@ -35,16 +34,9 @@ public class ProfessorClassDetailActivity extends BaseActivity {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-classID " + classID);
         }
 
-        if (findViewById(R.id.class_detail_container) != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
-            mTwoPane = true;
-        }
         recyclerView = findViewById(R.id.class_list);
         textViewEmptyClassList = findViewById(R.id.class_list_empty);
-        getSupportActionBar().setTitle(className);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(className);
         setupRecyclerView(classID);
     }
 
@@ -65,16 +57,14 @@ public class ProfessorClassDetailActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onOptionsItemSelected-");
         int id = item.getItemId();
-        switch (id) {
-            case R.id.statsButton:
-                Intent statsIntent = new Intent(this, StatsActivity.class);
-                statsIntent.putExtra(Constants.KEY_CLASS_ID, classID);
-                statsIntent.putExtra(Constants.KEY_CLASS_NAME, className);
-                startActivity(statsIntent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (id == R.id.statsButton) {
+            Intent statsIntent = new Intent(this, StatsActivity.class);
+            statsIntent.putExtra(Constants.KEY_CLASS_ID, classID);
+            statsIntent.putExtra(Constants.KEY_CLASS_NAME, className);
+            startActivity(statsIntent);
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     private void setupRecyclerView(int classID) {
@@ -90,7 +80,7 @@ public class ProfessorClassDetailActivity extends BaseActivity {
         } else {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -setupRecyclerView- classname " + lessonList);
             recyclerView.setVisibility(View.VISIBLE);
-            recyclerView.setAdapter(new ClassRecyclerViewAdapter(this, lessonList, mTwoPane));
+            recyclerView.setAdapter(new ClassRecyclerViewAdapter(this, lessonList));
             textViewEmptyClassList.setVisibility(View.GONE);
         }
     }

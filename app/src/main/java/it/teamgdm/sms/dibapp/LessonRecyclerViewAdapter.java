@@ -36,7 +36,7 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
     private StudentLessonListActivity parent;
     private GeofenceAPI geofenceAPI;
 
-    LessonRecyclerViewAdapter(StudentLessonListActivity parent, ArrayList<Lesson> lessonList, GeofenceAPI geofenceAPI, boolean twoPane) {
+    LessonRecyclerViewAdapter(StudentLessonListActivity parent, ArrayList<Lesson> lessonList, GeofenceAPI geofenceAPI) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -ClassRecyclerViewAdapter-");
         this.parent = parent;
         this.lessonList = lessonList;
@@ -304,6 +304,7 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
                 Log.i(Constants.TAG, getClass().getSimpleName() + " -showEvaluationUI-lessonID null");
                 evaluateFragment = StudentReviewFragment.newInstance(lessonReviewID);
             }
+            assert evaluateFragment != null;
             evaluateFragment.setStudentEvaluateFragmentInterfaceCallback(this);
             currentLessonReview = lessonReviewID;
 

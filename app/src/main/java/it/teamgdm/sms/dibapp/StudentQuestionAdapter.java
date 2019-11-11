@@ -15,9 +15,9 @@ public class StudentQuestionAdapter extends ArrayAdapter<Question> {
 
     private Context context;
     private int layoutResourceId;
-    ArrayList<Question> data;
+    private ArrayList<Question> data;
     //used to check if the change of state of a checkbox is asked by the click of the user or by the click on the other checkbox
-    boolean chanceCheckFlag = false;
+    private boolean chanceCheckFlag = false;
 
     StudentQuestionAdapter(Context context, int layoutResourceId, ArrayList<Question> data) {
         super(context, layoutResourceId, data);
@@ -32,10 +32,9 @@ public class StudentQuestionAdapter extends ArrayAdapter<Question> {
 
         //we need to get the view of the xml for our list item
         //And for this we need a layoutinflater
-        LayoutInflater layoutInflater = LayoutInflater.from(context);
 
         //getting the view
-        View view = layoutInflater.inflate(layoutResourceId, null, false);
+        View view = LayoutInflater.from(context).inflate(layoutResourceId, null, false);
 
         //getting the view elements of the list from the view
         TextView textQuestion  = view.findViewById(R.id.questiontext);
@@ -49,7 +48,7 @@ public class StudentQuestionAdapter extends ArrayAdapter<Question> {
 
         //adding values to the list item
         textQuestion.setText(question.question);
-        rate.setText(String.valueOf(question.rate));;
+        rate.setText(String.valueOf(question.rate));
 
         int flag = DAO.isQuestionRated( Session.getUserID(),question.id);
 

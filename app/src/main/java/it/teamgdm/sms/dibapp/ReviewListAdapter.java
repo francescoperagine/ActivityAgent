@@ -13,13 +13,13 @@ import java.util.ArrayList;
 public class ReviewListAdapter extends ArrayAdapter<Review> {
 
     //the list values in the List of type hero
-    ArrayList<Review> reviewList;
+    private ArrayList<Review> reviewList;
 
     //activity context
     Context context;
 
     //the layout resource file for the list items
-    int resource;
+    private int resource;
 
     //constructor initializing the values
     public ReviewListAdapter(Context context, int resource, ArrayList<Review> reviewList) {

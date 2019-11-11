@@ -6,7 +6,7 @@ public class Review {
     private String summary;
     private String description;
 
-    public Review(float rate, String summary, String description){
+    Review(float rate, String summary, String description){
         this.rate = rate;
         this.summary = summary;
         this.description = description;
@@ -17,11 +17,11 @@ public class Review {
         return rate;
     }
 
-    public String getSummary() {
+    String getSummary() {
         return summary;
     }
 
-    public String getDescription() {
+    String getDescription() {
         return description;
     }
 }

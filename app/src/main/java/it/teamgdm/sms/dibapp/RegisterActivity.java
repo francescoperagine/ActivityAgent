@@ -91,20 +91,20 @@ public class RegisterActivity extends BaseActivity {
     private void registrationInit() {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -registrationInit-");
 
-        User tmpUser = new User();
+        User user = User.Builder.create()
+                .setName(editTextName.getText().toString().trim())
+                .setSurname(editTextSurname.getText().toString().trim())
+                .setSsn(editTextSerialNumber.getText().toString().trim())
+                .setDegreeCourse(spinnerDegreecourse.getSelectedItem().toString())
+                .setRoleName(spinnerRole.getSelectedItem().toString())
+                .setEmail(editTextEmail.getText().toString().toLowerCase().trim())
+                .setRegistrationDate(new Date())
+                .setPassword(editTextPassword.getText().toString().trim())
+                .setConfirmPassword(editTextConfirmPassword.getText().toString().trim())
+                .build();
 
-        tmpUser.setName(editTextName.getText().toString().trim());
-        tmpUser.setSurname(editTextSurname.getText().toString().trim());
-        tmpUser.setSsn(editTextSerialNumber.getText().toString().trim()) ;
-        tmpUser.setDegreeCourse(spinnerDegreecourse.getSelectedItem().toString());
-        tmpUser.setRole(spinnerRole.getSelectedItem().toString());
-        tmpUser.setEmail(editTextEmail.getText().toString().toLowerCase().trim());
-        tmpUser.setPassword(editTextPassword.getText().toString().trim());
-        tmpUser.setConfirmPassword(editTextConfirmPassword.getText().toString().trim());
-        tmpUser.setRegistrationDate(new Date());
-
-        if(validateInputs(tmpUser) && register(tmpUser)) {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -registrationInit-registrationComplete-"+tmpUser);
+        if(validateInputs(user) && register(user)) {
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -registrationInit-registrationComplete-"+user);
             toLogin();
         }
     }
@@ -119,50 +119,50 @@ public class RegisterActivity extends BaseActivity {
      * Validates inputs and shows error if any
      *
      */
-    private boolean validateInputs(User tmpUser) {
+    private boolean validateInputs(User user) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -validateInputs-");
 
-        if (Constants.KEY_EMPTY.equals(tmpUser.getName())) {
+        if (Constants.KEY_EMPTY.equals(user.name)) {
             editTextName.setError(getResources().getString(R.string.namePromptHint) + " " + getResources().getString(R.string.inputCannotBeEmpty));
             editTextName.requestFocus();
             return false;
         }
-        if (Constants.KEY_EMPTY.equals(tmpUser.getSurname())) {
+        if (Constants.KEY_EMPTY.equals(user.surname)) {
             editTextSurname.setError(getResources().getString(R.string.surnamePromptHint) + " " + getResources().getString(R.string.inputCannotBeEmpty));
             editTextSurname.requestFocus();
             return false;
         }
-        if (Constants.KEY_EMPTY.equals(tmpUser.getSsn())) {
+        if (Constants.KEY_EMPTY.equals(user.ssn)) {
             editTextSerialNumber.setError(getResources().getString(R.string.ssnPromptHint) + " " + getResources().getString(R.string.inputCannotBeEmpty));
             editTextSerialNumber.requestFocus();
             return false;
         }
-        if (tmpUser.getDegreeCourse().equals(getResources().getString(R.string.selectDegreecourseText))) {
+        if (user.degreeCourse.equals(getResources().getString(R.string.selectDegreecourseText))) {
             TextView errorText = (TextView) spinnerDegreecourse.getSelectedView();
             errorText.setError("");
             errorText.setTextColor(Color.RED);
             errorText.setText(getResources().getString(R.string.degreecourseSelectionErrorText));
             return false;
         }
-        if (tmpUser.getRoleName().equals(getResources().getString(R.string.selectRoleText))) {
+        if (user.roleName.equals(getResources().getString(R.string.selectRoleText))) {
             TextView errorText = (TextView) spinnerRole.getSelectedView();
             errorText.setError("");
             errorText.setTextColor(Color.RED);
             errorText.setText(getResources().getString(R.string.roleSelectionErrorText));
             return false;
         }
-        if(!tmpUser.isEmailValid()) {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -validateInputs-!isEmailValid" + tmpUser.getEmail());
+        if(!user.isEmailValid()) {
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -validateInputs-!isEmailValid" + user.email);
             editTextEmail.setError(getResources().getString(R.string.emailNotValid));
             editTextEmail.requestFocus();
             return false;
         }
-        if (Constants.KEY_EMPTY.equals(tmpUser.getPassword())) {
+        if (Constants.KEY_EMPTY.equals(user.password)) {
             editTextPassword.setError(getResources().getString(R.string.passwordPromptHint) + " " + getResources().getString(R.string.inputCannotBeEmpty));
             editTextPassword.requestFocus();
             return false;
         }
-        if (!tmpUser.getPassword().equals(tmpUser.getConfirmPassword())) {
+        if (!user.password.equals(user.confirmPassword)) {
             editTextConfirmPassword.setError(getResources().getString(R.string.passwordAndConfirmDoesNotMatch));
             editTextConfirmPassword.requestFocus();
             return false;

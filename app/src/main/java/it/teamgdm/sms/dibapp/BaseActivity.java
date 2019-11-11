@@ -40,7 +40,6 @@ public abstract class BaseActivity extends AppCompatActivity {
             @Override
             public void onReceive(Context context, Intent intent) {
                 Log.d("onReceive","Logout in progress");
-                //At this point you should start the login activity and finish this one
                 Intent mainActivityIntent = new Intent(context, MainActivity.class);
                 mainActivityIntent.addFlags(FLAG_ACTIVITY_CLEAR_TOP);
                 mainActivityIntent.addFlags(FLAG_ACTIVITY_NEW_TASK);
@@ -110,5 +109,5 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected void disableBackButton() {
         backButtonEnabled = false;
-    };
+    }
 }

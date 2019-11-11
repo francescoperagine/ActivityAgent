@@ -17,12 +17,8 @@ public final class Constants {
     static final String KEY_QUESTION_ID = "ID";
     static final String KEY_QUESTION_ID2 = "questionID";
     static final Object KEY_CLASS_LIST = "Courses";
-    static final String KEY_GEOFENCE_LOCATION_UPDATE = "requestLocationUpdate";
-    static final String HAS_GEOFENCE_PERMISSION = "hasGeofencePermission";
     static final String LESSON_NEW_QUESTION = "lessonNewQuestion";
     static final String KEY_TIME = "time";
-    static final String TWO_PANEL = "twoPanel";
-    static final String LESSON_IN_PROGRESS = "lessonInProgress";
     static final String USER_SEND_REVIEW = "sendReview";
     static final String KEY_REVIEW_TEXT = "reviewText";
     static final String KEY_REVIEW_SUMMARY = "reviewSummary";
@@ -32,7 +28,6 @@ public final class Constants {
     static final String KEY_QUESTION = "question";
     static final String KEY_QUESTION_TIME = "time";
     static final String USER_QUESTION_ASK = "askAQuestion";
-    static final String KEY_CLASS_LESSON = "lesson";
     static final String KEY_SET_ATTENDANCE = "setAttendance";
     static final String TAG = "dibApp";
     static final String PREFERENCE_FILE_KEY = "it.teamgdm.dibApp.userSession";
@@ -40,7 +35,6 @@ public final class Constants {
     static final String REQUEST_METHOD = "POST";
     static final String KEY_ACTION = "action";
     static final String KEY_CODE = "code";
-    static final String KEY_MESSAGE = "message";
 
     static final String DATE_FORMAT = "yyyy-MM-dd";
     static final String TIME_FORMAT = "HH:mm:ss";
@@ -103,10 +97,6 @@ public final class Constants {
     static final String KEY_LESSON_TIME_END ="classLessonTimeEnd";
     static final String KEY_LESSON_SUMMARY = "classLessonSummary";
     static final String KEY_LESSON_DESCRIPTION = "classLessonDescription";
-    static final String KEY_PASSED = "passed";
-    static final String KEY_VOTE = "vote";
-    static final String KEY_PRAISE = "praise";
-    static final String KEY_PASSED_DATE = "passedDate";
     static final String KEY_LESSON_ID = "lessonID";
     static final String KEY_LESSON_CALENDAR_ID = "calendarID";
     static final String KEY_LESSON_ATTENDANCE = "attendance";

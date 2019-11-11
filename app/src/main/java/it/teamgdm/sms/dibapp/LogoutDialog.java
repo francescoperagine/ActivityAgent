@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 
 public class LogoutDialog extends Dialog implements View.OnClickListener {
 
-    private Button cancelButton, confirmButton;
+    private Button confirmButton;
 
     LogoutDialog(@NonNull Context context) {
         super(context);
@@ -24,7 +24,7 @@ public class LogoutDialog extends Dialog implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        cancelButton = findViewById(R.id.logoutCancelButton);
+        Button cancelButton = findViewById(R.id.logoutCancelButton);
         confirmButton = findViewById(R.id.logoutConfirmButton);
         cancelButton.setOnClickListener(this);
         confirmButton.setOnClickListener(this);

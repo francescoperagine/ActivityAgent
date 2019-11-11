@@ -30,14 +30,4 @@ abstract class LessonList {
         return lessonList.toString();
     }
 
-    static Lesson getLessonFromID(int lessonID) {
-        Log.i(Constants.TAG, LessonList.class.getSimpleName() + " -getLessonFromID-");
-        Lesson lesson = null;
-        for(int i = 0; i< lessonList.size(); i++) {
-            if(lessonList.get(i).lessonID == lessonID) {
-                lesson = lessonList.get(i);
-            }
-        }
-        return lesson;
-    }
 }

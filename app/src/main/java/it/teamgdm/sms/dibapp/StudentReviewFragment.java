@@ -14,6 +14,8 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
+import java.util.Objects;
+
 public class StudentReviewFragment extends DialogFragment {
 
     private StudentEvaluateFragmentInterface studentEvaluateFragmentInterfaceCallback;
@@ -81,7 +83,7 @@ public class StudentReviewFragment extends DialogFragment {
         reviewRating = view.findViewById(R.id.reviewRating);
 
         Button cancelButton = view.findViewById(R.id.cancelReview);
-        cancelButton.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.secondaryColor));
+        cancelButton.setBackgroundColor(ContextCompat.getColor(Objects.requireNonNull(getActivity()), R.color.secondaryColor));
         Button submitButton = view.findViewById(R.id.submitReview);
         submitButton.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.secondaryColor));
 
@@ -119,6 +121,7 @@ public class StudentReviewFragment extends DialogFragment {
     private final View.OnClickListener cancelButtonListener = v -> {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -cancelButtonListener-");
         studentEvaluateFragmentInterfaceCallback.turnOffButton();
+        assert getFragmentManager() != null;
         getFragmentManager().beginTransaction().remove(StudentReviewFragment.this).commit();
     };
 
@@ -130,6 +133,7 @@ public class StudentReviewFragment extends DialogFragment {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -submitButtonListener-classLessonID " + classLessonID + " summary " + summary + " text " + text + " rating " + rating);
         studentEvaluateFragmentInterfaceCallback.turnOffButton();
         studentEvaluateFragmentInterfaceCallback.setReview(classLessonID, summary, text, rating);
+        assert getFragmentManager() != null;
         getFragmentManager().beginTransaction().remove(StudentReviewFragment.this).commit();
     };
 }

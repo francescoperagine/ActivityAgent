@@ -134,13 +134,13 @@ class DAO {
         return response;
     }
 
-    static boolean deleteQuestionRate (int userID, int questionID){
+    static void deleteQuestionRate (int userID, int questionID){
         Log.i(Constants.TAG, DAO.class.getSimpleName() + " deleteQuestionRate ");
         HashMap<String, String> params = new HashMap<>();
         params.put(Constants.KEY_ACTION, Constants.ACTION_DELETE_QUESTION_RATE);
         params.put(Constants.KEY_USER_ID, String.valueOf(userID));
         params.put(Constants.KEY_QUESTION_ID2, String.valueOf(questionID));
-        return isDataSent(params);
+        isDataSent(params);
     }
 
     static void setQuestionRate (int userID, int questionID, int rate){
@@ -198,18 +198,18 @@ class DAO {
         return isDataSent(params);
     }
 
-    static boolean registerUser(User tmpUser) {
-        Log.i(Constants.TAG, DAO.class.getSimpleName() + " -registerUser- " + tmpUser);
+    static boolean registerUser(User user) {
+        Log.i(Constants.TAG, DAO.class.getSimpleName() + " -registerUser- " + user);
         HashMap<String, String> params = new HashMap<>();
         params.put(Constants.KEY_ACTION, Constants.USER_REGISTRATION);
-        params.put(Constants.KEY_USER_NAME, tmpUser.getName());
-        params.put(Constants.KEY_USER_SURNAME, tmpUser.getSurname());
-        params.put(Constants.KEY_USER_SERIAL_NUMBER, tmpUser.getSsn());
-        params.put(Constants.KEY_DEGREECOURSE, tmpUser.getDegreeCourse());
-        params.put(Constants.KEY_USER_ROLE_NAME, tmpUser.getRoleName());
-        params.put(Constants.KEY_USER_EMAIL, tmpUser.getEmail());
-        params.put(Constants.KEY_USER_PASSWORD, tmpUser.getPassword());
-        params.put(Constants.KEY_USER_REGISTRATION_DATE, tmpUser.getRegistrationDate());
+        params.put(Constants.KEY_USER_NAME, user.name);
+        params.put(Constants.KEY_USER_SURNAME, user.surname);
+        params.put(Constants.KEY_USER_SERIAL_NUMBER, user.ssn);
+        params.put(Constants.KEY_DEGREECOURSE, user.degreeCourse);
+        params.put(Constants.KEY_USER_ROLE_NAME, user.roleName);
+        params.put(Constants.KEY_USER_EMAIL, user.email);
+        params.put(Constants.KEY_USER_PASSWORD, user.password);
+        params.put(Constants.KEY_USER_REGISTRATION_DATE, user.getRegistrationDate());
         return isDataSent(params);
     }
 

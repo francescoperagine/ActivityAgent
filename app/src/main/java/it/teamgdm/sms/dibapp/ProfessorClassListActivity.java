@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.json.JSONArray;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * An activity representing a list of Courses. This activity
@@ -50,7 +51,7 @@ public class ProfessorClassListActivity extends BaseActivity {
         recyclerView = findViewById(R.id.class_list);
         textViewEmptyClassList = findViewById(R.id.class_list_empty);
         disableBackButton();
-        getSupportActionBar().setTitle(getTitle() + " - " + Constants.KEY_CLASS_LIST);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(getTitle() + " - " + Constants.KEY_CLASS_LIST);
         setupRecyclerView();
     }
 
@@ -72,20 +73,18 @@ public class ProfessorClassListActivity extends BaseActivity {
         } else {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -setupRecyclerView-");
             recyclerView.setVisibility(View.VISIBLE);
-            recyclerView.setAdapter(new ClassRecyclerViewAdapter(this, classList, mTwoPane));
+            recyclerView.setAdapter(new ClassRecyclerViewAdapter(classList, mTwoPane));
             textViewEmptyClassList.setVisibility(View.GONE);
         }
     }
 
     public class ClassRecyclerViewAdapter extends RecyclerView.Adapter<ClassRecyclerViewAdapter.ViewHolder> {
-        private final ProfessorClassListActivity mParentActivity;
         private final boolean mTwoPane;
         ArrayList<Lesson> classList;
 
-        ClassRecyclerViewAdapter(ProfessorClassListActivity parent, ArrayList<Lesson> classList, boolean twoPane) {
+        ClassRecyclerViewAdapter(ArrayList<Lesson> classList, boolean twoPane) {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -ClassRecyclerViewAdapter-");
             this.classList = classList;
-            mParentActivity = parent;
             mTwoPane = twoPane;
         }
 

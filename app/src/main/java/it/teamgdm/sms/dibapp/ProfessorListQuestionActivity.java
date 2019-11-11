@@ -16,6 +16,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Objects;
 
 public class ProfessorListQuestionActivity extends BaseActivity {
 
@@ -43,7 +44,7 @@ public class ProfessorListQuestionActivity extends BaseActivity {
         int lessonID = getIntent().getIntExtra(Constants.KEY_LESSON_ID, 0);
         String date = getIntent().getStringExtra(Constants.KEY_LESSON_DATE);
 
-        getSupportActionBar().setTitle(getResources().getString(R.string.question_title) + " - " + date);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(getResources().getString(R.string.question_title) + " - " + date);
 
         //query
         JSONArray response = DAO.getLessonQuestion(lessonID);
@@ -59,9 +60,9 @@ public class ProfessorListQuestionActivity extends BaseActivity {
                 Date dateQst = sdf.parse(obj.getString(Constants.KEY_QUESTION_TIME));
                 questionArray.add(
                     Question.Builder.create(obj.optInt(Constants.KEY_QUESTION_ID))
-                    .question(obj.optString(Constants.KEY_QUESTION))
-                    .rate(obj.optInt(Constants.KEY_QUESTION_RATE))
-                    .date(dateQst)
+                    .setQuestion(obj.optString(Constants.KEY_QUESTION))
+                    .setRate(obj.optInt(Constants.KEY_QUESTION_RATE))
+                    .setDate(dateQst)
                     .build());
 
             } catch (JSONException | ParseException e) {

@@ -26,26 +26,26 @@ public final class Question {
             this.id = id;
         }
 
-        public Builder question(final String question) {
+        public Builder setQuestion(final String question) {
             this.question = question;
             return this;
         }
 
-        public Builder rate(final int rate) {
+        public Builder setRate(final int rate) {
             this.rate = rate;
             return this;
         }
 
-        public Builder date(final Date date) {
+        public Builder setDate(final Date date) {
             this.date = date;
             return this;
         }
 
-        public static Builder create(final int id) {
+        static Builder create(final int id) {
             return new Builder(id);
         }
 
-        public Question build() {
+        Question build() {
             return new Question(id, question, rate, date);
         }
     }

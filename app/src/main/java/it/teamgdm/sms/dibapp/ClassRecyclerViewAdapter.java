@@ -16,17 +16,16 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class ClassRecyclerViewAdapter extends RecyclerView.Adapter<ClassRecyclerViewAdapter.ViewHolder> {
     private final ProfessorClassDetailActivity parent;
-    private final boolean mTwoPane;
     private ArrayList<Lesson> lessonList;
 
-    ClassRecyclerViewAdapter(ProfessorClassDetailActivity parent, ArrayList<Lesson> lessonList, boolean twoPane) {
+    ClassRecyclerViewAdapter(ProfessorClassDetailActivity parent, ArrayList<Lesson> lessonList) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -ClassRecyclerViewAdapter-");
         this.lessonList = lessonList;
         this.parent = parent;
-        mTwoPane = twoPane;
     }
 
     @NonNull
@@ -111,7 +110,7 @@ public class ClassRecyclerViewAdapter extends RecyclerView.Adapter<ClassRecycler
             ratingBarProf.setIsIndicator(true);
 
             if(lesson.rating > 0) {
-                String rating = String.format("%.1f", lesson.rating);
+                String rating = String.format(Locale.getDefault(),"%.1f", lesson.rating);
                 ratingValueProf.setText(rating);
             } else {
                 ratingValueProf.setText("0.0");

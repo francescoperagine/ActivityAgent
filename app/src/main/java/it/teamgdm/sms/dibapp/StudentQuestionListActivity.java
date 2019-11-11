@@ -18,11 +18,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
+import java.util.Objects;
 
 public class StudentQuestionListActivity extends BaseActivity {
 
@@ -53,7 +50,7 @@ public class StudentQuestionListActivity extends BaseActivity {
         String className = getIntent().getStringExtra(Constants.KEY_CLASS_NAME);
         String date = getIntent().getStringExtra(Constants.KEY_LESSON_DATE);
 
-        getSupportActionBar().setTitle(className + " - " + date);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(className + " - " + date);
 
         questionList = getQuestionList(lessonID);
         if(questionList != null) {
@@ -87,8 +84,8 @@ public class StudentQuestionListActivity extends BaseActivity {
             try {
                 JSONObject obj = response.getJSONObject(i);
                 Question q = Question.Builder.create(obj.optInt(Constants.KEY_QUESTION_ID, 0))
-                        .question(response.getJSONObject(i).optString(Constants.KEY_QUESTION))
-                        .rate(response.getJSONObject(i).optInt(Constants.KEY_QUESTION_RATE, 0 ))
+                        .setQuestion(response.getJSONObject(i).optString(Constants.KEY_QUESTION))
+                        .setRate(response.getJSONObject(i).optInt(Constants.KEY_QUESTION_RATE, 0 ))
                         .build();
                 arrayList.add(q);
                 Log.i(Constants.TAG, getClass().getSimpleName() + " -onCreate-Question " + q.toString());

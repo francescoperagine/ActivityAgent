@@ -11,6 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class ProfessorListReviewActivity extends BaseActivity {
 
@@ -39,7 +40,7 @@ public class ProfessorListReviewActivity extends BaseActivity {
         int lessonID = getIntent().getIntExtra(Constants.KEY_LESSON_ID, 0);
         String date = getIntent().getStringExtra(Constants.KEY_LESSON_DATE);
 
-        getSupportActionBar().setTitle(getResources().getString(R.string.review_title) + " - " + date);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(getResources().getString(R.string.review_title) + " - " + date);
 
         //query
         JSONArray response = DAO.getLessonReview(lessonID);

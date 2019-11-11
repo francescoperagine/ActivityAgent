@@ -28,10 +28,6 @@ class Session {
         sharedPreferencesEditor = sharedPreferences.edit();
     }
 
-    static boolean getSharedPreference(String key, boolean defaultValue) {
-        return sharedPreferences.getBoolean(key, defaultValue);
-    }
-
     void setAccess(Context context, String email) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -setAccess-");
         sharedPreferencesEditor.putBoolean(Constants.USER_IS_LOGGED_IN, true);

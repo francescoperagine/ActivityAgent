@@ -6,14 +6,6 @@ public class ComparatorReviewMaxToMin implements Comparator<Review> {
 
     @Override
     public int compare(Review a, Review b) {
-        if(a.getRate()>b.getRate()){
-            return -1;
-        }
-        else if(a.getRate()<b.getRate()){
-            return 1;
-        }
-        else{
-            return 0;
-        }
+        return Float.compare(b.getRate(), a.getRate());
     }
 }

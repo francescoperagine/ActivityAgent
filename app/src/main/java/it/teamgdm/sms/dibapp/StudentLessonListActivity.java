@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 public class StudentLessonListActivity extends BaseActivity implements
             DibappBroadcastReceiver.GeofenceReceiverInterface {
@@ -29,7 +30,6 @@ public class StudentLessonListActivity extends BaseActivity implements
     private GeofenceAPI geofenceAPI;
     private IntentFilter intentFilter = new IntentFilter(Constants.GEOFENCE_TRANSITION_ACTION);
 
-    private boolean mTwoPane;
     Intent loginIntent;
     RecyclerView recyclerView;
     View classListContainer;
@@ -43,18 +43,11 @@ public class StudentLessonListActivity extends BaseActivity implements
         geofenceAPI = new GeofenceAPI(this);
         loginIntent = getIntent();
 
-        if (findViewById(R.id.class_detail_container) != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
-            mTwoPane = true;
-        }
         classListContainer = findViewById(R.id.classListContainer);
         recyclerView = findViewById(R.id.class_list);
         textViewEmptyClassList = findViewById(R.id.lesson_list_empty);
         String today = new SimpleDateFormat(Constants.DATE_FORMAT, Locale.getDefault()).format(new Date());
-        getSupportActionBar().setTitle(getString(R.string.lesson_today_schedule) + Constants.KEY_BLANK + today);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(getString(R.string.lesson_today_schedule) + Constants.KEY_BLANK + today);
         disableBackButton();
         setupRecyclerView();
     }
@@ -71,7 +64,7 @@ public class StudentLessonListActivity extends BaseActivity implements
         } else {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -setupRecyclerView-");
             recyclerView.setVisibility(View.VISIBLE);
-            adapter = new LessonRecyclerViewAdapter(this, classList, geofenceAPI, mTwoPane);
+            adapter = new LessonRecyclerViewAdapter(this, classList, geofenceAPI);
             recyclerView.setAdapter(adapter);
             textViewEmptyClassList.setVisibility(View.GONE);
         }

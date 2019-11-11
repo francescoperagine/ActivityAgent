@@ -1,5 +1,7 @@
 package it.teamgdm.sms.dibapp;
 
+import androidx.annotation.NonNull;
+
 public class SpinnerElement {
 
     private String name;
@@ -8,6 +10,7 @@ public class SpinnerElement {
         this.name = name;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return this.name;
