@@ -431,7 +431,7 @@ function getTotalMembers(int $classID){
 function getAttedanceChart(int $classID){
 	global $connection;
 	$stmt = $connection->prepare(GET_ATTENDANCE_CHART);
-	$stmt->execute([$classID]]);
+	$stmt->execute([$classID]);
 	$response = $stmt->fetchAll(PDO::FETCH_OBJ);
 	return $response;
 }
