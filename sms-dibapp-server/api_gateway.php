@@ -61,10 +61,10 @@ if(isset($input[ACTION])){
 			$response = getAverageRating($input);
 			break;		
 		case ACTION_GET_TOTAL_MEMBERS:
-			$response = getTotalMembers($input);
-			break;		
+			$response = getTotalMembers($input[KEY_CLASS_ID]);
+			break;
 		case ACTION_GET_ATTENDANCE_CHART:
-			$response = getAttedanceChart($input);
+			$response = getAttedanceChart($input[KEY_CLASS_ID]);
 			break;
 		case ACTION_GET_LESSON_IN_PROGRESS:
 			$response = getLessonInProgress($input[KEY_CLASS_LESSON_ID], $input[KEY_CURRENT_TIME]);

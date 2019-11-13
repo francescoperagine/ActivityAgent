@@ -420,18 +420,18 @@ function getAverageRating(array $input){
 	return $response;
 }
 
-function getTotalMembers(array $input){
+function getTotalMembers(int $classID){
 	global $connection;
 	$stmt = $connection->prepare(GET_TOTAL_MEMBERS);
-	$stmt->execute([$input[KEY_CLASS_ID]]);
+	$stmt->execute([$classID]);
 	$response = $stmt->fetchAll(PDO::FETCH_OBJ);
 	return $response;
 }
 
-function getAttedanceChart(array $input){
+function getAttedanceChart(int $classID){
 	global $connection;
 	$stmt = $connection->prepare(GET_ATTENDANCE_CHART);
-	$stmt->execute([$input[KEY_CLASS_ID]]);
+	$stmt->execute([$classID]]);
 	$response = $stmt->fetchAll(PDO::FETCH_OBJ);
 	return $response;
 }

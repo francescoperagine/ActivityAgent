@@ -65,6 +65,7 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
             lesson.setExpanded(! expanded);
             // Notify the adapter that item has changed
             TransitionManager.beginDelayedTransition(parent.recyclerView);
+            parent.recyclerView.smoothScrollToPosition(position);
             notifyItemChanged(position);
         });
     }
@@ -144,7 +145,9 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
                 featurePanelHandler(false, parent.getResources().getString(R.string.geofence_permission_not_granted));
             }
             if(DAO.isUserAttendingLesson(lesson.lessonID, Session.getUserID())) {
-                updateAttendanceStatus(buttonPartecipate.isChecked(), R.string.attendance_set);
+                Log.i(Constants.TAG, getClass().getSimpleName() + " -onStart-user is attending a lesson");
+                currentLessonPartecipation = lesson.lessonID;
+                buttonPartecipate.setChecked(true);
             }
         }
 
@@ -268,9 +271,10 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
             }
         }
         private final View.OnClickListener evaluateButtonListener = v -> {
-            Log.i(Constants.TAG, getClass().getSimpleName() + " -evaluateButtonListener-");
+            Log.i(Constants.TAG, getClass().getSimpleName() + " -evaluateButtonListener- position " + getAdapterPosition());
             if(buttonReview.isChecked()) {
                 showEvaluationUI(lesson.lessonID);
+                parent.recyclerView.smoothScrollBy(0, getAdapterPosition()*200);
             } else {
                 hideEvaluationUI(lesson.lessonID);
             }

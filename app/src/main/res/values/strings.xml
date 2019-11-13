@@ -107,7 +107,7 @@
     <string name="user_registration_not_ok">The user has not been registered.</string>
     <string name="user_login_ok">Login done.</string>
     <string name="user_login_not_ok">Login went wrong.</string>
-    <string name="question_button_test">Questions</string>
+    <string name="question_button_text">Questions</string>
     <string name="review_button_text">Reviews</string>
     <string name="lesson_of">Lesson of</string>
     <string name="average_text_string">Average rating</string>

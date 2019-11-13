@@ -122,7 +122,7 @@
     <string name="no_question_text">0 domande</string>
     <string name="no_review_text">0 recensioni</string>
     <string name="question_add_text">Aggiungi domanda</string>
-    <string name="question_button_test">Domande</string>
+    <string name="question_button_text">Domande</string>
     <string name="question_dislike_button_text">Non mi piace</string>
     <string name="question_like_button_text">Mi piace</string>
     <string name="question_title">Domande</string>

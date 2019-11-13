@@ -122,8 +122,10 @@ public class ClassRecyclerViewAdapter extends RecyclerView.Adapter<ClassRecycler
             //checking if there are any questions
             if (DAO.questionCount(lesson.lessonID) == 0){
                 questionButtonProf.setEnabled(false);
+                questionButtonProf.setText(R.string.no_question_text);
             } else {
                 questionButtonProf.setEnabled(true);
+                questionButtonProf.setText(R.string.question_button_text);
             }
 
             questionButtonProf.setOnClickListener(v -> {
@@ -137,8 +139,10 @@ public class ClassRecyclerViewAdapter extends RecyclerView.Adapter<ClassRecycler
             //checking if there are any reviews
             if( DAO.reviewCount(lesson.lessonID) == 0 ){
                 reviewButtonProf.setEnabled(false);
+                reviewButtonProf.setText(R.string.no_review_text);
             } else{
                 reviewButtonProf.setEnabled(true);
+                reviewButtonProf.setText(R.string.review_button_text);
             }
 
             reviewButtonProf.setOnClickListener(v -> {
