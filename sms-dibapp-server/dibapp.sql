@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.5
+-- version 4.9.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1:3306
--- Creato il: Nov 13, 2019 alle 14:17
--- Versione del server: 5.7.26
--- Versione PHP: 7.2.18
+-- Host: 127.0.0.1
+-- Creato il: Nov 13, 2019 alle 18:02
+-- Versione del server: 10.4.8-MariaDB
+-- Versione PHP: 7.3.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -32,10 +32,10 @@ DROP TABLE IF EXISTS `class`;
 CREATE TABLE IF NOT EXISTS `class` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(256) DEFAULT NULL,
-  `description` text,
+  `description` text DEFAULT NULL,
   `code` varchar(10) DEFAULT NULL,
   `year` int(1) NOT NULL,
-  `semester` int(1) DEFAULT '0',
+  `semester` int(1) DEFAULT 0,
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM AUTO_INCREMENT=56 DEFAULT CHARSET=utf8mb4;
 
@@ -98,10 +98,10 @@ CREATE TABLE IF NOT EXISTS `class_lesson_attendance_rating` (
   `lessonID` int(11) NOT NULL,
   `rating` int(1) DEFAULT NULL,
   `summary` varchar(128) DEFAULT NULL,
-  `review` text,
+  `review` text DEFAULT NULL,
   `time` datetime DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM AUTO_INCREMENT=122 DEFAULT CHARSET=utf8mb4;
+) ENGINE=MyISAM AUTO_INCREMENT=224 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dump dei dati per la tabella `class_lesson_attendance_rating`
@@ -154,7 +154,6 @@ INSERT INTO `class_lesson_attendance_rating` (`ID`, `studentID`, `lessonID`, `ra
 (113, 49, 14, 1, 'Pessima lezione', 'É stata una lezione pessima.', '2019-09-30 10:55:38'),
 (114, 42, 14, NULL, NULL, NULL, '2019-09-30 11:00:30'),
 (115, 43, 14, NULL, NULL, NULL, '2019-09-30 11:00:30'),
-(116, 44, 14, NULL, NULL, NULL, '2019-09-30 11:00:30'),
 (117, 46, 15, 5, 'Ottima lezione', 'É stata una lezione ottima.', '2019-09-30 10:55:38'),
 (118, 48, 15, 4, 'Bella lezione', 'É stata una lezione gradevole.', '2019-09-30 10:55:38'),
 (119, 49, 15, 1, 'Pessima lezione', 'É stata una lezione pessima.', '2019-09-30 10:55:38'),
@@ -319,9 +318,9 @@ CREATE TABLE IF NOT EXISTS `class_room_lesson` (
   `timeStart` datetime DEFAULT NULL,
   `timeEnd` datetime DEFAULT NULL,
   `summary` varchar(128) DEFAULT NULL,
-  `description` text,
+  `description` text DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4;
+) ENGINE=MyISAM AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dump dei dati per la tabella `class_room_lesson`
@@ -345,7 +344,11 @@ INSERT INTO `class_room_lesson` (`ID`, `calendarID`, `roomID`, `timeStart`, `tim
 (22, 19, 10, '2019-11-14 11:30:00', '2019-11-14 14:30:00', NULL, NULL),
 (23, 27, 8, '2019-11-14 08:30:00', '2019-11-14 11:30:00', NULL, NULL),
 (24, 30, 5, '2019-11-14 08:30:00', '2019-11-14 11:30:00', NULL, NULL),
-(25, 33, 5, '2019-11-14 08:30:00', '2019-11-14 11:30:00', NULL, NULL);
+(25, 33, 5, '2019-11-14 08:30:00', '2019-11-14 11:30:00', NULL, NULL),
+(26, 38, 10, '2019-11-14 08:30:00', '2019-11-14 11:30:00', NULL, NULL),
+(27, 46, 10, '2019-11-14 11:30:00', '2019-11-14 14:30:00', NULL, NULL),
+(28, 53, 3, '2019-11-14 16:30:00', '2019-11-14 18:30:00', NULL, NULL),
+(29, 56, 3, '2019-11-14 13:30:00', '2019-11-14 16:30:00', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -357,7 +360,7 @@ DROP TABLE IF EXISTS `degreecourse`;
 CREATE TABLE IF NOT EXISTS `degreecourse` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(256) NOT NULL,
-  `description` text,
+  `description` text DEFAULT NULL,
   `ministerialDecree` varchar(128) DEFAULT NULL,
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
@@ -588,7 +591,7 @@ CREATE TABLE IF NOT EXISTS `student_career` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `studentID` int(11) NOT NULL,
   `classID` int(11) NOT NULL,
-  `passed` tinyint(1) NOT NULL DEFAULT '0',
+  `passed` tinyint(1) NOT NULL DEFAULT 0,
   `vote` int(2) NOT NULL,
   `praise` tinyint(1) DEFAULT NULL,
   `passedDate` date DEFAULT NULL,
@@ -894,7 +897,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `email` varchar(128) NOT NULL,
   `passwordHash` varchar(256) NOT NULL,
   `salt` varchar(256) NOT NULL,
-  `registrationDate` datetime DEFAULT CURRENT_TIMESTAMP,
+  `registrationDate` datetime DEFAULT current_timestamp(),
   `roleID` int(11) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `email` (`email`)
@@ -956,7 +959,7 @@ INSERT INTO `user_degreecourse` (`ID`, `userID`, `degreecourseID`) VALUES
 --
 DROP TABLE IF EXISTS `class_lesson_question_rated`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `class_lesson_question_rated`  AS  select `clq`.`ID` AS `ID`,`clq`.`studentID` AS `studentID`,`clq`.`question` AS `question`,`clq`.`time` AS `time`,sum(`qr`.`questionRate`) AS `rate`,`clq`.`lessonID` AS `lessonID` from (`class_lesson_question` `clq` left join `question_rate` `qr` on((`clq`.`ID` = `qr`.`questionID`))) group by `clq`.`ID` ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `class_lesson_question_rated`  AS  select `clq`.`ID` AS `ID`,`clq`.`studentID` AS `studentID`,`clq`.`question` AS `question`,`clq`.`time` AS `time`,sum(`qr`.`questionRate`) AS `rate`,`clq`.`lessonID` AS `lessonID` from (`class_lesson_question` `clq` left join `question_rate` `qr` on(`clq`.`ID` = `qr`.`questionID`)) group by `clq`.`ID` ;
 
 --
 -- Limiti per le tabelle scaricate
