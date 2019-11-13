@@ -21,6 +21,7 @@ import java.util.Locale;
 public class ClassRecyclerViewAdapter extends RecyclerView.Adapter<ClassRecyclerViewAdapter.ViewHolder> {
     private final ProfessorClassDetailActivity parent;
     private ArrayList<Lesson> lessonList;
+    private int expandedPosition = -1;
 
     ClassRecyclerViewAdapter(ProfessorClassDetailActivity parent, ArrayList<Lesson> lessonList) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -ClassRecyclerViewAdapter-");
@@ -39,17 +40,16 @@ public class ClassRecyclerViewAdapter extends RecyclerView.Adapter<ClassRecycler
     @Override
     public void onBindViewHolder(final ClassRecyclerViewAdapter.ViewHolder holder, int position) {
         Log.i(Constants.TAG, getClass().getSimpleName() + " -onBindViewHolder-");
-
+        final boolean isExpanded = position==expandedPosition;
+        holder.lessonDetail.setVisibility(isExpanded?View.VISIBLE:View.GONE);
+        holder.itemView.setActivated(isExpanded);
         Lesson lesson = lessonList.get(position);
         holder.bind(lesson);
         holder.lessonTitle.setOnClickListener(v -> {
-            // Get the current state of the item
-            boolean expanded = lesson.isExpanded();
-            // Change the state
-            lesson.setExpanded(!expanded);
-            // Notify the adapter that item has changed
-            TransitionManager.beginDelayedTransition(parent.recyclerView);
-            notifyItemChanged(position);
+            expandedPosition = isExpanded ? -1:position;
+    //        TransitionManager.beginDelayedTransition(parent.recyclerView);
+            parent.recyclerView.smoothScrollToPosition(position);
+            notifyDataSetChanged();
         });
         holder.itemView.setTag(lessonList.get(position).lessonID);
     }
@@ -95,8 +95,9 @@ public class ClassRecyclerViewAdapter extends RecyclerView.Adapter<ClassRecycler
             String lessonCalendarTime = parent.getString(R.string.from) + " " + lesson.getTimeStringFromDate(lesson.timeStart) + " " + parent.getString(R.string.to) + " " +  lesson.getTimeStringFromDate(lesson.timeEnd);
             lessonTime.setText(lessonCalendarTime);
 
-            boolean expanded = lesson.isExpanded();
-            lessonDetail.setVisibility(expanded ? View.VISIBLE : View.GONE);
+    //        boolean expanded = lesson.isExpanded();
+    //        parent.recyclerView.smoothScrollToPosition(1);
+    //       lessonDetail.setVisibility(expanded ? View.VISIBLE : View.GONE);
 
             //checking if lesson is in progress
             if(lesson.isInProgress()) {

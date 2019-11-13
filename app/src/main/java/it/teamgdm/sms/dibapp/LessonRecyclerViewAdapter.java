@@ -60,7 +60,9 @@ public class LessonRecyclerViewAdapter extends RecyclerView.Adapter<LessonRecycl
         viewHolder.studentLessonContainer.setOnClickListener(v -> {
             Log.i(Constants.TAG, getClass().getSimpleName() + " -onBindViewHolder-setOnClickListener");
             // Get the current state of the item
+
             boolean expanded = lesson.isExpanded();
+            viewHolder.itemView.setActivated(expanded);
             // Change the state
             lesson.setExpanded(! expanded);
             // Notify the adapter that item has changed
