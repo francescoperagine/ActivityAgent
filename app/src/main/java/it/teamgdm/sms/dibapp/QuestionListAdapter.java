@@ -1,6 +1,7 @@
 package it.teamgdm.sms.dibapp;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,6 +52,14 @@ public class QuestionListAdapter extends ArrayAdapter<Question> {
 
         //adding values to the list item
         rateText.setText(String.valueOf(qst.rate));
+        if(qst.rate > 0){
+        rateText.setTextColor(context.getColor(R.color.green));
+        }
+        else if (qst.rate <0){
+            rateText.setTextColor(context.getColor(R.color.red));
+        } else if (qst.rate == 0){
+            rateText.setTextColor(context.getColor(R.color.black));
+        }
         qstText.setText(qst.question);
 
         //finally returning the view

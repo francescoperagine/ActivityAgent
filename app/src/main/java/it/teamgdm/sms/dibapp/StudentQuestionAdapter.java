@@ -49,6 +49,14 @@ public class StudentQuestionAdapter extends ArrayAdapter<Question> {
         //adding values to the list item
         textQuestion.setText(question.question);
         rate.setText(String.valueOf(question.rate));
+        if(question.rate > 0){
+            rate.setTextColor(context.getColor(R.color.green));
+        }
+        else if (question.rate <0){
+            rate.setTextColor(context.getColor(R.color.red));
+        } else if (question.rate == 0){
+            rate.setTextColor(context.getColor(R.color.black));
+        }
 
         int flag = DAO.isQuestionRated( Session.getUserID(),question.id);
 
@@ -90,6 +98,15 @@ public class StudentQuestionAdapter extends ArrayAdapter<Question> {
 
                     rate.setText(String.valueOf(newRate));
 
+                    if(newRate > 0){
+                        rate.setTextColor(context.getColor(R.color.green));
+                    }
+                    else if (newRate <0){
+                        rate.setTextColor(context.getColor(R.color.red));
+                    } else if (newRate == 0){
+                        rate.setTextColor(context.getColor(R.color.black));
+                    }
+
 
                 }
                 else {
@@ -102,6 +119,15 @@ public class StudentQuestionAdapter extends ArrayAdapter<Question> {
                         DAO.deleteQuestionRate(Session.getUserID(), question.id);
 
                         rate.setText(String.valueOf(newRate));
+
+                        if(newRate > 0){
+                            rate.setTextColor(context.getColor(R.color.green));
+                        }
+                        else if (newRate <0){
+                            rate.setTextColor(context.getColor(R.color.red));
+                        } else if (newRate == 0){
+                            rate.setTextColor(context.getColor(R.color.black));
+                        }
                     }
 
                 }
@@ -131,6 +157,15 @@ public class StudentQuestionAdapter extends ArrayAdapter<Question> {
                     DAO.setQuestionRate(Session.getUserID(), question.id, Constants.RATE_BAD);
 
                     rate.setText(String.valueOf(newRate));
+
+                    if(newRate > 0){
+                        rate.setTextColor(context.getColor(R.color.green));
+                    }
+                    else if (newRate <0){
+                        rate.setTextColor(context.getColor(R.color.red));
+                    } else if (newRate == 0){
+                        rate.setTextColor(context.getColor(R.color.black));
+                    }
                 }
                 else{
                     if(chanceCheckFlag){
@@ -142,6 +177,15 @@ public class StudentQuestionAdapter extends ArrayAdapter<Question> {
                         DAO.deleteQuestionRate(Session.getUserID(), question.id);
 
                         rate.setText(String.valueOf(newRate));
+
+                        if(newRate > 0){
+                            rate.setTextColor(context.getColor(R.color.green));
+                        }
+                        else if (newRate <0){
+                            rate.setTextColor(context.getColor(R.color.red));
+                        } else if (newRate == 0){
+                            rate.setTextColor(context.getColor(R.color.black));
+                        }
                     }
 
                 }
