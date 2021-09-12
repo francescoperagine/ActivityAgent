@@ -1,3 +1,7 @@
+# INTRODUCTION
+
+Refer to the 'presentazione.pdf' file for the app functionalities (italian language).
+
 # REQUIREMENTS:
 
 - Android Studio
