@@ -1,6 +1,6 @@
 # INTRODUCTION
 
-Refer to the 'presentazione.pdf' file for the app functionalities (italian language).
+Refer to the 'presentazione.pdf' file for the app functionalities introduction (italian language).
 
 # REQUIREMENTS:
 
